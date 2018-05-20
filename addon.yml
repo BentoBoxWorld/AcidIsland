@@ -1,0 +1,6 @@
+name: BSkyBlock-AcidIsland
+main: bskyblock.addon.acidisland.AcidIsland
+version: 0.1
+
+authors: tastybento
+
