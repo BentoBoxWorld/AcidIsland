@@ -6,6 +6,11 @@ import java.util.List;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+/**
+ * A lot of placeholders right now in here...
+ * @author tastybento
+ *
+ */
 public class Settings {
 
     public boolean isNetherGenerate() {

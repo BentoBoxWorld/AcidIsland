@@ -11,6 +11,11 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.noise.PerlinOctaveGenerator;
 
+/**
+ * Generates the AcidIsland world
+ * @author tastybento
+ *
+ */
 public class ChunkGeneratorWorld extends ChunkGenerator {
     
     AcidIsland addon;

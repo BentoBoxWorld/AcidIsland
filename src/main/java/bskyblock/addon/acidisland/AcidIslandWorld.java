@@ -11,6 +11,7 @@ import org.bukkit.WorldType;
 import us.tastybento.bskyblock.util.Util;
 
 /**
+ * Creates the AI worlds and registers them with BSkyBlock
  * @author tastybento
  *
  */

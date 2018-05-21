@@ -19,20 +19,24 @@ public class AcidIsland extends Addon {
 
     @Override
     public void onLoad() {
+        // Load settings
         settings = new Settings();
         // Create worlds
         aiw = new AcidIslandWorld(this);
-        // Register settings
-        //getBSkyBlock().getSettings().register();
+        // TODO Register settings
+        //getBSkyBlock().getSettings().register(settings);
+
     }
 
     @Override
     public void onEnable() {
-        // Register listener
+        // Register listeners
         PluginManager manager = getServer().getPluginManager();
-        // Player join events
+        // Acid Effects
         manager.registerEvents(new AcidEffect(this), this.getBSkyBlock());
+        // New Islands
         manager.registerEvents(new IslandBuilder(this), this.getBSkyBlock());
+        
     }
 
     @Override
