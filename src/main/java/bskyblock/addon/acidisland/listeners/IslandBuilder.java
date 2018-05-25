@@ -2,6 +2,7 @@ package bskyblock.addon.acidisland.listeners;
 
 import java.util.UUID;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
@@ -35,30 +36,37 @@ public class IslandBuilder implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onIslandCreate(final IslandCreateEvent event) {
-        if (addon.isEnabled()) {
+    public void onIslandCreate(IslandCreateEvent event) {
+        // Only create islands in the AcidIsland worlds
+        if (addon.isEnabled() && addon.getAiw().inWorld(event.getLocation())) {
             event.setCancelled(true);
-            generateAcidIslandBlocks(event.getIsland(), addon.getAiw().getOverWorld());
-            if (addon.getSettings().isNetherGenerate() && addon.getSettings().isNetherIslands()) {
-                generateAcidIslandBlocks(event.getIsland(), addon.getAiw().getNetherWorld());
-            }
-            if (addon.getSettings().isEndGenerate() && addon.getSettings().isEndIslands()) {
-                generateAcidIslandBlocks(event.getIsland(), addon.getAiw().getEndWorld());
-            }
+            createIsland(User.getInstance(event.getPlayerUUID()), event.getIsland());
         }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onIslandReset(final IslandResetEvent event) {
-        if (addon.isEnabled()) {
+    public void onIslandReset(IslandResetEvent event) {
+        // Only create islands in the AcidIsland worlds
+        if (addon.isEnabled() && addon.getAiw().inWorld(event.getLocation())) {
             event.setCancelled(true);
-            generateAcidIslandBlocks(event.getIsland(), addon.getAiw().getOverWorld());
-            if (addon.getSettings().isNetherGenerate() && addon.getSettings().isNetherIslands()) {
-                generateAcidIslandBlocks(event.getIsland(), addon.getAiw().getNetherWorld());
-            }
-            if (addon.getSettings().isEndGenerate() && addon.getSettings().isEndIslands()) {
-                generateAcidIslandBlocks(event.getIsland(), addon.getAiw().getEndWorld());
-            }
+            createIsland(User.getInstance(event.getPlayerUUID()), event.getIsland());
+        }
+    }
+
+    private void createIsland(User user, Island island) {
+        if (user != null) {
+            user.setGameMode(GameMode.SPECTATOR);
+        }
+        generateAcidIslandBlocks(island, addon.getAiw().getOverWorld());
+        if (addon.getSettings().isNetherGenerate() && addon.getSettings().isNetherIslands()) {
+            generateAcidIslandBlocks(island, addon.getAiw().getNetherWorld());
+        }
+        if (addon.getSettings().isEndGenerate() && addon.getSettings().isEndIslands()) {
+            generateAcidIslandBlocks(island, addon.getAiw().getEndWorld());
+        }
+        // Teleport player to their island
+        if (user != null) {
+            addon.getIslands().homeTeleport(island.getWorld(), user.getPlayer());
         }
     }
 

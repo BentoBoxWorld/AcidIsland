@@ -35,7 +35,7 @@ public class AcidIslandWorld {
         // Create the world if it does not exist
         islandWorld = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(new ChunkGeneratorWorld(addon))
                 .createWorld();
-        addon.getBSkyBlock().registerWorld("acidisland", islandWorld);
+        addon.getBSkyBlock().registerWorld(islandWorld, addon.getSettings());
         // Make the nether if it does not exist
         if (addon.getSettings().isNetherGenerate()) {
             if (addon.getServer().getWorld(worldName + NETHER) == null) {
@@ -47,7 +47,6 @@ public class AcidIslandWorld {
                 netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(addon))
                         .environment(World.Environment.NETHER).createWorld();
             }
-            addon.getBSkyBlock().registerWorld("acid_nether", netherWorld);
         }
         // Make the end if it does not exist
         if (addon.getSettings().isEndGenerate()) {
@@ -60,7 +59,6 @@ public class AcidIslandWorld {
                 endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(addon))
                         .environment(World.Environment.THE_END).createWorld();
             }
-            addon.getBSkyBlock().registerWorld("acid_end", endWorld);
         }
     }
 

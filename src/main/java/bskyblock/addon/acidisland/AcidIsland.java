@@ -14,13 +14,13 @@ import us.tastybento.bskyblock.api.addons.Addon;
  */
 public class AcidIsland extends Addon {
     
-    private Settings settings;
+    private AISettings settings;
     private AcidIslandWorld aiw;
 
     @Override
     public void onLoad() {
         // Load settings
-        settings = new Settings();
+        settings = new AISettings();
         // Create worlds
         aiw = new AcidIslandWorld(this);
         // TODO Register settings
@@ -43,7 +43,7 @@ public class AcidIsland extends Addon {
     public void onDisable(){
     }
 
-    public Settings getSettings() {
+    public AISettings getSettings() {
         return settings;
     }
 
