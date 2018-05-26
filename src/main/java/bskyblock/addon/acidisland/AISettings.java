@@ -172,5 +172,17 @@ public class AISettings implements WorldSettings {
         return false;
     }
 
+    @Override
+    public int getMaxTeamSize() {
+        // TODO Auto-generated method stub
+        return 3;
+    }
+
+    @Override
+    public int getMaxHomes() {
+        // TODO Auto-generated method stub
+        return 1;
+    }
+
 
 }

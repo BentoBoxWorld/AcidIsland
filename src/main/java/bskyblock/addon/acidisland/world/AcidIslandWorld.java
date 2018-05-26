@@ -1,13 +1,14 @@
 /**
  * 
  */
-package bskyblock.addon.acidisland;
+package bskyblock.addon.acidisland.world;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
+import bskyblock.addon.acidisland.AcidIsland;
 import us.tastybento.bskyblock.util.Util;
 
 /**

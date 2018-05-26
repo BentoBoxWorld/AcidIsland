@@ -3,8 +3,11 @@ package bskyblock.addon.acidisland;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 
+import bskyblock.addon.acidisland.commands.AcidCommand;
+import bskyblock.addon.acidisland.commands.AiCommand;
 import bskyblock.addon.acidisland.listeners.AcidEffect;
 import bskyblock.addon.acidisland.listeners.IslandBuilder;
+import bskyblock.addon.acidisland.world.AcidIslandWorld;
 import us.tastybento.bskyblock.api.addons.Addon;
 
 /**
@@ -25,7 +28,6 @@ public class AcidIsland extends Addon {
         aiw = new AcidIslandWorld(this);
         // TODO Register settings
         //getBSkyBlock().getSettings().register(settings);
-
     }
 
     @Override
@@ -36,6 +38,9 @@ public class AcidIsland extends Addon {
         manager.registerEvents(new AcidEffect(this), this.getBSkyBlock());
         // New Islands
         manager.registerEvents(new IslandBuilder(this), this.getBSkyBlock());
+        // Register commands
+        new AcidCommand(this);
+        new AiCommand(this);
         
     }
 
@@ -54,6 +59,10 @@ public class AcidIsland extends Addon {
         return aiw;
     }
     
+    /**
+     * Convenience method to obtain the AcidIsland overworld
+     * @return
+     */
     public World getIslandWorld() {
         return aiw.getOverWorld();
     }
