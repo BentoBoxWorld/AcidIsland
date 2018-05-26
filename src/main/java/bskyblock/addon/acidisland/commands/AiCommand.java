@@ -71,7 +71,7 @@ public class AiCommand extends CompositeCommand {
         }        
         if (args.isEmpty()) {
             // If in world, go
-            if (getPlugin().getIslands().hasIsland(getWorld(), user.getUniqueId())) {
+            if (getPlugin().getIslands().getIsland(getWorld(), user.getUniqueId()) != null) {
                 return getSubCommand("go").map(goCmd -> goCmd.execute(user, new ArrayList<>())).orElse(false);
             }
             // No islands currently
