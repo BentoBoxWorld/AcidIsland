@@ -22,8 +22,16 @@ public class AcidIsland extends Addon {
 
     @Override
     public void onLoad() {
+        saveDefaultConfig();
         // Load settings
         settings = new AISettings();
+        // Load settings from config.yml. This will check if there are any issues with it too.
+        try {
+            settings = settings.loadSettings();
+        } catch (Exception e) {
+            this.log("Settings could not be loaded " + e.getMessage());
+        }
+
         // Create worlds
         aiw = new AcidIslandWorld(this);
         // TODO Register settings

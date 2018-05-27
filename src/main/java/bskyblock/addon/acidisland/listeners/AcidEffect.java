@@ -69,7 +69,7 @@ public class AcidEffect implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent e) {
         // Fast return if acid isn't being used
-        if (addon.getSettings().getRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0) {
+        if (addon.getSettings().getAcidRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0) {
             return;
         }
         final Player player = e.getPlayer();
@@ -102,7 +102,7 @@ public class AcidEffect implements Listener {
         Location playerLoc = player.getLocation();
 
         // Check for acid rain
-        if (addon.getSettings().getRainDamage() > 0D && isRaining) {
+        if (addon.getSettings().getAcidRainDamage() > 0D && isRaining) {
             // Only check if they are in a non-dry biome
             Biome biome = playerLoc.getBlock().getBiome();
             if (biome != Biome.DESERT && biome != Biome.DESERT_HILLS 
@@ -121,12 +121,12 @@ public class AcidEffect implements Listener {
                             @Override
                             public void run() {
                                 // Check if it is still raining or player is safe or dead or there is no damage
-                                if (!isRaining || player.isDead() || isSafeFromRain(player) || addon.getSettings().getRainDamage() <= 0D) {
+                                if (!isRaining || player.isDead() || isSafeFromRain(player) || addon.getSettings().getAcidRainDamage() <= 0D) {
                                     wetPlayers.remove(player);
                                     this.cancel();
                                     // Check they are still in this world
                                 } else {
-                                    player.damage((addon.getSettings().getRainDamage() - addon.getSettings().getRainDamage() * getDamageReduced(player)));
+                                    player.damage((addon.getSettings().getAcidRainDamage() - addon.getSettings().getAcidRainDamage() * getDamageReduced(player)));
                                     if (addon.getServer().getVersion().contains("(MC: 1.8") || addon.getServer().getVersion().contains("(MC: 1.7")) {
                                         player.getWorld().playSound(playerLoc, Sound.valueOf("FIZZ"), 3F, 3F);
                                     } else {
