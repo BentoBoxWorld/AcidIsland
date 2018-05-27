@@ -3,6 +3,7 @@ package bskyblock.addon.acidisland.commands;
 import java.util.List;
 
 import bskyblock.addon.acidisland.AcidIsland;
+import us.tastybento.bskyblock.api.addons.Addon;
 import us.tastybento.bskyblock.api.commands.CompositeCommand;
 import us.tastybento.bskyblock.api.user.User;
 import us.tastybento.bskyblock.commands.admin.AdminGetRankCommand;
@@ -19,9 +20,18 @@ import us.tastybento.bskyblock.commands.admin.teams.AdminTeamMakeLeaderCommand;
 
 public class AcidCommand extends CompositeCommand {
 
-    public AcidCommand(AcidIsland addon) {
-        super("acid");
-        setWorld(addon.getIslandWorld());
+    public AcidCommand(Addon addon) {
+        super(addon, "acid");
+    }
+
+    @Override
+    public void setup() {
+        setPermissionPrefix("acidisland");
+        setPermission("acidisland.admin.*");
+        setOnlyPlayer(false);
+        setParameters("commands.admin.help.parameters");
+        setDescription("commands.admin.help.description");
+        setWorld(((AcidIsland)getAddon()).getIslandWorld());
         new AdminVersionCommand(this);
         new AdminReloadCommand(this);
         new AdminTeleportCommand(this, "tp");
@@ -37,15 +47,6 @@ public class AcidCommand extends CompositeCommand {
         new AdminTeamMakeLeaderCommand(this);
         // Schems
         new AdminSchemCommand(this);
-    }
-
-    @Override
-    public void setup() {
-        setPermissionPrefix("acidisland");
-        setPermission("acidisland.admin.*");
-        setOnlyPlayer(false);
-        setParameters("commands.admin.help.parameters");
-        setDescription("commands.admin.help.description");
     }
 
     @Override

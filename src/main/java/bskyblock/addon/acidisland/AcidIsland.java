@@ -41,7 +41,6 @@ public class AcidIsland extends Addon {
         // Register commands
         new AcidCommand(this);
         new AiCommand(this);
-        
     }
 
     @Override
