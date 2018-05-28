@@ -34,8 +34,6 @@ public class AcidIsland extends Addon {
 
         // Create worlds
         aiw = new AcidIslandWorld(this);
-        // TODO Register settings
-        //getBSkyBlock().getSettings().register(settings);
     }
 
     @Override

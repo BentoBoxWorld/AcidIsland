@@ -2,8 +2,6 @@ package bskyblock.addon.acidisland.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import bskyblock.addon.acidisland.AcidIsland;
 import us.tastybento.bskyblock.api.addons.Addon;
@@ -22,7 +20,6 @@ import us.tastybento.bskyblock.commands.island.IslandSetnameCommand;
 import us.tastybento.bskyblock.commands.island.IslandSettingsCommand;
 import us.tastybento.bskyblock.commands.island.IslandUnbanCommand;
 import us.tastybento.bskyblock.commands.island.teams.IslandTeamCommand;
-import us.tastybento.bskyblock.util.Util;
 
 public class AiCommand extends CompositeCommand {
     
@@ -79,12 +76,4 @@ public class AiCommand extends CompositeCommand {
         return false;
 
     }
-
-    @Override
-    public Optional<List<String>> tabComplete(User user, String alias, List<String> args) {       
-        List<String> options = getPlugin().getIWM().getOverWorldNames().stream().collect(Collectors.toList());
-        String lastArg = !args.isEmpty() ? args.get(args.size()-1) : "";
-        return Optional.of(Util.tabLimit(options, lastArg));
-    }
-    
 }

@@ -810,5 +810,10 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
         this.chestItems = chestItems;
     }
 
+    @Override
+    public String getPermissionPrefix() {
+        return "acidisland";
+    }
+
 
 }
