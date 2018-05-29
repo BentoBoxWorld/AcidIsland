@@ -186,10 +186,10 @@ public class IslandBuilder implements Listener {
             User user = User.getInstance(playerUUID);
 
             // Sets the lines of the sign
-            sign.setLine(0, user.getTranslation("new-island.sign.line0", PLAYER_PLACEHOLDER, user.getName()));
-            sign.setLine(1, user.getTranslation("new-island.sign.line1", PLAYER_PLACEHOLDER, user.getName()));
-            sign.setLine(2, user.getTranslation("new-island.sign.line2", PLAYER_PLACEHOLDER, user.getName()));
-            sign.setLine(3, user.getTranslation("new-island.sign.line3", PLAYER_PLACEHOLDER, user.getName()));
+            sign.setLine(0, user.getTranslation("acidisland.sign.line0", PLAYER_PLACEHOLDER, user.getName()));
+            sign.setLine(1, user.getTranslation("acidisland.sign.line1", PLAYER_PLACEHOLDER, user.getName()));
+            sign.setLine(2, user.getTranslation("acidisland.sign.line2", PLAYER_PLACEHOLDER, user.getName()));
+            sign.setLine(3, user.getTranslation("acidisland.sign.line3", PLAYER_PLACEHOLDER, user.getName()));
 
             ((org.bukkit.material.Sign) sign.getData()).setFacingDirection(BlockFace.NORTH);
             sign.update();
