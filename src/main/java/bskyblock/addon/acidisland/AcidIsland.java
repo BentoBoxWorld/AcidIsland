@@ -7,6 +7,7 @@ import bskyblock.addon.acidisland.commands.AcidCommand;
 import bskyblock.addon.acidisland.commands.AiCommand;
 import bskyblock.addon.acidisland.listeners.AcidEffect;
 import bskyblock.addon.acidisland.listeners.IslandBuilder;
+import bskyblock.addon.acidisland.listeners.LavaCheck;
 import bskyblock.addon.acidisland.world.AcidIslandWorld;
 import us.tastybento.bskyblock.api.addons.Addon;
 
@@ -30,8 +31,8 @@ public class AcidIsland extends Addon {
             settings = settings.loadSettings();
         } catch (Exception e) {
             this.log("Settings could not be loaded " + e.getMessage());
+            e.printStackTrace();
         }
-
         // Create worlds
         aiw = new AcidIslandWorld(this);
     }
@@ -42,6 +43,7 @@ public class AcidIsland extends Addon {
         PluginManager manager = getServer().getPluginManager();
         // Acid Effects
         manager.registerEvents(new AcidEffect(this), this.getBSkyBlock());
+        manager.registerEvents(new LavaCheck(this), this.getBSkyBlock());
         // New Islands
         manager.registerEvents(new IslandBuilder(this), this.getBSkyBlock());
         // Register commands

@@ -18,6 +18,7 @@
 package bskyblock.addon.acidisland.listeners;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -55,6 +56,13 @@ public class AcidEffect implements Listener {
     private List<Player> burningPlayers = new ArrayList<Player>();
     private boolean isRaining = false;
     private List<Player> wetPlayers = new ArrayList<Player>();
+    private final static List<PotionEffectType> EFFECTS = Arrays.asList(
+            PotionEffectType.BLINDNESS, 
+            PotionEffectType.CONFUSION, 
+            PotionEffectType.HUNGER,
+            PotionEffectType.SLOW,
+            PotionEffectType.SLOW_DIGGING,
+            PotionEffectType.WEAKNESS);
 
     public AcidEffect(AcidIsland addon) {
         this.addon = addon;
@@ -68,76 +76,55 @@ public class AcidEffect implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent e) {
-        // Fast return if acid isn't being used
-        if (addon.getSettings().getAcidRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0) {
-            return;
-        }
-        final Player player = e.getPlayer();
+        Player player = e.getPlayer();
         // Fast checks
-        if (player.isDead() || player.getGameMode().toString().startsWith("SPECTATOR")) {
-            return;
-        }
-        // Check if in teleport
-        if (addon.getPlayers().isInTeleport(player.getUniqueId())) {
-            return;
-        }
-        // Check that they are in the ASkyBlock world
-        if (!player.getWorld().equals(addon.getAiw().getOverWorld())) {
+        if ((addon.getSettings().getAcidRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0)
+                || player.isDead()
+                || player.getGameMode().equals(GameMode.CREATIVE)
+                || player.getGameMode().toString().startsWith("SPECTATOR")
+                || addon.getPlayers().isInTeleport(player.getUniqueId())
+                || !player.getWorld().equals(addon.getIslandWorld())
+                || player.hasPermission("acidisland.mod.noburn") 
+                || player.hasPermission("admin.noburn")
+                || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
             return;
         }        
-        // Return if players are immune
-        if (player.isOp()) {
-            if (!addon.getSettings().getDamageOps()) {
-                return;
-            }
-        } else if (player.hasPermission("acidisland.mod.noburn") || player.hasPermission("admin.noburn")) {
-            return;
-        }
-
-        if (player.getGameMode().equals(GameMode.CREATIVE)) {
-            return;
-        }
 
         // Slow checks
         Location playerLoc = player.getLocation();
-
+        Biome biome = playerLoc.getBlock().getBiome();
         // Check for acid rain
-        if (addon.getSettings().getAcidRainDamage() > 0D && isRaining) {
-            // Only check if they are in a non-dry biome
-            Biome biome = playerLoc.getBlock().getBiome();
-            if (biome != Biome.DESERT && biome != Biome.DESERT_HILLS 
-                    && biome != Biome.SAVANNA && biome != Biome.MESA && biome != Biome.HELL) {
-                if (isSafeFromRain(player)) {
-                    wetPlayers.remove(player);
-                } else {
-                    if (!wetPlayers.contains(player)) {
-                        // Start hurting them
-                        // Add to the list
-                        wetPlayers.add(player);
-                        // This runnable continuously hurts the player even if
-                        // they are not
-                        // moving but are in acid rain.
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                // Check if it is still raining or player is safe or dead or there is no damage
-                                if (!isRaining || player.isDead() || isSafeFromRain(player) || addon.getSettings().getAcidRainDamage() <= 0D) {
-                                    wetPlayers.remove(player);
-                                    this.cancel();
-                                    // Check they are still in this world
-                                } else {
-                                    player.damage((addon.getSettings().getAcidRainDamage() - addon.getSettings().getAcidRainDamage() * getDamageReduced(player)));
-                                    if (addon.getServer().getVersion().contains("(MC: 1.8") || addon.getServer().getVersion().contains("(MC: 1.7")) {
-                                        player.getWorld().playSound(playerLoc, Sound.valueOf("FIZZ"), 3F, 3F);
-                                    } else {
-                                        player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
-                                    }
-                                }
-                            }
-                        }.runTaskTimer(addon.getBSkyBlock(), 0L, 20L);
+        if (addon.getSettings().getAcidRainDamage() > 0D && isRaining
+                && !biome.name().contains("DESERT")
+                && !biome.equals(Biome.HELL)
+                && !biome.name().contains("SAVANNA")) {
+            if (isSafeFromRain(player)) {
+                wetPlayers.remove(player);
+            } else if (!wetPlayers.contains(player)) {
+                // Start hurting them
+                // Add to the list
+                wetPlayers.add(player);
+                // This runnable continuously hurts the player even if
+                // they are not
+                // moving but are in acid rain.
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        // Check if it is still raining or player is safe or dead or there is no damage
+                        if (!isRaining || player.isDead() || isSafeFromRain(player) || addon.getSettings().getAcidRainDamage() <= 0D) {
+                            wetPlayers.remove(player);
+                            this.cancel();
+                            // Check they are still in this world
+                        } else {
+                            player.damage((addon.getSettings().getAcidRainDamage() - addon.getSettings().getAcidRainDamage() * getDamageReduced(player)));
+                            player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                        }
                     }
-                }
+                }.runTaskTimer(addon.getBSkyBlock(), 0L, 20L);
             }
+
+
         }
 
         // Find out if they are at the bottom of the sea and if so bounce them
@@ -149,9 +136,10 @@ public class AcidEffect implements Listener {
         // If they are already burning in acid then return
         if (burningPlayers.contains(player)) {
             // plugin.getLogger().info("DEBUG: no acid water is false");
-            if (isSafeFromAcid(player)) {
-                return;
-            }
+            return;
+        }
+        if (isSafeFromAcid(player)) {
+            return;
         }
         // ACID!
         // Put the player into the acid list
@@ -165,25 +153,12 @@ public class AcidEffect implements Listener {
                     burningPlayers.remove(player);
                     this.cancel();
                 } else {
-                    if (!addon.getSettings().getAcidDamageType().isEmpty()) {
-                        for (PotionEffectType t : addon.getSettings().getAcidDamageType()) {
-                            if (t.equals(PotionEffectType.BLINDNESS) || t.equals(PotionEffectType.CONFUSION) || t.equals(PotionEffectType.HUNGER)
-                                    || t.equals(PotionEffectType.SLOW) || t.equals(PotionEffectType.SLOW_DIGGING) || t.equals(PotionEffectType.WEAKNESS)) {
-                                player.addPotionEffect(new PotionEffect(t, 600, 1));
-                            } else {
-                                // Poison
-                                player.addPotionEffect(new PotionEffect(t, 200, 1));
-                            }
-                        }
-                    }
+                    addon.getSettings().getAcidDamageType().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
+                    addon.getSettings().getAcidDamageType().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
                     // Apply damage if there is any
                     if (addon.getSettings().getAcidDamage() > 0D) {
                         player.damage((addon.getSettings().getAcidDamage() - addon.getSettings().getAcidDamage() * getDamageReduced(player)));
-                        if (addon.getServer().getVersion().contains("(MC: 1.8") || addon.getServer().getVersion().contains("(MC: 1.7")) {
-                            player.getWorld().playSound(playerLoc, Sound.valueOf("FIZZ"), 3F, 3F);
-                        } else {
-                            player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
-                        }
+                        player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     }
 
                 }
@@ -197,17 +172,12 @@ public class AcidEffect implements Listener {
      * @return true if they are safe
      */
     private boolean isSafeFromRain(Player player) {
-        if (!player.getWorld().equals(addon.getIslandWorld())) {
-            return true;
-        }
-        // Check if player has a helmet on and helmet protection is true
-        if (addon.getSettings().getHelmetProtection() && (player.getInventory().getHelmet() != null 
+        if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null 
                 && player.getInventory().getHelmet().getType().name().contains("HELMET"))) {
             return true;
         }
         // Check potions
-        Collection<PotionEffect> activePotions = player.getActivePotionEffects();
-        for (PotionEffect s : activePotions) {
+        for (PotionEffect s : player.getActivePotionEffects()) {
             if (s.getType().equals(PotionEffectType.WATER_BREATHING)) {
                 // Safe!
                 return true;
@@ -228,9 +198,6 @@ public class AcidEffect implements Listener {
      * @return true if player is not safe
      */
     private boolean isSafeFromAcid(Player player) {
-        if (!player.getWorld().equals(addon.getIslandWorld())) {
-            return true;
-        }
         // In liquid
         Material bodyMat = player.getLocation().getBlock().getType();
         Material headMat = player.getLocation().getBlock().getRelative(BlockFace.UP).getType();
@@ -243,15 +210,12 @@ public class AcidEffect implements Listener {
         }
         // Check if player is in a boat
         Entity playersVehicle = player.getVehicle();
-        if (playersVehicle != null) {
-            // They are in a Vehicle
-            if (playersVehicle.getType().equals(EntityType.BOAT)) {
+        if (playersVehicle != null && playersVehicle.getType().equals(EntityType.BOAT)) {
                 // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT!
                 return true;
             }
-        }
         // Check if full armor protects
-        if (addon.getSettings().getFullArmorProtection()) {
+        if (addon.getSettings().isFullArmorProtection()) {
             boolean fullArmor = true;
             for (ItemStack item : player.getInventory().getArmorContents()) {
                 if (item == null || (item != null && item.getType().equals(Material.AIR))) {

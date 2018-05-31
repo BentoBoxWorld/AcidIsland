@@ -204,10 +204,9 @@ island:
 
 
 ### Acid Settings ###
-# Originally designed for AcidIsland, but can be used for BSkyBlock as well.
 acid:
   # Ops receive damage from acid (Set to true if you want Ops to play properly)
-  damage-op: false
+  damage-op: true
 
   # Damage chickens in acid - true or false - chickens tend to go swimming...
   damage-chickens: false
@@ -219,13 +218,13 @@ acid:
       # A fully health player has 20 health points. Players will regen some health
       # so the default will give players about 3 seconds to get out the acid
       # 0 = no damage, 10 = default damage, 20 = instant death
-      player: 0
+      player: 10
 
       # Damage that monsters will experience in acid.
-      monster: 0
+      monster: 5
 
       # Damage that animals will experience in acid.
-      animal: 0
+      animal: 5
 
       # Destroy items in water after this many seconds. Timing is variable and may occur
       # up to 2x this time. If 0, items will not be removed. Acid damage does not need to
@@ -234,14 +233,15 @@ acid:
       item: 0
 
     # Damage that rain does.
-    rain: 0
+    rain: 1
 
     # Damage type to apply in addition to acid damage
     # Types can be : SLOW, SLOW_DIGGING, CONFUSION, BLINDNESS, HUNGER, WEAKNESS and POISON
     # If you just want these to act, then make the acid damage 0 above
     # Note - these are potion effects and so can be cured by milk
     effects:
-    #- confusion
+    - CONFUSION
+    - BLINDNESS
 
   # Armor protection
   protection:

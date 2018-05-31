@@ -1,7 +1,6 @@
 package bskyblock.addon.acidisland;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -92,20 +91,31 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
     @ConfigEntry(path = "acid.damage-chickens")
     private boolean acidDamageChickens = false;
 
-    @ConfigEntry(path = "acid.options.item-destroy-time")
-    private int acidDestroyItemTime = 0;
-
     // Damage
     @ConfigEntry(path = "acid.damage.acid.player")
     private int acidDamage = 10;
+    
+    @ConfigEntry(path = "acid.damage.acid.monster")
+    private int acidDamageMonster = 10;
+    
+    @ConfigEntry(path = "acid.damage.acid.animal")
+    private int acidDamageAnimal = 10;
+    
+    @ConfigEntry(path = "acid.damage.acid.item")
+    private int acidDestroyItemTime = 0;
 
     @ConfigEntry(path = "acid.damage.rain")
     private int acidRainDamage = 1;
 
     @ConfigEntry(path = "acid.damage.effects")
     @Adapter(PotionEffectListAdapter.class)
-    private List<PotionEffectType> acidEffects = new ArrayList<>(Arrays.asList(PotionEffectType.CONFUSION, PotionEffectType.SLOW));
+    private List<PotionEffectType> acidEffects = new ArrayList<>();
 
+    @ConfigEntry(path = "acid.damage.protection.helmet")
+    private boolean helmetProtection;
+    
+    @ConfigEntry(path = "acid.damage.protection.full-armor")
+    private boolean fullArmorProtection;
     // ---------------------------------------------
 
     /*      ISLAND      */
@@ -174,10 +184,6 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
 
     private boolean useOwnGenerator;
 
-    public int getAcidDamage() {
-        return 1;
-    }
-
     public List<PotionEffectType> getAcidDamageType() {
         return acidEffects;
     }
@@ -186,23 +192,9 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
         return chestItems;
     }
 
-    public boolean getDamageOps() {
-        return true;
-    }
-
     @Override
     public Map<EntityType, Integer> getEntityLimits() {
         return entityLimits;
-    }
-
-    public boolean getFullArmorProtection() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean getHelmetProtection() {
-        // TODO Auto-generated method stub
-        return false;
     }
 
     @Override
@@ -339,6 +331,13 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
      */
     public boolean isAcidDamageOp() {
         return acidDamageOp;
+    }
+
+    /**
+     * @return the acidDamage
+     */
+    public int getAcidDamage() {
+        return acidDamage;
     }
 
     /**
@@ -813,6 +812,62 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
     @Override
     public String getPermissionPrefix() {
         return "acidisland";
+    }
+
+    /**
+     * @return the acidDamageMonster
+     */
+    public int getAcidDamageMonster() {
+        return acidDamageMonster;
+    }
+
+    /**
+     * @param acidDamageMonster the acidDamageMonster to set
+     */
+    public void setAcidDamageMonster(int acidDamageMonster) {
+        this.acidDamageMonster = acidDamageMonster;
+    }
+
+    /**
+     * @return the acidDamageAnimal
+     */
+    public int getAcidDamageAnimal() {
+        return acidDamageAnimal;
+    }
+
+    /**
+     * @param acidDamageAnimal the acidDamageAnimal to set
+     */
+    public void setAcidDamageAnimal(int acidDamageAnimal) {
+        this.acidDamageAnimal = acidDamageAnimal;
+    }
+
+    /**
+     * @return the helmetProtection
+     */
+    public boolean isHelmetProtection() {
+        return helmetProtection;
+    }
+
+    /**
+     * @param helmetProtection the helmetProtection to set
+     */
+    public void setHelmetProtection(boolean helmetProtection) {
+        this.helmetProtection = helmetProtection;
+    }
+
+    /**
+     * @return the fullArmorProtection
+     */
+    public boolean isFullArmorProtection() {
+        return fullArmorProtection;
+    }
+
+    /**
+     * @param fullArmorProtection the fullArmorProtection to set
+     */
+    public void setFullArmorProtection(boolean fullArmorProtection) {
+        this.fullArmorProtection = fullArmorProtection;
     }
 
 
