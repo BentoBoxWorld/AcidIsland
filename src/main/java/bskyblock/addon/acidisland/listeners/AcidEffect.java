@@ -1,20 +1,3 @@
-/*******************************************************************************
- * This file is part of ASkyBlock.
- *
- *     ASkyBlock is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- *
- *     ASkyBlock is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *
- *     You should have received a copy of the GNU General Public License
- *     along with ASkyBlock.  If not, see <http://www.gnu.org/licenses/>.
- *******************************************************************************/
-
 package bskyblock.addon.acidisland.listeners;
 
 import java.util.ArrayList;
@@ -53,9 +36,9 @@ import bskyblock.addon.acidisland.AcidIsland;
 public class AcidEffect implements Listener {
 
     private final AcidIsland addon;
-    private List<Player> burningPlayers = new ArrayList<Player>();
+    private final List<Player> burningPlayers = new ArrayList<>();
     private boolean isRaining = false;
-    private List<Player> wetPlayers = new ArrayList<Player>();
+    private final List<Player> wetPlayers = new ArrayList<>();
     private final static List<PotionEffectType> EFFECTS = Arrays.asList(
             PotionEffectType.BLINDNESS, 
             PotionEffectType.CONFUSION, 
@@ -70,8 +53,8 @@ public class AcidEffect implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDeath(PlayerDeathEvent e) {
-        burningPlayers.remove((Player) e.getEntity());
-        wetPlayers.remove((Player) e.getEntity());
+        burningPlayers.remove(e.getEntity());
+        wetPlayers.remove(e.getEntity());
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -168,7 +151,7 @@ public class AcidEffect implements Listener {
 
     /**
      * Check if player is safe from rain
-     * @param player
+     * @param player - player
      * @return true if they are safe
      */
     private boolean isSafeFromRain(Player player) {
@@ -194,7 +177,7 @@ public class AcidEffect implements Listener {
 
     /**
      * Check if player can be burned by acid
-     * @param player
+     * @param player - player
      * @return true if player is not safe
      */
     private boolean isSafeFromAcid(Player player) {
@@ -218,7 +201,7 @@ public class AcidEffect implements Listener {
         if (addon.getSettings().isFullArmorProtection()) {
             boolean fullArmor = true;
             for (ItemStack item : player.getInventory().getArmorContents()) {
-                if (item == null || (item != null && item.getType().equals(Material.AIR))) {
+                if (item == null || item.getType().equals(Material.AIR)) {
                     fullArmor = false;
                     break;
                 }
@@ -241,12 +224,12 @@ public class AcidEffect implements Listener {
     }
 
     /**
-     * @param player
+     * @param player - player
      * @return A double between 0.0 and 0.80 that reflects how much armor the
      *         player has on. The higher the value, the more protection they
      *         have.
      */
-    static public double getDamageReduced(Player player) {
+    private static double getDamageReduced(Player player) {
         org.bukkit.inventory.PlayerInventory inv = player.getInventory();
         ItemStack boots = inv.getBoots();
         ItemStack helmet = inv.getHelmet();
@@ -254,54 +237,82 @@ public class AcidEffect implements Listener {
         ItemStack pants = inv.getLeggings();
         double red = 0.0;
         if (helmet != null) {
-            if (helmet.getType() == Material.LEATHER_HELMET)
-                red = red + 0.04;
-            else if (helmet.getType() == Material.GOLD_HELMET)
-                red = red + 0.08;
-            else if (helmet.getType() == Material.CHAINMAIL_HELMET)
-                red = red + 0.08;
-            else if (helmet.getType() == Material.IRON_HELMET)
-                red = red + 0.08;
-            else if (helmet.getType() == Material.DIAMOND_HELMET)
-                red = red + 0.12;
+            switch (helmet.getType()) {
+                case LEATHER_HELMET:
+                    red = red + 0.04;
+                    break;
+                case GOLD_HELMET:
+                    red = red + 0.08;
+                    break;
+                case CHAINMAIL_HELMET:
+                    red = red + 0.08;
+                    break;
+                case IRON_HELMET:
+                    red = red + 0.08;
+                    break;
+                case DIAMOND_HELMET:
+                    red = red + 0.12;
+                    break;
+            }
         }
         if (boots != null) {
-            if (boots.getType() == Material.LEATHER_BOOTS)
-                red = red + 0.04;
-            else if (boots.getType() == Material.GOLD_BOOTS)
-                red = red + 0.04;
-            else if (boots.getType() == Material.CHAINMAIL_BOOTS)
-                red = red + 0.04;
-            else if (boots.getType() == Material.IRON_BOOTS)
-                red = red + 0.08;
-            else if (boots.getType() == Material.DIAMOND_BOOTS)
-                red = red + 0.12;
+            switch (boots.getType()) {
+                case LEATHER_BOOTS:
+                    red = red + 0.04;
+                    break;
+                case GOLD_BOOTS:
+                    red = red + 0.04;
+                    break;
+                case CHAINMAIL_BOOTS:
+                    red = red + 0.04;
+                    break;
+                case IRON_BOOTS:
+                    red = red + 0.08;
+                    break;
+                case DIAMOND_BOOTS:
+                    red = red + 0.12;
+                    break;
+            }
         }
         // Pants
         if (pants != null) {
-            if (pants.getType() == Material.LEATHER_LEGGINGS)
-                red = red + 0.08;
-            else if (pants.getType() == Material.GOLD_LEGGINGS)
-                red = red + 0.12;
-            else if (pants.getType() == Material.CHAINMAIL_LEGGINGS)
-                red = red + 0.16;
-            else if (pants.getType() == Material.IRON_LEGGINGS)
-                red = red + 0.20;
-            else if (pants.getType() == Material.DIAMOND_LEGGINGS)
-                red = red + 0.24;
+            switch (pants.getType()) {
+                case LEATHER_LEGGINGS:
+                    red = red + 0.08;
+                    break;
+                case GOLD_LEGGINGS:
+                    red = red + 0.12;
+                    break;
+                case CHAINMAIL_LEGGINGS:
+                    red = red + 0.16;
+                    break;
+                case IRON_LEGGINGS:
+                    red = red + 0.20;
+                    break;
+                case DIAMOND_LEGGINGS:
+                    red = red + 0.24;
+                    break;
+            }
         }
         // Chest plate
         if (chest != null) {
-            if (chest.getType() == Material.LEATHER_CHESTPLATE)
-                red = red + 0.12;
-            else if (chest.getType() == Material.GOLD_CHESTPLATE)
-                red = red + 0.20;
-            else if (chest.getType() == Material.CHAINMAIL_CHESTPLATE)
-                red = red + 0.20;
-            else if (chest.getType() == Material.IRON_CHESTPLATE)
-                red = red + 0.24;
-            else if (chest.getType() == Material.DIAMOND_CHESTPLATE)
-                red = red + 0.32;
+            switch (chest.getType()) {
+                case LEATHER_CHESTPLATE:
+                    red = red + 0.12;
+                    break;
+                case GOLD_CHESTPLATE:
+                    red = red + 0.20;
+                    break;
+                case CHAINMAIL_CHESTPLATE:
+                    red = red + 0.20;
+                    break;
+                case IRON_CHESTPLATE:
+                    red = red + 0.24;
+                    break;
+                case DIAMOND_CHESTPLATE:
+                    red = red + 0.32;
+                    break;
+            }
         }
         return red;
     }

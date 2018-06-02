@@ -12,7 +12,7 @@ import bskyblock.addon.acidisland.AcidIsland;
 
 public class LavaCheck implements Listener {
 
-    AcidIsland addon;
+    private final AcidIsland addon;
 
 
     public LavaCheck(AcidIsland addon) {

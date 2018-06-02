@@ -1,6 +1,3 @@
-/**
- * 
- */
 package bskyblock.addon.acidisland.world;
 
 import org.bukkit.Location;
@@ -20,13 +17,13 @@ public class AcidIslandWorld {
 
     private static final String NETHER = "_nether";
     private static final String THE_END = "_the_end";
-    private World islandWorld;
+    private final World islandWorld;
     private World netherWorld;
     private World endWorld;
     
     /**
      * Create a register worlds with BSkyBlock
-     * @param addon
+     * @param addon - addon
      */
     public AcidIslandWorld(AcidIsland addon) {
         String worldName = addon.getSettings().getWorldName();

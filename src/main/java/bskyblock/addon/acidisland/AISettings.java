@@ -276,10 +276,7 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
     }
 
     @Override
-    public boolean isNetherIslands() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+    public boolean isNetherIslands() { return netherIslands; }
 
     public boolean isNetherRoof() {
         return netherRoof;
@@ -809,6 +806,7 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
         this.chestItems = chestItems;
     }
 
+    @SuppressWarnings("SameReturnValue")
     @Override
     public String getPermissionPrefix() {
         return "acidisland";

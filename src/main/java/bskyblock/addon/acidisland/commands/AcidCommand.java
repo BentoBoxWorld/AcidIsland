@@ -59,4 +59,5 @@ public class AcidCommand extends CompositeCommand {
         return showHelp(this, user);
     }
 
+
 }

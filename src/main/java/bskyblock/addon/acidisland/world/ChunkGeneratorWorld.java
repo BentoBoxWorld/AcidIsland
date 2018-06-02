@@ -18,14 +18,13 @@ import bskyblock.addon.acidisland.AcidIsland;
  * @author tastybento
  *
  */
-public class ChunkGeneratorWorld extends ChunkGenerator {
+class ChunkGeneratorWorld extends ChunkGenerator {
     
-    AcidIsland addon;
-    Random rand = new Random();
-    PerlinOctaveGenerator gen;
+    private final AcidIsland addon;
+    private final Random rand = new Random();
 
     /**
-     * @param addon
+     * @param addon - addon
      */
     public ChunkGeneratorWorld(AcidIsland addon) {
         super();
@@ -69,7 +68,7 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     private ChunkData generateNetherChunks(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomeGrid) {
         ChunkData result = createChunkData(world);
         rand.setSeed(world.getSeed());
-        gen = new PerlinOctaveGenerator((long) (random.nextLong() * random.nextGaussian()), 8);
+        PerlinOctaveGenerator gen = new PerlinOctaveGenerator((long) (random.nextLong() * random.nextGaussian()), 8);
         // This is a nether generator
         if (!world.getEnvironment().equals(Environment.NETHER)) {
             return result;

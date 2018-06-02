@@ -12,7 +12,7 @@ import bskyblock.addon.acidisland.world.AcidIslandWorld;
 import us.tastybento.bskyblock.api.addons.Addon;
 
 /**
- * Addin to BSkyBlock that enables AcidIsland
+ * Addon to BSkyBlock that enables AcidIsland
  * @author tastybento
  *
  */
@@ -68,7 +68,7 @@ public class AcidIsland extends Addon {
     
     /**
      * Convenience method to obtain the AcidIsland overworld
-     * @return
+     * @return Island World
      */
     public World getIslandWorld() {
         return aiw.getOverWorld();

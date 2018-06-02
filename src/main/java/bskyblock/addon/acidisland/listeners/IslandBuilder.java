@@ -26,10 +26,10 @@ import us.tastybento.bskyblock.database.objects.Island;
 
 public class IslandBuilder implements Listener {
     private static final String PLAYER_PLACEHOLDER = "[player]";
-    private AcidIsland addon;
+    private final AcidIsland addon;
 
     /**
-     * @param addon
+     * @param addon - addon
      */
     public IslandBuilder(AcidIsland addon) {
         this.addon = addon;
