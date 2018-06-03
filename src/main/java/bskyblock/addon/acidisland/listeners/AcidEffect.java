@@ -61,13 +61,22 @@ public class AcidEffect implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onSeaBounce(PlayerMoveEvent e) {
+        Player player = e.getPlayer();
+        if (!player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)
+                && player.getWorld().equals(addon.getIslandWorld()) && player.getLocation().getBlockY() < 1) {
+            player.setVelocity(new Vector(player.getVelocity().getX(), 1D, player.getVelocity().getZ()));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         // Fast checks
         if ((addon.getSettings().getAcidRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0)
                 || player.isDead()
                 || player.getGameMode().equals(GameMode.CREATIVE)
-                || player.getGameMode().toString().startsWith("SPECTATOR")
+                || player.getGameMode().equals(GameMode.SPECTATOR)
                 || addon.getPlayers().isInTeleport(player.getUniqueId())
                 || !player.getWorld().equals(addon.getIslandWorld())
                 || player.hasPermission("acidisland.mod.noburn") 
@@ -111,13 +120,6 @@ public class AcidEffect implements Listener {
             }
 
 
-        }
-
-        // Find out if they are at the bottom of the sea and if so bounce them
-        // back up
-        if (playerLoc.getBlockY() < 1) {
-            final Vector v = new Vector(player.getVelocity().getX(), 1D, player.getVelocity().getZ());
-            player.setVelocity(v);
         }
         // If they are already burning in acid then return
         if (burningPlayers.contains(player)) {
@@ -197,9 +199,9 @@ public class AcidEffect implements Listener {
         // Check if player is in a boat
         Entity playersVehicle = player.getVehicle();
         if (playersVehicle != null && playersVehicle.getType().equals(EntityType.BOAT)) {
-                // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT!
-                return true;
-            }
+            // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT!
+            return true;
+        }
         // Check if full armor protects
         if (addon.getSettings().isFullArmorProtection()) {
             boolean fullArmor = true;
@@ -241,42 +243,42 @@ public class AcidEffect implements Listener {
         double red = 0.0;
         if (helmet != null) {
             switch (helmet.getType()) {
-                case LEATHER_HELMET:
-                    red = red + 0.04;
-                    break;
-                case GOLD_HELMET:
-                    red = red + 0.08;
-                    break;
-                case CHAINMAIL_HELMET:
-                    red = red + 0.08;
-                    break;
-                case IRON_HELMET:
-                    red = red + 0.08;
-                    break;
-                case DIAMOND_HELMET:
-                    red = red + 0.12;
-                    break;
+            case LEATHER_HELMET:
+                red = red + 0.04;
+                break;
+            case GOLD_HELMET:
+                red = red + 0.08;
+                break;
+            case CHAINMAIL_HELMET:
+                red = red + 0.08;
+                break;
+            case IRON_HELMET:
+                red = red + 0.08;
+                break;
+            case DIAMOND_HELMET:
+                red = red + 0.12;
+                break;
             default:
                 break;
             }
         }
         if (boots != null) {
             switch (boots.getType()) {
-                case LEATHER_BOOTS:
-                    red = red + 0.04;
-                    break;
-                case GOLD_BOOTS:
-                    red = red + 0.04;
-                    break;
-                case CHAINMAIL_BOOTS:
-                    red = red + 0.04;
-                    break;
-                case IRON_BOOTS:
-                    red = red + 0.08;
-                    break;
-                case DIAMOND_BOOTS:
-                    red = red + 0.12;
-                    break;
+            case LEATHER_BOOTS:
+                red = red + 0.04;
+                break;
+            case GOLD_BOOTS:
+                red = red + 0.04;
+                break;
+            case CHAINMAIL_BOOTS:
+                red = red + 0.04;
+                break;
+            case IRON_BOOTS:
+                red = red + 0.08;
+                break;
+            case DIAMOND_BOOTS:
+                red = red + 0.12;
+                break;
             default:
                 break;
             }
@@ -284,21 +286,21 @@ public class AcidEffect implements Listener {
         // Pants
         if (pants != null) {
             switch (pants.getType()) {
-                case LEATHER_LEGGINGS:
-                    red = red + 0.08;
-                    break;
-                case GOLD_LEGGINGS:
-                    red = red + 0.12;
-                    break;
-                case CHAINMAIL_LEGGINGS:
-                    red = red + 0.16;
-                    break;
-                case IRON_LEGGINGS:
-                    red = red + 0.20;
-                    break;
-                case DIAMOND_LEGGINGS:
-                    red = red + 0.24;
-                    break;
+            case LEATHER_LEGGINGS:
+                red = red + 0.08;
+                break;
+            case GOLD_LEGGINGS:
+                red = red + 0.12;
+                break;
+            case CHAINMAIL_LEGGINGS:
+                red = red + 0.16;
+                break;
+            case IRON_LEGGINGS:
+                red = red + 0.20;
+                break;
+            case DIAMOND_LEGGINGS:
+                red = red + 0.24;
+                break;
             default:
                 break;
             }
@@ -306,21 +308,21 @@ public class AcidEffect implements Listener {
         // Chest plate
         if (chest != null) {
             switch (chest.getType()) {
-                case LEATHER_CHESTPLATE:
-                    red = red + 0.12;
-                    break;
-                case GOLD_CHESTPLATE:
-                    red = red + 0.20;
-                    break;
-                case CHAINMAIL_CHESTPLATE:
-                    red = red + 0.20;
-                    break;
-                case IRON_CHESTPLATE:
-                    red = red + 0.24;
-                    break;
-                case DIAMOND_CHESTPLATE:
-                    red = red + 0.32;
-                    break;
+            case LEATHER_CHESTPLATE:
+                red = red + 0.12;
+                break;
+            case GOLD_CHESTPLATE:
+                red = red + 0.20;
+                break;
+            case CHAINMAIL_CHESTPLATE:
+                red = red + 0.20;
+                break;
+            case IRON_CHESTPLATE:
+                red = red + 0.24;
+                break;
+            case DIAMOND_CHESTPLATE:
+                red = red + 0.32;
+                break;
             default:
                 break;
             }
