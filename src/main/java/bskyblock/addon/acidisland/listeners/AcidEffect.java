@@ -27,6 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import bskyblock.addon.acidisland.AcidIsland;
+import bskyblock.addon.acidisland.world.AcidTask;
 
 /**
  * Applies the acid effect to players
@@ -49,6 +50,8 @@ public class AcidEffect implements Listener {
 
     public AcidEffect(AcidIsland addon) {
         this.addon = addon;
+        // Burn monsters or animals that fall into the acid
+        new AcidTask(addon);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -253,6 +256,8 @@ public class AcidEffect implements Listener {
                 case DIAMOND_HELMET:
                     red = red + 0.12;
                     break;
+            default:
+                break;
             }
         }
         if (boots != null) {
@@ -272,6 +277,8 @@ public class AcidEffect implements Listener {
                 case DIAMOND_BOOTS:
                     red = red + 0.12;
                     break;
+            default:
+                break;
             }
         }
         // Pants
@@ -292,6 +299,8 @@ public class AcidEffect implements Listener {
                 case DIAMOND_LEGGINGS:
                     red = red + 0.24;
                     break;
+            default:
+                break;
             }
         }
         // Chest plate
@@ -312,6 +321,8 @@ public class AcidEffect implements Listener {
                 case DIAMOND_CHESTPLATE:
                     red = red + 0.32;
                     break;
+            default:
+                break;
             }
         }
         return red;

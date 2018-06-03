@@ -102,7 +102,7 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
     private int acidDamageAnimal = 10;
     
     @ConfigEntry(path = "acid.damage.acid.item")
-    private int acidDestroyItemTime = 0;
+    private long acidDestroyItemTime = 0;
 
     @ConfigEntry(path = "acid.damage.rain")
     private int acidRainDamage = 1;
@@ -361,14 +361,14 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
     /**
      * @return the acidDestroyItemTime
      */
-    public int getAcidDestroyItemTime() {
+    public long getAcidDestroyItemTime() {
         return acidDestroyItemTime;
     }
 
     /**
      * @param acidDestroyItemTime the acidDestroyItemTime to set
      */
-    public void setAcidDestroyItemTime(int acidDestroyItemTime) {
+    public void setAcidDestroyItemTime(long acidDestroyItemTime) {
         this.acidDestroyItemTime = acidDestroyItemTime;
     }
 
@@ -806,7 +806,6 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
         this.chestItems = chestItems;
     }
 
-    @SuppressWarnings("SameReturnValue")
     @Override
     public String getPermissionPrefix() {
         return "acidisland";

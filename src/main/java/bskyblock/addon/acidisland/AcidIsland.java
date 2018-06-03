@@ -9,6 +9,7 @@ import bskyblock.addon.acidisland.listeners.AcidEffect;
 import bskyblock.addon.acidisland.listeners.IslandBuilder;
 import bskyblock.addon.acidisland.listeners.LavaCheck;
 import bskyblock.addon.acidisland.world.AcidIslandWorld;
+import bskyblock.addon.acidisland.world.AcidTask;
 import us.tastybento.bskyblock.api.addons.Addon;
 
 /**
@@ -49,6 +50,8 @@ public class AcidIsland extends Addon {
         // Register commands
         new AcidCommand(this);
         new AiCommand(this);
+        // Burn everything
+        new AcidTask(this);
     }
 
     @Override
