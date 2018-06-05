@@ -11,6 +11,7 @@ import bskyblock.addon.acidisland.listeners.LavaCheck;
 import bskyblock.addon.acidisland.world.AcidIslandWorld;
 import bskyblock.addon.acidisland.world.AcidTask;
 import us.tastybento.bskyblock.api.addons.Addon;
+import us.tastybento.bskyblock.api.configuration.BSBConfig;
 
 /**
  * Addon to BSkyBlock that enables AcidIsland
@@ -26,14 +27,7 @@ public class AcidIsland extends Addon {
     public void onLoad() {
         saveDefaultConfig();
         // Load settings
-        settings = new AISettings();
-        // Load settings from config.yml. This will check if there are any issues with it too.
-        try {
-            settings = settings.loadSettings();
-        } catch (Exception e) {
-            this.log("Settings could not be loaded " + e.getMessage());
-            e.printStackTrace();
-        }
+        settings = new BSBConfig<>(this, AISettings.class).loadConfigObject("");
         // Create worlds
         aiw = new AcidIslandWorld(this);
     }

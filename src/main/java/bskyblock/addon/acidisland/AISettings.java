@@ -11,9 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import us.tastybento.bskyblock.api.configuration.ConfigEntry;
-import us.tastybento.bskyblock.api.configuration.ISettings;
 import us.tastybento.bskyblock.api.configuration.StoreAt;
 import us.tastybento.bskyblock.api.configuration.WorldSettings;
+import us.tastybento.bskyblock.database.objects.DataObject;
 import us.tastybento.bskyblock.database.objects.adapters.Adapter;
 import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter;
 
@@ -23,7 +23,7 @@ import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter
  *
  */
 @StoreAt(filename="config.yml", path="addons/BSkyBlock-AcidIsland") // Explicitly call out what name this should have.
-public class AISettings implements ISettings<AISettings>, WorldSettings {
+public class AISettings implements DataObject, WorldSettings {
     
     private String uniqueId = "config";
     
@@ -305,11 +305,6 @@ public class AISettings implements ISettings<AISettings>, WorldSettings {
     @Override
     public int getMaxHomes() {
         return maxHomes;
-    }
-
-    @Override
-    public AISettings getInstance() {
-        return this;
     }
 
     @Override
