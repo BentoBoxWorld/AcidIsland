@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import us.tastybento.bskyblock.api.configuration.ConfigComment;
 import us.tastybento.bskyblock.api.configuration.ConfigEntry;
 import us.tastybento.bskyblock.api.configuration.StoreAt;
 import us.tastybento.bskyblock.api.configuration.WorldSettings;
@@ -116,6 +117,13 @@ public class AISettings implements DataObject, WorldSettings {
     
     @ConfigEntry(path = "acid.damage.protection.full-armor")
     private boolean fullArmorProtection;
+    
+    // Invincible visitor settings
+    @ConfigComment("Invincible visitors. List of damages that will not affect visitors.")
+    @ConfigComment("Make list blank if visitors should receive all damages")
+    @ConfigEntry(path = "protection.invincible-visitors")
+    private List<String> ivSettings = new ArrayList<>();
+
     // ---------------------------------------------
 
     /*      ISLAND      */
@@ -183,6 +191,7 @@ public class AISettings implements DataObject, WorldSettings {
     private EntityType companionType = EntityType.COW;
 
     private boolean useOwnGenerator;
+
 
     public List<PotionEffectType> getAcidDamageType() {
         return acidEffects;
@@ -860,6 +869,22 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setFullArmorProtection(boolean fullArmorProtection) {
         this.fullArmorProtection = fullArmorProtection;
+    }
+
+    /**
+     * Invincible visitor settings
+     * @return the ivSettings
+     */
+    @Override
+    public List<String> getIvSettings() {
+        return ivSettings;
+    }
+
+    /**
+     * @param ivSettings the ivSettings to set
+     */
+    public void setIvSettings(List<String> ivSettings) {
+        this.ivSettings = ivSettings;
     }
 
 

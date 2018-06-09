@@ -74,6 +74,55 @@ world:
     generate: true
     islands: true
 
+### Protection Settings ###
+protection:
+  # Allow pistons to push outside of the protected area (maybe to make bridges)
+  allow-piston-push: true
+  
+  # Restrict Wither and other flying mobs.
+  # Any flying mobs that exit the island space where they were spawned will be removed.
+  # Includes blaze and ghast. 
+  restrict-flying-mobs: true
+  
+  # Invincible visitors. List of damages that will not affect visitors.
+  # Make list blank if visitors should receive all damages
+  invincible-visitors:
+  - BLOCK_EXPLOSION
+  - CONTACT
+  - CUSTOM
+  - DROWNING
+  - ENTITY_ATTACK
+  - ENTITY_EXPLOSION
+  - FALL
+  - FALLING_BLOCK
+  - FIRE
+  - FIRE_TICK
+  - LAVA
+  - LIGHTNING
+  - MAGIC
+  - POISON
+  - PROJECTILE
+  - STARVATION
+  - SUFFOCATION
+  - THORNS
+  - WITHER
+  - DRAGON_BREATH
+  - FLY_INTO_WALL
+  - HOT_FLOOR
+  - CRAMMING
+  - VOID
+
+  # Visitor banned commands: Visitors to islands cannot use these commands
+  visitor-banned-commands:
+  - spawner
+  - spawnmob
+
+  # PVP cooldown in seconds. Players cannot toggle PVP off and on until this timeout
+  toggle-pvp-cooldown: 60
+  
+  # TODO
+  flags: []
+
 ### Island Settings ###
 island:
   # Default chest items
