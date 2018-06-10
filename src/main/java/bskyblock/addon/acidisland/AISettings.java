@@ -82,6 +82,15 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "world.end.dragon-spawn")
     private boolean dragonSpawn = false;
     
+    @ConfigComment("World flags. These are boolean settings for various flags for this world")
+    @ConfigEntry(path = "world.flags")
+    private Map<String, Boolean> worldFlags = new HashMap<>();
+    {
+        worldFlags.put("ENTER_EXIT_MESSAGES", true);
+        worldFlags.put("PISTON_PUSH", true);
+        worldFlags.put("REMOVE_MOBS", true);
+    }
+
     // ---------------------------------------------
 
     /*      ACID        */
@@ -887,5 +896,18 @@ public class AISettings implements DataObject, WorldSettings {
         this.ivSettings = ivSettings;
     }
 
+    /**
+     * @return the worldFlags
+     */
+    @Override
+    public Map<String, Boolean> getWorldFlags() {
+        return worldFlags;
+    }
+    /**
+     * @param worldFlags the worldFlags to set
+     */
+    public void setWorldFlags(Map<String, Boolean> worldFlags) {
+        this.worldFlags = worldFlags;
+    }
 
 }
