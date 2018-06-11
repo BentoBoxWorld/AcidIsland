@@ -17,10 +17,10 @@ public class AcidIslandWorld {
 
     private static final String NETHER = "_nether";
     private static final String THE_END = "_the_end";
-    private final World islandWorld;
+    private World islandWorld;
     private World netherWorld;
     private World endWorld;
-    
+
     /**
      * Create a register worlds with BSkyBlock
      * @param addon - addon
@@ -73,11 +73,11 @@ public class AcidIslandWorld {
     public World getOverWorld() {
         return islandWorld;
     }
-    
+
     public World getNetherWorld() {
         return netherWorld;
     }
-    
+
     public World getEndWorld() {
         return endWorld;
     }

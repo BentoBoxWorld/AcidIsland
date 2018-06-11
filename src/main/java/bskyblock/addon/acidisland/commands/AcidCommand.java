@@ -13,6 +13,7 @@ import us.tastybento.bskyblock.commands.admin.AdminSchemCommand;
 import us.tastybento.bskyblock.commands.admin.AdminSetRankCommand;
 import us.tastybento.bskyblock.commands.admin.AdminTeleportCommand;
 import us.tastybento.bskyblock.commands.admin.AdminVersionCommand;
+import us.tastybento.bskyblock.commands.admin.AdminWorldCommand;
 import us.tastybento.bskyblock.commands.admin.teams.AdminTeamAddCommand;
 import us.tastybento.bskyblock.commands.admin.teams.AdminTeamDisbandCommand;
 import us.tastybento.bskyblock.commands.admin.teams.AdminTeamKickCommand;
@@ -47,6 +48,8 @@ public class AcidCommand extends CompositeCommand {
         new AdminTeamMakeLeaderCommand(this);
         // Schems
         new AdminSchemCommand(this);
+        // World
+        new AdminWorldCommand(this);
     }
 
     @Override
