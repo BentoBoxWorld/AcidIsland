@@ -3,9 +3,12 @@ package bskyblock.addon.acidisland;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -14,6 +17,7 @@ import us.tastybento.bskyblock.api.configuration.ConfigComment;
 import us.tastybento.bskyblock.api.configuration.ConfigEntry;
 import us.tastybento.bskyblock.api.configuration.StoreAt;
 import us.tastybento.bskyblock.api.configuration.WorldSettings;
+import us.tastybento.bskyblock.api.flags.Flag;
 import us.tastybento.bskyblock.database.objects.DataObject;
 import us.tastybento.bskyblock.database.objects.adapters.Adapter;
 import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter;
@@ -25,71 +29,8 @@ import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter
  */
 @StoreAt(filename="config.yml", path="addons/BSkyBlock-AcidIsland") // Explicitly call out what name this should have.
 public class AISettings implements DataObject, WorldSettings {
-    
+
     private String uniqueId = "config";
-    
-    /*      WORLD       */
-    @ConfigEntry(path = "world.friendly-name", needsReset = true)
-    private String friendlyName = "AcidIsland";
-    
-    @ConfigEntry(path = "world.world-name", needsReset = true)
-    private String worldName = "AcidIsland_world";
-
-    @ConfigEntry(path = "world.distance-between-islands", needsReset = true)
-    private int islandDistance = 200;
-
-    @ConfigEntry(path = "world.protection-range", overrideOnChange = true)
-    private int islandProtectionRange = 100;
-
-    @ConfigEntry(path = "world.start-x", needsReset = true)
-    private int islandStartX = 0;
-
-    @ConfigEntry(path = "world.start-z", needsReset = true)
-    private int islandStartZ = 0;
-
-    @ConfigEntry(path = "world.sea-height")
-    private int seaHeight = 55;
-
-    @ConfigEntry(path = "world.island-height")
-    private int islandHeight = 50;
-
-    @ConfigEntry(path = "world.max-islands")
-    private int maxIslands = -1;
-
-    // Nether
-    @ConfigEntry(path = "world.nether.generate")
-    private boolean netherGenerate = true;
-
-    @ConfigEntry(path = "world.nether.islands", needsReset = true)
-    private boolean netherIslands = true;
-
-    @ConfigEntry(path = "world.nether.trees")
-    private boolean netherTrees = true;
-
-    @ConfigEntry(path = "world.nether.roof")
-    private boolean netherRoof = true;
-
-    @ConfigEntry(path = "world.nether.spawn-radius")
-    private int netherSpawnRadius = 32;
-
-    // End
-    @ConfigEntry(path = "world.end.generate")
-    private boolean endGenerate = true;
-
-    @ConfigEntry(path = "world.end.islands", needsReset = true)
-    private boolean endIslands = true;
-    
-    @ConfigEntry(path = "world.end.dragon-spawn")
-    private boolean dragonSpawn = false;
-    
-    @ConfigComment("World flags. These are boolean settings for various flags for this world")
-    @ConfigEntry(path = "world.flags")
-    private Map<String, Boolean> worldFlags = new HashMap<>();
-    {
-        worldFlags.put("ENTER_EXIT_MESSAGES", true);
-        worldFlags.put("PISTON_PUSH", true);
-        worldFlags.put("REMOVE_MOBS", true);
-    }
 
     // ---------------------------------------------
 
@@ -104,13 +45,13 @@ public class AISettings implements DataObject, WorldSettings {
     // Damage
     @ConfigEntry(path = "acid.damage.acid.player")
     private int acidDamage = 10;
-    
+
     @ConfigEntry(path = "acid.damage.acid.monster")
     private int acidDamageMonster = 10;
-    
+
     @ConfigEntry(path = "acid.damage.acid.animal")
     private int acidDamageAnimal = 10;
-    
+
     @ConfigEntry(path = "acid.damage.acid.item")
     private long acidDestroyItemTime = 0;
 
@@ -123,15 +64,127 @@ public class AISettings implements DataObject, WorldSettings {
 
     @ConfigEntry(path = "acid.damage.protection.helmet")
     private boolean helmetProtection;
-    
+
     @ConfigEntry(path = "acid.damage.protection.full-armor")
     private boolean fullArmorProtection;
-    
-    // Invincible visitor settings
-    @ConfigComment("Invincible visitors. List of damages that will not affect visitors.")
-    @ConfigComment("Make list blank if visitors should receive all damages")
-    @ConfigEntry(path = "protection.invincible-visitors")
-    private List<String> ivSettings = new ArrayList<>();
+
+
+    /*      WORLD       */
+    @ConfigComment("Friendly name for this world. Used in admin commands. Must be a single word")
+    @ConfigEntry(path = "world.friendly-name", needsReset = true)
+    private String friendlyName = "AcidIsland";
+
+    @ConfigComment("Name of the world - if it does not exist then it will be generated.")
+    @ConfigComment("It acts like a prefix for nether and end (e.g. BSkyBlock, BSkyBlock_nether, BSkyBlock_end)")
+    @ConfigEntry(path = "world.world-name", needsReset = true)
+    private String worldName = "AcidIsland_world";
+
+    @ConfigComment("Radius of island in blocks. (So distance between islands is twice this)")
+    @ConfigComment("Will be rounded up to the nearest 16 blocks.")
+    @ConfigComment("It is the same for every dimension : Overworld, Nether and End.")
+    @ConfigComment("This value cannot be changed mid-game and the plugin will not start if it is different.")
+    @ConfigEntry(path = "world.distance-between-islands", needsReset = true)
+    private int islandDistance = 200;
+
+    @ConfigComment("Default protection range radius in blocks. Cannot be larger than distance.")
+    @ConfigComment("Admins can change protection sizes for players individually using /bsadmin setrange")
+    @ConfigComment("or set this permission: bskyblock.island.range.<number>")
+    @ConfigEntry(path = "world.protection-range", overrideOnChange = true)
+    private int islandProtectionRange = 100;
+
+    @ConfigComment("Start islands at these coordinates. This is where new islands will start in the")
+    @ConfigComment("world. These must be a factor of your island distance, but the plugin will auto")
+    @ConfigComment("calculate the closest location on the grid. Islands develop around this location")
+    @ConfigComment("both positively and negatively in a square grid.")
+    @ConfigComment("If none of this makes sense, leave it at 0,0.")
+    @ConfigEntry(path = "world.start-x", needsReset = true)
+    private int islandStartX = 0;
+
+    @ConfigEntry(path = "world.start-z", needsReset = true)
+    private int islandStartZ = 0;
+
+    private int islandXOffset;
+    private int islandZOffset;
+
+    @ConfigComment("Island height - Lowest is 5.")
+    @ConfigComment("It is the y coordinate of the bedrock block in the schem")
+    @ConfigEntry(path = "world.island-height")
+    private int islandHeight = 100;
+
+    @ConfigComment("Sea height (don't changes this mid-game unless you delete the world)")
+    @ConfigComment("Minimum is 0, which means you are playing Skyblock!")
+    @ConfigComment("If sea height is less than about 10, then players will drop right through it")
+    @ConfigComment("if it exists. Makes for an interesting variation on skyblock.")
+    @ConfigEntry(path = "world.sea-height")
+    private int seaHeight = 55;
+
+    @ConfigComment("Maximum number of islands in the world. Set to 0 for unlimited. ")
+    @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
+    @ConfigEntry(path = "world.max-islands")
+    private int maxIslands = -1;
+
+    @ConfigComment("The default game mode for this world. Players will be set to this mode when they create")
+    @ConfigComment("a new island for example. Options are SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR")
+    @ConfigEntry(path = "world.default-game-mode")
+    private GameMode defaultGameMode = GameMode.SURVIVAL;
+
+    // Nether
+    @ConfigComment("Generate Nether - if this is false, the nether world will not be made and access to")
+    @ConfigComment("the nether will not occur. Other plugins may still enable portal usage.")
+    @ConfigComment("Note: Some challenges will not be possible if there is no nether.")
+    @ConfigComment("Note that with a standard nether all players arrive at the same portal and entering a")
+    @ConfigComment("portal will return them back to their islands.")
+    @ConfigEntry(path = "world.nether.generate")
+    private boolean netherGenerate = true;
+
+    @ConfigComment("Islands in Nether. Change to false for standard vanilla nether.")
+    @ConfigEntry(path = "world.nether.islands", needsReset = true)
+    private boolean netherIslands = true;
+
+    @ConfigComment("Nether trees are made if a player grows a tree in the nether (gravel and glowstone)")
+    @ConfigComment("Applies to both vanilla and islands Nether")
+    @ConfigEntry(path = "world.nether.trees")
+    private boolean netherTrees = true;
+
+    @ConfigComment("Make the nether roof, if false, there is nothing up there")
+    @ConfigComment("Change to false if lag is a problem from the generation")
+    @ConfigComment("Only applies to islands Nether")
+    @ConfigEntry(path = "world.nether.roof")
+    private boolean netherRoof = true;
+
+    @ConfigComment("Nether spawn protection radius - this is the distance around the nether spawn")
+    @ConfigComment("that will be protected from player interaction (breaking blocks, pouring lava etc.)")
+    @ConfigComment("Minimum is 0 (not recommended), maximum is 100. Default is 25.")
+    @ConfigComment("Only applies to vanilla nether")
+    @ConfigEntry(path = "world.nether.spawn-radius")
+    private int netherSpawnRadius = 32;
+
+    // End
+    @ConfigEntry(path = "world.end.generate")
+    private boolean endGenerate = true;
+
+    @ConfigEntry(path = "world.end.islands", needsReset = true)
+    private boolean endIslands = true;
+
+    @ConfigEntry(path = "world.end.dragon-spawn")
+    private boolean dragonSpawn = false;
+
+    @ConfigComment("Disable redstone operation on islands unless a team member is online.")
+    @ConfigComment("This may reduce lag but it can cause problems with visitors needing to use a redstone system.")
+    @ConfigComment("Default is false, because it is an experimental feature that can break a lot of redstone systems.")
+    @ConfigEntry(path = "world.disable-offline-redstone")
+    private boolean disableOfflineRedstone = false;
+
+    @ConfigComment("Removing mobs - this kills all monsters in the vicinity. Benefit is that it helps")
+    @ConfigComment("players return to their island if the island has been overrun by monsters.")
+    @ConfigComment("This setting is toggled in world flags and set by the settings GUI.")
+    @ConfigComment("Mob white list - these mobs will NOT be removed when logging in or doing /island")
+    @ConfigEntry(path = "world.remove-mobs-whitelist")
+    private Set<EntityType> removeMobsWhitelist = new HashSet<>();
+
+    @ConfigComment("World flags. These are boolean settings for various flags for this world")
+    @ConfigEntry(path = "world.flags")
+    private Map<String, Boolean> worldFlags = new HashMap<>();
 
     // ---------------------------------------------
 
@@ -142,55 +195,150 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "island.limits.tile-entities")
     private Map<String, Integer> tileEntityLimits = new HashMap<>();
 
-    
+    @ConfigComment("Default max team size")
+    @ConfigComment("Use this permission to set for specific user groups: askyblock.team.maxsize.<number>")
+    @ConfigComment("Permission size cannot be less than the default below. ")
     @ConfigEntry(path = "island.max-team-size")
     private int maxTeamSize = 4;
+    @ConfigComment("Default maximum number of homes a player can have. Min = 1")
+    @ConfigComment("Accessed via sethome <number> or go <number>")
+    @ConfigComment("Use this permission to set for specific user groups: askyblock.island.maxhomes.<number>")
     @ConfigEntry(path = "island.max-homes")
     private int maxHomes = 5;
+    @ConfigComment("Island naming")
+    @ConfigComment("Only players with the TODO can name their island")
+    @ConfigComment("It is displayed in the top ten and enter and exit announcements")
+    @ConfigComment("It replaces the owner's name. Players can use & for color coding if they have the TODO permission")
+    @ConfigComment("These set the minimum and maximum size of a name.")
     @ConfigEntry(path = "island.name.min-length")
     private int nameMinLength = 4;
     @ConfigEntry(path = "island.name.max-length")
     private int nameMaxLength = 20;
+    @ConfigComment("How long a player must wait until they can rejoin a team island after being")
+    @ConfigComment("kicked in minutes. This slows the effectiveness of players repeating challenges")
+    @ConfigComment("by repetitively being invited to a team island.")
     @ConfigEntry(path = "island.invite-wait")
     private int inviteWait = 60;
 
     // Reset
+    @ConfigComment("How many resets a player is allowed (override with /asadmin clearreset <player>)")
+    @ConfigComment("Value of -1 means unlimited, 0 means hardcore - no resets.")
+    @ConfigComment("Example, 2 resets means they get 2 resets or 3 islands lifetime")
     @ConfigEntry(path = "island.reset.reset-limit")
     private int resetLimit = -1;
 
     @ConfigEntry(path = "island.require-confirmation.reset")
     private boolean resetConfirmation = true;
 
+    @ConfigComment("How long a player must wait before they can reset their island again in second")
     @ConfigEntry(path = "island.reset-wait")
-    private long resetWait = 10L;
+    private long resetWait = 300;
 
+    @ConfigComment("Kicked or leaving players lose resets")
+    @ConfigComment("Players who leave a team will lose an island reset chance")
+    @ConfigComment("If a player has zero resets left and leaves a team, they cannot make a new")
+    @ConfigComment("island by themselves and can only join a team.")
+    @ConfigComment("Leave this true to avoid players exploiting free islands")
     @ConfigEntry(path = "island.reset.leavers-lose-reset")
     private boolean leaversLoseReset = false;
 
+    @ConfigComment("Allow kicked players to keep their inventory.")
+    @ConfigComment("If false, kicked player's inventory will be thrown at the island leader if the")
+    @ConfigComment("kicked player is online and in the island world.")
     @ConfigEntry(path = "island.reset.kicked-keep-inventory")
     private boolean kickedKeepInventory = false;
 
-    // Remove mobs
-    @ConfigEntry(path = "island.remove-mobs.on-login")
-    private boolean removeMobsOnLogin = false;
-    @ConfigEntry(path = "island.remove-mobs.on-island")
-    private boolean removeMobsOnIsland = false;
+    @ConfigComment("What the plugin should reset when the player joins or creates an island")
+    @ConfigComment("Reset Money - if this is true, will reset the player's money to the starting money")
+    @ConfigComment("Recommendation is that this is set to true, but if you run multi-worlds")
+    @ConfigComment("make sure your economy handles multi-worlds too.")
+    @ConfigEntry(path = "island.reset.on-join.money")
+    private boolean onJoinResetMoney = false;
 
-    @ConfigEntry(path = "island.remove-mobs.whitelist")
-    private List<String> removeMobsWhitelist = new ArrayList<>();
+    @ConfigComment("Reset inventory - if true, the player's inventory will be cleared.")
+    @ConfigComment("Note: if you have MultiInv running or a similar inventory control plugin, that")
+    @ConfigComment("plugin may still reset the inventory when the world changes.")
+    @ConfigEntry(path = "island.reset.on-join.inventory")
+    private boolean onJoinResetInventory = false;
+
+    @ConfigComment("Reset Ender Chest - if true, the player's Ender Chest will be cleared.")
+    @ConfigEntry(path = "island.reset.on-join.ender-chest")
+    private boolean onJoinResetEnderChest = false;
+
+    @ConfigComment("What the plugin should reset when the player leaves or is kicked from an island")
+    @ConfigComment("Reset Money - if this is true, will reset the player's money to the starting money")
+    @ConfigComment("Recommendation is that this is set to true, but if you run multi-worlds")
+    @ConfigComment("make sure your economy handles multi-worlds too.")
+    @ConfigEntry(path = "island.reset.on-leave.money")
+    private boolean onLeaveResetMoney = false;
+
+    @ConfigComment("Reset inventory - if true, the player's inventory will be cleared.")
+    @ConfigComment("Note: if you have MultiInv running or a similar inventory control plugin, that")
+    @ConfigComment("plugin may still reset the inventory when the world changes.")
+    @ConfigEntry(path = "island.reset.on-leave.inventory")
+    private boolean onLeaveResetInventory = false;
+
+    @ConfigComment("Reset Ender Chest - if true, the player's Ender Chest will be cleared.")
+    @ConfigEntry(path = "island.reset.on-leave.ender-chest")
+    private boolean onLeaveResetEnderChest = false;
 
     @ConfigEntry(path = "island.make-island-if-none")
     private boolean makeIslandIfNone = false;
-
+    @ConfigComment("Immediately teleport player to their island (home 1 if it exists) when entering the world")
     @ConfigEntry(path = "island.immediate-teleport-on-island")
     private boolean immediateTeleportOnIsland = false;
-
+    @ConfigComment("Have player's respawn on their island if they die")
+    @ConfigEntry(path = "island.respawn-on-island")
     private boolean respawnOnIsland = true;
 
-    private int islandXOffset;
+    // Deaths
+    @ConfigEntry(path = "island.deaths.max")
+    private int deathsMax = 10;
 
-    private int islandZOffset;
-    
+    @ConfigEntry(path = "island.deaths.sum-team")
+    private boolean deathsSumTeam = false;
+
+    // Ranks
+    @ConfigEntry(path = "island.customranks")
+    private Map<String, Integer> customRanks = new HashMap<>();
+
+    // ---------------------------------------------
+
+    /*      PROTECTION      */
+    @ConfigComment("Allow pistons to push outside of the protected area (maybe to make bridges)")
+    @ConfigEntry(path = "protection.allow-piston-push")
+    private boolean allowPistonPush = false;
+
+    @ConfigComment("Restrict Wither and other flying mobs.")
+    @ConfigComment("Any flying mobs that exit the island space where they were spawned will be removed.")
+    @ConfigComment("Includes blaze and ghast. ")
+    @ConfigEntry(path = "protection.restrict-flying-mobs")
+    private boolean restrictFlyingMobs = true;
+
+    private int togglePvPCooldown;
+
+    private Map<Flag, Boolean> defaultFlags = new HashMap<>();
+
+    //TODO transform these options below into flags
+    private boolean allowEndermanGriefing;
+    private boolean endermanDeathDrop;
+    private boolean allowTNTDamage;
+    private boolean allowChestDamage;
+    private boolean allowCreeperDamage;
+    private boolean allowCreeperGriefing;
+    private boolean allowMobDamageToItemFrames;
+
+    // Invincible visitor settings
+    @ConfigComment("Invincible visitors. List of damages that will not affect visitors.")
+    @ConfigComment("Make list blank if visitors should receive all damages")
+    @ConfigEntry(path = "protection.invincible-visitors")
+    private List<String> ivSettings = new ArrayList<>();
+
+    //TODO flags
+
+    // ---------------------------------------------
+
+
     /*      SCHEMATICS      */
     private List<String> companionNames = new ArrayList<>();
 
@@ -200,6 +348,29 @@ public class AISettings implements DataObject, WorldSettings {
     private EntityType companionType = EntityType.COW;
 
     private boolean useOwnGenerator;
+
+    private Map<String,Integer> limitedBlocks = new HashMap<>();
+    private boolean teamJoinDeathReset;
+
+    // Timeout for team kick and leave commands
+    @ConfigComment("Ask the player to confirm the command he is using by typing it again.")
+    @ConfigComment("The 'wait' value is the number of seconds to wait for confirmation.")
+    @ConfigEntry(path = "island.require-confirmation.kick")
+    private boolean kickConfirmation = true;
+
+    @ConfigEntry(path = "island.require-confirmation.kick-wait")
+    private long kickWait = 10L;
+
+    @ConfigEntry(path = "island.require-confirmation.leave")
+    private boolean leaveConfirmation = true;
+
+    @ConfigEntry(path = "island.require-confirmation.leave-wait")
+    private long leaveWait = 10L;
+
+    @ConfigEntry(path = "panel.close-on-click-outside")
+    private boolean closePanelOnClickOutside = true;
+
+    //---------------------------------------------------------------------------------------/
 
 
     public List<PotionEffectType> getAcidDamageType() {
@@ -219,17 +390,17 @@ public class AISettings implements DataObject, WorldSettings {
     public int getIslandDistance() {
         return islandDistance;
     }
-    
+
     @Override
     public int getIslandHeight() {
         return islandHeight;
     }
-    
+
     @Override
     public int getIslandProtectionRange() {
         return islandProtectionRange;
     }
-    
+
     @Override
     public int getIslandStartX() {
         return islandStartX;
@@ -264,6 +435,7 @@ public class AISettings implements DataObject, WorldSettings {
         return acidRainDamage;
     }
 
+    @Override
     public int getSeaHeight() {
         return seaHeight;
     }
@@ -333,7 +505,7 @@ public class AISettings implements DataObject, WorldSettings {
     @Override
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
-        
+
     }
 
     /**
@@ -512,44 +684,17 @@ public class AISettings implements DataObject, WorldSettings {
     }
 
     /**
-     * @return the removeMobsOnLogin
-     */
-    public boolean isRemoveMobsOnLogin() {
-        return removeMobsOnLogin;
-    }
-
-    /**
-     * @param removeMobsOnLogin the removeMobsOnLogin to set
-     */
-    public void setRemoveMobsOnLogin(boolean removeMobsOnLogin) {
-        this.removeMobsOnLogin = removeMobsOnLogin;
-    }
-
-    /**
-     * @return the removeMobsOnIsland
-     */
-    public boolean isRemoveMobsOnIsland() {
-        return removeMobsOnIsland;
-    }
-
-    /**
-     * @param removeMobsOnIsland the removeMobsOnIsland to set
-     */
-    public void setRemoveMobsOnIsland(boolean removeMobsOnIsland) {
-        this.removeMobsOnIsland = removeMobsOnIsland;
-    }
-
-    /**
      * @return the removeMobsWhitelist
      */
-    public List<String> getRemoveMobsWhitelist() {
+    @Override
+    public Set<EntityType> getRemoveMobsWhitelist() {
         return removeMobsWhitelist;
     }
 
     /**
      * @param removeMobsWhitelist the removeMobsWhitelist to set
      */
-    public void setRemoveMobsWhitelist(List<String> removeMobsWhitelist) {
+    public void setRemoveMobsWhitelist(Set<EntityType> removeMobsWhitelist) {
         this.removeMobsWhitelist = removeMobsWhitelist;
     }
 
@@ -908,6 +1053,404 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setWorldFlags(Map<String, Boolean> worldFlags) {
         this.worldFlags = worldFlags;
+    }
+
+    @Override
+    public GameMode getDefaultGameMode() {
+        return GameMode.SURVIVAL;
+    }
+
+    @Override
+    public boolean isOnJoinResetMoney() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isOnJoinResetInventory() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isOnJoinResetEnderChest() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isOnLeaveResetMoney() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isOnLeaveResetInventory() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isOnLeaveResetEnderChest() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    /**
+     * @return the disableOfflineRedstone
+     */
+    public boolean isDisableOfflineRedstone() {
+        return disableOfflineRedstone;
+    }
+
+    /**
+     * @return the deathsMax
+     */
+    public int getDeathsMax() {
+        return deathsMax;
+    }
+
+    /**
+     * @return the deathsSumTeam
+     */
+    public boolean isDeathsSumTeam() {
+        return deathsSumTeam;
+    }
+
+    /**
+     * @return the customRanks
+     */
+    public Map<String, Integer> getCustomRanks() {
+        return customRanks;
+    }
+
+    /**
+     * @return the allowPistonPush
+     */
+    public boolean isAllowPistonPush() {
+        return allowPistonPush;
+    }
+
+    /**
+     * @return the restrictFlyingMobs
+     */
+    public boolean isRestrictFlyingMobs() {
+        return restrictFlyingMobs;
+    }
+
+    /**
+     * @return the togglePvPCooldown
+     */
+    public int getTogglePvPCooldown() {
+        return togglePvPCooldown;
+    }
+
+    /**
+     * @return the defaultFlags
+     */
+    public Map<Flag, Boolean> getDefaultFlags() {
+        return defaultFlags;
+    }
+
+    /**
+     * @return the allowEndermanGriefing
+     */
+    public boolean isAllowEndermanGriefing() {
+        return allowEndermanGriefing;
+    }
+
+    /**
+     * @return the endermanDeathDrop
+     */
+    public boolean isEndermanDeathDrop() {
+        return endermanDeathDrop;
+    }
+
+    /**
+     * @return the allowTNTDamage
+     */
+    public boolean isAllowTNTDamage() {
+        return allowTNTDamage;
+    }
+
+    /**
+     * @return the allowChestDamage
+     */
+    public boolean isAllowChestDamage() {
+        return allowChestDamage;
+    }
+
+    /**
+     * @return the allowCreeperDamage
+     */
+    public boolean isAllowCreeperDamage() {
+        return allowCreeperDamage;
+    }
+
+    /**
+     * @return the allowCreeperGriefing
+     */
+    public boolean isAllowCreeperGriefing() {
+        return allowCreeperGriefing;
+    }
+
+    /**
+     * @return the allowMobDamageToItemFrames
+     */
+    public boolean isAllowMobDamageToItemFrames() {
+        return allowMobDamageToItemFrames;
+    }
+
+    /**
+     * @return the limitedBlocks
+     */
+    public Map<String, Integer> getLimitedBlocks() {
+        return limitedBlocks;
+    }
+
+    /**
+     * @return the teamJoinDeathReset
+     */
+    public boolean isTeamJoinDeathReset() {
+        return teamJoinDeathReset;
+    }
+
+    /**
+     * @return the kickConfirmation
+     */
+    public boolean isKickConfirmation() {
+        return kickConfirmation;
+    }
+
+    /**
+     * @return the kickWait
+     */
+    public long getKickWait() {
+        return kickWait;
+    }
+
+    /**
+     * @return the leaveConfirmation
+     */
+    public boolean isLeaveConfirmation() {
+        return leaveConfirmation;
+    }
+
+    /**
+     * @return the leaveWait
+     */
+    public long getLeaveWait() {
+        return leaveWait;
+    }
+
+    /**
+     * @return the closePanelOnClickOutside
+     */
+    public boolean isClosePanelOnClickOutside() {
+        return closePanelOnClickOutside;
+    }
+
+    /**
+     * @param defaultGameMode the defaultGameMode to set
+     */
+    public void setDefaultGameMode(GameMode defaultGameMode) {
+        this.defaultGameMode = defaultGameMode;
+    }
+
+    /**
+     * @param disableOfflineRedstone the disableOfflineRedstone to set
+     */
+    public void setDisableOfflineRedstone(boolean disableOfflineRedstone) {
+        this.disableOfflineRedstone = disableOfflineRedstone;
+    }
+
+    /**
+     * @param onJoinResetMoney the onJoinResetMoney to set
+     */
+    public void setOnJoinResetMoney(boolean onJoinResetMoney) {
+        this.onJoinResetMoney = onJoinResetMoney;
+    }
+
+    /**
+     * @param onJoinResetInventory the onJoinResetInventory to set
+     */
+    public void setOnJoinResetInventory(boolean onJoinResetInventory) {
+        this.onJoinResetInventory = onJoinResetInventory;
+    }
+
+    /**
+     * @param onJoinResetEnderChest the onJoinResetEnderChest to set
+     */
+    public void setOnJoinResetEnderChest(boolean onJoinResetEnderChest) {
+        this.onJoinResetEnderChest = onJoinResetEnderChest;
+    }
+
+    /**
+     * @param onLeaveResetMoney the onLeaveResetMoney to set
+     */
+    public void setOnLeaveResetMoney(boolean onLeaveResetMoney) {
+        this.onLeaveResetMoney = onLeaveResetMoney;
+    }
+
+    /**
+     * @param onLeaveResetInventory the onLeaveResetInventory to set
+     */
+    public void setOnLeaveResetInventory(boolean onLeaveResetInventory) {
+        this.onLeaveResetInventory = onLeaveResetInventory;
+    }
+
+    /**
+     * @param onLeaveResetEnderChest the onLeaveResetEnderChest to set
+     */
+    public void setOnLeaveResetEnderChest(boolean onLeaveResetEnderChest) {
+        this.onLeaveResetEnderChest = onLeaveResetEnderChest;
+    }
+
+    /**
+     * @param deathsMax the deathsMax to set
+     */
+    public void setDeathsMax(int deathsMax) {
+        this.deathsMax = deathsMax;
+    }
+
+    /**
+     * @param deathsSumTeam the deathsSumTeam to set
+     */
+    public void setDeathsSumTeam(boolean deathsSumTeam) {
+        this.deathsSumTeam = deathsSumTeam;
+    }
+
+    /**
+     * @param customRanks the customRanks to set
+     */
+    public void setCustomRanks(Map<String, Integer> customRanks) {
+        this.customRanks = customRanks;
+    }
+
+    /**
+     * @param allowPistonPush the allowPistonPush to set
+     */
+    public void setAllowPistonPush(boolean allowPistonPush) {
+        this.allowPistonPush = allowPistonPush;
+    }
+
+    /**
+     * @param restrictFlyingMobs the restrictFlyingMobs to set
+     */
+    public void setRestrictFlyingMobs(boolean restrictFlyingMobs) {
+        this.restrictFlyingMobs = restrictFlyingMobs;
+    }
+
+    /**
+     * @param togglePvPCooldown the togglePvPCooldown to set
+     */
+    public void setTogglePvPCooldown(int togglePvPCooldown) {
+        this.togglePvPCooldown = togglePvPCooldown;
+    }
+
+    /**
+     * @param defaultFlags the defaultFlags to set
+     */
+    public void setDefaultFlags(Map<Flag, Boolean> defaultFlags) {
+        this.defaultFlags = defaultFlags;
+    }
+
+    /**
+     * @param allowEndermanGriefing the allowEndermanGriefing to set
+     */
+    public void setAllowEndermanGriefing(boolean allowEndermanGriefing) {
+        this.allowEndermanGriefing = allowEndermanGriefing;
+    }
+
+    /**
+     * @param endermanDeathDrop the endermanDeathDrop to set
+     */
+    public void setEndermanDeathDrop(boolean endermanDeathDrop) {
+        this.endermanDeathDrop = endermanDeathDrop;
+    }
+
+    /**
+     * @param allowTNTDamage the allowTNTDamage to set
+     */
+    public void setAllowTNTDamage(boolean allowTNTDamage) {
+        this.allowTNTDamage = allowTNTDamage;
+    }
+
+    /**
+     * @param allowChestDamage the allowChestDamage to set
+     */
+    public void setAllowChestDamage(boolean allowChestDamage) {
+        this.allowChestDamage = allowChestDamage;
+    }
+
+    /**
+     * @param allowCreeperDamage the allowCreeperDamage to set
+     */
+    public void setAllowCreeperDamage(boolean allowCreeperDamage) {
+        this.allowCreeperDamage = allowCreeperDamage;
+    }
+
+    /**
+     * @param allowCreeperGriefing the allowCreeperGriefing to set
+     */
+    public void setAllowCreeperGriefing(boolean allowCreeperGriefing) {
+        this.allowCreeperGriefing = allowCreeperGriefing;
+    }
+
+    /**
+     * @param allowMobDamageToItemFrames the allowMobDamageToItemFrames to set
+     */
+    public void setAllowMobDamageToItemFrames(boolean allowMobDamageToItemFrames) {
+        this.allowMobDamageToItemFrames = allowMobDamageToItemFrames;
+    }
+
+    /**
+     * @param limitedBlocks the limitedBlocks to set
+     */
+    public void setLimitedBlocks(Map<String, Integer> limitedBlocks) {
+        this.limitedBlocks = limitedBlocks;
+    }
+
+    /**
+     * @param teamJoinDeathReset the teamJoinDeathReset to set
+     */
+    public void setTeamJoinDeathReset(boolean teamJoinDeathReset) {
+        this.teamJoinDeathReset = teamJoinDeathReset;
+    }
+
+    /**
+     * @param kickConfirmation the kickConfirmation to set
+     */
+    public void setKickConfirmation(boolean kickConfirmation) {
+        this.kickConfirmation = kickConfirmation;
+    }
+
+    /**
+     * @param kickWait the kickWait to set
+     */
+    public void setKickWait(long kickWait) {
+        this.kickWait = kickWait;
+    }
+
+    /**
+     * @param leaveConfirmation the leaveConfirmation to set
+     */
+    public void setLeaveConfirmation(boolean leaveConfirmation) {
+        this.leaveConfirmation = leaveConfirmation;
+    }
+
+    /**
+     * @param leaveWait the leaveWait to set
+     */
+    public void setLeaveWait(long leaveWait) {
+        this.leaveWait = leaveWait;
+    }
+
+    /**
+     * @param closePanelOnClickOutside the closePanelOnClickOutside to set
+     */
+    public void setClosePanelOnClickOutside(boolean closePanelOnClickOutside) {
+        this.closePanelOnClickOutside = closePanelOnClickOutside;
     }
 
 }
