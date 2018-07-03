@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.bukkit.GameMode;
@@ -13,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+import us.tastybento.bskyblock.api.addons.Addon;
 import us.tastybento.bskyblock.api.configuration.ConfigComment;
 import us.tastybento.bskyblock.api.configuration.ConfigEntry;
 import us.tastybento.bskyblock.api.configuration.StoreAt;
@@ -1451,6 +1453,11 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setClosePanelOnClickOutside(boolean closePanelOnClickOutside) {
         this.closePanelOnClickOutside = closePanelOnClickOutside;
+    }
+
+    @Override
+    public Optional<Addon> getAddon() {
+        return Optional.of(AcidIsland.getInstance());
     }
 
 }
