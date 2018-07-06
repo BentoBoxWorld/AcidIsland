@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import us.tastybento.bskyblock.api.addons.Addon;
@@ -22,6 +21,8 @@ import us.tastybento.bskyblock.api.configuration.WorldSettings;
 import us.tastybento.bskyblock.api.flags.Flag;
 import us.tastybento.bskyblock.database.objects.DataObject;
 import us.tastybento.bskyblock.database.objects.adapters.Adapter;
+import us.tastybento.bskyblock.database.objects.adapters.FlagSerializer;
+import us.tastybento.bskyblock.database.objects.adapters.FlagSerializer2;
 import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter;
 
 /**
@@ -105,7 +106,9 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "world.start-z", needsReset = true)
     private int islandStartZ = 0;
 
+    @ConfigEntry(path = "world.offset-x")
     private int islandXOffset;
+    @ConfigEntry(path = "world.offset-z")
     private int islandZOffset;
 
     @ConfigComment("Island height - Lowest is 5.")
@@ -113,12 +116,17 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "world.island-height")
     private int islandHeight = 100;
 
+    @ConfigComment("Use your own world generator for this world. In this case, the plugin will not generate")
+    @ConfigComment("anything.")
+    @ConfigEntry(path = "world.use-own-generator")
+    private boolean useOwnGenerator;
+
     @ConfigComment("Sea height (don't changes this mid-game unless you delete the world)")
     @ConfigComment("Minimum is 0, which means you are playing Skyblock!")
     @ConfigComment("If sea height is less than about 10, then players will drop right through it")
     @ConfigComment("if it exists. Makes for an interesting variation on skyblock.")
     @ConfigEntry(path = "world.sea-height")
-    private int seaHeight = 55;
+    private int seaHeight = 0;
 
     @ConfigComment("Maximum number of islands in the world. Set to 0 for unlimited. ")
     @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
@@ -171,12 +179,6 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "world.end.dragon-spawn")
     private boolean dragonSpawn = false;
 
-    @ConfigComment("Disable redstone operation on islands unless a team member is online.")
-    @ConfigComment("This may reduce lag but it can cause problems with visitors needing to use a redstone system.")
-    @ConfigComment("Default is false, because it is an experimental feature that can break a lot of redstone systems.")
-    @ConfigEntry(path = "world.disable-offline-redstone")
-    private boolean disableOfflineRedstone = false;
-
     @ConfigComment("Removing mobs - this kills all monsters in the vicinity. Benefit is that it helps")
     @ConfigComment("players return to their island if the island has been overrun by monsters.")
     @ConfigComment("This setting is toggled in world flags and set by the settings GUI.")
@@ -187,6 +189,22 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("World flags. These are boolean settings for various flags for this world")
     @ConfigEntry(path = "world.flags")
     private Map<String, Boolean> worldFlags = new HashMap<>();
+
+    @ConfigComment("These are the default protection settings for new islands.")
+    @ConfigComment("The value is the minimum island rank required allowed to do the action")
+    @ConfigComment("Ranks are: Visitor = 0, Member = 900, Owner = 1000")
+    @ConfigEntry(path = "world.default-island-flags")
+    @Adapter(FlagSerializer.class)
+    private Map<Flag, Integer> defaultIslandFlags = new HashMap<>();
+
+    @ConfigComment("These are the default settings for new islands")
+    @ConfigEntry(path = "world.default-island-settings")
+    @Adapter(FlagSerializer2.class)
+    private Map<Flag, Integer> defaultIslandSettings = new HashMap<>();
+
+    @ConfigComment("These are the settings visible to users.")
+    @ConfigEntry(path = "world.visible-settings")
+    private List<String> visibleSettings = new ArrayList<>();
 
     // ---------------------------------------------
 
@@ -294,11 +312,16 @@ public class AISettings implements DataObject, WorldSettings {
     private boolean respawnOnIsland = true;
 
     // Deaths
+    @ConfigComment("Maximum number of deaths to count. The death count can be used by add-ons.")
     @ConfigEntry(path = "island.deaths.max")
     private int deathsMax = 10;
 
     @ConfigEntry(path = "island.deaths.sum-team")
     private boolean deathsSumTeam = false;
+
+    @ConfigComment("When a player joins a team, reset their death count")
+    @ConfigEntry(path = "island.deaths.team-join-reset")
+    private boolean teamJoinDeathReset = true;
 
     // Ranks
     @ConfigEntry(path = "island.customranks")
@@ -319,8 +342,6 @@ public class AISettings implements DataObject, WorldSettings {
 
     private int togglePvPCooldown;
 
-    private Map<Flag, Boolean> defaultFlags = new HashMap<>();
-
     //TODO transform these options below into flags
     private boolean allowEndermanGriefing;
     private boolean endermanDeathDrop;
@@ -336,23 +357,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "protection.invincible-visitors")
     private List<String> ivSettings = new ArrayList<>();
 
-    //TODO flags
-
     // ---------------------------------------------
-
-
-    /*      SCHEMATICS      */
-    private List<String> companionNames = new ArrayList<>();
-
-    @ConfigEntry(path = "island.chest-items")
-    private List<ItemStack> chestItems = new ArrayList<>();
-
-    private EntityType companionType = EntityType.COW;
-
-    private boolean useOwnGenerator;
-
-    private Map<String,Integer> limitedBlocks = new HashMap<>();
-    private boolean teamJoinDeathReset;
 
     // Timeout for team kick and leave commands
     @ConfigComment("Ask the player to confirm the command he is using by typing it again.")
@@ -374,414 +379,775 @@ public class AISettings implements DataObject, WorldSettings {
 
     //---------------------------------------------------------------------------------------/
 
-
-    public List<PotionEffectType> getAcidDamageType() {
-        return acidEffects;
-    }
-
-    public List<ItemStack> getChestItems() {
-        return chestItems;
-    }
-
-    @Override
-    public Map<EntityType, Integer> getEntityLimits() {
-        return entityLimits;
-    }
-
-    @Override
-    public int getIslandDistance() {
-        return islandDistance;
-    }
-
-    @Override
-    public int getIslandHeight() {
-        return islandHeight;
-    }
-
-    @Override
-    public int getIslandProtectionRange() {
-        return islandProtectionRange;
-    }
-
-    @Override
-    public int getIslandStartX() {
-        return islandStartX;
-    }
-
-    @Override
-    public int getIslandStartZ() {
-        return islandStartZ;
-    }
-
-    @Override
-    public int getIslandXOffset() {
-        return islandXOffset;
-    }
-
-    @Override
-    public int getIslandZOffset() {
-        return islandZOffset;
-    }
-
-    @Override
-    public int getMaxIslands() {
-        return maxIslands;
-    }
-
-    @Override
-    public int getNetherSpawnRadius() {
-        return netherSpawnRadius;
-    }
-
-    public int getAcidRainDamage() {
-        return acidRainDamage;
-    }
-
-    @Override
-    public int getSeaHeight() {
-        return seaHeight;
-    }
-
-    @Override
-    public Map<String, Integer> getTileEntityLimits() {
-        return tileEntityLimits;
-    }
-
-    @Override
-    public String getWorldName() {
-        return worldName;
-    }
-
-    @Override
-    public boolean isEndGenerate() {
-        return endGenerate;
-    }
-
-    @Override
-    public boolean isEndIslands() {
-        return endIslands;
-    }
-
-    @Override
-    public boolean isNetherGenerate() {
-        return netherGenerate;
-    }
-
-    @Override
-    public boolean isNetherIslands() { return netherIslands; }
-
-    public boolean isNetherRoof() {
-        return netherRoof;
-    }
-
-    @Override
-    public boolean isNetherTrees() {
-        return netherTrees;
-    }
-
-    @Override
-    public String getFriendlyName() {
-        return friendlyName;
-    }
-
-    @Override
-    public boolean isDragonSpawn() {
-        return dragonSpawn;
-    }
-
-    @Override
-    public int getMaxTeamSize() {
-        return maxTeamSize;
-    }
-
-    @Override
-    public int getMaxHomes() {
-        return maxHomes;
-    }
-
-    @Override
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    @Override
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-
-    }
-
     /**
      * @return the acidDamageOp
      */
     public boolean isAcidDamageOp() {
         return acidDamageOp;
     }
-
-    /**
-     * @return the acidDamage
-     */
-    public int getAcidDamage() {
-        return acidDamage;
-    }
-
-    /**
-     * @param acidDamageOp the acidDamageOp to set
-     */
-    public void setAcidDamageOp(boolean acidDamageOp) {
-        this.acidDamageOp = acidDamageOp;
-    }
-
     /**
      * @return the acidDamageChickens
      */
     public boolean isAcidDamageChickens() {
         return acidDamageChickens;
     }
-
     /**
-     * @param acidDamageChickens the acidDamageChickens to set
+     * @return the acidDamage
      */
-    public void setAcidDamageChickens(boolean acidDamageChickens) {
-        this.acidDamageChickens = acidDamageChickens;
+    public int getAcidDamage() {
+        return acidDamage;
     }
-
+    /**
+     * @return the acidDamageMonster
+     */
+    public int getAcidDamageMonster() {
+        return acidDamageMonster;
+    }
+    /**
+     * @return the acidDamageAnimal
+     */
+    public int getAcidDamageAnimal() {
+        return acidDamageAnimal;
+    }
     /**
      * @return the acidDestroyItemTime
      */
     public long getAcidDestroyItemTime() {
         return acidDestroyItemTime;
     }
-
     /**
-     * @param acidDestroyItemTime the acidDestroyItemTime to set
+     * @return the acidRainDamage
      */
-    public void setAcidDestroyItemTime(long acidDestroyItemTime) {
-        this.acidDestroyItemTime = acidDestroyItemTime;
+    public int getAcidRainDamage() {
+        return acidRainDamage;
     }
-
     /**
      * @return the acidEffects
      */
     public List<PotionEffectType> getAcidEffects() {
         return acidEffects;
     }
-
+    /**
+     * @return the helmetProtection
+     */
+    public boolean isHelmetProtection() {
+        return helmetProtection;
+    }
+    /**
+     * @return the fullArmorProtection
+     */
+    public boolean isFullArmorProtection() {
+        return fullArmorProtection;
+    }
+    /**
+     * @param acidDamageOp the acidDamageOp to set
+     */
+    public void setAcidDamageOp(boolean acidDamageOp) {
+        this.acidDamageOp = acidDamageOp;
+    }
+    /**
+     * @param acidDamageChickens the acidDamageChickens to set
+     */
+    public void setAcidDamageChickens(boolean acidDamageChickens) {
+        this.acidDamageChickens = acidDamageChickens;
+    }
+    /**
+     * @param acidDamage the acidDamage to set
+     */
+    public void setAcidDamage(int acidDamage) {
+        this.acidDamage = acidDamage;
+    }
+    /**
+     * @param acidDamageMonster the acidDamageMonster to set
+     */
+    public void setAcidDamageMonster(int acidDamageMonster) {
+        this.acidDamageMonster = acidDamageMonster;
+    }
+    /**
+     * @param acidDamageAnimal the acidDamageAnimal to set
+     */
+    public void setAcidDamageAnimal(int acidDamageAnimal) {
+        this.acidDamageAnimal = acidDamageAnimal;
+    }
+    /**
+     * @param acidDestroyItemTime the acidDestroyItemTime to set
+     */
+    public void setAcidDestroyItemTime(long acidDestroyItemTime) {
+        this.acidDestroyItemTime = acidDestroyItemTime;
+    }
+    /**
+     * @param acidRainDamage the acidRainDamage to set
+     */
+    public void setAcidRainDamage(int acidRainDamage) {
+        this.acidRainDamage = acidRainDamage;
+    }
     /**
      * @param acidEffects the acidEffects to set
      */
     public void setAcidEffects(List<PotionEffectType> acidEffects) {
         this.acidEffects = acidEffects;
     }
-
     /**
-     * @return the nameMinLength
+     * @param helmetProtection the helmetProtection to set
      */
-    public int getNameMinLength() {
-        return nameMinLength;
+    public void setHelmetProtection(boolean helmetProtection) {
+        this.helmetProtection = helmetProtection;
     }
-
     /**
-     * @param nameMinLength the nameMinLength to set
+     * @param fullArmorProtection the fullArmorProtection to set
      */
-    public void setNameMinLength(int nameMinLength) {
-        this.nameMinLength = nameMinLength;
+    public void setFullArmorProtection(boolean fullArmorProtection) {
+        this.fullArmorProtection = fullArmorProtection;
     }
-
+    //---------------------------------------------------------------------------------------/
+    /**
+     * @return the customRanks
+     */
+    public Map<String, Integer> getCustomRanks() {
+        return customRanks;
+    }
+    /**
+     * @return the deathsMax
+     */
+    public int getDeathsMax() {
+        return deathsMax;
+    }
+    /**
+     * @param teamJoinDeathReset the teamJoinDeathReset to set
+     */
+    public void setTeamJoinDeathReset(boolean teamJoinDeathReset) {
+        this.teamJoinDeathReset = teamJoinDeathReset;
+    }
+    /**
+     * @return the entityLimits
+     */
+    @Override
+    public Map<EntityType, Integer> getEntityLimits() {
+        return entityLimits;
+    }
+    /**
+     * Number of minutes to wait
+     * @return the inviteWait
+     */
+    public int getInviteWait() {
+        return inviteWait;
+    }
+    /**
+     * @return the islandDistance
+     */
+    @Override
+    public int getIslandDistance() {
+        return islandDistance;
+    }
+    /**
+     * @return the islandHeight
+     */
+    @Override
+    public int getIslandHeight() {
+        return islandHeight;
+    }
+    /**
+     * @return the islandProtectionRange
+     */
+    @Override
+    public int getIslandProtectionRange() {
+        return islandProtectionRange;
+    }
+    /**
+     * @return the islandStartX
+     */
+    @Override
+    public int getIslandStartX() {
+        return islandStartX;
+    }
+    /**
+     * @return the islandStartZ
+     */
+    @Override
+    public int getIslandStartZ() {
+        return islandStartZ;
+    }
+    /**
+     * @return the islandXOffset
+     */
+    @Override
+    public int getIslandXOffset() {
+        return islandXOffset;
+    }
+    /**
+     * @return the islandZOffset
+     */
+    @Override
+    public int getIslandZOffset() {
+        return islandZOffset;
+    }
+    /**
+     * @return the kickWait
+     */
+    public long getKickWait() {
+        return kickWait;
+    }
+    /**
+     * @return the leaveWait
+     */
+    public long getLeaveWait() {
+        return leaveWait;
+    }
+    /**
+     * @return the maxHomes
+     */
+    @Override
+    public int getMaxHomes() {
+        return maxHomes;
+    }
+    /**
+     * @return the maxIslands
+     */
+    @Override
+    public int getMaxIslands() {
+        return maxIslands;
+    }
+    /**
+     * @return the maxTeamSize
+     */
+    @Override
+    public int getMaxTeamSize() {
+        return maxTeamSize;
+    }
     /**
      * @return the nameMaxLength
      */
     public int getNameMaxLength() {
         return nameMaxLength;
     }
-
     /**
-     * @param nameMaxLength the nameMaxLength to set
+     * @return the nameMinLength
      */
-    public void setNameMaxLength(int nameMaxLength) {
-        this.nameMaxLength = nameMaxLength;
+    public int getNameMinLength() {
+        return nameMinLength;
     }
-
     /**
-     * @return the inviteWait
+     * @return the netherSpawnRadius
      */
-    public int getInviteWait() {
-        return inviteWait;
+    @Override
+    public int getNetherSpawnRadius() {
+        return netherSpawnRadius;
     }
-
-    /**
-     * @param inviteWait the inviteWait to set
-     */
-    public void setInviteWait(int inviteWait) {
-        this.inviteWait = inviteWait;
-    }
-
     /**
      * @return the resetLimit
      */
     public int getResetLimit() {
         return resetLimit;
     }
-
-    /**
-     * @param resetLimit the resetLimit to set
-     */
-    public void setResetLimit(int resetLimit) {
-        this.resetLimit = resetLimit;
-    }
-
-    /**
-     * @return the resetConfirmation
-     */
-    public boolean isResetConfirmation() {
-        return resetConfirmation;
-    }
-
-    /**
-     * @param resetConfirmation the resetConfirmation to set
-     */
-    public void setResetConfirmation(boolean resetConfirmation) {
-        this.resetConfirmation = resetConfirmation;
-    }
-
     /**
      * @return the resetWait
      */
     public long getResetWait() {
         return resetWait;
     }
-
     /**
-     * @param resetWait the resetWait to set
-     */
-    public void setResetWait(long resetWait) {
-        this.resetWait = resetWait;
-    }
-
-    /**
-     * @return the leaversLoseReset
-     */
-    public boolean isLeaversLoseReset() {
-        return leaversLoseReset;
-    }
-
-    /**
-     * @param leaversLoseReset the leaversLoseReset to set
-     */
-    public void setLeaversLoseReset(boolean leaversLoseReset) {
-        this.leaversLoseReset = leaversLoseReset;
-    }
-
-    /**
-     * @return the kickedKeepInventory
-     */
-    public boolean isKickedKeepInventory() {
-        return kickedKeepInventory;
-    }
-
-    /**
-     * @param kickedKeepInventory the kickedKeepInventory to set
-     */
-    public void setKickedKeepInventory(boolean kickedKeepInventory) {
-        this.kickedKeepInventory = kickedKeepInventory;
-    }
-
-    /**
-     * @return the removeMobsWhitelist
+     * @return the seaHeight
      */
     @Override
-    public Set<EntityType> getRemoveMobsWhitelist() {
-        return removeMobsWhitelist;
+    public int getSeaHeight() {
+        return seaHeight;
     }
-
     /**
-     * @param removeMobsWhitelist the removeMobsWhitelist to set
+     * @return the tileEntityLimits
      */
-    public void setRemoveMobsWhitelist(Set<EntityType> removeMobsWhitelist) {
-        this.removeMobsWhitelist = removeMobsWhitelist;
+    @Override
+    public Map<String, Integer> getTileEntityLimits() {
+        return tileEntityLimits;
     }
-
     /**
-     * @return the makeIslandIfNone
+     * @return the togglePvPCooldown
      */
-    public boolean isMakeIslandIfNone() {
-        return makeIslandIfNone;
+    public int getTogglePvPCooldown() {
+        return togglePvPCooldown;
     }
-
     /**
-     * @param makeIslandIfNone the makeIslandIfNone to set
+     * @return the uniqueId
      */
-    public void setMakeIslandIfNone(boolean makeIslandIfNone) {
-        this.makeIslandIfNone = makeIslandIfNone;
+    @Override
+    public String getUniqueId() {
+        return uniqueId;
     }
-
+    /**
+     * @return the worldName
+     */
+    @Override
+    public String getWorldName() {
+        return worldName;
+    }
+    /**
+     * @return the allowChestDamage
+     */
+    public boolean isAllowChestDamage() {
+        return allowChestDamage;
+    }
+    /**
+     * @return the allowCreeperDamage
+     */
+    public boolean isAllowCreeperDamage() {
+        return allowCreeperDamage;
+    }
+    /**
+     * @return the allowCreeperGriefing
+     */
+    public boolean isAllowCreeperGriefing() {
+        return allowCreeperGriefing;
+    }
+    /**
+     * @return the allowEndermanGriefing
+     */
+    public boolean isAllowEndermanGriefing() {
+        return allowEndermanGriefing;
+    }
+    /**
+     * @return the allowMobDamageToItemFrames
+     */
+    public boolean isAllowMobDamageToItemFrames() {
+        return allowMobDamageToItemFrames;
+    }
+    /**
+     * @return the allowPistonPush
+     */
+    public boolean isAllowPistonPush() {
+        return allowPistonPush;
+    }
+    /**
+     * @return the allowTNTDamage
+     */
+    public boolean isAllowTNTDamage() {
+        return allowTNTDamage;
+    }
+    /**
+     * @return the deathsSumTeam
+     */
+    public boolean isDeathsSumTeam() {
+        return deathsSumTeam;
+    }
+    /**
+     * @return the endermanDeathDrop
+     */
+    public boolean isEndermanDeathDrop() {
+        return endermanDeathDrop;
+    }
+    /**
+     * @return the endGenerate
+     */
+    @Override
+    public boolean isEndGenerate() {
+        return endGenerate;
+    }
+    /**
+     * @return the endIslands
+     */
+    @Override
+    public boolean isEndIslands() {
+        return endIslands;
+    }
     /**
      * @return the immediateTeleportOnIsland
      */
     public boolean isImmediateTeleportOnIsland() {
         return immediateTeleportOnIsland;
     }
-
     /**
-     * @param immediateTeleportOnIsland the immediateTeleportOnIsland to set
+     * @return the kickConfirmation
      */
-    public void setImmediateTeleportOnIsland(boolean immediateTeleportOnIsland) {
-        this.immediateTeleportOnIsland = immediateTeleportOnIsland;
+    public boolean isKickConfirmation() {
+        return kickConfirmation;
     }
-
+    /**
+     * @return the kickedKeepInventory
+     */
+    public boolean isKickedKeepInventory() {
+        return kickedKeepInventory;
+    }
+    /**
+     * @return the leaveConfirmation
+     */
+    public boolean isLeaveConfirmation() {
+        return leaveConfirmation;
+    }
+    /**
+     * @return the leaversLoseReset
+     */
+    public boolean isLeaversLoseReset() {
+        return leaversLoseReset;
+    }
+    /**
+     * @return the makeIslandIfNone
+     */
+    public boolean isMakeIslandIfNone() {
+        return makeIslandIfNone;
+    }
+    /**
+     * @return the netherGenerate
+     */
+    @Override
+    public boolean isNetherGenerate() {
+        return netherGenerate;
+    }
+    /**
+     * @return the netherIslands
+     */
+    @Override
+    public boolean isNetherIslands() {
+        return netherIslands;
+    }
+    /**
+     * @return the netherRoof
+     */
+    public boolean isNetherRoof() {
+        return netherRoof;
+    }
+    /**
+     * @return the netherTrees
+     */
+    @Override
+    public boolean isNetherTrees() {
+        return netherTrees;
+    }
+    /**
+     * @return the resetConfirmation
+     */
+    public boolean isResetConfirmation() {
+        return resetConfirmation;
+    }
     /**
      * @return the respawnOnIsland
      */
     public boolean isRespawnOnIsland() {
         return respawnOnIsland;
     }
-
+    /**
+     * @return the restrictFlyingMobs
+     */
+    public boolean isRestrictFlyingMobs() {
+        return restrictFlyingMobs;
+    }
+    /**
+     * @return the useOwnGenerator
+     */
+    @Override
+    public boolean isUseOwnGenerator() {
+        return useOwnGenerator;
+    }
+    /**
+     * @param allowChestDamage the allowChestDamage to set
+     */
+    public void setAllowChestDamage(boolean allowChestDamage) {
+        this.allowChestDamage = allowChestDamage;
+    }
+    /**
+     * @param allowCreeperDamage the allowCreeperDamage to set
+     */
+    public void setAllowCreeperDamage(boolean allowCreeperDamage) {
+        this.allowCreeperDamage = allowCreeperDamage;
+    }
+    /**
+     * @param allowCreeperGriefing the allowCreeperGriefing to set
+     */
+    public void setAllowCreeperGriefing(boolean allowCreeperGriefing) {
+        this.allowCreeperGriefing = allowCreeperGriefing;
+    }
+    /**
+     * @param allowEndermanGriefing the allowEndermanGriefing to set
+     */
+    public void setAllowEndermanGriefing(boolean allowEndermanGriefing) {
+        this.allowEndermanGriefing = allowEndermanGriefing;
+    }
+    /**
+     * @param allowMobDamageToItemFrames the allowMobDamageToItemFrames to set
+     */
+    public void setAllowMobDamageToItemFrames(boolean allowMobDamageToItemFrames) {
+        this.allowMobDamageToItemFrames = allowMobDamageToItemFrames;
+    }
+    /**
+     * @param allowPistonPush the allowPistonPush to set
+     */
+    public void setAllowPistonPush(boolean allowPistonPush) {
+        this.allowPistonPush = allowPistonPush;
+    }
+    /**
+     * @param allowTNTDamage the allowTNTDamage to set
+     */
+    public void setAllowTNTDamage(boolean allowTNTDamage) {
+        this.allowTNTDamage = allowTNTDamage;
+    }
+    /**
+     * @param customRanks the customRanks to set
+     */
+    public void setCustomRanks(Map<String, Integer> customRanks) {
+        this.customRanks = customRanks;
+    }
+    /**
+     * @param deathsMax the deathsMax to set
+     */
+    public void setDeathsMax(int deathsMax) {
+        this.deathsMax = deathsMax;
+    }
+    /**
+     * @param deathsSumTeam the deathsSumTeam to set
+     */
+    public void setDeathsSumTeam(boolean deathsSumTeam) {
+        this.deathsSumTeam = deathsSumTeam;
+    }
+    /**
+     * @param endermanDeathDrop the endermanDeathDrop to set
+     */
+    public void setEndermanDeathDrop(boolean endermanDeathDrop) {
+        this.endermanDeathDrop = endermanDeathDrop;
+    }
+    /**
+     * @param endGenerate the endGenerate to set
+     */
+    public void setEndGenerate(boolean endGenerate) {
+        this.endGenerate = endGenerate;
+    }
+    /**
+     * @param endIslands the endIslands to set
+     */
+    public void setEndIslands(boolean endIslands) {
+        this.endIslands = endIslands;
+    }
+    /**
+     * @param entityLimits the entityLimits to set
+     */
+    public void setEntityLimits(Map<EntityType, Integer> entityLimits) {
+        this.entityLimits = entityLimits;
+    }
+    /**
+     * @param immediateTeleportOnIsland the immediateTeleportOnIsland to set
+     */
+    public void setImmediateTeleportOnIsland(boolean immediateTeleportOnIsland) {
+        this.immediateTeleportOnIsland = immediateTeleportOnIsland;
+    }
+    /**
+     * @param inviteWait the inviteWait to set
+     */
+    public void setInviteWait(int inviteWait) {
+        this.inviteWait = inviteWait;
+    }
+    /**
+     * @param islandDistance the islandDistance to set
+     */
+    public void setIslandDistance(int islandDistance) {
+        this.islandDistance = islandDistance;
+    }
+    /**
+     * @param islandHeight the islandHeight to set
+     */
+    public void setIslandHeight(int islandHeight) {
+        this.islandHeight = islandHeight;
+    }
+    /**
+     * @param islandProtectionRange the islandProtectionRange to set
+     */
+    public void setIslandProtectionRange(int islandProtectionRange) {
+        this.islandProtectionRange = islandProtectionRange;
+    }
+    /**
+     * @param islandStartX the islandStartX to set
+     */
+    public void setIslandStartX(int islandStartX) {
+        this.islandStartX = islandStartX;
+    }
+    /**
+     * @param islandStartZ the islandStartZ to set
+     */
+    public void setIslandStartZ(int islandStartZ) {
+        this.islandStartZ = islandStartZ;
+    }
+    /**
+     * @param islandXOffset the islandXOffset to set
+     */
+    public void setIslandXOffset(int islandXOffset) {
+        this.islandXOffset = islandXOffset;
+    }
+    /**
+     * @param islandZOffset the islandZOffset to set
+     */
+    public void setIslandZOffset(int islandZOffset) {
+        this.islandZOffset = islandZOffset;
+    }
+    /**
+     * @param kickConfirmation the kickConfirmation to set
+     */
+    public void setKickConfirmation(boolean kickConfirmation) {
+        this.kickConfirmation = kickConfirmation;
+    }
+    /**
+     * @param kickedKeepInventory the kickedKeepInventory to set
+     */
+    public void setKickedKeepInventory(boolean kickedKeepInventory) {
+        this.kickedKeepInventory = kickedKeepInventory;
+    }
+    /**
+     * @param kickWait the kickWait to set
+     */
+    public void setKickWait(long kickWait) {
+        this.kickWait = kickWait;
+    }
+    /**
+     * @param leaveConfirmation the leaveConfirmation to set
+     */
+    public void setLeaveConfirmation(boolean leaveConfirmation) {
+        this.leaveConfirmation = leaveConfirmation;
+    }
+    /**
+     * @param leaversLoseReset the leaversLoseReset to set
+     */
+    public void setLeaversLoseReset(boolean leaversLoseReset) {
+        this.leaversLoseReset = leaversLoseReset;
+    }
+    /**
+     * @param leaveWait the leaveWait to set
+     */
+    public void setLeaveWait(long leaveWait) {
+        this.leaveWait = leaveWait;
+    }
+    /**
+     * @param makeIslandIfNone the makeIslandIfNone to set
+     */
+    public void setMakeIslandIfNone(boolean makeIslandIfNone) {
+        this.makeIslandIfNone = makeIslandIfNone;
+    }
+    /**
+     * @param maxHomes the maxHomes to set
+     */
+    public void setMaxHomes(int maxHomes) {
+        this.maxHomes = maxHomes;
+    }
+    /**
+     * @param maxIslands the maxIslands to set
+     */
+    public void setMaxIslands(int maxIslands) {
+        this.maxIslands = maxIslands;
+    }
+    /**
+     * @param maxTeamSize the maxTeamSize to set
+     */
+    public void setMaxTeamSize(int maxTeamSize) {
+        this.maxTeamSize = maxTeamSize;
+    }
+    /**
+     * @param nameMaxLength the nameMaxLength to set
+     */
+    public void setNameMaxLength(int nameMaxLength) {
+        this.nameMaxLength = nameMaxLength;
+    }
+    /**
+     * @param nameMinLength the nameMinLength to set
+     */
+    public void setNameMinLength(int nameMinLength) {
+        this.nameMinLength = nameMinLength;
+    }
+    /**
+     * @param netherGenerate the netherGenerate to set
+     */
+    public void setNetherGenerate(boolean netherGenerate) {
+        this.netherGenerate = netherGenerate;
+    }
+    /**
+     * @param netherIslands the netherIslands to set
+     */
+    public void setNetherIslands(boolean netherIslands) {
+        this.netherIslands = netherIslands;
+    }
+    /**
+     * @param netherRoof the netherRoof to set
+     */
+    public void setNetherRoof(boolean netherRoof) {
+        this.netherRoof = netherRoof;
+    }
+    /**
+     * @param netherSpawnRadius the netherSpawnRadius to set
+     */
+    public void setNetherSpawnRadius(int netherSpawnRadius) {
+        this.netherSpawnRadius = netherSpawnRadius;
+    }
+    /**
+     * @param netherTrees the netherTrees to set
+     */
+    public void setNetherTrees(boolean netherTrees) {
+        this.netherTrees = netherTrees;
+    }
+    /**
+     * @param resetConfirmation the resetConfirmation to set
+     */
+    public void setResetConfirmation(boolean resetConfirmation) {
+        this.resetConfirmation = resetConfirmation;
+    }
+    /**
+     * @param resetLimit the resetLimit to set
+     */
+    public void setResetLimit(int resetLimit) {
+        this.resetLimit = resetLimit;
+    }
+    /**
+     * @param resetWait the resetWait to set
+     */
+    public void setResetWait(long resetWait) {
+        this.resetWait = resetWait;
+    }
     /**
      * @param respawnOnIsland the respawnOnIsland to set
      */
     public void setRespawnOnIsland(boolean respawnOnIsland) {
         this.respawnOnIsland = respawnOnIsland;
     }
-
     /**
-     * @return the companionNames
+     * @param restrictFlyingMobs the restrictFlyingMobs to set
      */
-    public List<String> getCompanionNames() {
-        return companionNames;
+    public void setRestrictFlyingMobs(boolean restrictFlyingMobs) {
+        this.restrictFlyingMobs = restrictFlyingMobs;
     }
-
     /**
-     * @param companionNames the companionNames to set
+     * @param seaHeight the seaHeight to set
      */
-    public void setCompanionNames(List<String> companionNames) {
-        this.companionNames = companionNames;
+    public void setSeaHeight(int seaHeight) {
+        this.seaHeight = seaHeight;
     }
-
     /**
-     * @return the companionType
+     * @param tileEntityLimits the tileEntityLimits to set
      */
-    public EntityType getCompanionType() {
-        return companionType;
+    public void setTileEntityLimits(Map<String, Integer> tileEntityLimits) {
+        this.tileEntityLimits = tileEntityLimits;
     }
-
     /**
-     * @param companionType the companionType to set
+     * @param togglePvPCooldown the togglePvPCooldown to set
      */
-    public void setCompanionType(EntityType companionType) {
-        this.companionType = companionType;
+    public void setTogglePvPCooldown(int togglePvPCooldown) {
+        this.togglePvPCooldown = togglePvPCooldown;
     }
-
     /**
-     * @return the useOwnGenerator
+     * @param uniqueId - unique ID the uniqueId to set
      */
-    public boolean isUseOwnGenerator() {
-        return useOwnGenerator;
+    @Override
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
-
     /**
      * @param useOwnGenerator the useOwnGenerator to set
      */
     public void setUseOwnGenerator(boolean useOwnGenerator) {
         this.useOwnGenerator = useOwnGenerator;
+    }
+    /**
+     * @param worldName the worldName to set
+     */
+    public void setWorldName(String worldName) {
+        this.worldName = worldName;
+    }
+    /* (non-Javadoc)
+     * @see us.tastybento.bskyblock.api.configuration.WorldSettings#getFriendlyName()
+     */
+    @Override
+    public String getFriendlyName() {
+        return friendlyName;
     }
 
     /**
@@ -790,112 +1156,13 @@ public class AISettings implements DataObject, WorldSettings {
     public void setFriendlyName(String friendlyName) {
         this.friendlyName = friendlyName;
     }
-
     /**
-     * @param worldName the worldName to set
+     * @return the dragonSpawn
      */
-    public void setWorldName(String worldName) {
-        this.worldName = worldName;
+    @Override
+    public boolean isDragonSpawn() {
+        return dragonSpawn;
     }
-
-    /**
-     * @param islandDistance the islandDistance to set
-     */
-    public void setIslandDistance(int islandDistance) {
-        this.islandDistance = islandDistance;
-    }
-
-    /**
-     * @param islandProtectionRange the islandProtectionRange to set
-     */
-    public void setIslandProtectionRange(int islandProtectionRange) {
-        this.islandProtectionRange = islandProtectionRange;
-    }
-
-    /**
-     * @param islandStartX the islandStartX to set
-     */
-    public void setIslandStartX(int islandStartX) {
-        this.islandStartX = islandStartX;
-    }
-
-    /**
-     * @param islandStartZ the islandStartZ to set
-     */
-    public void setIslandStartZ(int islandStartZ) {
-        this.islandStartZ = islandStartZ;
-    }
-
-    /**
-     * @param seaHeight the seaHeight to set
-     */
-    public void setSeaHeight(int seaHeight) {
-        this.seaHeight = seaHeight;
-    }
-
-    /**
-     * @param islandHeight the islandHeight to set
-     */
-    public void setIslandHeight(int islandHeight) {
-        this.islandHeight = islandHeight;
-    }
-
-    /**
-     * @param maxIslands the maxIslands to set
-     */
-    public void setMaxIslands(int maxIslands) {
-        this.maxIslands = maxIslands;
-    }
-
-    /**
-     * @param netherGenerate the netherGenerate to set
-     */
-    public void setNetherGenerate(boolean netherGenerate) {
-        this.netherGenerate = netherGenerate;
-    }
-
-    /**
-     * @param netherIslands the netherIslands to set
-     */
-    public void setNetherIslands(boolean netherIslands) {
-        this.netherIslands = netherIslands;
-    }
-
-    /**
-     * @param netherTrees the netherTrees to set
-     */
-    public void setNetherTrees(boolean netherTrees) {
-        this.netherTrees = netherTrees;
-    }
-
-    /**
-     * @param netherRoof the netherRoof to set
-     */
-    public void setNetherRoof(boolean netherRoof) {
-        this.netherRoof = netherRoof;
-    }
-
-    /**
-     * @param netherSpawnRadius the netherSpawnRadius to set
-     */
-    public void setNetherSpawnRadius(int netherSpawnRadius) {
-        this.netherSpawnRadius = netherSpawnRadius;
-    }
-
-    /**
-     * @param endGenerate the endGenerate to set
-     */
-    public void setEndGenerate(boolean endGenerate) {
-        this.endGenerate = endGenerate;
-    }
-
-    /**
-     * @param endIslands the endIslands to set
-     */
-    public void setEndIslands(boolean endIslands) {
-        this.endIslands = endIslands;
-    }
-
     /**
      * @param dragonSpawn the dragonSpawn to set
      */
@@ -903,128 +1170,9 @@ public class AISettings implements DataObject, WorldSettings {
         this.dragonSpawn = dragonSpawn;
     }
 
-    /**
-     * @param acidDamage the acidDamage to set
-     */
-    public void setAcidDamage(int acidDamage) {
-        this.acidDamage = acidDamage;
-    }
-
-    /**
-     * @param acidRainDamage the acidRainDamage to set
-     */
-    public void setAcidRainDamage(int acidRainDamage) {
-        this.acidRainDamage = acidRainDamage;
-    }
-
-    /**
-     * @param entityLimits the entityLimits to set
-     */
-    public void setEntityLimits(Map<EntityType, Integer> entityLimits) {
-        this.entityLimits = entityLimits;
-    }
-
-    /**
-     * @param tileEntityLimits the tileEntityLimits to set
-     */
-    public void setTileEntityLimits(Map<String, Integer> tileEntityLimits) {
-        this.tileEntityLimits = tileEntityLimits;
-    }
-
-    /**
-     * @param maxTeamSize the maxTeamSize to set
-     */
-    public void setMaxTeamSize(int maxTeamSize) {
-        this.maxTeamSize = maxTeamSize;
-    }
-
-    /**
-     * @param maxHomes the maxHomes to set
-     */
-    public void setMaxHomes(int maxHomes) {
-        this.maxHomes = maxHomes;
-    }
-
-    /**
-     * @param islandXOffset the islandXOffset to set
-     */
-    public void setIslandXOffset(int islandXOffset) {
-        this.islandXOffset = islandXOffset;
-    }
-
-    /**
-     * @param islandZOffset the islandZOffset to set
-     */
-    public void setIslandZOffset(int islandZOffset) {
-        this.islandZOffset = islandZOffset;
-    }
-
-    /**
-     * @param chestItems the chestItems to set
-     */
-    public void setChestItems(List<ItemStack> chestItems) {
-        this.chestItems = chestItems;
-    }
-
     @Override
     public String getPermissionPrefix() {
-        return "acidisland";
-    }
-
-    /**
-     * @return the acidDamageMonster
-     */
-    public int getAcidDamageMonster() {
-        return acidDamageMonster;
-    }
-
-    /**
-     * @param acidDamageMonster the acidDamageMonster to set
-     */
-    public void setAcidDamageMonster(int acidDamageMonster) {
-        this.acidDamageMonster = acidDamageMonster;
-    }
-
-    /**
-     * @return the acidDamageAnimal
-     */
-    public int getAcidDamageAnimal() {
-        return acidDamageAnimal;
-    }
-
-    /**
-     * @param acidDamageAnimal the acidDamageAnimal to set
-     */
-    public void setAcidDamageAnimal(int acidDamageAnimal) {
-        this.acidDamageAnimal = acidDamageAnimal;
-    }
-
-    /**
-     * @return the helmetProtection
-     */
-    public boolean isHelmetProtection() {
-        return helmetProtection;
-    }
-
-    /**
-     * @param helmetProtection the helmetProtection to set
-     */
-    public void setHelmetProtection(boolean helmetProtection) {
-        this.helmetProtection = helmetProtection;
-    }
-
-    /**
-     * @return the fullArmorProtection
-     */
-    public boolean isFullArmorProtection() {
-        return fullArmorProtection;
-    }
-
-    /**
-     * @param fullArmorProtection the fullArmorProtection to set
-     */
-    public void setFullArmorProtection(boolean fullArmorProtection) {
-        this.fullArmorProtection = fullArmorProtection;
+        return "bskyblock";
     }
 
     /**
@@ -1057,250 +1205,118 @@ public class AISettings implements DataObject, WorldSettings {
         this.worldFlags = worldFlags;
     }
 
-    @Override
-    public GameMode getDefaultGameMode() {
-        return GameMode.SURVIVAL;
-    }
-
-    @Override
-    public boolean isOnJoinResetMoney() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isOnJoinResetInventory() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isOnJoinResetEnderChest() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isOnLeaveResetMoney() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isOnLeaveResetInventory() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isOnLeaveResetEnderChest() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
     /**
-     * @return the disableOfflineRedstone
-     */
-    public boolean isDisableOfflineRedstone() {
-        return disableOfflineRedstone;
-    }
-
-    /**
-     * @return the deathsMax
-     */
-    public int getDeathsMax() {
-        return deathsMax;
-    }
-
-    /**
-     * @return the deathsSumTeam
-     */
-    public boolean isDeathsSumTeam() {
-        return deathsSumTeam;
-    }
-
-    /**
-     * @return the customRanks
-     */
-    public Map<String, Integer> getCustomRanks() {
-        return customRanks;
-    }
-
-    /**
-     * @return the allowPistonPush
-     */
-    public boolean isAllowPistonPush() {
-        return allowPistonPush;
-    }
-
-    /**
-     * @return the restrictFlyingMobs
-     */
-    public boolean isRestrictFlyingMobs() {
-        return restrictFlyingMobs;
-    }
-
-    /**
-     * @return the togglePvPCooldown
-     */
-    public int getTogglePvPCooldown() {
-        return togglePvPCooldown;
-    }
-
-    /**
-     * @return the defaultFlags
-     */
-    public Map<Flag, Boolean> getDefaultFlags() {
-        return defaultFlags;
-    }
-
-    /**
-     * @return the allowEndermanGriefing
-     */
-    public boolean isAllowEndermanGriefing() {
-        return allowEndermanGriefing;
-    }
-
-    /**
-     * @return the endermanDeathDrop
-     */
-    public boolean isEndermanDeathDrop() {
-        return endermanDeathDrop;
-    }
-
-    /**
-     * @return the allowTNTDamage
-     */
-    public boolean isAllowTNTDamage() {
-        return allowTNTDamage;
-    }
-
-    /**
-     * @return the allowChestDamage
-     */
-    public boolean isAllowChestDamage() {
-        return allowChestDamage;
-    }
-
-    /**
-     * @return the allowCreeperDamage
-     */
-    public boolean isAllowCreeperDamage() {
-        return allowCreeperDamage;
-    }
-
-    /**
-     * @return the allowCreeperGriefing
-     */
-    public boolean isAllowCreeperGriefing() {
-        return allowCreeperGriefing;
-    }
-
-    /**
-     * @return the allowMobDamageToItemFrames
-     */
-    public boolean isAllowMobDamageToItemFrames() {
-        return allowMobDamageToItemFrames;
-    }
-
-    /**
-     * @return the limitedBlocks
-     */
-    public Map<String, Integer> getLimitedBlocks() {
-        return limitedBlocks;
-    }
-
-    /**
-     * @return the teamJoinDeathReset
-     */
-    public boolean isTeamJoinDeathReset() {
-        return teamJoinDeathReset;
-    }
-
-    /**
-     * @return the kickConfirmation
-     */
-    public boolean isKickConfirmation() {
-        return kickConfirmation;
-    }
-
-    /**
-     * @return the kickWait
-     */
-    public long getKickWait() {
-        return kickWait;
-    }
-
-    /**
-     * @return the leaveConfirmation
-     */
-    public boolean isLeaveConfirmation() {
-        return leaveConfirmation;
-    }
-
-    /**
-     * @return the leaveWait
-     */
-    public long getLeaveWait() {
-        return leaveWait;
-    }
-
-    /**
-     * @return the closePanelOnClickOutside
+     * @return whether panels should close when clicked outside or not
      */
     public boolean isClosePanelOnClickOutside() {
         return closePanelOnClickOutside;
     }
 
     /**
+     * Set panel close on click outside
+     * @param closePanelOnClickOutside - true means close panel when click is outside panel
+     */
+    public void setClosePanelOnClickOutside(boolean closePanelOnClickOutside) {
+        this.closePanelOnClickOutside = closePanelOnClickOutside;
+    }
+    /**
+     * @return the defaultGameMode
+     */
+    @Override
+    public GameMode getDefaultGameMode() {
+        return defaultGameMode;
+    }
+    /**
      * @param defaultGameMode the defaultGameMode to set
      */
     public void setDefaultGameMode(GameMode defaultGameMode) {
         this.defaultGameMode = defaultGameMode;
     }
-
     /**
-     * @param disableOfflineRedstone the disableOfflineRedstone to set
+     * @return the removeMobsWhitelist
      */
-    public void setDisableOfflineRedstone(boolean disableOfflineRedstone) {
-        this.disableOfflineRedstone = disableOfflineRedstone;
+    @Override
+    public Set<EntityType> getRemoveMobsWhitelist() {
+        return removeMobsWhitelist;
     }
-
+    /**
+     * @param removeMobsWhitelist the removeMobsWhitelist to set
+     */
+    public void setRemoveMobsWhitelist(Set<EntityType> removeMobsWhitelist) {
+        this.removeMobsWhitelist = removeMobsWhitelist;
+    }
+    /**
+     * @return the onJoinResetMoney
+     */
+    @Override
+    public boolean isOnJoinResetMoney() {
+        return onJoinResetMoney;
+    }
+    /**
+     * @return the onJoinResetInventory
+     */
+    @Override
+    public boolean isOnJoinResetInventory() {
+        return onJoinResetInventory;
+    }
+    /**
+     * @return the onJoinResetEnderChest
+     */
+    @Override
+    public boolean isOnJoinResetEnderChest() {
+        return onJoinResetEnderChest;
+    }
+    /**
+     * @return the onLeaveResetMoney
+     */
+    @Override
+    public boolean isOnLeaveResetMoney() {
+        return onLeaveResetMoney;
+    }
+    /**
+     * @return the onLeaveResetInventory
+     */
+    @Override
+    public boolean isOnLeaveResetInventory() {
+        return onLeaveResetInventory;
+    }
+    /**
+     * @return the onLeaveResetEnderChest
+     */
+    @Override
+    public boolean isOnLeaveResetEnderChest() {
+        return onLeaveResetEnderChest;
+    }
     /**
      * @param onJoinResetMoney the onJoinResetMoney to set
      */
     public void setOnJoinResetMoney(boolean onJoinResetMoney) {
         this.onJoinResetMoney = onJoinResetMoney;
     }
-
     /**
      * @param onJoinResetInventory the onJoinResetInventory to set
      */
     public void setOnJoinResetInventory(boolean onJoinResetInventory) {
         this.onJoinResetInventory = onJoinResetInventory;
     }
-
     /**
      * @param onJoinResetEnderChest the onJoinResetEnderChest to set
      */
     public void setOnJoinResetEnderChest(boolean onJoinResetEnderChest) {
         this.onJoinResetEnderChest = onJoinResetEnderChest;
     }
-
     /**
      * @param onLeaveResetMoney the onLeaveResetMoney to set
      */
     public void setOnLeaveResetMoney(boolean onLeaveResetMoney) {
         this.onLeaveResetMoney = onLeaveResetMoney;
     }
-
     /**
      * @param onLeaveResetInventory the onLeaveResetInventory to set
      */
     public void setOnLeaveResetInventory(boolean onLeaveResetInventory) {
         this.onLeaveResetInventory = onLeaveResetInventory;
     }
-
     /**
      * @param onLeaveResetEnderChest the onLeaveResetEnderChest to set
      */
@@ -1308,156 +1324,51 @@ public class AISettings implements DataObject, WorldSettings {
         this.onLeaveResetEnderChest = onLeaveResetEnderChest;
     }
 
-    /**
-     * @param deathsMax the deathsMax to set
-     */
-    public void setDeathsMax(int deathsMax) {
-        this.deathsMax = deathsMax;
-    }
-
-    /**
-     * @param deathsSumTeam the deathsSumTeam to set
-     */
-    public void setDeathsSumTeam(boolean deathsSumTeam) {
-        this.deathsSumTeam = deathsSumTeam;
-    }
-
-    /**
-     * @param customRanks the customRanks to set
-     */
-    public void setCustomRanks(Map<String, Integer> customRanks) {
-        this.customRanks = customRanks;
-    }
-
-    /**
-     * @param allowPistonPush the allowPistonPush to set
-     */
-    public void setAllowPistonPush(boolean allowPistonPush) {
-        this.allowPistonPush = allowPistonPush;
-    }
-
-    /**
-     * @param restrictFlyingMobs the restrictFlyingMobs to set
-     */
-    public void setRestrictFlyingMobs(boolean restrictFlyingMobs) {
-        this.restrictFlyingMobs = restrictFlyingMobs;
-    }
-
-    /**
-     * @param togglePvPCooldown the togglePvPCooldown to set
-     */
-    public void setTogglePvPCooldown(int togglePvPCooldown) {
-        this.togglePvPCooldown = togglePvPCooldown;
-    }
-
-    /**
-     * @param defaultFlags the defaultFlags to set
-     */
-    public void setDefaultFlags(Map<Flag, Boolean> defaultFlags) {
-        this.defaultFlags = defaultFlags;
-    }
-
-    /**
-     * @param allowEndermanGriefing the allowEndermanGriefing to set
-     */
-    public void setAllowEndermanGriefing(boolean allowEndermanGriefing) {
-        this.allowEndermanGriefing = allowEndermanGriefing;
-    }
-
-    /**
-     * @param endermanDeathDrop the endermanDeathDrop to set
-     */
-    public void setEndermanDeathDrop(boolean endermanDeathDrop) {
-        this.endermanDeathDrop = endermanDeathDrop;
-    }
-
-    /**
-     * @param allowTNTDamage the allowTNTDamage to set
-     */
-    public void setAllowTNTDamage(boolean allowTNTDamage) {
-        this.allowTNTDamage = allowTNTDamage;
-    }
-
-    /**
-     * @param allowChestDamage the allowChestDamage to set
-     */
-    public void setAllowChestDamage(boolean allowChestDamage) {
-        this.allowChestDamage = allowChestDamage;
-    }
-
-    /**
-     * @param allowCreeperDamage the allowCreeperDamage to set
-     */
-    public void setAllowCreeperDamage(boolean allowCreeperDamage) {
-        this.allowCreeperDamage = allowCreeperDamage;
-    }
-
-    /**
-     * @param allowCreeperGriefing the allowCreeperGriefing to set
-     */
-    public void setAllowCreeperGriefing(boolean allowCreeperGriefing) {
-        this.allowCreeperGriefing = allowCreeperGriefing;
-    }
-
-    /**
-     * @param allowMobDamageToItemFrames the allowMobDamageToItemFrames to set
-     */
-    public void setAllowMobDamageToItemFrames(boolean allowMobDamageToItemFrames) {
-        this.allowMobDamageToItemFrames = allowMobDamageToItemFrames;
-    }
-
-    /**
-     * @param limitedBlocks the limitedBlocks to set
-     */
-    public void setLimitedBlocks(Map<String, Integer> limitedBlocks) {
-        this.limitedBlocks = limitedBlocks;
-    }
-
-    /**
-     * @param teamJoinDeathReset the teamJoinDeathReset to set
-     */
-    public void setTeamJoinDeathReset(boolean teamJoinDeathReset) {
-        this.teamJoinDeathReset = teamJoinDeathReset;
-    }
-
-    /**
-     * @param kickConfirmation the kickConfirmation to set
-     */
-    public void setKickConfirmation(boolean kickConfirmation) {
-        this.kickConfirmation = kickConfirmation;
-    }
-
-    /**
-     * @param kickWait the kickWait to set
-     */
-    public void setKickWait(long kickWait) {
-        this.kickWait = kickWait;
-    }
-
-    /**
-     * @param leaveConfirmation the leaveConfirmation to set
-     */
-    public void setLeaveConfirmation(boolean leaveConfirmation) {
-        this.leaveConfirmation = leaveConfirmation;
-    }
-
-    /**
-     * @param leaveWait the leaveWait to set
-     */
-    public void setLeaveWait(long leaveWait) {
-        this.leaveWait = leaveWait;
-    }
-
-    /**
-     * @param closePanelOnClickOutside the closePanelOnClickOutside to set
-     */
-    public void setClosePanelOnClickOutside(boolean closePanelOnClickOutside) {
-        this.closePanelOnClickOutside = closePanelOnClickOutside;
-    }
-
     @Override
     public Optional<Addon> getAddon() {
         return Optional.of(AcidIsland.getInstance());
+    }
+    /**
+     * @return the defaultIslandProtection
+     */
+    @Override
+    public Map<Flag, Integer> getDefaultIslandFlags() {
+        return defaultIslandFlags;
+    }
+    /**
+     * @return the visibleSettings
+     */
+    @Override
+    public List<String> getVisibleSettings() {
+        return visibleSettings;
+    }
+    /**
+     */
+    public void setDefaultIslandFlags(Map<Flag, Integer> defaultIslandFlags) {
+        this.defaultIslandFlags = defaultIslandFlags;
+    }
+    /**
+     * @param visibleSettings the visibleSettings to set
+     */
+    public void setVisibleSettings(List<String> visibleSettings) {
+        this.visibleSettings = visibleSettings;
+    }
+    /**
+     * @return the defaultIslandSettings
+     */
+    @Override
+    public Map<Flag, Integer> getDefaultIslandSettings() {
+        return defaultIslandSettings;
+    }
+    /**
+     * @param defaultIslandSettings the defaultIslandSettings to set
+     */
+    public void setDefaultIslandSettings(Map<Flag, Integer> defaultIslandSettings) {
+        this.defaultIslandSettings = defaultIslandSettings;
+    }
+
+    public boolean isTeamJoinDeathReset() {
+        return teamJoinDeathReset;
     }
 
 }

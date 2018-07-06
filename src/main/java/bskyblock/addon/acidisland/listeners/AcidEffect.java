@@ -31,7 +31,7 @@ import bskyblock.addon.acidisland.world.AcidTask;
 
 /**
  * Applies the acid effect to players
- * 
+ *
  * @author tastybento
  */
 public class AcidEffect implements Listener {
@@ -41,8 +41,8 @@ public class AcidEffect implements Listener {
     private boolean isRaining = false;
     private final List<Player> wetPlayers = new ArrayList<>();
     private final static List<PotionEffectType> EFFECTS = Arrays.asList(
-            PotionEffectType.BLINDNESS, 
-            PotionEffectType.CONFUSION, 
+            PotionEffectType.BLINDNESS,
+            PotionEffectType.CONFUSION,
             PotionEffectType.HUNGER,
             PotionEffectType.SLOW,
             PotionEffectType.SLOW_DIGGING,
@@ -79,11 +79,11 @@ public class AcidEffect implements Listener {
                 || player.getGameMode().equals(GameMode.SPECTATOR)
                 || addon.getPlayers().isInTeleport(player.getUniqueId())
                 || !player.getWorld().equals(addon.getIslandWorld())
-                || player.hasPermission("acidisland.mod.noburn") 
+                || player.hasPermission("acidisland.mod.noburn")
                 || player.hasPermission("admin.noburn")
                 || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
             return;
-        }        
+        }
 
         // Slow checks
         Location playerLoc = player.getLocation();
@@ -141,8 +141,8 @@ public class AcidEffect implements Listener {
                     burningPlayers.remove(player);
                     this.cancel();
                 } else {
-                    addon.getSettings().getAcidDamageType().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
-                    addon.getSettings().getAcidDamageType().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
+                    addon.getSettings().getAcidEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
+                    addon.getSettings().getAcidEffects().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
                     // Apply damage if there is any
                     if (addon.getSettings().getAcidDamage() > 0D) {
                         player.damage((addon.getSettings().getAcidDamage() - addon.getSettings().getAcidDamage() * getDamageReduced(player)));
@@ -160,7 +160,7 @@ public class AcidEffect implements Listener {
      * @return true if they are safe
      */
     private boolean isSafeFromRain(Player player) {
-        if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null 
+        if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
                 && player.getInventory().getHelmet().getType().name().contains("HELMET"))) {
             return true;
         }
@@ -332,7 +332,7 @@ public class AcidEffect implements Listener {
 
     /**
      * Tracks weather changes and acid rain
-     * 
+     *
      * @param e - event
      */
     @EventHandler(priority = EventPriority.NORMAL)
