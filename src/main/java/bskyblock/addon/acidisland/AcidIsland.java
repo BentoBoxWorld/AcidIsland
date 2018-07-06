@@ -22,6 +22,7 @@ public class AcidIsland extends Addon {
     private static AcidIsland addon;
     private AISettings settings;
     private AcidIslandWorld aiw;
+    private AcidTask acidTask;
 
     @Override
     public void onLoad() {
@@ -46,11 +47,12 @@ public class AcidIsland extends Addon {
         new AcidCommand(this);
         new AiCommand(this);
         // Burn everything
-        new AcidTask(this);
+        acidTask = new AcidTask(this);
     }
 
     @Override
     public void onDisable(){
+        acidTask.cancelTasks();
     }
 
     public AISettings getSettings() {

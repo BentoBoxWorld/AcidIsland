@@ -27,6 +27,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import bskyblock.addon.acidisland.AcidIsland;
+import bskyblock.addon.acidisland.events.AcidEvent;
+import bskyblock.addon.acidisland.events.AcidRainEvent;
 import bskyblock.addon.acidisland.world.AcidTask;
 
 /**
@@ -112,8 +114,14 @@ public class AcidEffect implements Listener {
                             this.cancel();
                             // Check they are still in this world
                         } else {
-                            player.damage((addon.getSettings().getAcidRainDamage() - addon.getSettings().getAcidRainDamage() * getDamageReduced(player)));
-                            player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                            double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
+                            double totalDamage = (addon.getSettings().getAcidRainDamage() - protection);
+                            AcidRainEvent e = new AcidRainEvent(player, totalDamage, protection);
+                            addon.getServer().getPluginManager().callEvent(e);
+                            if (!e.isCancelled()) {
+                                player.damage(e.getRainDamage());
+                                player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                            }
                         }
                     }
                 }.runTaskTimer(addon.getBSkyBlock(), 0L, 20L);
@@ -141,14 +149,19 @@ public class AcidEffect implements Listener {
                     burningPlayers.remove(player);
                     this.cancel();
                 } else {
-                    addon.getSettings().getAcidEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
-                    addon.getSettings().getAcidEffects().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
-                    // Apply damage if there is any
-                    if (addon.getSettings().getAcidDamage() > 0D) {
-                        player.damage((addon.getSettings().getAcidDamage() - addon.getSettings().getAcidDamage() * getDamageReduced(player)));
-                        player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                    double protection = addon.getSettings().getAcidDamage() * getDamageReduced(player);
+                    double totalDamage = addon.getSettings().getAcidDamage() - protection;
+                    AcidEvent acidEvent = new AcidEvent(player, totalDamage, protection, addon.getSettings().getAcidEffects());
+                    addon.getServer().getPluginManager().callEvent(acidEvent);
+                    if (!acidEvent.isCancelled()) {
+                        acidEvent.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
+                        acidEvent.getPotionEffects().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
+                        // Apply damage if there is any
+                        if (acidEvent.getTotalDamage() > 0D) {
+                            player.damage(acidEvent.getTotalDamage());
+                            player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                        }
                     }
-
                 }
             }
         }.runTaskTimer(addon.getBSkyBlock(), 0L, 20L);
