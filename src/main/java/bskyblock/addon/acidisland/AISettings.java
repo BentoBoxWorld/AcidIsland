@@ -1172,7 +1172,7 @@ public class AISettings implements DataObject, WorldSettings {
 
     @Override
     public String getPermissionPrefix() {
-        return "bskyblock";
+        return "acidisland";
     }
 
     /**
