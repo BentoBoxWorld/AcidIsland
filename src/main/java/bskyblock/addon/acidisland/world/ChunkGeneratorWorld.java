@@ -19,7 +19,7 @@ import bskyblock.addon.acidisland.AcidIsland;
  *
  */
 class ChunkGeneratorWorld extends ChunkGenerator {
-    
+
     private final AcidIsland addon;
     private final Random rand = new Random();
 
@@ -72,6 +72,16 @@ class ChunkGeneratorWorld extends ChunkGenerator {
         // This is a nether generator
         if (!world.getEnvironment().equals(Environment.NETHER)) {
             return result;
+        }
+        if (addon.getSettings().getSeaHeight() != 0) {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    for (int y = 0; y < addon.getSettings().getSeaHeight(); y++) {
+                        result.setBlock(x, y, z, Material.STATIONARY_WATER);
+                    }
+                }
+            }
+
         }
         if (addon.getSettings().isNetherRoof()) {
             // Make the roof - common across the world

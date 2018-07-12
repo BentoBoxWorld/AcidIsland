@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,6 +13,8 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Guardian;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Squid;
 
@@ -38,17 +41,29 @@ public class AcidTask {
      */
     private void burnEntities() {
         // This part will kill monsters if they fall into the water because it is acid
-        entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getBSkyBlock(), () -> addon.getIslandWorld().getEntities().stream()
+        entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getBSkyBlock(), () -> getEntityStream()
                 .filter(e -> !(e instanceof Guardian || e instanceof Squid))
                 .filter(w -> w.getLocation().getBlock().getType().equals(Material.WATER) || w.getLocation().getBlock().getType().equals(Material.STATIONARY_WATER))
                 .forEach(e -> {
-                    if ((e instanceof Monster) && addon.getSettings().getAcidDamageMonster() > 0D) {
-                        ((Monster) e).damage(addon.getSettings().getAcidDamageMonster());
+                    if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
+                        ((LivingEntity) e).damage(addon.getSettings().getAcidDamageMonster());
                     } else if ((e instanceof Animals) && addon.getSettings().getAcidDamageAnimal() > 0D
                             && (!e.getType().equals(EntityType.CHICKEN) || addon.getSettings().isAcidDamageChickens())) {
-                        ((Animals) e).damage(addon.getSettings().getAcidDamageMonster());
+                        ((LivingEntity) e).damage(addon.getSettings().getAcidDamageMonster());
                     }
                 }), 0L, 20L);
+    }
+
+    private Stream<Entity> getEntityStream() {
+        Stream<Entity> entityStream = addon.getIslandWorld().getEntities().stream();
+        // Nether and end
+        if (addon.getSettings().isNetherGenerate() && addon.getSettings().isNetherIslands()) {
+            entityStream = Stream.concat(entityStream, addon.getAiw().getNetherWorld().getEntities().stream());
+        }
+        if (addon.getSettings().isEndGenerate() && addon.getSettings().isEndIslands()) {
+            entityStream = Stream.concat(entityStream, addon.getAiw().getEndWorld().getEntities().stream());
+        }
+        return entityStream;
     }
 
     /**
@@ -60,8 +75,7 @@ public class AcidTask {
         }
         itemBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getBSkyBlock(), () -> {
             Set<Entity> newItemsInWater = new HashSet<>();
-            addon.getIslandWorld().getEntities().stream()
-            .filter(e -> e.getType().equals(EntityType.DROPPED_ITEM)
+            getEntityStream().filter(e -> e.getType().equals(EntityType.DROPPED_ITEM)
                     && (e.getLocation().getBlock().getType().equals(Material.WATER)
                             || e.getLocation().getBlock().getType().equals(Material.STATIONARY_WATER))
                     )

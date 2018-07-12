@@ -30,6 +30,7 @@ import bskyblock.addon.acidisland.AcidIsland;
 import bskyblock.addon.acidisland.events.AcidEvent;
 import bskyblock.addon.acidisland.events.AcidRainEvent;
 import bskyblock.addon.acidisland.world.AcidTask;
+import us.tastybento.bskyblock.util.Util;
 
 /**
  * Applies the acid effect to players
@@ -80,7 +81,7 @@ public class AcidEffect implements Listener {
                 || player.getGameMode().equals(GameMode.CREATIVE)
                 || player.getGameMode().equals(GameMode.SPECTATOR)
                 || addon.getPlayers().isInTeleport(player.getUniqueId())
-                || !player.getWorld().equals(addon.getIslandWorld())
+                || !Util.sameWorld(addon.getIslandWorld(), player.getWorld())
                 || player.hasPermission("acidisland.mod.noburn")
                 || player.hasPermission("admin.noburn")
                 || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
