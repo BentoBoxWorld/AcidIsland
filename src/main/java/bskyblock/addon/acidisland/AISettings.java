@@ -33,41 +33,59 @@ import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter
 @StoreAt(filename="config.yml", path="addons/BSkyBlock-AcidIsland") // Explicitly call out what name this should have.
 public class AISettings implements DataObject, WorldSettings {
 
+    @ConfigComment("AcidIsland Configuration")
+    @ConfigComment("This config file is dynamic and saved when the server is shutdown.")
+    @ConfigComment("You cannot edit it while the server is running because changes will")
+    @ConfigComment("be lost! Use in-game settings GUI or edit when server is offline.")
+    @ConfigComment("Do not change this value below")
     private String uniqueId = "config";
 
     // ---------------------------------------------
 
     /*      ACID        */
-
+    @ConfigComment("Acid Settings")
+    @ConfigComment("")
+    @ConfigComment("Acid can damage ops or not")
     @ConfigEntry(path = "acid.damage-op")
     private boolean acidDamageOp = false;
 
+    @ConfigComment("")
+    @ConfigComment("Acid can damage chickens - best to leave false because they like to swim")
     @ConfigEntry(path = "acid.damage-chickens")
     private boolean acidDamageChickens = false;
 
     // Damage
+    @ConfigComment("Damage that a player will experience in acid. 10 is half their health typically. 5 would be easier.")
     @ConfigEntry(path = "acid.damage.acid.player")
     private int acidDamage = 10;
 
+    @ConfigComment("Damage that monsters experience from acid")
     @ConfigEntry(path = "acid.damage.acid.monster")
-    private int acidDamageMonster = 10;
+    private int acidDamageMonster = 5;
 
+    @ConfigComment("Damage animals experience from acid")
     @ConfigEntry(path = "acid.damage.acid.animal")
-    private int acidDamageAnimal = 10;
+    private int acidDamageAnimal = 1;
 
+    @ConfigComment("Destroy items after this many seconds in acid. 0 = do not destroy items")
     @ConfigEntry(path = "acid.damage.acid.item")
     private long acidDestroyItemTime = 0;
 
+    @ConfigComment("Damage from acid rain")
     @ConfigEntry(path = "acid.damage.rain")
     private int acidRainDamage = 1;
 
+    @ConfigComment("Portion effects from going into acid water")
+    @ConfigComment("You can list multiple effects")
     @ConfigEntry(path = "acid.damage.effects")
     @Adapter(PotionEffectListAdapter.class)
     private List<PotionEffectType> acidEffects = new ArrayList<>();
 
+    @ConfigComment("If player wears a helmet then they will not suffer from acid rain")
     @ConfigEntry(path = "acid.damage.protection.helmet")
     private boolean helmetProtection;
 
+    @ConfigComment("If player wears any set of full armor, they will not suffer from acid damage")
     @ConfigEntry(path = "acid.damage.protection.full-armor")
     private boolean fullArmorProtection;
 
@@ -205,6 +223,10 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("These are the settings visible to users.")
     @ConfigEntry(path = "world.visible-settings")
     private List<String> visibleSettings = new ArrayList<>();
+
+    @ConfigComment("Visitor banned commands - Visitors to islands cannot use these commands in this world")
+    @ConfigEntry(path = "world.visitor-banned-commands")
+    private List<String> visitorBannedCommands = new ArrayList<>();
 
     // ---------------------------------------------
 
@@ -1370,5 +1392,20 @@ public class AISettings implements DataObject, WorldSettings {
     public boolean isTeamJoinDeathReset() {
         return teamJoinDeathReset;
     }
+
+    /**
+     * @return the visitorbannedcommands
+     */
+    @Override
+    public List<String> getVisitorBannedCommands() {
+        return visitorBannedCommands;
+    }
+    /**
+     * @param visitorBannedCommands the visitorbannedcommands to set
+     */
+    public void setVisitorBannedCommands(List<String> visitorBannedCommands) {
+        this.visitorBannedCommands = visitorBannedCommands;
+    }
+
 
 }

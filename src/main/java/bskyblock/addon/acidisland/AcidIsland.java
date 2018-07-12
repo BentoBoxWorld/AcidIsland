@@ -53,6 +53,8 @@ public class AcidIsland extends Addon {
     @Override
     public void onDisable(){
         acidTask.cancelTasks();
+        // Save settings
+        new BSBConfig<>(this, AISettings.class).saveConfigObject(settings);
     }
 
     public AISettings getSettings() {
