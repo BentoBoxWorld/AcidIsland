@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
@@ -30,15 +31,12 @@ import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter
  * @author tastybento
  *
  */
+@ConfigComment("AcidIsland Configuration")
+@ConfigComment("This config file is dynamic and saved when the server is shutdown.")
+@ConfigComment("You cannot edit it while the server is running because changes will")
+@ConfigComment("be lost! Use in-game settings GUI or edit when server is offline.")
 @StoreAt(filename="config.yml", path="addons/BSkyBlock-AcidIsland") // Explicitly call out what name this should have.
 public class AISettings implements DataObject, WorldSettings {
-
-    @ConfigComment("AcidIsland Configuration")
-    @ConfigComment("This config file is dynamic and saved when the server is shutdown.")
-    @ConfigComment("You cannot edit it while the server is running because changes will")
-    @ConfigComment("be lost! Use in-game settings GUI or edit when server is offline.")
-    @ConfigComment("Do not change this value below")
-    private String uniqueId = "config";
 
     // ---------------------------------------------
 
@@ -99,6 +97,11 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("It acts like a prefix for nether and end (e.g. BSkyBlock, BSkyBlock_nether, BSkyBlock_end)")
     @ConfigEntry(path = "world.world-name", needsReset = true)
     private String worldName = "AcidIsland_world";
+
+    @ConfigComment("World difficulty setting - PEACEFUL, EASY, NORMAL, HARD")
+    @ConfigComment("Other plugins may override this setting")
+    @ConfigEntry(path = "world.difficulty")
+    private Difficulty difficulty;
 
     @ConfigComment("Radius of island in blocks. (So distance between islands is twice this)")
     @ConfigComment("Will be rounded up to the nearest 16 blocks.")
@@ -400,6 +403,9 @@ public class AISettings implements DataObject, WorldSettings {
     private boolean closePanelOnClickOutside = true;
 
     //---------------------------------------------------------------------------------------/
+    @ConfigComment("Do not change this value below")
+    private String uniqueId = "config";
+
 
     /**
      * @return the acidDamageOp
@@ -1407,5 +1413,19 @@ public class AISettings implements DataObject, WorldSettings {
         this.visitorBannedCommands = visitorBannedCommands;
     }
 
+    /**
+     * @return the difficulty
+     */
+    @Override
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+    /**
+     * @param difficulty the difficulty to set
+     */
+    @Override
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 
 }

@@ -1,19 +1,36 @@
-uniqueId: config
+# AcidIsland Configuration
+# This config file is dynamic and saved when the server is shutdown.
+# You cannot edit it while the server is running because changes will
+# be lost! Use in-game settings GUI or edit when server is offline.
 acid:
+  # Acid Settings
+  # 
+  # Acid can damage ops or not
   damage-op: true
+  # 
+  # Acid can damage chickens - best to leave false because they like to swim
   damage-chickens: false
   damage:
     acid:
+      # Damage that a player will experience in acid. 10 is half their health typically. 5 would be easier.
       player: 10
+      # Damage that monsters experience from acid
       monster: 5
+      # Damage animals experience from acid
       animal: 5
+      # Destroy items after this many seconds in acid. 0 = do not destroy items
       item: 0
+    # Damage from acid rain
     rain: 1
+    # Portion effects from going into acid water
+    # You can list multiple effects
     effects:
     - CONFUSION
     - BLINDNESS
     protection:
+      # If player wears a helmet then they will not suffer from acid rain
       helmet: false
+      # If player wears any set of full armor, they will not suffer from acid damage
       full-armor: false
 world:
   # Friendly name for this world. Used in admin commands. Must be a single word
@@ -21,6 +38,9 @@ world:
   # Name of the world - if it does not exist then it will be generated.
   # It acts like a prefix for nether and end (e.g. BSkyBlock, BSkyBlock_nether, BSkyBlock_end)
   world-name: AcidIsland_world
+  # World difficulty setting - PEACEFUL, EASY, NORMAL, HARD
+  # Other plugins may override this setting
+  difficulty: NORMAL
   # Radius of island in blocks. (So distance between islands is twice this)
   # Will be rounded up to the nearest 16 blocks.
   # It is the same for every dimension : Overworld, Nether and End.
@@ -87,8 +107,8 @@ world:
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
   - ZOMBIE_VILLAGER
-  - PIG_ZOMBIE
   - WITHER
+  - PIG_ZOMBIE
   - ENDERMAN
   # World flags. These are boolean settings for various flags for this world
   flags:
@@ -98,6 +118,7 @@ world:
     OFFLINE_REDSTONE: true
     REMOVE_MOBS: true
     ENDER_CHEST: false
+    CLEAN_SUPER_FLAT: true
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
   # Ranks are: Visitor = 0, Member = 900, Owner = 1000
@@ -105,26 +126,26 @@ world:
     HURT_ANIMALS: 900
     COLLECT_WATER: 900
     REDSTONE: 900
-    BUTTON: 900
     BUCKET: 900
-    FIRE_EXTINGUISH: 900
+    BUTTON: 900
     LOCK: 0
+    FIRE_EXTINGUISH: 900
     ENDER_PEARL: 900
-    BEACON: 900
     DOOR: 900
+    BEACON: 900
     TRAPDOOR: 900
-    FURNACE: 900
     PRESSURE_PLATE: 900
+    FURNACE: 900
     PLACE_BLOCKS: 900
     ANVIL: 900
     FIRE: 900
     CRAFTING: 900
     BREEDING: 900
-    HURT_VILLAGERS: 900
     SHEARING: 900
     ENCHANTING: 900
-    BED: 900
+    HURT_VILLAGERS: 900
     SPAWN_EGGS: 900
+    BED: 900
     COLLECT_LAVA: 900
     MILKING: 900
     LEVER: 900
@@ -142,8 +163,8 @@ world:
     MOUNT_INVENTORY: 900
     BREAK_BLOCKS: 900
     CHORUS_FRUIT: 900
-    CROP_TRAMPLE: 900
     ITEM_PICKUP: 900
+    CROP_TRAMPLE: 900
     JUKEBOX: 900
     BREWING: 900
   # These are the default settings for new islands
@@ -289,3 +310,5 @@ allowCreeperGriefing: false
 allowMobDamageToItemFrames: false
 panel:
   close-on-click-outside: true
+# Do not change this value below
+uniqueId: config
