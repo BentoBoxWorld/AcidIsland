@@ -1428,4 +1428,10 @@ public class AISettings implements DataObject, WorldSettings {
         this.difficulty = difficulty;
     }
 
+    @Override
+    public boolean isWaterNotSafe() {
+        // Water is not safe in acid island
+        return true;
+    }
+
 }
