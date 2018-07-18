@@ -1429,8 +1429,8 @@ public class AISettings implements DataObject, WorldSettings {
     }
 
     @Override
-    public boolean isWaterNotSafe() {
-        // Water is not safe in acid island
+    public boolean isWaterUnsafe() {
+        // Water is unsafe in acid island
         return true;
     }
 
