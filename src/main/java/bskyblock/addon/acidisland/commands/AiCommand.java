@@ -19,10 +19,10 @@ import us.tastybento.bskyblock.commands.island.IslandSethomeCommand;
 import us.tastybento.bskyblock.commands.island.IslandSetnameCommand;
 import us.tastybento.bskyblock.commands.island.IslandSettingsCommand;
 import us.tastybento.bskyblock.commands.island.IslandUnbanCommand;
-import us.tastybento.bskyblock.commands.island.teams.IslandTeamCommand;
+import us.tastybento.bskyblock.commands.island.team.IslandTeamCommand;
 
 public class AiCommand extends CompositeCommand {
-    
+
     public AiCommand(Addon addon) {
         super(addon, "ai");
     }
@@ -60,17 +60,17 @@ public class AiCommand extends CompositeCommand {
      * @see us.tastybento.bskyblock.api.commands.CommandArgument#execute(org.bukkit.command.CommandSender, java.lang.String[])
      */
     @Override
-    public boolean execute(User user, List<String> args) {
+    public boolean execute(User user, String label, List<String> args) {
         if (user == null) {
             return false;
-        }        
+        }
         if (args.isEmpty()) {
             // If in world, go
             if (getPlugin().getIslands().getIsland(getWorld(), user.getUniqueId()) != null) {
-                return getSubCommand("go").map(goCmd -> goCmd.execute(user, new ArrayList<>())).orElse(false);
+                return getSubCommand("go").map(goCmd -> goCmd.execute(user, label, new ArrayList<>())).orElse(false);
             }
             // No islands currently
-            return getSubCommand("create").map(createCmd -> createCmd.execute(user, new ArrayList<>())).orElse(false);
+            return getSubCommand("create").map(createCmd -> createCmd.execute(user, label, new ArrayList<>())).orElse(false);
         }
         user.sendMessage("general.errors.unknown-command", "[label]", getLabel());
         return false;
