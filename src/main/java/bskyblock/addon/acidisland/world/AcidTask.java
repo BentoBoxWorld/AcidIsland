@@ -7,7 +7,6 @@ import java.util.WeakHashMap;
 import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
@@ -43,7 +42,8 @@ public class AcidTask {
         // This part will kill monsters if they fall into the water because it is acid
         entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getBSkyBlock(), () -> getEntityStream()
                 .filter(e -> !(e instanceof Guardian || e instanceof Squid))
-                .filter(w -> w.getLocation().getBlock().getType().equals(Material.WATER) || w.getLocation().getBlock().getType().equals(Material.STATIONARY_WATER))
+                // TODO: remove backwards compatibility hack
+                .filter(w -> w.getLocation().getBlock().getType().name().contains("WATER"))
                 .forEach(e -> {
                     if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
                         ((LivingEntity) e).damage(addon.getSettings().getAcidDamageMonster());
@@ -76,8 +76,7 @@ public class AcidTask {
         itemBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getBSkyBlock(), () -> {
             Set<Entity> newItemsInWater = new HashSet<>();
             getEntityStream().filter(e -> e.getType().equals(EntityType.DROPPED_ITEM)
-                    && (e.getLocation().getBlock().getType().equals(Material.WATER)
-                            || e.getLocation().getBlock().getType().equals(Material.STATIONARY_WATER))
+                    && (e.getLocation().getBlock().getType().name().contains("WATER"))
                     )
             .forEach(e -> {
                 if (itemsInWater.contains(e)) {

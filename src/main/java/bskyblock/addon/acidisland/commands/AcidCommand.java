@@ -15,6 +15,7 @@ import us.tastybento.bskyblock.commands.admin.AdminSetRankCommand;
 import us.tastybento.bskyblock.commands.admin.AdminTeleportCommand;
 import us.tastybento.bskyblock.commands.admin.AdminUnregisterCommand;
 import us.tastybento.bskyblock.commands.admin.AdminVersionCommand;
+import us.tastybento.bskyblock.commands.admin.range.AdminRangeCommand;
 import us.tastybento.bskyblock.commands.admin.team.AdminTeamAddCommand;
 import us.tastybento.bskyblock.commands.admin.team.AdminTeamDisbandCommand;
 import us.tastybento.bskyblock.commands.admin.team.AdminTeamKickCommand;
@@ -52,6 +53,8 @@ public class AcidCommand extends CompositeCommand {
         new AdminTeleportCommand(this, "tpend");
         new AdminUnregisterCommand(this);
         new AdminVersionCommand(this);
+        // Range
+        new AdminRangeCommand(this);
     }
 
     @Override

@@ -41,7 +41,7 @@ class ChunkGeneratorWorld extends ChunkGenerator {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     for (int y = 0; y < addon.getSettings().getSeaHeight(); y++) {
-                        result.setBlock(x, y, z, Material.STATIONARY_WATER);
+                        result.setBlock(x, y, z, Material.WATER);
                     }
                 }
             }
@@ -77,7 +77,7 @@ class ChunkGeneratorWorld extends ChunkGenerator {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     for (int y = 0; y < addon.getSettings().getSeaHeight(); y++) {
-                        result.setBlock(x, y, z, Material.STATIONARY_WATER);
+                        result.setBlock(x, y, z, Material.WATER);
                     }
                 }
             }

@@ -203,9 +203,10 @@ public class AcidEffect implements Listener {
         // In liquid
         Material bodyMat = player.getLocation().getBlock().getType();
         Material headMat = player.getLocation().getBlock().getRelative(BlockFace.UP).getType();
-        if (bodyMat.equals(Material.STATIONARY_WATER))
+        // TODO: remove backwards compatibility hack
+        if (bodyMat.name().contains("WATER"))
             bodyMat = Material.WATER;
-        if (headMat.equals(Material.STATIONARY_WATER))
+        if (headMat.name().contains("WATER"))
             headMat = Material.WATER;
         if (bodyMat != Material.WATER && headMat != Material.WATER) {
             return true;
