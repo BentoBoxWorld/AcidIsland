@@ -389,7 +389,9 @@ public class AISettings implements DataObject, WorldSettings {
     private boolean closePanelOnClickOutside = true;
 
     //---------------------------------------------------------------------------------------/
-    @ConfigComment("Do not change this value below")
+    @ConfigComment("These settings should not be edited")
+    @ConfigEntry(path = "do-not-edit-these-settings.reset-epoch")
+    private long resetEpoch = 0;
     private String uniqueId = "config";
 
 
@@ -650,6 +652,7 @@ public class AISettings implements DataObject, WorldSettings {
     /**
      * @return the resetLimit
      */
+    @Override
     public int getResetLimit() {
         return resetLimit;
     }
@@ -1323,6 +1326,15 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setGeoLimitSettings(List<String> geoLimitSettings) {
         this.geoLimitSettings = geoLimitSettings;
+    }
+
+    @Override
+    public long getResetEpoch() {
+        return resetEpoch;
+    }
+    @Override
+    public void setResetEpoch(long timestamp) {
+        this.resetEpoch = timestamp;
     }
 
 }

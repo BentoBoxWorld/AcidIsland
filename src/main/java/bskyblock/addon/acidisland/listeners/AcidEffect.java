@@ -94,7 +94,7 @@ public class AcidEffect implements Listener {
         // Check for acid rain
         if (addon.getSettings().getAcidRainDamage() > 0D && isRaining
                 && !biome.name().contains("DESERT")
-                && !biome.equals(Biome.HELL)
+                && !biome.equals(Biome.NETHER)
                 && !biome.name().contains("SAVANNA")) {
             if (isSafeFromRain(player)) {
                 wetPlayers.remove(player);
@@ -261,7 +261,7 @@ public class AcidEffect implements Listener {
             case LEATHER_HELMET:
                 red = red + 0.04;
                 break;
-            case GOLD_HELMET:
+            case GOLDEN_HELMET:
                 red = red + 0.08;
                 break;
             case CHAINMAIL_HELMET:
@@ -282,7 +282,7 @@ public class AcidEffect implements Listener {
             case LEATHER_BOOTS:
                 red = red + 0.04;
                 break;
-            case GOLD_BOOTS:
+            case GOLDEN_BOOTS:
                 red = red + 0.04;
                 break;
             case CHAINMAIL_BOOTS:
@@ -304,7 +304,7 @@ public class AcidEffect implements Listener {
             case LEATHER_LEGGINGS:
                 red = red + 0.08;
                 break;
-            case GOLD_LEGGINGS:
+            case GOLDEN_LEGGINGS:
                 red = red + 0.12;
                 break;
             case CHAINMAIL_LEGGINGS:
@@ -326,7 +326,7 @@ public class AcidEffect implements Listener {
             case LEATHER_CHESTPLATE:
                 red = red + 0.12;
                 break;
-            case GOLD_CHESTPLATE:
+            case GOLDEN_CHESTPLATE:
                 red = red + 0.20;
                 break;
             case CHAINMAIL_CHESTPLATE:
