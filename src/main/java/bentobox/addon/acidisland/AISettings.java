@@ -1,4 +1,4 @@
-package bskyblock.addon.acidisland;
+package bentobox.addon.acidisland;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -14,17 +14,17 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 
-import us.tastybento.bskyblock.api.addons.Addon;
-import us.tastybento.bskyblock.api.configuration.ConfigComment;
-import us.tastybento.bskyblock.api.configuration.ConfigEntry;
-import us.tastybento.bskyblock.api.configuration.StoreAt;
-import us.tastybento.bskyblock.api.configuration.WorldSettings;
-import us.tastybento.bskyblock.api.flags.Flag;
-import us.tastybento.bskyblock.database.objects.DataObject;
-import us.tastybento.bskyblock.database.objects.adapters.Adapter;
-import us.tastybento.bskyblock.database.objects.adapters.FlagSerializer;
-import us.tastybento.bskyblock.database.objects.adapters.FlagSerializer2;
-import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter;
+import world.bentobox.bbox.api.addons.Addon;
+import world.bentobox.bbox.api.configuration.ConfigComment;
+import world.bentobox.bbox.api.configuration.ConfigEntry;
+import world.bentobox.bbox.api.configuration.StoreAt;
+import world.bentobox.bbox.api.configuration.WorldSettings;
+import world.bentobox.bbox.api.flags.Flag;
+import world.bentobox.bbox.database.objects.DataObject;
+import world.bentobox.bbox.database.objects.adapters.Adapter;
+import world.bentobox.bbox.database.objects.adapters.FlagSerializer;
+import world.bentobox.bbox.database.objects.adapters.FlagSerializer2;
+import world.bentobox.bbox.database.objects.adapters.PotionEffectListAdapter;
 
 /**
  * A lot of placeholders right now in here...
@@ -35,7 +35,7 @@ import us.tastybento.bskyblock.database.objects.adapters.PotionEffectListAdapter
 @ConfigComment("This config file is dynamic and saved when the server is shutdown.")
 @ConfigComment("You cannot edit it while the server is running because changes will")
 @ConfigComment("be lost! Use in-game settings GUI or edit when server is offline.")
-@StoreAt(filename="config.yml", path="addons/BSkyBlock-AcidIsland") // Explicitly call out what name this should have.
+@StoreAt(filename="config.yml", path="addons/BentoBox-AcidIsland") // Explicitly call out what name this should have.
 public class AISettings implements DataObject, WorldSettings {
 
     // ---------------------------------------------
@@ -135,7 +135,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("Island height - Lowest is 5.")
     @ConfigComment("It is the y coordinate of the bedrock block in the schem")
     @ConfigEntry(path = "world.island-height")
-    private int islandHeight = 100;
+    private int islandHeight = 50;
 
     @ConfigComment("Use your own world generator for this world. In this case, the plugin will not generate")
     @ConfigComment("anything.")
@@ -147,7 +147,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("If sea height is less than about 10, then players will drop right through it")
     @ConfigComment("if it exists. Makes for an interesting variation on skyblock.")
     @ConfigEntry(path = "world.sea-height")
-    private int seaHeight = 0;
+    private int seaHeight = 55;
 
     @ConfigComment("Maximum number of islands in the world. Set to 0 for unlimited. ")
     @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
@@ -525,6 +525,7 @@ public class AISettings implements DataObject, WorldSettings {
     /**
      * @return the deathsMax
      */
+    @Override
     public int getDeathsMax() {
         return deathsMax;
     }
@@ -1052,7 +1053,7 @@ public class AISettings implements DataObject, WorldSettings {
         this.worldName = worldName;
     }
     /* (non-Javadoc)
-     * @see us.tastybento.bskyblock.api.configuration.WorldSettings#getFriendlyName()
+     * @see world.bentobox.bbox.api.configuration.WorldSettings#getFriendlyName()
      */
     @Override
     public String getFriendlyName() {
@@ -1276,6 +1277,7 @@ public class AISettings implements DataObject, WorldSettings {
         this.defaultIslandSettings = defaultIslandSettings;
     }
 
+    @Override
     public boolean isTeamJoinDeathReset() {
         return teamJoinDeathReset;
     }

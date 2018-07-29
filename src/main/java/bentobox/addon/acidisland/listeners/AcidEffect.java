@@ -1,4 +1,4 @@
-package bskyblock.addon.acidisland.listeners;
+package bentobox.addon.acidisland.listeners;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,11 +26,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import bskyblock.addon.acidisland.AcidIsland;
-import bskyblock.addon.acidisland.events.AcidEvent;
-import bskyblock.addon.acidisland.events.AcidRainEvent;
-import bskyblock.addon.acidisland.world.AcidTask;
-import us.tastybento.bskyblock.util.Util;
+import bentobox.addon.acidisland.AcidIsland;
+import bentobox.addon.acidisland.events.AcidEvent;
+import bentobox.addon.acidisland.events.AcidRainEvent;
+import bentobox.addon.acidisland.world.AcidTask;
+import world.bentobox.bbox.util.Util;
 
 /**
  * Applies the acid effect to players

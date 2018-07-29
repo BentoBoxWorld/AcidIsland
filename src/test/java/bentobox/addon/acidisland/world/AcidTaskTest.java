@@ -1,4 +1,4 @@
-package bskyblock.addon.acidisland.world;
+package bentobox.addon.acidisland.world;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,8 +13,9 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import bskyblock.addon.acidisland.AISettings;
-import bskyblock.addon.acidisland.AcidIsland;
+import bentobox.addon.acidisland.AISettings;
+import bentobox.addon.acidisland.AcidIsland;
+import bentobox.addon.acidisland.world.AcidTask;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Bukkit.class})

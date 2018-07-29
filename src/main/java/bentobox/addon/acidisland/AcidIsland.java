@@ -1,16 +1,16 @@
-package bskyblock.addon.acidisland;
+package bentobox.addon.acidisland;
 
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 
-import bskyblock.addon.acidisland.commands.AcidCommand;
-import bskyblock.addon.acidisland.commands.AiCommand;
-import bskyblock.addon.acidisland.listeners.AcidEffect;
-import bskyblock.addon.acidisland.listeners.LavaCheck;
-import bskyblock.addon.acidisland.world.AcidIslandWorld;
-import bskyblock.addon.acidisland.world.AcidTask;
-import us.tastybento.bskyblock.api.addons.Addon;
-import us.tastybento.bskyblock.api.configuration.BSBConfig;
+import bentobox.addon.acidisland.commands.AcidCommand;
+import bentobox.addon.acidisland.commands.AiCommand;
+import bentobox.addon.acidisland.listeners.AcidEffect;
+import bentobox.addon.acidisland.listeners.LavaCheck;
+import bentobox.addon.acidisland.world.AcidIslandWorld;
+import bentobox.addon.acidisland.world.AcidTask;
+import world.bentobox.bbox.api.addons.Addon;
+import world.bentobox.bbox.api.configuration.BSBConfig;
 
 /**
  * Addon to BSkyBlock that enables AcidIsland

@@ -1,4 +1,4 @@
-package bskyblock.addon.acidisland.listeners;
+package bentobox.addon.acidisland.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -7,7 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
-import bskyblock.addon.acidisland.AcidIsland;
+import bentobox.addon.acidisland.AcidIsland;
 
 
 public class LavaCheck implements Listener {

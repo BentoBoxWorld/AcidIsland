@@ -1,25 +1,25 @@
-package bskyblock.addon.acidisland.commands;
+package bentobox.addon.acidisland.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import bskyblock.addon.acidisland.AcidIsland;
-import us.tastybento.bskyblock.api.addons.Addon;
-import us.tastybento.bskyblock.api.commands.CompositeCommand;
-import us.tastybento.bskyblock.api.user.User;
-import us.tastybento.bskyblock.commands.island.IslandAboutCommand;
-import us.tastybento.bskyblock.commands.island.IslandBanCommand;
-import us.tastybento.bskyblock.commands.island.IslandBanlistCommand;
-import us.tastybento.bskyblock.commands.island.IslandCreateCommand;
-import us.tastybento.bskyblock.commands.island.IslandGoCommand;
-import us.tastybento.bskyblock.commands.island.IslandLanguageCommand;
-import us.tastybento.bskyblock.commands.island.IslandResetCommand;
-import us.tastybento.bskyblock.commands.island.IslandResetnameCommand;
-import us.tastybento.bskyblock.commands.island.IslandSethomeCommand;
-import us.tastybento.bskyblock.commands.island.IslandSetnameCommand;
-import us.tastybento.bskyblock.commands.island.IslandSettingsCommand;
-import us.tastybento.bskyblock.commands.island.IslandUnbanCommand;
-import us.tastybento.bskyblock.commands.island.team.IslandTeamCommand;
+import bentobox.addon.acidisland.AcidIsland;
+import world.bentobox.bbox.api.addons.Addon;
+import world.bentobox.bbox.api.commands.CompositeCommand;
+import world.bentobox.bbox.api.user.User;
+import world.bentobox.bbox.commands.island.IslandAboutCommand;
+import world.bentobox.bbox.commands.island.IslandBanCommand;
+import world.bentobox.bbox.commands.island.IslandBanlistCommand;
+import world.bentobox.bbox.commands.island.IslandCreateCommand;
+import world.bentobox.bbox.commands.island.IslandGoCommand;
+import world.bentobox.bbox.commands.island.IslandLanguageCommand;
+import world.bentobox.bbox.commands.island.IslandResetCommand;
+import world.bentobox.bbox.commands.island.IslandResetnameCommand;
+import world.bentobox.bbox.commands.island.IslandSethomeCommand;
+import world.bentobox.bbox.commands.island.IslandSetnameCommand;
+import world.bentobox.bbox.commands.island.IslandSettingsCommand;
+import world.bentobox.bbox.commands.island.IslandUnbanCommand;
+import world.bentobox.bbox.commands.island.team.IslandTeamCommand;
 
 public class AiCommand extends CompositeCommand {
 
@@ -28,7 +28,7 @@ public class AiCommand extends CompositeCommand {
     }
 
     /* (non-Javadoc)
-     * @see us.tastybento.bskyblock.api.commands.CompositeCommand#setup()
+     * @see world.bentobox.bbox.api.commands.CompositeCommand#setup()
      */
     @Override
     public void setup() {
@@ -57,7 +57,7 @@ public class AiCommand extends CompositeCommand {
     }
 
     /* (non-Javadoc)
-     * @see us.tastybento.bskyblock.api.commands.CommandArgument#execute(org.bukkit.command.CommandSender, java.lang.String[])
+     * @see world.bentobox.bbox.api.commands.CommandArgument#execute(org.bukkit.command.CommandSender, java.lang.String[])
      */
     @Override
     public boolean execute(User user, String label, List<String> args) {

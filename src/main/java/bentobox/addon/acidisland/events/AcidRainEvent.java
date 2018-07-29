@@ -1,4 +1,4 @@
-package bskyblock.addon.acidisland.events;
+package bentobox.addon.acidisland.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

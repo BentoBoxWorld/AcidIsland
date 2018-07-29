@@ -1,4 +1,4 @@
-package bskyblock.addon.acidisland.events;
+package bentobox.addon.acidisland.events;
 
 import java.util.ArrayList;
 import java.util.List;

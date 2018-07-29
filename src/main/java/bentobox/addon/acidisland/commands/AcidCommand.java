@@ -1,27 +1,27 @@
-package bskyblock.addon.acidisland.commands;
+package bentobox.addon.acidisland.commands;
 
 import java.util.List;
 
-import bskyblock.addon.acidisland.AcidIsland;
-import us.tastybento.bskyblock.api.addons.Addon;
-import us.tastybento.bskyblock.api.commands.CompositeCommand;
-import us.tastybento.bskyblock.api.user.User;
-import us.tastybento.bskyblock.commands.admin.AdminClearResetsAllCommand;
-import us.tastybento.bskyblock.commands.admin.AdminClearResetsCommand;
-import us.tastybento.bskyblock.commands.admin.AdminGetRankCommand;
-import us.tastybento.bskyblock.commands.admin.AdminInfoCommand;
-import us.tastybento.bskyblock.commands.admin.AdminRegisterCommand;
-import us.tastybento.bskyblock.commands.admin.AdminReloadCommand;
-import us.tastybento.bskyblock.commands.admin.AdminSchemCommand;
-import us.tastybento.bskyblock.commands.admin.AdminSetRankCommand;
-import us.tastybento.bskyblock.commands.admin.AdminTeleportCommand;
-import us.tastybento.bskyblock.commands.admin.AdminUnregisterCommand;
-import us.tastybento.bskyblock.commands.admin.AdminVersionCommand;
-import us.tastybento.bskyblock.commands.admin.range.AdminRangeCommand;
-import us.tastybento.bskyblock.commands.admin.team.AdminTeamAddCommand;
-import us.tastybento.bskyblock.commands.admin.team.AdminTeamDisbandCommand;
-import us.tastybento.bskyblock.commands.admin.team.AdminTeamKickCommand;
-import us.tastybento.bskyblock.commands.admin.team.AdminTeamMakeLeaderCommand;
+import bentobox.addon.acidisland.AcidIsland;
+import world.bentobox.bbox.api.addons.Addon;
+import world.bentobox.bbox.api.commands.CompositeCommand;
+import world.bentobox.bbox.api.user.User;
+import world.bentobox.bbox.commands.admin.AdminClearResetsAllCommand;
+import world.bentobox.bbox.commands.admin.AdminClearResetsCommand;
+import world.bentobox.bbox.commands.admin.AdminGetRankCommand;
+import world.bentobox.bbox.commands.admin.AdminInfoCommand;
+import world.bentobox.bbox.commands.admin.AdminRegisterCommand;
+import world.bentobox.bbox.commands.admin.AdminReloadCommand;
+import world.bentobox.bbox.commands.admin.AdminSchemCommand;
+import world.bentobox.bbox.commands.admin.AdminSetRankCommand;
+import world.bentobox.bbox.commands.admin.AdminTeleportCommand;
+import world.bentobox.bbox.commands.admin.AdminUnregisterCommand;
+import world.bentobox.bbox.commands.admin.AdminVersionCommand;
+import world.bentobox.bbox.commands.admin.range.AdminRangeCommand;
+import world.bentobox.bbox.commands.admin.team.AdminTeamAddCommand;
+import world.bentobox.bbox.commands.admin.team.AdminTeamDisbandCommand;
+import world.bentobox.bbox.commands.admin.team.AdminTeamKickCommand;
+import world.bentobox.bbox.commands.admin.team.AdminTeamMakeLeaderCommand;
 
 public class AcidCommand extends CompositeCommand {
 

@@ -1,12 +1,12 @@
-package bskyblock.addon.acidisland.world;
+package bentobox.addon.acidisland.world;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
-import bskyblock.addon.acidisland.AcidIsland;
-import us.tastybento.bskyblock.util.Util;
+import bentobox.addon.acidisland.AcidIsland;
+import world.bentobox.bbox.util.Util;
 
 /**
  * Creates the AI worlds and registers them with BSkyBlock

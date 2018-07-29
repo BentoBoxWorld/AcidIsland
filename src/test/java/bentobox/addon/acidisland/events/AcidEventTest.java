@@ -1,4 +1,4 @@
-package bskyblock.addon.acidisland.events;
+package bentobox.addon.acidisland.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -6,19 +6,29 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AcidRainEventTest {
+import bentobox.addon.acidisland.events.AcidEvent;
+
+public class AcidEventTest {
 
     private Player player;
-    private AcidRainEvent e;
+    private List<PotionEffectType> effects;
+    private AcidEvent e;
 
     @Before
     public void setUp() throws Exception {
         player = mock(Player.class);
-        e = new AcidRainEvent(player, 10, 5);
+        effects = Arrays.asList(PotionEffectType.values());
+        e = new AcidEvent(player, 10, 5, effects);
     }
 
     @Test
@@ -40,7 +50,7 @@ public class AcidRainEventTest {
 
     @Test
     public void testGetTotalDamage() {
-        assertTrue(e.getRainDamage() == 10D);
+        assertTrue(e.getTotalDamage() == 10D);
     }
 
     @Test
@@ -50,8 +60,19 @@ public class AcidRainEventTest {
 
     @Test
     public void testSetTotalDamage() {
-        e.setRainDamage(50);
-        assertTrue(e.getRainDamage() == 50D);
+        e.setTotalDamage(50);
+        assertTrue(e.getTotalDamage() == 50D);
+    }
+
+    @Test
+    public void testGetPotionEffects() {
+        Assert.assertArrayEquals(PotionEffectType.values(), e.getPotionEffects().toArray());
+    }
+
+    @Test
+    public void testSetPotionEffects() {
+        e.setPotionEffects(new ArrayList<>());
+        assertTrue(e.getPotionEffects().isEmpty());
     }
 
     @Test
