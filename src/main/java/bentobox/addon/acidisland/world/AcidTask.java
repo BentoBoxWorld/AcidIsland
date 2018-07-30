@@ -40,7 +40,7 @@ public class AcidTask {
      */
     private void burnEntities() {
         // This part will kill monsters if they fall into the water because it is acid
-        entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getBSkyBlock(), () -> getEntityStream()
+        entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getPlugin(), () -> getEntityStream()
                 .filter(e -> !(e instanceof Guardian || e instanceof Squid))
                 // TODO: remove backwards compatibility hack
                 .filter(w -> w.getLocation().getBlock().getType().name().contains("WATER"))
@@ -73,7 +73,7 @@ public class AcidTask {
         if (addon.getSettings().getAcidDestroyItemTime() <= 0) {
             return;
         }
-        itemBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getBSkyBlock(), () -> {
+        itemBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getPlugin(), () -> {
             Set<Entity> newItemsInWater = new HashSet<>();
             getEntityStream().filter(e -> e.getType().equals(EntityType.DROPPED_ITEM)
                     && (e.getLocation().getBlock().getType().name().contains("WATER"))

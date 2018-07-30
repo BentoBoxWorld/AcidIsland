@@ -125,7 +125,7 @@ public class AcidEffect implements Listener {
                             }
                         }
                     }
-                }.runTaskTimer(addon.getBSkyBlock(), 0L, 20L);
+                }.runTaskTimer(addon.getPlugin(), 0L, 20L);
             }
 
 
@@ -165,7 +165,7 @@ public class AcidEffect implements Listener {
                     }
                 }
             }
-        }.runTaskTimer(addon.getBSkyBlock(), 0L, 20L);
+        }.runTaskTimer(addon.getPlugin(), 0L, 20L);
     }
 
     /**

@@ -33,7 +33,7 @@ public class LavaCheck implements Listener {
             return;
         }
         Material prev = e.getToBlock().getType();
-        addon.getServer().getScheduler().runTask(addon.getBSkyBlock(), () -> {
+        addon.getServer().getScheduler().runTask(addon.getPlugin(), () -> {
             if (e.getToBlock().getType().equals(Material.STONE)) {
                 e.getToBlock().setType(prev);
                 e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1F, 2F);

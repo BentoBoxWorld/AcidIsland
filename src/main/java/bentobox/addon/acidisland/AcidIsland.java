@@ -39,10 +39,8 @@ public class AcidIsland extends Addon {
         // Register listeners
         PluginManager manager = getServer().getPluginManager();
         // Acid Effects
-        manager.registerEvents(new AcidEffect(this), this.getBSkyBlock());
-        manager.registerEvents(new LavaCheck(this), this.getBSkyBlock());
-        // New Islands
-        //manager.registerEvents(new IslandBuilder(this), this.getBSkyBlock());
+        manager.registerEvents(new AcidEffect(this), this.getPlugin());
+        manager.registerEvents(new LavaCheck(this), this.getPlugin());
         // Register commands
         new AcidCommand(this);
         new AiCommand(this);
@@ -54,7 +52,9 @@ public class AcidIsland extends Addon {
     public void onDisable(){
         acidTask.cancelTasks();
         // Save settings
-        new BSBConfig<>(this, AISettings.class).saveConfigObject(settings);
+        if (settings != null) {
+            new BSBConfig<>(this, AISettings.class).saveConfigObject(settings);
+        }
     }
 
     public AISettings getSettings() {
@@ -78,7 +78,7 @@ public class AcidIsland extends Addon {
 
     @Override
     public void log(String string) {
-        getBSkyBlock().log(string);
+        getPlugin().log(string);
     }
 
     public static AcidIsland getInstance() {
