@@ -10,8 +10,6 @@ import org.bukkit.entity.Player;
 import org.junit.Before;
 import org.junit.Test;
 
-import bentobox.addon.acidisland.events.AcidRainEvent;
-
 public class AcidRainEventTest {
 
     private Player player;

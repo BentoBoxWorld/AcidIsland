@@ -30,7 +30,7 @@ import bentobox.addon.acidisland.AcidIsland;
 import bentobox.addon.acidisland.events.AcidEvent;
 import bentobox.addon.acidisland.events.AcidRainEvent;
 import bentobox.addon.acidisland.world.AcidTask;
-import world.bentobox.bbox.util.Util;
+import world.bentobox.bentobox.util.Util;
 
 /**
  * Applies the acid effect to players

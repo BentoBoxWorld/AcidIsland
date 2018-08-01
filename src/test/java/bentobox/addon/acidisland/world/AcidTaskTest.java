@@ -15,7 +15,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import bentobox.addon.acidisland.AISettings;
 import bentobox.addon.acidisland.AcidIsland;
-import bentobox.addon.acidisland.world.AcidTask;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Bukkit.class})

@@ -14,17 +14,17 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 
-import world.bentobox.bbox.api.addons.Addon;
-import world.bentobox.bbox.api.configuration.ConfigComment;
-import world.bentobox.bbox.api.configuration.ConfigEntry;
-import world.bentobox.bbox.api.configuration.StoreAt;
-import world.bentobox.bbox.api.configuration.WorldSettings;
-import world.bentobox.bbox.api.flags.Flag;
-import world.bentobox.bbox.database.objects.DataObject;
-import world.bentobox.bbox.database.objects.adapters.Adapter;
-import world.bentobox.bbox.database.objects.adapters.FlagSerializer;
-import world.bentobox.bbox.database.objects.adapters.FlagSerializer2;
-import world.bentobox.bbox.database.objects.adapters.PotionEffectListAdapter;
+import world.bentobox.bentobox.api.addons.Addon;
+import world.bentobox.bentobox.api.configuration.ConfigComment;
+import world.bentobox.bentobox.api.configuration.ConfigEntry;
+import world.bentobox.bentobox.api.configuration.StoreAt;
+import world.bentobox.bentobox.api.configuration.WorldSettings;
+import world.bentobox.bentobox.api.flags.Flag;
+import world.bentobox.bentobox.database.objects.DataObject;
+import world.bentobox.bentobox.database.objects.adapters.Adapter;
+import world.bentobox.bentobox.database.objects.adapters.FlagSerializer;
+import world.bentobox.bentobox.database.objects.adapters.FlagSerializer2;
+import world.bentobox.bentobox.database.objects.adapters.PotionEffectListAdapter;
 
 /**
  * A lot of placeholders right now in here...

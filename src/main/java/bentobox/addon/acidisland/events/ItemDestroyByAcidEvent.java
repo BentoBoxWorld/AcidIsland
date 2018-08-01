@@ -2,8 +2,8 @@ package bentobox.addon.acidisland.events;
 
 import org.bukkit.entity.Item;
 
-import world.bentobox.bbox.api.events.IslandBaseEvent;
-import world.bentobox.bbox.database.objects.Island;
+import world.bentobox.bentobox.api.events.IslandBaseEvent;
+import world.bentobox.bentobox.database.objects.Island;
 
 /**
  * Fired when an item (on the ground) gets destroyed by acid

@@ -3,8 +3,8 @@ package bentobox.addon.acidisland.events;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import world.bentobox.bbox.api.events.IslandBaseEvent;
-import world.bentobox.bbox.database.objects.Island;
+import world.bentobox.bentobox.api.events.IslandBaseEvent;
+import world.bentobox.bentobox.database.objects.Island;
 
 /**
  * Fired when an ItemStack (water bottle or bucket) is filled with acid

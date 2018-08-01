@@ -9,8 +9,8 @@ import bentobox.addon.acidisland.listeners.AcidEffect;
 import bentobox.addon.acidisland.listeners.LavaCheck;
 import bentobox.addon.acidisland.world.AcidIslandWorld;
 import bentobox.addon.acidisland.world.AcidTask;
-import world.bentobox.bbox.api.addons.Addon;
-import world.bentobox.bbox.api.configuration.BSBConfig;
+import world.bentobox.bentobox.api.addons.Addon;
+import world.bentobox.bentobox.api.configuration.BSBConfig;
 
 /**
  * Addon to BSkyBlock that enables AcidIsland

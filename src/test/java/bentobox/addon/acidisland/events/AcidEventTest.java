@@ -16,8 +16,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import bentobox.addon.acidisland.events.AcidEvent;
-
 public class AcidEventTest {
 
     private Player player;
