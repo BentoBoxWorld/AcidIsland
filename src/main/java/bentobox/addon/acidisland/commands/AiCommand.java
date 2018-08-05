@@ -6,7 +6,6 @@ import java.util.List;
 import bentobox.addon.acidisland.AcidIsland;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
-import world.bentobox.bentobox.api.commands.island.IslandAboutCommand;
 import world.bentobox.bentobox.api.commands.island.IslandBanCommand;
 import world.bentobox.bentobox.api.commands.island.IslandBanlistCommand;
 import world.bentobox.bentobox.api.commands.island.IslandCreateCommand;
