@@ -259,11 +259,6 @@ public class AISettings implements DataObject, WorldSettings {
     private int nameMinLength = 4;
     @ConfigEntry(path = "island.name.max-length")
     private int nameMaxLength = 20;
-    @ConfigComment("How long a player must wait until they can rejoin a team island after being")
-    @ConfigComment("kicked in minutes. This slows the effectiveness of players repeating challenges")
-    @ConfigComment("by repetitively being invited to a team island.")
-    @ConfigEntry(path = "island.invite-wait")
-    private int inviteWait = 60;
 
     // Reset
     @ConfigComment("How many resets a player is allowed (override with /asadmin clearreset <player>)")
@@ -541,13 +536,6 @@ public class AISettings implements DataObject, WorldSettings {
     @Override
     public Map<EntityType, Integer> getEntityLimits() {
         return entityLimits;
-    }
-    /**
-     * Number of minutes to wait
-     * @return the inviteWait
-     */
-    public int getInviteWait() {
-        return inviteWait;
     }
     /**
      * @return the islandDistance
@@ -840,12 +828,6 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setImmediateTeleportOnIsland(boolean immediateTeleportOnIsland) {
         this.immediateTeleportOnIsland = immediateTeleportOnIsland;
-    }
-    /**
-     * @param inviteWait the inviteWait to set
-     */
-    public void setInviteWait(int inviteWait) {
-        this.inviteWait = inviteWait;
     }
     /**
      * @param islandDistance the islandDistance to set

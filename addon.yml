@@ -62,6 +62,9 @@ permissions:
   acidisland.mod.tp:
     description: Allows teleport to an island
     default: op
+  acidisland.mod.bypasscooldowns:
+    description: Allow moderator to bypass cooldowns
+    default: op
   acidisland.mod.bypassprotect:
     description: Allow moderator to bypass island protection
     default: op
