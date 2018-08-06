@@ -10,10 +10,10 @@ import bentobox.addon.acidisland.listeners.LavaCheck;
 import bentobox.addon.acidisland.world.AcidIslandWorld;
 import bentobox.addon.acidisland.world.AcidTask;
 import world.bentobox.bentobox.api.addons.Addon;
-import world.bentobox.bentobox.api.configuration.BSBConfig;
+import world.bentobox.bentobox.api.configuration.BBConfig;
 
 /**
- * Addon to BSkyBlock that enables AcidIsland
+ * Add-on to BentoBox that enables AcidIsland
  * @author tastybento
  *
  */
@@ -29,7 +29,7 @@ public class AcidIsland extends Addon {
         addon = this;
         saveDefaultConfig();
         // Load settings
-        settings = new BSBConfig<>(this, AISettings.class).loadConfigObject("");
+        settings = new BBConfig<>(this, AISettings.class).loadConfigObject();
         // Create worlds
         aiw = new AcidIslandWorld(this);
     }
@@ -53,7 +53,7 @@ public class AcidIsland extends Addon {
         acidTask.cancelTasks();
         // Save settings
         if (settings != null) {
-            new BSBConfig<>(this, AISettings.class).saveConfigObject(settings);
+            new BBConfig<>(this, AISettings.class).saveConfigObject(settings);
         }
     }
 
