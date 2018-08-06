@@ -10,7 +10,7 @@ import bentobox.addon.acidisland.listeners.LavaCheck;
 import bentobox.addon.acidisland.world.AcidIslandWorld;
 import bentobox.addon.acidisland.world.AcidTask;
 import world.bentobox.bentobox.api.addons.Addon;
-import world.bentobox.bentobox.api.configuration.BBConfig;
+import world.bentobox.bentobox.api.configuration.Config;
 
 /**
  * Add-on to BentoBox that enables AcidIsland
@@ -29,7 +29,7 @@ public class AcidIsland extends Addon {
         addon = this;
         saveDefaultConfig();
         // Load settings
-        settings = new BBConfig<>(this, AISettings.class).loadConfigObject();
+        settings = new Config<>(this, AISettings.class).loadConfigObject();
         // Create worlds
         aiw = new AcidIslandWorld(this);
     }
@@ -53,7 +53,7 @@ public class AcidIsland extends Addon {
         acidTask.cancelTasks();
         // Save settings
         if (settings != null) {
-            new BBConfig<>(this, AISettings.class).saveConfigObject(settings);
+            new Config<>(this, AISettings.class).saveConfigObject(settings);
         }
     }
 
