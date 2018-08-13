@@ -1,4 +1,4 @@
-name: BentoBox-AcidIsland
+name: AcidIsland
 main: bentobox.addon.acidisland.AcidIsland
 version: 0.1
 

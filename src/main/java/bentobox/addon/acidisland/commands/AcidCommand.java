@@ -10,7 +10,6 @@ import world.bentobox.bentobox.api.commands.admin.AdminClearResetsCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminGetRankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminInfoCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminRegisterCommand;
-import world.bentobox.bentobox.api.commands.admin.AdminReloadCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSchemCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSetRankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminTeleportCommand;
@@ -34,7 +33,7 @@ public class AcidCommand extends CompositeCommand {
         setPermissionPrefix("acidisland");
         setPermission("acidisland.admin.*");
         setOnlyPlayer(false);
-        setParameters("commands.admin.help.parameters");
+        setParametersHelp("commands.admin.help.parameters");
         setDescription("commands.admin.help.description");
         setWorld(((AcidIsland)getAddon()).getIslandWorld());
 
@@ -47,7 +46,6 @@ public class AcidCommand extends CompositeCommand {
         new AdminGetRankCommand(this);
         new AdminInfoCommand(this);
         new AdminRegisterCommand(this);
-        new AdminReloadCommand(this);
         new AdminSchemCommand(this);
         new AdminSetRankCommand(this);
         new AdminTeleportCommand(this, "tp");
