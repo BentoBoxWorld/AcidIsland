@@ -1,7 +1,6 @@
 package bentobox.addon.acidisland;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +34,7 @@ import world.bentobox.bentobox.database.objects.adapters.PotionEffectListAdapter
 @ConfigComment("This config file is dynamic and saved when the server is shutdown.")
 @ConfigComment("You cannot edit it while the server is running because changes will")
 @ConfigComment("be lost! Use in-game settings GUI or edit when server is offline.")
-@StoreAt(filename="config.yml", path="addons/BentoBox-AcidIsland") // Explicitly call out what name this should have.
+@StoreAt(filename="config.yml", path="addons/AcidIsland") // Explicitly call out what name this should have.
 public class AISettings implements DataObject, WorldSettings {
 
     // ---------------------------------------------
@@ -223,7 +222,7 @@ public class AISettings implements DataObject, WorldSettings {
     @Adapter(FlagSerializer2.class)
     private Map<Flag, Integer> defaultIslandSettings = new HashMap<>();
 
-    @ConfigComment("These are the settings visible to users.")
+    @ConfigComment("These are the settings visible to users. (Not implemented yet)")
     @ConfigEntry(path = "world.visible-settings")
     private List<String> visibleSettings = new ArrayList<>();
 
@@ -234,12 +233,6 @@ public class AISettings implements DataObject, WorldSettings {
     // ---------------------------------------------
 
     /*      ISLAND      */
-    // Entities
-    @ConfigEntry(path = "island.limits.entities")
-    private Map<EntityType, Integer> entityLimits = new EnumMap<>(EntityType.class);
-    @ConfigEntry(path = "island.limits.tile-entities")
-    private Map<String, Integer> tileEntityLimits = new HashMap<>();
-
     @ConfigComment("Default max team size")
     @ConfigComment("Use this permission to set for specific user groups: askyblock.team.maxsize.<number>")
     @ConfigComment("Permission size cannot be less than the default below. ")
@@ -531,13 +524,6 @@ public class AISettings implements DataObject, WorldSettings {
         this.teamJoinDeathReset = teamJoinDeathReset;
     }
     /**
-     * @return the entityLimits
-     */
-    @Override
-    public Map<EntityType, Integer> getEntityLimits() {
-        return entityLimits;
-    }
-    /**
      * @return the islandDistance
      */
     @Override
@@ -657,13 +643,6 @@ public class AISettings implements DataObject, WorldSettings {
     @Override
     public int getSeaHeight() {
         return seaHeight;
-    }
-    /**
-     * @return the tileEntityLimits
-     */
-    @Override
-    public Map<String, Integer> getTileEntityLimits() {
-        return tileEntityLimits;
     }
     /**
      * @return the togglePvPCooldown
@@ -816,12 +795,6 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setEndIslands(boolean endIslands) {
         this.endIslands = endIslands;
-    }
-    /**
-     * @param entityLimits the entityLimits to set
-     */
-    public void setEntityLimits(Map<EntityType, Integer> entityLimits) {
-        this.entityLimits = entityLimits;
     }
     /**
      * @param immediateTeleportOnIsland the immediateTeleportOnIsland to set
@@ -1002,12 +975,6 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setSeaHeight(int seaHeight) {
         this.seaHeight = seaHeight;
-    }
-    /**
-     * @param tileEntityLimits the tileEntityLimits to set
-     */
-    public void setTileEntityLimits(Map<String, Integer> tileEntityLimits) {
-        this.tileEntityLimits = tileEntityLimits;
     }
     /**
      * @param togglePvPCooldown the togglePvPCooldown to set

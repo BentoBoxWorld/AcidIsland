@@ -7,6 +7,7 @@ import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminClearResetsAllCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminClearResetsCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminDeleteCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminGetRankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminInfoCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminRegisterCommand;
@@ -36,28 +37,30 @@ public class AcidCommand extends CompositeCommand {
         setParametersHelp("commands.admin.help.parameters");
         setDescription("commands.admin.help.description");
         setWorld(((AcidIsland)getAddon()).getIslandWorld());
-
+        new AdminVersionCommand(this);
+        new AdminTeleportCommand(this, "tp");
+        new AdminTeleportCommand(this, "tpnether");
+        new AdminTeleportCommand(this, "tpend");
+        new AdminGetRankCommand(this);
+        new AdminSetRankCommand(this);
+        new AdminInfoCommand(this);
         // Team commands
         new AdminTeamAddCommand(this);
         new AdminTeamKickCommand(this);
         new AdminTeamDisbandCommand(this);
         new AdminTeamMakeLeaderCommand(this);
-        // Other
-        new AdminGetRankCommand(this);
-        new AdminInfoCommand(this);
-        new AdminRegisterCommand(this);
+        // Schems
         new AdminSchemCommand(this);
-        new AdminSetRankCommand(this);
-        new AdminTeleportCommand(this, "tp");
-        new AdminTeleportCommand(this, "tpnether");
-        new AdminTeleportCommand(this, "tpend");
+        // Register/unregister islands
+        new AdminRegisterCommand(this);
         new AdminUnregisterCommand(this);
-        new AdminVersionCommand(this);
         // Range
         new AdminRangeCommand(this);
         // Resets
         new AdminClearResetsCommand(this);
         new AdminClearResetsAllCommand(this);
+        // Delete
+        new AdminDeleteCommand(this);
     }
 
     @Override

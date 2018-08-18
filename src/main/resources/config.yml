@@ -106,10 +106,10 @@ world:
   # This setting is toggled in world flags and set by the settings GUI.
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
-  - ZOMBIE_VILLAGER
-  - WITHER
   - PIG_ZOMBIE
   - ENDERMAN
+  - WITHER
+  - ZOMBIE_VILLAGER
   # World flags. These are boolean settings for various flags for this world
   flags:
     ENTER_EXIT_MESSAGES: true
@@ -126,8 +126,8 @@ world:
     HURT_ANIMALS: 900
     COLLECT_WATER: 900
     REDSTONE: 900
-    BUCKET: 900
     BUTTON: 900
+    BUCKET: 900
     LOCK: 0
     FIRE_EXTINGUISH: 900
     ENDER_PEARL: 900
@@ -141,11 +141,12 @@ world:
     FIRE: 900
     CRAFTING: 900
     BREEDING: 900
-    SHEARING: 900
+    TNT: 500
     ENCHANTING: 900
+    SHEARING: 900
     HURT_VILLAGERS: 900
-    SPAWN_EGGS: 900
     BED: 900
+    SPAWN_EGGS: 900
     COLLECT_LAVA: 900
     MILKING: 900
     LEVER: 900
@@ -155,17 +156,17 @@ world:
     GATE: 900
     TRADING: 900
     EGGS: 900
-    ITEM_DROP: 900
     PORTAL: 900
+    ITEM_DROP: 900
     CHEST: 900
     NOTE_BLOCK: 900
     LEASH: 900
-    MOUNT_INVENTORY: 900
     BREAK_BLOCKS: 900
+    MOUNT_INVENTORY: 900
     CHORUS_FRUIT: 900
-    ITEM_PICKUP: 900
     CROP_TRAMPLE: 900
     JUKEBOX: 900
+    ITEM_PICKUP: 900
     BREWING: 900
   # These are the default settings for new islands
   default-island-settings:
@@ -175,16 +176,13 @@ world:
     MONSTER_SPAWN: true
     FIRE_SPREAD: true
     PVP_OVERWORLD: false
-  # These are the settings visible to users.
+  # These are the settings visible to users. (Not implemented yet)
   visible-settings: []
   # Visitor banned commands - Visitors to islands cannot use these commands in this world
   visitor-banned-commands:
   - spawner
   - spawnmob
 island:
-  limits:
-    entities: {}
-    tile-entities: {}
   # Default max team size
   # Use this permission to set for specific user groups: askyblock.team.maxsize.<number>
   # Permission size cannot be less than the default below. 
@@ -262,13 +260,11 @@ island:
     # When a player joins a team, reset their death count
     team-join-reset: true
   customranks: {}
+togglePvPCooldown: 0
 protection:
-  # Allow pistons to push outside of the protected area (maybe to make bridges)
-  allow-piston-push: true
-  # Restrict Wither and other flying mobs.
-  # Any flying mobs that exit the island space where they were spawned will be removed.
-  # Includes blaze and ghast. 
-  restrict-flying-mobs: true
+  # Geo restrict mobs.
+  # Mobs that exit the island space where they were spawned will be removed.
+  geo-limit-settings: []
   # Invincible visitors. List of damages that will not affect visitors.
   # Make list blank if visitors should receive all damages
   invincible-visitors:
@@ -296,15 +292,9 @@ protection:
   - HOT_FLOOR
   - CRAMMING
   - VOID
-togglePvPCooldown: 0
-allowEndermanGriefing: false
-endermanDeathDrop: false
-allowTNTDamage: false
-allowChestDamage: false
-allowCreeperDamage: false
-allowCreeperGriefing: false
-allowMobDamageToItemFrames: false
 panel:
   close-on-click-outside: true
-# Do not change this value below
+do-not-edit-these-settings:
+  # These settings should not be edited
+  reset-epoch: 0
 uniqueId: config
