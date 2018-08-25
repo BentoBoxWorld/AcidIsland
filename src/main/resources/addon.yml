@@ -50,6 +50,9 @@ permissions:
   acidisland.island.team:
     description: Let a player use team commands
     default: true
+  acidisland.settings.*:
+    description: Allow access to settings panel items
+    default: true
   acidisland.mod.info:
     description: Let a moderator see info on a player
     default: op
