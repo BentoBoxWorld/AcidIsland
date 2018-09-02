@@ -132,7 +132,6 @@ public class AcidEffect implements Listener {
         }
         // If they are already burning in acid then return
         if (burningPlayers.contains(player)) {
-            // plugin.getLogger().info("DEBUG: no acid water is false");
             return;
         }
         if (isSafeFromAcid(player)) {
@@ -233,8 +232,6 @@ public class AcidEffect implements Listener {
         // Check if player has an active water potion or not
         Collection<PotionEffect> activePotions = player.getActivePotionEffects();
         for (PotionEffect s : activePotions) {
-            // plugin.getLogger().info("Potion is : " +
-            // s.getType().toString());
             if (s.getType().equals(PotionEffectType.WATER_BREATHING)) {
                 // Safe!
                 return true;

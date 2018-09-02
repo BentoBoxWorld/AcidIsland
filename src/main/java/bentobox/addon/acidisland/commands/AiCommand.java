@@ -18,6 +18,10 @@ import world.bentobox.bentobox.api.commands.island.IslandSetnameCommand;
 import world.bentobox.bentobox.api.commands.island.IslandSettingsCommand;
 import world.bentobox.bentobox.api.commands.island.IslandUnbanCommand;
 import world.bentobox.bentobox.api.commands.island.team.IslandTeamCommand;
+import world.bentobox.bentobox.api.commands.island.team.IslandTeamCoopCommand;
+import world.bentobox.bentobox.api.commands.island.team.IslandTeamTrustCommand;
+import world.bentobox.bentobox.api.commands.island.team.IslandTeamUncoopCommand;
+import world.bentobox.bentobox.api.commands.island.team.IslandTeamUntrustCommand;
 import world.bentobox.bentobox.api.user.User;
 
 public class AiCommand extends CompositeCommand {
@@ -53,6 +57,10 @@ public class AiCommand extends CompositeCommand {
         new IslandBanlistCommand(this);
         // Team commands
         new IslandTeamCommand(this);
+        new IslandTeamTrustCommand(this);
+        new IslandTeamUntrustCommand(this);
+        new IslandTeamCoopCommand(this);
+        new IslandTeamUncoopCommand(this);
     }
 
     /* (non-Javadoc)

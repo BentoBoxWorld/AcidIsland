@@ -50,6 +50,12 @@ permissions:
   acidisland.island.team:
     description: Let a player use team commands
     default: true
+  acidisland.island.team.trust:
+    description: Let a player use team trust commands
+    default: true
+  acidisland.island.team.coop:
+    description: Let a player use team coop commands
+    default: true
   acidisland.settings.*:
     description: Allow access to settings panel items
     default: true
