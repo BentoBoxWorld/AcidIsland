@@ -25,8 +25,8 @@ import world.bentobox.bentobox.api.user.User;
 
 public class AcidCommand extends CompositeCommand {
 
-    public AcidCommand(Addon addon) {
-        super(addon, "acid");
+    public AcidCommand(Addon addon, String command) {
+        super(addon, command);
     }
 
     @Override

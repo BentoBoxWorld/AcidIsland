@@ -26,8 +26,8 @@ import world.bentobox.bentobox.api.user.User;
 
 public class AiCommand extends CompositeCommand {
 
-    public AiCommand(Addon addon) {
-        super(addon, "ai");
+    public AiCommand(Addon addon, String command) {
+        super(addon, command);
     }
 
     /* (non-Javadoc)

@@ -52,6 +52,17 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "acid.damage-chickens")
     private boolean acidDamageChickens = false;
 
+    // Command
+    @ConfigComment("")
+    @ConfigComment("Island Command. What command users will run to access their island")
+    @ConfigEntry(path = "acid.command.island")
+    private String islandCommand = "ai";
+
+    @ConfigComment("")
+    @ConfigComment("The island admin command.")
+    @ConfigEntry(path = "acid.command.admin")
+    private String adminCommand = "acid";
+
     // Damage
     @ConfigComment("Damage that a player will experience in acid. 10 is half their health typically. 5 would be easier.")
     @ConfigEntry(path = "acid.damage.acid.player")
@@ -1305,4 +1316,22 @@ public class AISettings implements DataObject, WorldSettings {
         this.defaultBiome = defaultBiome;
     }
 
+    /**
+     * @return the command for accessing your island
+     */
+    public String getIslandCommand() { return islandCommand; }
+
+    /**
+     * @param islandCommand what you want your island command to be
+     */
+    public void setIslandCommand(String islandCommand) { this.islandCommand = islandCommand; }
+    /**
+     * @return the command for accessing your admin command
+     */
+    public String getAdminCommand() { return adminCommand; }
+
+    /**
+     * @param adminCommand what you want your admin command to be
+     */
+    public void setAdminCommand(String adminCommand) { this.adminCommand = adminCommand; }
 }

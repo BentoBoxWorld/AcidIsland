@@ -42,8 +42,8 @@ public class AcidIsland extends Addon {
         manager.registerEvents(new AcidEffect(this), this.getPlugin());
         manager.registerEvents(new LavaCheck(this), this.getPlugin());
         // Register commands
-        new AcidCommand(this);
-        new AiCommand(this);
+        new AcidCommand(this, settings.getAdminCommand());
+        new AiCommand(this, settings.getIslandCommand());
         // Burn everything
         acidTask = new AcidTask(this);
     }
