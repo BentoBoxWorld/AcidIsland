@@ -6,7 +6,7 @@
 
 	<groupId>us.tastybento</groupId>
 	<artifactId>AcidIsland</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.3.0-SNAPSHOT</version>
 
 	<name>AcidIsland</name>
 	<description>AcidIsland is an add-on for BentoBox, an expandable Minecraft Bukkit plugin for island-type games like ASkyBlock or AcidIsland.</description>
@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>world.bentobox</groupId>
 			<artifactId>bentobox</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
+			<version>0.10.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -85,7 +85,7 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
+				<filtering>true</filtering>
 			</resource>
 			<resource>
 				<directory>src/main/resources/locales</directory>
@@ -100,7 +100,7 @@
 				<targetPath>./schems</targetPath>
 				<filtering>false</filtering>
 				<includes>
-					<include>*.schems</include>
+					<include>*.schem</include>
 				</includes>
 			</resource>
 		</resources>
@@ -114,6 +114,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.1.0</version>
+				<configuration>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>schem</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

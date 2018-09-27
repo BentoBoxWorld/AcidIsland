@@ -1,6 +1,6 @@
 name: AcidIsland
 main: bentobox.addon.acidisland.AcidIsland
-version: 0.1
+version: ${version}
 
 authors: tastybento
 
