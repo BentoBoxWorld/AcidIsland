@@ -35,7 +35,7 @@ permissions:
   acidisland.island.settings:
     description: Player can see server settings
     default: true
-  acidisland.island.lang:
+  acidisland.island.language:
     description: Player can select a language
     default: true
   acidisland.island.name:
