@@ -15,6 +15,7 @@ import world.bentobox.bentobox.api.commands.admin.AdminSetRankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminTeleportCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminUnregisterCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminVersionCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminWhyCommand;
 import world.bentobox.bentobox.api.commands.admin.range.AdminRangeCommand;
 import world.bentobox.bentobox.api.commands.admin.schem.AdminSchemCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamAddCommand;
@@ -61,6 +62,8 @@ public class AcidCommand extends CompositeCommand {
         new AdminClearResetsAllCommand(this);
         // Delete
         new AdminDeleteCommand(this);
+        // Why
+        new AdminWhyCommand(this);
     }
 
     @Override
