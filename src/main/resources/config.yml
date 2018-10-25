@@ -10,6 +10,13 @@ acid:
   # 
   # Acid can damage chickens - best to leave false because they like to swim
   damage-chickens: false
+  command:
+    # 
+    # Island Command. What command users will run to access their island
+    island: ai
+    # 
+    # The island admin command.
+    admin: acid
   damage:
     acid:
       # Damage that a player will experience in acid. 10 is half their health typically. 5 would be easier.
@@ -78,7 +85,6 @@ world:
   default-game-mode: SURVIVAL
   # The default biome for the overworld
   default-biome: WARM_OCEAN
- 
   nether:
     # Generate Nether - if this is false, the nether world will not be made and access to
     # the nether will not occur. Other plugins may still enable portal usage.
@@ -109,10 +115,10 @@ world:
   # This setting is toggled in world flags and set by the settings GUI.
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
-  - PIG_ZOMBIE
-  - ENDERMAN
-  - WITHER
   - ZOMBIE_VILLAGER
+  - PIG_ZOMBIE
+  - WITHER
+  - ENDERMAN
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -130,7 +136,7 @@ world:
     ITEM_FRAME_DAMAGE: false
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
-  # Ranks are: Visitor = 0, Member = 500, Owner = 1000
+  # Ranks are: Visitor = 0, Member = 900, Owner = 1000
   default-island-flags:
     HURT_ANIMALS: 500
     COLLECT_WATER: 500
@@ -140,48 +146,48 @@ world:
     LOCK: 0
     FIRE_EXTINGUISH: 500
     ENDER_PEARL: 500
-    DOOR: 500
     BEACON: 500
+    DOOR: 500
     TRAPDOOR: 500
-    PRESSURE_PLATE: 0
     FURNACE: 500
+    PRESSURE_PLATE: 0
     PLACE_BLOCKS: 500
     ANVIL: 500
     FIRE: 500
     CRAFTING: 0
     BREEDING: 500
-    TNT: 500
-    ENCHANTING: 0
     SHEARING: 500
+    ENCHANTING: 0
+    TNT: 500
     HURT_VILLAGERS: 500
-    BED: 500
     SPAWN_EGGS: 500
+    BED: 500
     COLLECT_LAVA: 500
     MILKING: 0
     LEVER: 500
-    RIDING: 500
     HURT_MONSTERS: 0
+    RIDING: 500
     ARMOR_STAND: 500
     GATE: 0
     TRADING: 0
     EGGS: 500
-    PORTAL: 0
     ITEM_DROP: 0
+    PORTAL: 0
     CHEST: 500
     NOTE_BLOCK: 0
     LEASH: 500
     BREAK_BLOCKS: 500
     MOUNT_INVENTORY: 500
     CHORUS_FRUIT: 500
-    CROP_TRAMPLE: 500
     JUKEBOX: 500
+    CROP_TRAMPLE: 500
     ITEM_PICKUP: 0
     BREWING: 500
   # These are the default settings for new islands
   default-island-settings:
     PVP_END: false
-    ANIMAL_SPAWN: true
     PVP_NETHER: false
+    ANIMAL_SPAWN: true
     MONSTER_SPAWN: true
     FIRE_SPREAD: true
     PVP_OVERWORLD: false
@@ -262,7 +268,16 @@ island:
   immediate-teleport-on-island: false
   # Have player's respawn on their island if they die
   respawn-on-island: false
+  sethome:
+    nether:
+      allow: true
+      require-confirmation: true
+    the-end:
+      allow: true
+      require-confirmation: true
   deaths:
+    # Whether deaths are counted or not.
+    counted: true
     # Maximum number of deaths to count. The death count can be used by add-ons.
     max: 10
     sum-team: false
