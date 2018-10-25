@@ -1,11 +1,11 @@
-package bentobox.addon.acidisland.world;
+package world.bentobox.acidisland.world;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
-import bentobox.addon.acidisland.AcidIsland;
+import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.bentobox.util.Util;
 
 /**

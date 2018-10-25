@@ -1,5 +1,5 @@
 name: AcidIsland
-main: bentobox.addon.acidisland.AcidIsland
+main: world.bentobox.acidisland.AcidIsland
 version: ${version}
 
 authors: tastybento

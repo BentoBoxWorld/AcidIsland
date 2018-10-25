@@ -1,4 +1,4 @@
-package bentobox.addon.acidisland.world;
+package world.bentobox.acidisland.world;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.noise.PerlinOctaveGenerator;
 
-import bentobox.addon.acidisland.AcidIsland;
+import world.bentobox.acidisland.AcidIsland;
 
 /**
  * Generates the AcidIsland world

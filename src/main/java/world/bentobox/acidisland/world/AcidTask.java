@@ -1,4 +1,4 @@
-package bentobox.addon.acidisland.world;
+package world.bentobox.acidisland.world;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -17,7 +17,7 @@ import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Squid;
 
-import bentobox.addon.acidisland.AcidIsland;
+import world.bentobox.acidisland.AcidIsland;
 
 public class AcidTask {
     private final AcidIsland addon;

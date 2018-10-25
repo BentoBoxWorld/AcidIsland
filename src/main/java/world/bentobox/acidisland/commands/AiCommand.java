@@ -1,9 +1,9 @@
-package bentobox.addon.acidisland.commands;
+package world.bentobox.acidisland.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import bentobox.addon.acidisland.AcidIsland;
+import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.commands.island.IslandBanCommand;

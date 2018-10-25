@@ -1,14 +1,14 @@
-package bentobox.addon.acidisland;
+package world.bentobox.acidisland;
 
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 
-import bentobox.addon.acidisland.commands.AcidCommand;
-import bentobox.addon.acidisland.commands.AiCommand;
-import bentobox.addon.acidisland.listeners.AcidEffect;
-import bentobox.addon.acidisland.listeners.LavaCheck;
-import bentobox.addon.acidisland.world.AcidIslandWorld;
-import bentobox.addon.acidisland.world.AcidTask;
+import world.bentobox.acidisland.commands.AcidCommand;
+import world.bentobox.acidisland.commands.AiCommand;
+import world.bentobox.acidisland.listeners.AcidEffect;
+import world.bentobox.acidisland.listeners.LavaCheck;
+import world.bentobox.acidisland.world.AcidIslandWorld;
+import world.bentobox.acidisland.world.AcidTask;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.configuration.Config;
 

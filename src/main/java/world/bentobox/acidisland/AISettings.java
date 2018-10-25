@@ -1,4 +1,4 @@
-package bentobox.addon.acidisland;
+package world.bentobox.acidisland;
 
 import java.util.ArrayList;
 import java.util.HashMap;

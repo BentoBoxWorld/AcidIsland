@@ -1,4 +1,4 @@
-package bentobox.addon.acidisland.commands;
+package world.bentobox.acidisland.commands;
 
 import java.util.List;
 

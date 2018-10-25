@@ -1,4 +1,4 @@
-package bentobox.addon.acidisland.listeners;
+package world.bentobox.acidisland.listeners;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,10 +26,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import bentobox.addon.acidisland.AcidIsland;
-import bentobox.addon.acidisland.events.AcidEvent;
-import bentobox.addon.acidisland.events.AcidRainEvent;
-import bentobox.addon.acidisland.world.AcidTask;
+import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.acidisland.events.AcidEvent;
+import world.bentobox.acidisland.events.AcidRainEvent;
+import world.bentobox.acidisland.world.AcidTask;
 import world.bentobox.bentobox.util.Util;
 
 /**

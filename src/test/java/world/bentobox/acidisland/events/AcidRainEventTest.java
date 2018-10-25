@@ -1,4 +1,4 @@
-package bentobox.addon.acidisland.events;
+package world.bentobox.acidisland.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
