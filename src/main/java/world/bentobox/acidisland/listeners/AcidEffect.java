@@ -82,8 +82,8 @@ public class AcidEffect implements Listener {
                 || player.getGameMode().equals(GameMode.SPECTATOR)
                 || addon.getPlayers().isInTeleport(player.getUniqueId())
                 || !Util.sameWorld(addon.getIslandWorld(), player.getWorld())
-                || player.hasPermission("acidisland.mod.noburn")
-                || player.hasPermission("admin.noburn")
+                || (!player.isOp() && player.hasPermission("acidisland.mod.noburn"))
+                || (!player.isOp() && player.hasPermission("admin.noburn"))
                 || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
             return;
         }
