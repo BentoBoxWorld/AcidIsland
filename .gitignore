@@ -2,3 +2,4 @@
 *.iml
 bin/
 *.class
+/target/
