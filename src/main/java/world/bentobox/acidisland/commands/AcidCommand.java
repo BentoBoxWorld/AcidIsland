@@ -5,13 +5,13 @@ import java.util.List;
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
-import world.bentobox.bentobox.api.commands.admin.AdminClearResetsAllCommand;
-import world.bentobox.bentobox.api.commands.admin.AdminClearResetsCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminClearresetsCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminClearresetsallCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminDeleteCommand;
-import world.bentobox.bentobox.api.commands.admin.AdminGetRankCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminGetrankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminInfoCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminRegisterCommand;
-import world.bentobox.bentobox.api.commands.admin.AdminSetRankCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminSetrankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminTeleportCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminUnregisterCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminVersionCommand;
@@ -21,7 +21,7 @@ import world.bentobox.bentobox.api.commands.admin.schem.AdminSchemCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamAddCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamDisbandCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamKickCommand;
-import world.bentobox.bentobox.api.commands.admin.team.AdminTeamMakeLeaderCommand;
+import world.bentobox.bentobox.api.commands.admin.team.AdminTeamSetownerCommand;
 import world.bentobox.bentobox.api.user.User;
 
 public class AcidCommand extends CompositeCommand {
@@ -32,7 +32,6 @@ public class AcidCommand extends CompositeCommand {
 
     @Override
     public void setup() {
-        setPermissionPrefix("acidisland");
         setPermission("acidisland.admin.*");
         setOnlyPlayer(false);
         setParametersHelp("commands.admin.help.parameters");
@@ -42,14 +41,14 @@ public class AcidCommand extends CompositeCommand {
         new AdminTeleportCommand(this, "tp");
         new AdminTeleportCommand(this, "tpnether");
         new AdminTeleportCommand(this, "tpend");
-        new AdminGetRankCommand(this);
-        new AdminSetRankCommand(this);
+        new AdminGetrankCommand(this);
+        new AdminSetrankCommand(this);
         new AdminInfoCommand(this);
         // Team commands
         new AdminTeamAddCommand(this);
         new AdminTeamKickCommand(this);
         new AdminTeamDisbandCommand(this);
-        new AdminTeamMakeLeaderCommand(this);
+        new AdminTeamSetownerCommand(this);
         // Schems
         new AdminSchemCommand(this);
         // Register/unregister islands
@@ -58,8 +57,8 @@ public class AcidCommand extends CompositeCommand {
         // Range
         new AdminRangeCommand(this);
         // Resets
-        new AdminClearResetsCommand(this);
-        new AdminClearResetsAllCommand(this);
+        new AdminClearresetsCommand(this);
+        new AdminClearresetsallCommand(this);
         // Delete
         new AdminDeleteCommand(this);
         // Why

@@ -38,7 +38,6 @@ public class AiCommand extends CompositeCommand {
         setDescription("commands.island.help.description");
         setOnlyPlayer(true);
         // Permission
-        setPermissionPrefix("acidisland");
         setPermission("island");
         // Set up world
         setWorld(((AcidIsland)getAddon()).getIslandWorld());
