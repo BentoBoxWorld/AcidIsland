@@ -1,0 +1,12 @@
+###########################################################################################
+# This is a YML file. Be careful when editing. Check your edits in a YAML checker like    #
+# the one at http://yaml-online-parser.appspot.com                                        #
+###########################################################################################
+
+acidisland:
+  sign:
+    line0: "&1酸水之岛"
+    line1: "[player]"
+    line2: "水是酸的！"
+    line3: "要小心哟！&c<3"
+    
