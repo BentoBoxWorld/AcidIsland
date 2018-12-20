@@ -6,7 +6,7 @@
 acidisland:
   sign:
     line0: "&1AcidIsland"
-    line1: "[player]"
+    line1: "[name]"
     line2: "Water is acid!"
     line3: "Be careful! &c<3"
     

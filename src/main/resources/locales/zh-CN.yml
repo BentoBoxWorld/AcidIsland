@@ -6,7 +6,7 @@
 acidisland:
   sign:
     line0: "&1酸水之岛"
-    line1: "[player]"
+    line1: "[name]"
     line2: "水是酸的！"
     line3: "要小心哟！&c<3"
     
