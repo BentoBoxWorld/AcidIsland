@@ -14,9 +14,6 @@ permissions:
   acidisland.island.home:
     description: Allow teleporting to player island
     default: true
-  acidisland.island.sethome:
-    description: Let the player use the sethome command
-    default: true
   acidisland.island.info:
     description: Let the player check their island level
     default: true
