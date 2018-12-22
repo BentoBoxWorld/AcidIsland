@@ -41,24 +41,19 @@ public class AISettings implements DataObject, WorldSettings {
     // ---------------------------------------------
 
     /*      ACID        */
-    @ConfigComment("Acid Settings")
-    @ConfigComment("")
     @ConfigComment("Acid can damage ops or not")
     @ConfigEntry(path = "acid.damage-op")
     private boolean acidDamageOp = false;
 
-    @ConfigComment("")
     @ConfigComment("Acid can damage chickens - best to leave false because they like to swim")
     @ConfigEntry(path = "acid.damage-chickens")
     private boolean acidDamageChickens = false;
 
     // Command
-    @ConfigComment("")
     @ConfigComment("Island Command. What command users will run to access their island")
     @ConfigEntry(path = "acid.command.island")
     private String islandCommand = "ai";
 
-    @ConfigComment("")
     @ConfigComment("The island admin command.")
     @ConfigEntry(path = "acid.command.admin")
     private String adminCommand = "acid";
@@ -105,7 +100,7 @@ public class AISettings implements DataObject, WorldSettings {
     private String friendlyName = "AcidIsland";
 
     @ConfigComment("Name of the world - if it does not exist then it will be generated.")
-    @ConfigComment("It acts like a prefix for nether and end (e.g. BSkyBlock, BSkyBlock_nether, BSkyBlock_end)")
+    @ConfigComment("It acts like a prefix for nether and end (e.g. AcidIsland_world, AcidIsland_world_nether, AcidIsland_world_end)")
     @ConfigEntry(path = "world.world-name", needsReset = true)
     private String worldName = "AcidIsland_world";
 
@@ -119,11 +114,11 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("It is the same for every dimension : Overworld, Nether and End.")
     @ConfigComment("This value cannot be changed mid-game and the plugin will not start if it is different.")
     @ConfigEntry(path = "world.distance-between-islands", needsReset = true)
-    private int islandDistance = 200;
+    private int islandDistance = 192;
 
     @ConfigComment("Default protection range radius in blocks. Cannot be larger than distance.")
-    @ConfigComment("Admins can change protection sizes for players individually using /bsadmin setrange")
-    @ConfigComment("or set this permission: bskyblock.island.range.<number>")
+    @ConfigComment("Admins can change protection sizes for players individually using /acid range set <player> <new range>")
+    @ConfigComment("or set this permission: acidisland.island.range.<number>")
     @ConfigEntry(path = "world.protection-range", overrideOnChange = true)
     private int islandProtectionRange = 100;
 
@@ -144,13 +139,13 @@ public class AISettings implements DataObject, WorldSettings {
     private int islandZOffset;
 
     @ConfigComment("Island height - Lowest is 5.")
-    @ConfigComment("It is the y coordinate of the bedrock block in the schem")
+    @ConfigComment("It is the y coordinate of the bedrock block in the schem.")
     @ConfigEntry(path = "world.island-height")
     private int islandHeight = 50;
 
-    @ConfigComment("Use your own world generator for this world. In this case, the plugin will not generate")
-    @ConfigComment("anything.")
-    @ConfigEntry(path = "world.use-own-generator")
+    @ConfigComment("Use your own world generator for this world.")
+    @ConfigComment("In this case, the plugin will not generate anything.")
+    @ConfigEntry(path = "world.use-own-generator", experimental = true)
     private boolean useOwnGenerator;
 
     @ConfigComment("Sea height (don't changes this mid-game unless you delete the world)")
@@ -160,7 +155,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "world.sea-height")
     private int seaHeight = 55;
 
-    @ConfigComment("Maximum number of islands in the world. Set to 0 for unlimited. ")
+    @ConfigComment("Maximum number of islands in the world. Set to -1 or 0 for unlimited. ")
     @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
     @ConfigEntry(path = "world.max-islands")
     private int maxIslands = -1;
@@ -177,7 +172,7 @@ public class AISettings implements DataObject, WorldSettings {
     // Nether
     @ConfigComment("Generate Nether - if this is false, the nether world will not be made and access to")
     @ConfigComment("the nether will not occur. Other plugins may still enable portal usage.")
-    @ConfigComment("Note: Some challenges will not be possible if there is no nether.")
+    @ConfigComment("Note: Some default challenges will not be possible if there is no nether.")
     @ConfigComment("Note that with a standard nether all players arrive at the same portal and entering a")
     @ConfigComment("portal will return them back to their islands.")
     @ConfigEntry(path = "world.nether.generate")
@@ -212,7 +207,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "world.end.islands", needsReset = true)
     private boolean endIslands = true;
 
-    @ConfigEntry(path = "world.end.dragon-spawn")
+    @ConfigEntry(path = "world.end.dragon-spawn", experimental = true)
     private boolean dragonSpawn = false;
 
     @ConfigComment("Removing mobs - this kills all monsters in the vicinity. Benefit is that it helps")
@@ -239,7 +234,7 @@ public class AISettings implements DataObject, WorldSettings {
     private Map<Flag, Integer> defaultIslandSettings = new HashMap<>();
 
     @ConfigComment("These are the settings visible to users. (Not implemented yet)")
-    @ConfigEntry(path = "world.visible-settings")
+    @ConfigEntry(path = "world.visible-settings", experimental = true)
     private List<String> visibleSettings = new ArrayList<>();
 
     @ConfigComment("Visitor banned commands - Visitors to islands cannot use these commands in this world")
@@ -250,15 +245,17 @@ public class AISettings implements DataObject, WorldSettings {
 
     /*      ISLAND      */
     @ConfigComment("Default max team size")
-    @ConfigComment("Use this permission to set for specific user groups: askyblock.team.maxsize.<number>")
-    @ConfigComment("Permission size cannot be less than the default below. ")
+    @ConfigComment("Use this permission to set for specific user groups: acidisland.team.maxsize.<number>")
+    @ConfigComment("Permission size cannot be less than the default below.")
     @ConfigEntry(path = "island.max-team-size")
     private int maxTeamSize = 4;
+
     @ConfigComment("Default maximum number of homes a player can have. Min = 1")
-    @ConfigComment("Accessed via sethome <number> or go <number>")
-    @ConfigComment("Use this permission to set for specific user groups: askyblock.island.maxhomes.<number>")
+    @ConfigComment("Accessed via /ai sethome <number> or /ai go <number>")
+    @ConfigComment("Use this permission to set for specific user groups: acidisland.island.maxhomes.<number>")
     @ConfigEntry(path = "island.max-homes")
     private int maxHomes = 5;
+
     @ConfigComment("Island naming")
     @ConfigComment("Only players with the TODO can name their island")
     @ConfigComment("It is displayed in the top ten and enter and exit announcements")
@@ -270,7 +267,7 @@ public class AISettings implements DataObject, WorldSettings {
     private int nameMaxLength = 20;
 
     // Reset
-    @ConfigComment("How many resets a player is allowed (override with /asadmin clearreset <player>)")
+    @ConfigComment("How many resets a player is allowed (override with /acid clearresets <player>)")
     @ConfigComment("Value of -1 means unlimited, 0 means hardcore - no resets.")
     @ConfigComment("Example, 2 resets means they get 2 resets or 3 islands lifetime")
     @ConfigEntry(path = "island.reset.reset-limit")
@@ -376,8 +373,6 @@ public class AISettings implements DataObject, WorldSettings {
     // ---------------------------------------------
 
     /*      PROTECTION      */
-    private int togglePvPCooldown;
-
     @ConfigComment("Geo restrict mobs.")
     @ConfigComment("Mobs that exit the island space where they were spawned will be removed.")
     @ConfigEntry(path = "protection.geo-limit-settings")
@@ -406,6 +401,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "island.require-confirmation.leave-wait")
     private long leaveWait = 10L;
 
+    @ConfigComment("Whether GUIs should be closed when the player clicks outside.")
     @ConfigEntry(path = "panel.close-on-click-outside")
     private boolean closePanelOnClickOutside = true;
 
@@ -414,7 +410,6 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "do-not-edit-these-settings.reset-epoch")
     private long resetEpoch = 0;
     private String uniqueId = "config";
-
 
     /**
      * @return the acidDamageOp
@@ -676,12 +671,6 @@ public class AISettings implements DataObject, WorldSettings {
     @Override
     public int getSeaHeight() {
         return seaHeight;
-    }
-    /**
-     * @return the togglePvPCooldown
-     */
-    public int getTogglePvPCooldown() {
-        return togglePvPCooldown;
     }
     /**
      * @return the uniqueId
@@ -1053,12 +1042,6 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setSeaHeight(int seaHeight) {
         this.seaHeight = seaHeight;
-    }
-    /**
-     * @param togglePvPCooldown the togglePvPCooldown to set
-     */
-    public void setTogglePvPCooldown(int togglePvPCooldown) {
-        this.togglePvPCooldown = togglePvPCooldown;
     }
     /**
      * @param uniqueId - unique ID the uniqueId to set
