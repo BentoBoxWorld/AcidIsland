@@ -2,7 +2,6 @@ package world.bentobox.acidisland.commands;
 
 import java.util.List;
 
-import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminClearresetsCommand;
@@ -36,7 +35,6 @@ public class AcidCommand extends CompositeCommand {
         setOnlyPlayer(false);
         setParametersHelp("commands.admin.help.parameters");
         setDescription("commands.admin.help.description");
-        setWorld(((AcidIsland)getAddon()).getIslandWorld());
         new AdminVersionCommand(this);
         new AdminTeleportCommand(this, "tp");
         new AdminTeleportCommand(this, "tpnether");

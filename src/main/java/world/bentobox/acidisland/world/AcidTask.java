@@ -55,13 +55,13 @@ public class AcidTask {
     }
 
     private Stream<Entity> getEntityStream() {
-        Stream<Entity> entityStream = addon.getIslandWorld().getEntities().stream();
+        Stream<Entity> entityStream = addon.getOverWorld().getEntities().stream();
         // Nether and end
         if (addon.getSettings().isNetherGenerate() && addon.getSettings().isNetherIslands()) {
-            entityStream = Stream.concat(entityStream, addon.getAiw().getNetherWorld().getEntities().stream());
+            entityStream = Stream.concat(entityStream, addon.getNetherWorld().getEntities().stream());
         }
         if (addon.getSettings().isEndGenerate() && addon.getSettings().isEndIslands()) {
-            entityStream = Stream.concat(entityStream, addon.getAiw().getEndWorld().getEntities().stream());
+            entityStream = Stream.concat(entityStream, addon.getEndWorld().getEntities().stream());
         }
         return entityStream;
     }

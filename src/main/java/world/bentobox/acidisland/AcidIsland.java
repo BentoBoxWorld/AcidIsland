@@ -1,28 +1,34 @@
 package world.bentobox.acidisland;
 
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.plugin.PluginManager;
 
 import world.bentobox.acidisland.commands.AcidCommand;
 import world.bentobox.acidisland.commands.AiCommand;
 import world.bentobox.acidisland.listeners.AcidEffect;
 import world.bentobox.acidisland.listeners.LavaCheck;
-import world.bentobox.acidisland.world.AcidIslandWorld;
 import world.bentobox.acidisland.world.AcidTask;
-import world.bentobox.bentobox.api.addons.Addon;
+import world.bentobox.acidisland.world.ChunkGeneratorWorld;
+import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.Config;
+import world.bentobox.bentobox.api.configuration.WorldSettings;
 
 /**
  * Add-on to BentoBox that enables AcidIsland
  * @author tastybento
  *
  */
-public class AcidIsland extends Addon {
+public class AcidIsland extends GameModeAddon {
 
     private static AcidIsland addon;
     private AISettings settings;
-    private AcidIslandWorld aiw;
     private AcidTask acidTask;
+
+    private static final String NETHER = "_nether";
+    private static final String THE_END = "_the_end";
+
 
     @Override
     public void onLoad() {
@@ -30,8 +36,6 @@ public class AcidIsland extends Addon {
         saveDefaultConfig();
         // Load settings
         settings = new Config<>(this, AISettings.class).loadConfigObject();
-        // Create worlds
-        aiw = new AcidIslandWorld(this);
     }
 
     @Override
@@ -61,21 +65,6 @@ public class AcidIsland extends Addon {
         return settings;
     }
 
-    /**
-     * @return the aiw
-     */
-    public AcidIslandWorld getAiw() {
-        return aiw;
-    }
-
-    /**
-     * Convenience method to obtain the AcidIsland overworld
-     * @return Island World
-     */
-    public World getIslandWorld() {
-        return aiw.getOverWorld();
-    }
-
     @Override
     public void log(String string) {
         getPlugin().log(string);
@@ -83,6 +72,47 @@ public class AcidIsland extends Addon {
 
     public static AcidIsland getInstance() {
         return addon;
+    }
+
+    @Override
+    public void createWorlds() {
+        String worldName = settings.getWorldName();
+        if (getServer().getWorld(worldName) == null) {
+            getLogger().info("Creating AcidIsland...");
+        }
+        // Create the world if it does not exist
+        islandWorld = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(new ChunkGeneratorWorld(addon))
+                .createWorld();
+
+        // Make the nether if it does not exist
+        if (settings.isNetherGenerate()) {
+            if (getServer().getWorld(worldName + NETHER) == null) {
+                log("Creating AcidIsland's Nether...");
+            }
+            if (!settings.isNetherIslands()) {
+                netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.NORMAL).environment(World.Environment.NETHER).createWorld();
+            } else {
+                netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(addon))
+                        .environment(World.Environment.NETHER).createWorld();
+            }
+        }
+        // Make the end if it does not exist
+        if (settings.isEndGenerate()) {
+            if (getServer().getWorld(worldName + THE_END) == null) {
+                log("Creating AcidIsland's End World...");
+            }
+            if (!settings.isEndIslands()) {
+                endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.NORMAL).environment(World.Environment.THE_END).createWorld();
+            } else {
+                endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(addon))
+                        .environment(World.Environment.THE_END).createWorld();
+            }
+        }
+    }
+
+    @Override
+    public WorldSettings getWorldSettings() {
+        return settings;
     }
 
 }
