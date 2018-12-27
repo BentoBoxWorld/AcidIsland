@@ -67,7 +67,7 @@ public class AcidEffect implements Listener {
     public void onSeaBounce(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (!player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)
-                && player.getWorld().equals(addon.getIslandWorld()) && player.getLocation().getBlockY() < 1) {
+                && player.getWorld().equals(addon.getOverWorld()) && player.getLocation().getBlockY() < 1) {
             player.setVelocity(new Vector(player.getVelocity().getX(), 1D, player.getVelocity().getZ()));
         }
     }
@@ -81,7 +81,7 @@ public class AcidEffect implements Listener {
                 || player.getGameMode().equals(GameMode.CREATIVE)
                 || player.getGameMode().equals(GameMode.SPECTATOR)
                 || addon.getPlayers().isInTeleport(player.getUniqueId())
-                || !Util.sameWorld(addon.getIslandWorld(), player.getWorld())
+                || !Util.sameWorld(addon.getOverWorld(), player.getWorld())
                 || (!player.isOp() && player.hasPermission("acidisland.mod.noburn"))
                 || (!player.isOp() && player.hasPermission("admin.noburn"))
                 || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
@@ -349,7 +349,7 @@ public class AcidEffect implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onWeatherChange(final WeatherChangeEvent e) {
-        if (e.getWorld().equals(addon.getIslandWorld())) {
+        if (e.getWorld().equals(addon.getOverWorld())) {
             this.isRaining = e.toWeatherState();
         }
     }

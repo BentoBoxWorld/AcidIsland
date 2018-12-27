@@ -3,7 +3,6 @@ package world.bentobox.acidisland.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.commands.island.IslandBanCommand;
@@ -40,8 +39,6 @@ public class AiCommand extends CompositeCommand {
         setOnlyPlayer(true);
         // Permission
         setPermission("island");
-        // Set up world
-        setWorld(((AcidIsland)getAddon()).getIslandWorld());
         // Set up subcommands
         new IslandAboutCommand(this);
         new IslandInfoCommand(this);

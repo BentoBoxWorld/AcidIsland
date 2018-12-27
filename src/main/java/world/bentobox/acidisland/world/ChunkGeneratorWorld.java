@@ -18,7 +18,7 @@ import world.bentobox.acidisland.AcidIsland;
  * @author tastybento
  *
  */
-class ChunkGeneratorWorld extends ChunkGenerator {
+public class ChunkGeneratorWorld extends ChunkGenerator {
 
     private final AcidIsland addon;
     private final Random rand = new Random();

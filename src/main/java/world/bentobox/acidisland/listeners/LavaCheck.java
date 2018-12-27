@@ -27,7 +27,7 @@ public class LavaCheck implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCleanstoneGen(BlockFromToEvent e) {
         // Only do this in AcidIsland over world
-        if (!e.getBlock().getWorld().equals(addon.getIslandWorld()) || addon.getSettings().getAcidDamage() <= 0
+        if (!e.getBlock().getWorld().equals(addon.getOverWorld()) || addon.getSettings().getAcidDamage() <= 0
                 // TODO: backward compatibility hack
                 || !(e.getToBlock().getType().name().equals("WATER"))) {
             return;
