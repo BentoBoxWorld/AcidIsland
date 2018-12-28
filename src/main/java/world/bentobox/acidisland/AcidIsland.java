@@ -22,7 +22,6 @@ import world.bentobox.bentobox.api.configuration.WorldSettings;
  */
 public class AcidIsland extends GameModeAddon {
 
-    private static AcidIsland addon;
     private AISettings settings;
     private AcidTask acidTask;
 
@@ -32,7 +31,6 @@ public class AcidIsland extends GameModeAddon {
 
     @Override
     public void onLoad() {
-        addon = this;
         saveDefaultConfig();
         // Load settings
         settings = new Config<>(this, AISettings.class).loadConfigObject();
@@ -70,10 +68,6 @@ public class AcidIsland extends GameModeAddon {
         getPlugin().log(string);
     }
 
-    public static AcidIsland getInstance() {
-        return addon;
-    }
-
     @Override
     public void createWorlds() {
         String worldName = settings.getWorldName();
@@ -81,7 +75,7 @@ public class AcidIsland extends GameModeAddon {
             getLogger().info("Creating AcidIsland...");
         }
         // Create the world if it does not exist
-        islandWorld = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(new ChunkGeneratorWorld(addon))
+        islandWorld = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(new ChunkGeneratorWorld(this))
                 .createWorld();
 
         // Make the nether if it does not exist
@@ -92,7 +86,7 @@ public class AcidIsland extends GameModeAddon {
             if (!settings.isNetherIslands()) {
                 netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.NORMAL).environment(World.Environment.NETHER).createWorld();
             } else {
-                netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(addon))
+                netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(this))
                         .environment(World.Environment.NETHER).createWorld();
             }
         }
@@ -104,7 +98,7 @@ public class AcidIsland extends GameModeAddon {
             if (!settings.isEndIslands()) {
                 endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.NORMAL).environment(World.Environment.THE_END).createWorld();
             } else {
-                endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(addon))
+                endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(this))
                         .environment(World.Environment.THE_END).createWorld();
             }
         }

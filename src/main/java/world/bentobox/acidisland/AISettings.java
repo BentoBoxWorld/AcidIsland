@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.bukkit.Difficulty;
@@ -14,7 +13,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 
-import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.configuration.ConfigComment;
 import world.bentobox.bentobox.api.configuration.ConfigEntry;
 import world.bentobox.bentobox.api.configuration.StoreAt;
@@ -164,7 +162,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("a new island for example. Options are SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR")
     @ConfigEntry(path = "world.default-game-mode")
     private GameMode defaultGameMode = GameMode.SURVIVAL;
-    
+
     @ConfigComment("The default biome for the overworld")
     @ConfigEntry(path = "world.default-biome")
     private Biome defaultBiome = Biome.WARM_OCEAN;
@@ -1244,10 +1242,6 @@ public class AISettings implements DataObject, WorldSettings {
         this.onLeaveResetEnderChest = onLeaveResetEnderChest;
     }
 
-    @Override
-    public Optional<Addon> getAddon() {
-        return Optional.of(AcidIsland.getInstance());
-    }
     /**
      * @return the defaultIslandProtection
      */
