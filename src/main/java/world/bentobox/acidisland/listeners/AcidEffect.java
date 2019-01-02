@@ -19,7 +19,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -41,7 +40,6 @@ public class AcidEffect implements Listener {
 
     private final AcidIsland addon;
     private final List<Player> burningPlayers = new ArrayList<>();
-    private boolean isRaining = false;
     private final List<Player> wetPlayers = new ArrayList<>();
     private final static List<PotionEffectType> EFFECTS = Arrays.asList(
             PotionEffectType.BLINDNESS,
@@ -87,12 +85,11 @@ public class AcidEffect implements Listener {
                 || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
             return;
         }
-
         // Slow checks
         Location playerLoc = player.getLocation();
         Biome biome = playerLoc.getBlock().getBiome();
         // Check for acid rain
-        if (addon.getSettings().getAcidRainDamage() > 0D && isRaining
+        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm()
                 && !biome.name().contains("DESERT")
                 && !biome.equals(Biome.NETHER)
                 && !biome.name().contains("SAVANNA")) {
@@ -110,7 +107,7 @@ public class AcidEffect implements Listener {
                     @Override
                     public void run() {
                         // Check if it is still raining or player is safe or dead or there is no damage
-                        if (!isRaining || player.isDead() || isSafeFromRain(player) || addon.getSettings().getAcidRainDamage() <= 0D) {
+                        if (!addon.getOverWorld().hasStorm() || player.isDead() || isSafeFromRain(player) || addon.getSettings().getAcidRainDamage() <= 0D) {
                             wetPlayers.remove(player);
                             this.cancel();
                             // Check they are still in this world
@@ -341,17 +338,4 @@ public class AcidEffect implements Listener {
         }
         return red;
     }
-
-    /**
-     * Tracks weather changes and acid rain
-     *
-     * @param e - event
-     */
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onWeatherChange(final WeatherChangeEvent e) {
-        if (e.getWorld().equals(addon.getOverWorld())) {
-            this.isRaining = e.toWeatherState();
-        }
-    }
-
 }
