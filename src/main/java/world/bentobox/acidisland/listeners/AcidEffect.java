@@ -20,6 +20,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -238,11 +240,13 @@ public class AcidEffect implements Listener {
     }
 
     /**
+     * Checks what protection armor provides and slightly damages it as a result of the acid
      * @param player - player
      * @return A double between 0.0 and 0.80 that reflects how much armor the
      *         player has on. The higher the value, the more protection they
      *         have.
      */
+    @SuppressWarnings("deprecation")
     private static double getDamageReduced(Player player) {
         org.bukkit.inventory.PlayerInventory inv = player.getInventory();
         ItemStack boots = inv.getBoots();
@@ -270,6 +274,8 @@ public class AcidEffect implements Listener {
             default:
                 break;
             }
+            // Damage
+            damage(helmet);
         }
         if (boots != null) {
             switch (boots.getType()) {
@@ -291,6 +297,8 @@ public class AcidEffect implements Listener {
             default:
                 break;
             }
+            // Damage
+            damage(boots);
         }
         // Pants
         if (pants != null) {
@@ -313,6 +321,8 @@ public class AcidEffect implements Listener {
             default:
                 break;
             }
+            // Damage
+            damage(pants);
         }
         // Chest plate
         if (chest != null) {
@@ -335,7 +345,18 @@ public class AcidEffect implements Listener {
             default:
                 break;
             }
+            // Damage
+            damage(chest);
         }
         return red;
+    }
+
+    private static void damage(ItemStack item) {
+        ItemMeta im = item.getItemMeta();
+        if (im instanceof Damageable) {
+            Damageable d = ((Damageable)item.getItemMeta());
+            d.setDamage(d.getDamage() + 1);
+            item.setItemMeta((ItemMeta) d);
+        }
     }
 }
