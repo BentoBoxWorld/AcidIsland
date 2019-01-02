@@ -36,14 +36,15 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
         if (world.getEnvironment().equals(World.Environment.NETHER)) {
             return generateNetherChunks(world, random, chunkX, chunkZ, biomeGrid);
         }
+        int seaHeight = world.getEnvironment().equals(World.Environment.NORMAL) ? addon.getSettings().getSeaHeight() : addon.getSettings().getEndSeaHeight();
         ChunkData result = createChunkData(world);
-        if (addon.getSettings().getSeaHeight() != 0) {
+        if (seaHeight != 0) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     if (world.getEnvironment().equals(Environment.NORMAL)) {
                         biomeGrid.setBiome(x, z, addon.getSettings().getDefaultBiome());
                     }
-                    for (int y = 0; y < addon.getSettings().getSeaHeight(); y++) {
+                    for (int y = 0; y < seaHeight; y++) {
                         result.setBlock(x, y, z, Material.WATER);
                     }
                 }
@@ -79,7 +80,7 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
         if (addon.getSettings().getSeaHeight() != 0) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
-                    for (int y = 0; y < addon.getSettings().getSeaHeight(); y++) {
+                    for (int y = 0; y < addon.getSettings().getNetherSeaHeight(); y++) {
                         result.setBlock(x, y, z, Material.WATER);
                     }
                 }

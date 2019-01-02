@@ -28,16 +28,22 @@ public class AcidIsland extends GameModeAddon {
     private static final String NETHER = "_nether";
     private static final String THE_END = "_the_end";
 
-
     @Override
     public void onLoad() {
         saveDefaultConfig();
         // Load settings
         settings = new Config<>(this, AISettings.class).loadConfigObject();
+        if (settings == null) {
+            // Woops
+            this.logError("Settings could not load! Addon disabled.");
+        }
     }
 
     @Override
     public void onEnable() {
+        if (settings == null) {
+            return;
+        }
         // Register listeners
         PluginManager manager = getServer().getPluginManager();
         // Acid Effects
@@ -52,6 +58,9 @@ public class AcidIsland extends GameModeAddon {
 
     @Override
     public void onDisable(){
+        if (settings == null) {
+            return;
+        }
         acidTask.cancelTasks();
         // Save settings
         if (settings != null) {
