@@ -3,3 +3,7 @@
 bin/
 *.class
 /target/
+/.classpath
+/.DS_Store
+/.project
+/.gitignore
