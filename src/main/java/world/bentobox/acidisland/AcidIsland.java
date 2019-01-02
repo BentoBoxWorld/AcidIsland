@@ -32,11 +32,21 @@ public class AcidIsland extends GameModeAddon {
     public void onLoad() {
         saveDefaultConfig();
         // Load settings
+        loadSettings();
+    }
+
+    private boolean loadSettings() {
         settings = new Config<>(this, AISettings.class).loadConfigObject();
         if (settings == null) {
             // Woops
-            this.logError("Settings could not load! Addon disabled.");
+            this.logError("AcidIsland settings could not load! Addon disabled.");
+            this.setState(State.DISABLED);
+            if (acidTask != null) {
+                acidTask.cancelTasks();
+            }
+            return false;
         }
+        return true;
     }
 
     @Override
@@ -116,6 +126,13 @@ public class AcidIsland extends GameModeAddon {
     @Override
     public WorldSettings getWorldSettings() {
         return settings;
+    }
+
+    @Override
+    public void onReload() {
+        if (loadSettings()) {
+            log("Reloaded AcidIsland settings");
+        }
     }
 
 }
