@@ -1,6 +1,6 @@
 name: AcidIsland
 main: world.bentobox.acidisland.AcidIsland
-version: ${version}
+version: ${project.version}
 
 authors: tastybento
 
