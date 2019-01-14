@@ -246,7 +246,6 @@ public class AcidEffect implements Listener {
      *         player has on. The higher the value, the more protection they
      *         have.
      */
-    @SuppressWarnings("deprecation")
     private static double getDamageReduced(Player player) {
         org.bukkit.inventory.PlayerInventory inv = player.getInventory();
         ItemStack boots = inv.getBoots();
