@@ -24,11 +24,10 @@ public class AcidEvent extends Event implements Cancellable {
     private List<PotionEffectType> potionEffects = new ArrayList<>();
 
     /**
-     * @param player
-     * @param totalDamage
-     * @param protection
-     * @param potionEffects
-     * @param cancelled
+     * @param player - player
+     * @param totalDamage - total damager
+     * @param protection - protection given by armor
+     * @param potionEffects - potion effects given to the player
      */
     public AcidEvent(Player player, double totalDamage, double protection, List<PotionEffectType> potionEffects) {
         this.player = player;
@@ -70,7 +69,7 @@ public class AcidEvent extends Event implements Cancellable {
     }
 
     /**
-     * @param acidDamage the rainDamage to set
+     * @param totalDamage to set
      */
     public void setTotalDamage(double totalDamage) {
         this.totalDamage = totalDamage;
