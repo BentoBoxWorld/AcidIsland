@@ -60,8 +60,8 @@ public class AcidIsland extends GameModeAddon {
         manager.registerEvents(new AcidEffect(this), this.getPlugin());
         manager.registerEvents(new LavaCheck(this), this.getPlugin());
         // Register commands
-        new AcidCommand(this, settings.getAdminCommand());
-        new AiCommand(this, settings.getIslandCommand());
+        adminCommand = new AcidCommand(this, settings.getAdminCommand());
+        playerCommand = new AiCommand(this, settings.getIslandCommand());
         // Burn everything
         acidTask = new AcidTask(this);
     }
