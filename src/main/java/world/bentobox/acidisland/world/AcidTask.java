@@ -7,8 +7,10 @@ import java.util.WeakHashMap;
 import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Drowned;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Guardian;
@@ -16,6 +18,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Squid;
+import org.bukkit.entity.Turtle;
 
 import world.bentobox.acidisland.AcidIsland;
 
@@ -36,14 +39,14 @@ public class AcidTask {
     }
 
     /**
-     * Start the entity buring task
+     * Start the entity burning task
      */
     private void burnEntities() {
         // This part will kill monsters if they fall into the water because it is acid
         entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getPlugin(), () -> getEntityStream()
-                .filter(e -> !(e instanceof Guardian || e instanceof Squid))
-                // TODO: remove backwards compatibility hack
-                .filter(w -> w.getLocation().getBlock().getType().name().contains("WATER"))
+                // These entities are immune to acid
+                .filter(e -> !(e instanceof Guardian || e instanceof Squid || e instanceof Turtle || e instanceof Drowned))
+                .filter(w -> w.getLocation().getBlock().getType().equals(Material.WATER))
                 .forEach(e -> {
                     if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
                         ((LivingEntity) e).damage(addon.getSettings().getAcidDamageMonster());
