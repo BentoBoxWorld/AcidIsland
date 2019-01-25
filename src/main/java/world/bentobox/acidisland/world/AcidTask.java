@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Drowned;
 import org.bukkit.entity.Entity;
@@ -57,6 +58,9 @@ public class AcidTask {
                 }), 0L, 20L);
     }
 
+    /**
+     * @return a stream of all entities in this world and the nether and end if those are island worlds too.
+     */
     private Stream<Entity> getEntityStream() {
         Stream<Entity> entityStream = addon.getOverWorld().getEntities().stream();
         // Nether and end
@@ -78,9 +82,10 @@ public class AcidTask {
         }
         itemBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getPlugin(), () -> {
             Set<Entity> newItemsInWater = new HashSet<>();
-            getEntityStream().filter(e -> e.getType().equals(EntityType.DROPPED_ITEM)
-                    && (e.getLocation().getBlock().getType().name().contains("WATER"))
-                    )
+            getEntityStream()
+            .filter(e -> e.getType().equals(EntityType.DROPPED_ITEM))
+            .filter(e -> e.getLocation().getBlock().getType().equals(Material.WATER) 
+                    || (e.getLocation().getY() > 0 && e.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER)))          
             .forEach(e -> {
                 if (itemsInWater.contains(e)) {
                     e.getWorld().playSound(e.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
