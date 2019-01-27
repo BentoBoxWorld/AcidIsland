@@ -3,7 +3,9 @@ package world.bentobox.acidisland;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
+import org.eclipse.jdt.annotation.NonNull;
 
 import world.bentobox.acidisland.commands.AcidCommand;
 import world.bentobox.acidisland.commands.AiCommand;
@@ -24,6 +26,7 @@ public class AcidIsland extends GameModeAddon {
 
     private AISettings settings;
     private AcidTask acidTask;
+    private @NonNull ChunkGenerator chunkGenerator;
 
     private static final String NETHER = "_nether";
     private static final String THE_END = "_the_end";
@@ -94,7 +97,8 @@ public class AcidIsland extends GameModeAddon {
             getLogger().info("Creating AcidIsland...");
         }
         // Create the world if it does not exist
-        islandWorld = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(new ChunkGeneratorWorld(this))
+        chunkGenerator = new ChunkGeneratorWorld(this);
+        islandWorld = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(chunkGenerator)
                 .createWorld();
 
         // Make the nether if it does not exist
@@ -105,7 +109,7 @@ public class AcidIsland extends GameModeAddon {
             if (!settings.isNetherIslands()) {
                 netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.NORMAL).environment(World.Environment.NETHER).createWorld();
             } else {
-                netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(this))
+                netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.FLAT).generator(chunkGenerator)
                         .environment(World.Environment.NETHER).createWorld();
             }
         }
@@ -117,7 +121,7 @@ public class AcidIsland extends GameModeAddon {
             if (!settings.isEndIslands()) {
                 endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.NORMAL).environment(World.Environment.THE_END).createWorld();
             } else {
-                endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.FLAT).generator(new ChunkGeneratorWorld(this))
+                endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.FLAT).generator(chunkGenerator)
                         .environment(World.Environment.THE_END).createWorld();
             }
         }
@@ -133,6 +137,11 @@ public class AcidIsland extends GameModeAddon {
         if (loadSettings()) {
             log("Reloaded AcidIsland settings");
         }
+    }
+
+    @Override
+    public @NonNull ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+        return chunkGenerator;
     }
 
 }
