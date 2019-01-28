@@ -23,7 +23,7 @@ public class IslandAboutCommand extends CompositeCommand {
     @Override
     public boolean execute(User user, String label, List<String> args) {
         user.sendRawMessage("About " + getAddon().getDescription().getName() + " " + getAddon().getDescription().getVersion() + ":");
-        user.sendRawMessage("Copyright (c) 2017 - 2018 tastybento");
+        user.sendRawMessage("Copyright (c) 2017 - 2019 tastybento");
         user.sendRawMessage("See https://www.eclipse.org/legal/epl-2.0/ for license information.");
         return true;
     }
