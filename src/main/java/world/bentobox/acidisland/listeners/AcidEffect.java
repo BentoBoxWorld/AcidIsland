@@ -43,13 +43,35 @@ public class AcidEffect implements Listener {
     private final AcidIsland addon;
     private final List<Player> burningPlayers = new ArrayList<>();
     private final List<Player> wetPlayers = new ArrayList<>();
-    private final static List<PotionEffectType> EFFECTS = Arrays.asList(
+    private static final List<PotionEffectType> EFFECTS = Arrays.asList(
             PotionEffectType.BLINDNESS,
             PotionEffectType.CONFUSION,
             PotionEffectType.HUNGER,
             PotionEffectType.SLOW,
             PotionEffectType.SLOW_DIGGING,
             PotionEffectType.WEAKNESS);
+
+    private static final List<Biome> DRY_BIOMES = Arrays.asList(
+            Biome.BADLANDS,
+            Biome.BADLANDS_PLATEAU,
+            Biome.DESERT,
+            Biome.DESERT_HILLS,
+            Biome.DESERT_LAKES,
+            Biome.END_BARRENS,
+            Biome.END_HIGHLANDS,
+            Biome.END_MIDLANDS,
+            Biome.ERODED_BADLANDS,
+            Biome.MODIFIED_BADLANDS_PLATEAU,
+            Biome.MODIFIED_WOODED_BADLANDS_PLATEAU,
+            Biome.NETHER,
+            Biome.SAVANNA,
+            Biome.SAVANNA_PLATEAU,
+            Biome.SHATTERED_SAVANNA,
+            Biome.SHATTERED_SAVANNA_PLATEAU,
+            Biome.SMALL_END_ISLANDS,
+            Biome.THE_END,
+            Biome.THE_VOID,
+            Biome.WOODED_BADLANDS_PLATEAU);
 
     public AcidEffect(AcidIsland addon) {
         this.addon = addon;
@@ -91,10 +113,7 @@ public class AcidEffect implements Listener {
         Location playerLoc = player.getLocation();
         Biome biome = playerLoc.getBlock().getBiome();
         // Check for acid rain
-        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm()
-                && !biome.name().contains("DESERT")
-                && !biome.equals(Biome.NETHER)
-                && !biome.name().contains("SAVANNA")) {
+        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm() && !DRY_BIOMES.contains(biome)) {
             if (isSafeFromRain(player)) {
                 wetPlayers.remove(player);
             } else if (!wetPlayers.contains(player)) {
