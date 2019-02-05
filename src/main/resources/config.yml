@@ -70,7 +70,7 @@ world:
   use-own-generator: false
   # Sea height (don't changes this mid-game unless you delete the world)
   # Minimum is 0, which means you are playing Skyblock!
-  sea-height: 55
+  sea-height: 54
   # Maximum number of islands in the world. Set to -1 or 0 for unlimited.
   # If the number of islands is greater than this number, no new island will be created.
   max-islands: 0
@@ -94,7 +94,7 @@ world:
     islands: true
     # Sea height in Nether. Only operates if nether islands is true.
     # Changing mid-game will cause problems!
-    sea-height: 55
+    sea-height: 54
     # Nether trees are made if a player grows a tree in the nether (gravel and glowstone)
     # Applies to both vanilla and islands Nether
     trees: true
@@ -115,7 +115,7 @@ world:
     islands: true
     # Sea height in The End. Only operates if end islands is true.
     # Changing mid-game will cause problems!
-    sea-height: 55
+    sea-height: 54
     # /!\ This feature is experimental and might not work as expected or might not work at all.
     dragon-spawn: false
   # Removing mobs - this kills all monsters in the vicinity. Benefit is that it helps

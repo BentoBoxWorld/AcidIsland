@@ -149,7 +149,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("Sea height (don't changes this mid-game unless you delete the world)")
     @ConfigComment("Minimum is 0, which means you are playing Skyblock!")
     @ConfigEntry(path = "world.sea-height")
-    private int seaHeight = 55;
+    private int seaHeight = 54;
 
     @ConfigComment("Maximum number of islands in the world. Set to -1 or 0 for unlimited. ")
     @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
@@ -187,7 +187,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("Sea height in Nether. Only operates if nether islands is true.")
     @ConfigComment("Changing mid-game will cause problems!")
     @ConfigEntry(path = "world.nether.sea-height", needsReset = true)
-    private int netherSeaHeight = 55;
+    private int netherSeaHeight = 54;
 
     @ConfigComment("Nether trees are made if a player grows a tree in the nether (gravel and glowstone)")
     @ConfigComment("Applies to both vanilla and islands Nether")
@@ -220,7 +220,7 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("Sea height in The End. Only operates if end islands is true.")
     @ConfigComment("Changing mid-game will cause problems!")
     @ConfigEntry(path = "world.end.sea-height", needsReset = true)
-    private int endSeaHeight = 55;
+    private int endSeaHeight = 54;
 
     @ConfigEntry(path = "world.end.dragon-spawn", experimental = true)
     private boolean dragonSpawn = false;
