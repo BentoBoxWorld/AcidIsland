@@ -288,13 +288,6 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "island.reset.reset-limit")
     private int resetLimit = -1;
 
-    @ConfigEntry(path = "island.require-confirmation.reset")
-    private boolean resetConfirmation = true;
-
-    @ConfigComment("How long a player must wait before they can reset their island again in second")
-    @ConfigEntry(path = "island.reset-wait")
-    private long resetWait = 300;
-
     @ConfigComment("Kicked or leaving players lose resets")
     @ConfigComment("Players who leave a team will lose an island reset chance")
     @ConfigComment("If a player has zero resets left and leaves a team, they cannot make a new")
@@ -343,15 +336,6 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "island.reset.on-leave.ender-chest")
     private boolean onLeaveResetEnderChest = false;
 
-    @ConfigEntry(path = "island.make-island-if-none")
-    private boolean makeIslandIfNone = false;
-    @ConfigComment("Immediately teleport player to their island (home 1 if it exists) when entering the world")
-    @ConfigEntry(path = "island.immediate-teleport-on-island")
-    private boolean immediateTeleportOnIsland = false;
-    @ConfigComment("Have player's respawn on their island if they die")
-    @ConfigEntry(path = "island.respawn-on-island")
-    private boolean respawnOnIsland = true;
-
     // Sethome
     @ConfigEntry(path = "island.sethome.nether.allow")
     private boolean allowSetHomeInNether = true;
@@ -398,27 +382,6 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("Make list blank if visitors should receive all damages")
     @ConfigEntry(path = "protection.invincible-visitors")
     private List<String> ivSettings = new ArrayList<>();
-
-    // ---------------------------------------------
-
-    // Timeout for team kick and leave commands
-    @ConfigComment("Ask the player to confirm the command he is using by typing it again.")
-    @ConfigComment("The 'wait' value is the number of seconds to wait for confirmation.")
-    @ConfigEntry(path = "island.require-confirmation.kick")
-    private boolean kickConfirmation = true;
-
-    @ConfigEntry(path = "island.require-confirmation.kick-wait")
-    private long kickWait = 10L;
-
-    @ConfigEntry(path = "island.require-confirmation.leave")
-    private boolean leaveConfirmation = true;
-
-    @ConfigEntry(path = "island.require-confirmation.leave-wait")
-    private long leaveWait = 10L;
-
-    @ConfigComment("Whether GUIs should be closed when the player clicks outside.")
-    @ConfigEntry(path = "panel.close-on-click-outside")
-    private boolean closePanelOnClickOutside = true;
 
     //---------------------------------------------------------------------------------------/
     @ConfigComment("These settings should not be edited")
@@ -601,18 +564,6 @@ public class AISettings implements DataObject, WorldSettings {
         return ivSettings;
     }
     /**
-     * @return the kickWait
-     */
-    public long getKickWait() {
-        return kickWait;
-    }
-    /**
-     * @return the leaveWait
-     */
-    public long getLeaveWait() {
-        return leaveWait;
-    }
-    /**
      * @return the maxHomes
      */
     @Override
@@ -679,12 +630,6 @@ public class AISettings implements DataObject, WorldSettings {
     @Override
     public int getResetLimit() {
         return resetLimit;
-    }
-    /**
-     * @return the resetWait
-     */
-    public long getResetWait() {
-        return resetWait;
     }
     /**
      * @return the seaHeight
@@ -755,12 +700,6 @@ public class AISettings implements DataObject, WorldSettings {
         return allowSetHomeInTheEnd;
     }
     /**
-     * @return whether panels should close when clicked outside or not
-     */
-    public boolean isClosePanelOnClickOutside() {
-        return closePanelOnClickOutside;
-    }
-    /**
      * @return the isDeathsCounted
      */
     @Override
@@ -807,45 +746,17 @@ public class AISettings implements DataObject, WorldSettings {
         return helmetProtection;
     }
     /**
-     * @return the immediateTeleportOnIsland
-     */
-    public boolean isImmediateTeleportOnIsland() {
-        return immediateTeleportOnIsland;
-    }
-    /**
-     * @return the kickConfirmation
-     */
-    public boolean isKickConfirmation() {
-        return kickConfirmation;
-    }
-    /**
      * @return the kickedKeepInventory
      */
     public boolean isKickedKeepInventory() {
         return kickedKeepInventory;
     }
-
-    /**
-     * @return the leaveConfirmation
-     */
-    public boolean isLeaveConfirmation() {
-        return leaveConfirmation;
-    }
-
     /**
      * @return the leaversLoseReset
      */
     public boolean isLeaversLoseReset() {
         return leaversLoseReset;
     }
-
-    /**
-     * @return the makeIslandIfNone
-     */
-    public boolean isMakeIslandIfNone() {
-        return makeIslandIfNone;
-    }
-
     /**
      * @return the netherGenerate
      */
@@ -928,18 +839,6 @@ public class AISettings implements DataObject, WorldSettings {
     @Override
     public boolean isRequireConfirmationToSetHomeInTheEnd() {
         return requireConfirmationToSetHomeInTheEnd;
-    }
-    /**
-     * @return the resetConfirmation
-     */
-    public boolean isResetConfirmation() {
-        return resetConfirmation;
-    }
-    /**
-     * @return the respawnOnIsland
-     */
-    public boolean isRespawnOnIsland() {
-        return respawnOnIsland;
     }
     @Override
     public boolean isTeamJoinDeathReset() {
@@ -1026,13 +925,6 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setBanLimit(int banLimit) {
         this.banLimit = banLimit;
-    }
-    /**
-     * Set panel close on click outside
-     * @param closePanelOnClickOutside - true means close panel when click is outside panel
-     */
-    public void setClosePanelOnClickOutside(boolean closePanelOnClickOutside) {
-        this.closePanelOnClickOutside = closePanelOnClickOutside;
     }
     /**
      * @param customRanks the customRanks to set
@@ -1132,14 +1024,6 @@ public class AISettings implements DataObject, WorldSettings {
     public void setHelmetProtection(boolean helmetProtection) {
         this.helmetProtection = helmetProtection;
     }
-
-    /**
-     * @param immediateTeleportOnIsland the immediateTeleportOnIsland to set
-     */
-    public void setImmediateTeleportOnIsland(boolean immediateTeleportOnIsland) {
-        this.immediateTeleportOnIsland = immediateTeleportOnIsland;
-    }
-
     /**
      * @param islandCommand what you want your island command to be
      */
@@ -1196,46 +1080,16 @@ public class AISettings implements DataObject, WorldSettings {
         this.ivSettings = ivSettings;
     }
     /**
-     * @param kickConfirmation the kickConfirmation to set
-     */
-    public void setKickConfirmation(boolean kickConfirmation) {
-        this.kickConfirmation = kickConfirmation;
-    }
-    /**
      * @param kickedKeepInventory the kickedKeepInventory to set
      */
     public void setKickedKeepInventory(boolean kickedKeepInventory) {
         this.kickedKeepInventory = kickedKeepInventory;
     }
     /**
-     * @param kickWait the kickWait to set
-     */
-    public void setKickWait(long kickWait) {
-        this.kickWait = kickWait;
-    }
-    /**
-     * @param leaveConfirmation the leaveConfirmation to set
-     */
-    public void setLeaveConfirmation(boolean leaveConfirmation) {
-        this.leaveConfirmation = leaveConfirmation;
-    }
-    /**
      * @param leaversLoseReset the leaversLoseReset to set
      */
     public void setLeaversLoseReset(boolean leaversLoseReset) {
         this.leaversLoseReset = leaversLoseReset;
-    }
-    /**
-     * @param leaveWait the leaveWait to set
-     */
-    public void setLeaveWait(long leaveWait) {
-        this.leaveWait = leaveWait;
-    }
-    /**
-     * @param makeIslandIfNone the makeIslandIfNone to set
-     */
-    public void setMakeIslandIfNone(boolean makeIslandIfNone) {
-        this.makeIslandIfNone = makeIslandIfNone;
     }
     /**
      * @param maxHomes the maxHomes to set
@@ -1356,13 +1210,6 @@ public class AISettings implements DataObject, WorldSettings {
     public void setRequireConfirmationToSetHomeInTheEnd(boolean requireConfirmationToSetHomeInTheEnd) {
         this.requireConfirmationToSetHomeInTheEnd = requireConfirmationToSetHomeInTheEnd;
     }
-
-    /**
-     * @param resetConfirmation the resetConfirmation to set
-     */
-    public void setResetConfirmation(boolean resetConfirmation) {
-        this.resetConfirmation = resetConfirmation;
-    }
     @Override
     public void setResetEpoch(long timestamp) {
         this.resetEpoch = timestamp;
@@ -1373,20 +1220,6 @@ public class AISettings implements DataObject, WorldSettings {
     public void setResetLimit(int resetLimit) {
         this.resetLimit = resetLimit;
     }
-    /**
-     * @param resetWait the resetWait to set
-     */
-    public void setResetWait(long resetWait) {
-        this.resetWait = resetWait;
-    }
-
-    /**
-     * @param respawnOnIsland the respawnOnIsland to set
-     */
-    public void setRespawnOnIsland(boolean respawnOnIsland) {
-        this.respawnOnIsland = respawnOnIsland;
-    }
-
     /**
      * @param seaHeight the seaHeight to set
      */

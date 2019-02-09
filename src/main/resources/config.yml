@@ -273,21 +273,6 @@ island:
       inventory: false
       # Reset Ender Chest - if true, the player's Ender Chest will be cleared.
       ender-chest: false
-  require-confirmation:
-    reset: true
-    # Ask the player to confirm the command he is using by typing it again.
-    # The 'wait' value is the number of seconds to wait for confirmation.
-    kick: true
-    kick-wait: 10
-    leave: true
-    leave-wait: 10
-  # How long a player must wait before they can reset their island again in second
-  reset-wait: 300
-  make-island-if-none: false
-  # Immediately teleport player to their island (home 1 if it exists) when entering the world
-  immediate-teleport-on-island: false
-  # Have player's respawn on their island if they die
-  respawn-on-island: false
   sethome:
     nether:
       allow: true
@@ -335,9 +320,6 @@ protection:
     - HOT_FLOOR
     - CRAMMING
     - VOID
-panel:
-  # Whether GUIs should be closed when the player clicks outside.
-  close-on-click-outside: true
 do-not-edit-these-settings:
   # These settings should not be edited
   reset-epoch: 0
