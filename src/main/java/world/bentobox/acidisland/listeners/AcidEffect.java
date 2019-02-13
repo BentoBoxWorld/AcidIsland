@@ -111,9 +111,8 @@ public class AcidEffect implements Listener {
         }
         // Slow checks
         Location playerLoc = player.getLocation();
-        Biome biome = playerLoc.getBlock().getBiome();
         // Check for acid rain
-        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm() && !DRY_BIOMES.contains(biome)) {
+        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm()) {
             if (isSafeFromRain(player)) {
                 wetPlayers.remove(player);
             } else if (!wetPlayers.contains(player)) {
@@ -192,7 +191,8 @@ public class AcidEffect implements Listener {
      */
     private boolean isSafeFromRain(Player player) {
         if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
-                && player.getInventory().getHelmet().getType().name().contains("HELMET"))) {
+                && player.getInventory().getHelmet().getType().name().contains("HELMET"))
+                || (DRY_BIOMES.contains(player.getLocation().getBlock().getBiome()))) {
             return true;
         }
         // Check potions
