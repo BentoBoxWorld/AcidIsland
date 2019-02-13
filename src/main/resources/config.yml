@@ -1,7 +1,4 @@
-# AcidIsland Configuration 1.0
-# This config file is dynamic and saved when the server is shutdown.
-# You cannot edit it while the server is running because changes will
-# be lost! Use in-game settings GUI or edit when server is offline.
+# AcidIsland Configuration ${version}
 acid:
   # Acid can damage ops or not
   damage-op: true

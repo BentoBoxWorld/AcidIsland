@@ -49,6 +49,8 @@ public class AcidIsland extends GameModeAddon {
             }
             return false;
         }
+        // Save settings
+        new Config<>(this, AISettings.class).saveConfigObject(settings);
         return true;
     }
 
@@ -75,10 +77,6 @@ public class AcidIsland extends GameModeAddon {
             return;
         }
         acidTask.cancelTasks();
-        // Save settings
-        if (settings != null) {
-            new Config<>(this, AISettings.class).saveConfigObject(settings);
-        }
     }
 
     public AISettings getSettings() {
