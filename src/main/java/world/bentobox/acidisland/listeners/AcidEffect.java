@@ -2,7 +2,6 @@ package world.bentobox.acidisland.listeners;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.bukkit.GameMode;
@@ -11,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,7 +48,9 @@ public class AcidEffect implements Listener {
             PotionEffectType.SLOW,
             PotionEffectType.SLOW_DIGGING,
             PotionEffectType.WEAKNESS);
-
+    private static final List<PotionEffectType> IMMUNE_EFFECTS = Arrays.asList(
+            PotionEffectType.WATER_BREATHING,
+            PotionEffectType.CONDUIT_POWER);
     private static final List<Biome> DRY_BIOMES = Arrays.asList(
             Biome.BADLANDS,
             Biome.BADLANDS_PLATEAU,
@@ -192,15 +192,9 @@ public class AcidEffect implements Listener {
     private boolean isSafeFromRain(Player player) {
         if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
                 && player.getInventory().getHelmet().getType().name().contains("HELMET"))
-                || (DRY_BIOMES.contains(player.getLocation().getBlock().getBiome()))) {
+                || (DRY_BIOMES.contains(player.getLocation().getBlock().getBiome()))
+                || (player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains))) {
             return true;
-        }
-        // Check potions
-        for (PotionEffect s : player.getActivePotionEffects()) {
-            if (s.getType().equals(PotionEffectType.WATER_BREATHING)) {
-                // Safe!
-                return true;
-            }
         }
         // Check if all air above player
         for (int y = player.getLocation().getBlockY() + 2; y < player.getLocation().getWorld().getMaxHeight(); y++) {
@@ -214,48 +208,26 @@ public class AcidEffect implements Listener {
     /**
      * Check if player can be burned by acid
      * @param player - player
-     * @return true if player is not safe
+     * @return true if player is safe
      */
     private boolean isSafeFromAcid(Player player) {
         // In liquid
-        Material bodyMat = player.getLocation().getBlock().getType();
-        Material headMat = player.getLocation().getBlock().getRelative(BlockFace.UP).getType();
-        // TODO: remove backwards compatibility hack
-        if (bodyMat.name().contains("WATER"))
-            bodyMat = Material.WATER;
-        if (headMat.name().contains("WATER"))
-            headMat = Material.WATER;
-        if (bodyMat != Material.WATER && headMat != Material.WATER) {
+        if (!player.getLocation().getBlock().getType().equals(Material.WATER)
+                && !player.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.WATER)) {
             return true;
         }
         // Check if player is in a boat
-        Entity playersVehicle = player.getVehicle();
-        if (playersVehicle != null && playersVehicle.getType().equals(EntityType.BOAT)) {
-            // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT!
+        if (player.getVehicle() != null && player.getVehicle().getType().equals(EntityType.BOAT)) {
+            // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT! SNL Sketch.
             return true;
         }
         // Check if full armor protects
-        if (addon.getSettings().isFullArmorProtection()) {
-            boolean fullArmor = true;
-            for (ItemStack item : player.getInventory().getArmorContents()) {
-                if (item == null || item.getType().equals(Material.AIR)) {
-                    fullArmor = false;
-                    break;
-                }
-            }
-            if (fullArmor) {
-                return true;
-            }
+        if (addon.getSettings().isFullArmorProtection()
+                && Arrays.stream(player.getInventory().getArmorContents()).allMatch(i -> i != null && !i.getType().equals(Material.AIR))) {
+            return true;
         }
         // Check if player has an active water potion or not
-        Collection<PotionEffect> activePotions = player.getActivePotionEffects();
-        for (PotionEffect s : activePotions) {
-            if (s.getType().equals(PotionEffectType.WATER_BREATHING)) {
-                // Safe!
-                return true;
-            }
-        }
-        return false;
+        return player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains);
     }
 
     /**
