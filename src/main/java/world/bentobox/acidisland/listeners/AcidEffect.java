@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -146,7 +147,7 @@ public class AcidEffect implements Listener {
                             // Check they are still in this world
                         } else {
                             double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
-                            double totalDamage = (addon.getSettings().getAcidRainDamage() - protection);
+                            double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection);
                             AcidRainEvent e = new AcidRainEvent(player, totalDamage, protection);
                             addon.getServer().getPluginManager().callEvent(e);
                             if (!e.isCancelled()) {
@@ -180,7 +181,7 @@ public class AcidEffect implements Listener {
                     this.cancel();
                 } else {
                     double protection = addon.getSettings().getAcidDamage() * getDamageReduced(player);
-                    double totalDamage = addon.getSettings().getAcidDamage() - protection;
+                    double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection);
                     AcidEvent acidEvent = new AcidEvent(player, totalDamage, protection, addon.getSettings().getAcidEffects());
                     addon.getServer().getPluginManager().callEvent(acidEvent);
                     if (!acidEvent.isCancelled()) {
@@ -250,7 +251,7 @@ public class AcidEffect implements Listener {
      *         player has on. The higher the value, the more protection they
      *         have.
      */
-    private static double getDamageReduced(Player player) {
+    private double getDamageReduced(Player player) {
         org.bukkit.inventory.PlayerInventory inv = player.getInventory();
         ItemStack boots = inv.getBoots();
         ItemStack helmet = inv.getHelmet();
@@ -260,23 +261,26 @@ public class AcidEffect implements Listener {
         if (helmet != null) {
             switch (helmet.getType()) {
             case LEATHER_HELMET:
-                red = red + 0.04;
+                red += 0.04;
                 break;
             case GOLDEN_HELMET:
-                red = red + 0.08;
+                red += 0.08;
                 break;
             case CHAINMAIL_HELMET:
-                red = red + 0.08;
+                red += 0.08;
                 break;
             case IRON_HELMET:
-                red = red + 0.08;
+                red += 0.08;
                 break;
             case DIAMOND_HELMET:
-                red = red + 0.12;
+                red += 0.12;
                 break;
             default:
                 break;
             }
+            // Check respiration (Bukkit name OXYGEN) enchantment
+            // Each level gives the same protection as a diamond helmet
+            red += helmet.getEnchantments().getOrDefault(Enchantment.OXYGEN, 0) * 0.12;
             // Damage
             damage(helmet);
         }
@@ -354,7 +358,7 @@ public class AcidEffect implements Listener {
         return red;
     }
 
-    private static void damage(ItemStack item) {
+    private void damage(ItemStack item) {
         ItemMeta im = item.getItemMeta();
         if (im instanceof Damageable) {
             Damageable d = ((Damageable)item.getItemMeta());
