@@ -51,7 +51,8 @@ public class AcidEffect implements Listener {
     private static final List<PotionEffectType> IMMUNE_EFFECTS = Arrays.asList(
             PotionEffectType.WATER_BREATHING,
             PotionEffectType.CONDUIT_POWER);
-    private static final List<Biome> DRY_BIOMES = Arrays.asList(
+    private static final List<Biome> NO_ACID_RAIN_BIOMES = Arrays.asList(
+            // Dry biomes
             Biome.BADLANDS,
             Biome.BADLANDS_PLATEAU,
             Biome.DESERT,
@@ -71,7 +72,19 @@ public class AcidEffect implements Listener {
             Biome.SMALL_END_ISLANDS,
             Biome.THE_END,
             Biome.THE_VOID,
-            Biome.WOODED_BADLANDS_PLATEAU);
+            Biome.WOODED_BADLANDS_PLATEAU,
+            // Cold biomes - snow doesn't burn either
+            Biome.MOUNTAINS,
+            Biome.GRAVELLY_MOUNTAINS,
+            Biome.MODIFIED_GRAVELLY_MOUNTAINS,
+            Biome.WOODED_MOUNTAINS,
+            Biome.TAIGA,
+            Biome.TAIGA_MOUNTAINS,
+            Biome.TAIGA_HILLS,
+            Biome.GIANT_SPRUCE_TAIGA,
+            Biome.GIANT_SPRUCE_TAIGA_HILLS,
+            Biome.STONE_SHORE
+            );
 
     public AcidEffect(AcidIsland addon) {
         this.addon = addon;
@@ -192,7 +205,7 @@ public class AcidEffect implements Listener {
     private boolean isSafeFromRain(Player player) {
         if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
                 && player.getInventory().getHelmet().getType().name().contains("HELMET"))
-                || (DRY_BIOMES.contains(player.getLocation().getBlock().getBiome()))
+                || (NO_ACID_RAIN_BIOMES.contains(player.getLocation().getBlock().getBiome()))
                 || (player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains))) {
             return true;
         }
