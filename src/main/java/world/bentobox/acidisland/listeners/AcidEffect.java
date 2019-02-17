@@ -8,7 +8,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -52,40 +51,6 @@ public class AcidEffect implements Listener {
     private static final List<PotionEffectType> IMMUNE_EFFECTS = Arrays.asList(
             PotionEffectType.WATER_BREATHING,
             PotionEffectType.CONDUIT_POWER);
-    private static final List<Biome> NO_ACID_RAIN_BIOMES = Arrays.asList(
-            // Dry biomes
-            Biome.BADLANDS,
-            Biome.BADLANDS_PLATEAU,
-            Biome.DESERT,
-            Biome.DESERT_HILLS,
-            Biome.DESERT_LAKES,
-            Biome.END_BARRENS,
-            Biome.END_HIGHLANDS,
-            Biome.END_MIDLANDS,
-            Biome.ERODED_BADLANDS,
-            Biome.MODIFIED_BADLANDS_PLATEAU,
-            Biome.MODIFIED_WOODED_BADLANDS_PLATEAU,
-            Biome.NETHER,
-            Biome.SAVANNA,
-            Biome.SAVANNA_PLATEAU,
-            Biome.SHATTERED_SAVANNA,
-            Biome.SHATTERED_SAVANNA_PLATEAU,
-            Biome.SMALL_END_ISLANDS,
-            Biome.THE_END,
-            Biome.THE_VOID,
-            Biome.WOODED_BADLANDS_PLATEAU,
-            // Cold biomes - snow doesn't burn either
-            Biome.MOUNTAINS,
-            Biome.GRAVELLY_MOUNTAINS,
-            Biome.MODIFIED_GRAVELLY_MOUNTAINS,
-            Biome.WOODED_MOUNTAINS,
-            Biome.TAIGA,
-            Biome.TAIGA_MOUNTAINS,
-            Biome.TAIGA_HILLS,
-            Biome.GIANT_SPRUCE_TAIGA,
-            Biome.GIANT_SPRUCE_TAIGA_HILLS,
-            Biome.STONE_SHORE
-            );
 
     public AcidEffect(AcidIsland addon) {
         this.addon = addon;
@@ -206,7 +171,8 @@ public class AcidEffect implements Listener {
     private boolean isSafeFromRain(Player player) {
         if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
                 && player.getInventory().getHelmet().getType().name().contains("HELMET"))
-                || (NO_ACID_RAIN_BIOMES.contains(player.getLocation().getBlock().getBiome()))
+                || player.getLocation().getBlock().getTemperature() < 0.1 // snow falls
+                || player.getLocation().getBlock().getHumidity() == 0 // dry
                 || (player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains))) {
             return true;
         }
