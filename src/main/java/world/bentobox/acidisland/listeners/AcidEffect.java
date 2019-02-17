@@ -248,7 +248,10 @@ public class AcidEffect implements Listener {
             // Each level gives the same protection as a diamond helmet
             red += helmet.getEnchantments().getOrDefault(Enchantment.OXYGEN, 0) * 0.12;
             // Damage
-            damage(helmet);
+            if (damage(helmet)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                inv.setHelmet(null);
+            }
         }
         if (boots != null) {
             switch (boots.getType()) {
@@ -271,7 +274,10 @@ public class AcidEffect implements Listener {
                 break;
             }
             // Damage
-            damage(boots);
+            if (damage(boots)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                inv.setBoots(null);
+            }
         }
         // Pants
         if (pants != null) {
@@ -295,7 +301,10 @@ public class AcidEffect implements Listener {
                 break;
             }
             // Damage
-            damage(pants);
+            if (damage(pants)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                inv.setLeggings(null);
+            }
         }
         // Chest plate
         if (chest != null) {
@@ -319,17 +328,23 @@ public class AcidEffect implements Listener {
                 break;
             }
             // Damage
-            damage(chest);
+            if (damage(chest)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                inv.setChestplate(null);
+            }
         }
         return red;
     }
 
-    private void damage(ItemStack item) {
+    private boolean damage(ItemStack item) {
         ItemMeta im = item.getItemMeta();
+
         if (im instanceof Damageable) {
             Damageable d = ((Damageable)item.getItemMeta());
             d.setDamage(d.getDamage() + 1);
             item.setItemMeta((ItemMeta) d);
+            return d.getDamage() >= item.getType().getMaxDurability();
         }
+        return false;
     }
 }
