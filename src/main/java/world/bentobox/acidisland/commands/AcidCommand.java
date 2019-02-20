@@ -5,6 +5,7 @@ import java.util.List;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminDeleteCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminEmptyTrashCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminGetrankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminInfoCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminRegisterCommand;
@@ -12,7 +13,9 @@ import world.bentobox.bentobox.api.commands.admin.AdminReloadCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminResetFlagsCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSetrankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSetspawnCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminSwitchtoCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminTeleportCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminTrashCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminUnregisterCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminVersionCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminWhyCommand;
@@ -72,6 +75,10 @@ public class AcidCommand extends CompositeCommand {
         new AdminSetspawnCommand(this);
         // Reset flags
         new AdminResetFlagsCommand(this);
+        // Trash
+        new AdminTrashCommand(this);
+        new AdminEmptyTrashCommand(this);
+        new AdminSwitchtoCommand(this);
 
     }
 
