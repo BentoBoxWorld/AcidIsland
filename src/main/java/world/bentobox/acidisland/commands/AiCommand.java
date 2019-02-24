@@ -19,6 +19,7 @@ import world.bentobox.bentobox.api.commands.island.IslandSettingsCommand;
 import world.bentobox.bentobox.api.commands.island.IslandSpawnCommand;
 import world.bentobox.bentobox.api.commands.island.IslandUnbanCommand;
 import world.bentobox.bentobox.api.commands.island.team.IslandTeamCommand;
+import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 
 public class AiCommand extends CompositeCommand {
@@ -71,7 +72,7 @@ public class AiCommand extends CompositeCommand {
             // No islands currently
             return getSubCommand("create").map(createCmd -> createCmd.execute(user, label, new ArrayList<>())).orElse(false);
         }
-        user.sendMessage("general.errors.unknown-command", "[label]", getLabel());
+        user.sendMessage("general.errors.unknown-command", TextVariables.LABEL, getLabel());
         return false;
 
     }

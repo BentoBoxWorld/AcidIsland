@@ -27,6 +27,7 @@ import world.bentobox.bentobox.api.commands.admin.team.AdminTeamAddCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamDisbandCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamKickCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamSetownerCommand;
+import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 
 public class AcidCommand extends CompositeCommand {
@@ -37,10 +38,12 @@ public class AcidCommand extends CompositeCommand {
 
     @Override
     public void setup() {
-        setPermission("acidisland.admin.*");
+        setPermission("admin");
         setOnlyPlayer(false);
         setParametersHelp("commands.admin.help.parameters");
         setDescription("commands.admin.help.description");
+        
+        // Commands
         new AdminVersionCommand(this);
         new AdminTeleportCommand(this, "tp");
         new AdminTeleportCommand(this, "tpnether");
@@ -85,7 +88,7 @@ public class AcidCommand extends CompositeCommand {
     @Override
     public boolean execute(User user, String label, List<String> args) {
         if (!args.isEmpty()) {
-            user.sendMessage("general.errors.unknown-command", "[label]", "acid");
+            user.sendMessage("general.errors.unknown-command", TextVariables.LABEL, label);
             return false;
         }
         // By default run the attached help command, if it exists (it should)
