@@ -1,7 +1,9 @@
 package world.bentobox.acidisland.world;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.stream.Stream;
@@ -11,20 +13,18 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Animals;
-import org.bukkit.entity.Drowned;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Guardian;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Monster;
-import org.bukkit.entity.Squid;
-import org.bukkit.entity.Turtle;
 
 import world.bentobox.acidisland.AcidIsland;
 
 public class AcidTask {
     private final AcidIsland addon;
+    private static final List<EntityType> IMMUNE = Arrays.asList(EntityType.GUARDIAN, EntityType.ELDER_GUARDIAN,
+            EntityType.SQUID, EntityType.TURTLE, EntityType.POLAR_BEAR, EntityType.DROWNED);
     private Set<Entity> itemsInWater = Collections.newSetFromMap(new WeakHashMap<Entity, Boolean>());
     private int entityBurnTask = -1;
     private int itemBurnTask = -1;
@@ -46,7 +46,7 @@ public class AcidTask {
         // This part will kill monsters if they fall into the water because it is acid
         entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getPlugin(), () -> getEntityStream()
                 // These entities are immune to acid
-                .filter(e -> !(e instanceof Guardian || e instanceof Squid || e instanceof Turtle || e instanceof Drowned))
+                .filter(e -> !IMMUNE.contains(e.getType()))
                 .filter(w -> w.getLocation().getBlock().getType().equals(Material.WATER))
                 .forEach(e -> {
                     if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
@@ -84,8 +84,8 @@ public class AcidTask {
             Set<Entity> newItemsInWater = new HashSet<>();
             getEntityStream()
             .filter(e -> e.getType().equals(EntityType.DROPPED_ITEM))
-            .filter(e -> e.getLocation().getBlock().getType().equals(Material.WATER) 
-                    || (e.getLocation().getY() > 0 && e.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER)))          
+            .filter(e -> e.getLocation().getBlock().getType().equals(Material.WATER)
+                    || (e.getLocation().getY() > 0 && e.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER)))
             .forEach(e -> {
                 if (itemsInWater.contains(e)) {
                     e.getWorld().playSound(e.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);

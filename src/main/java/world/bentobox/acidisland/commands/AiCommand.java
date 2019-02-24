@@ -16,12 +16,10 @@ import world.bentobox.bentobox.api.commands.island.IslandResetnameCommand;
 import world.bentobox.bentobox.api.commands.island.IslandSethomeCommand;
 import world.bentobox.bentobox.api.commands.island.IslandSetnameCommand;
 import world.bentobox.bentobox.api.commands.island.IslandSettingsCommand;
+import world.bentobox.bentobox.api.commands.island.IslandSpawnCommand;
 import world.bentobox.bentobox.api.commands.island.IslandUnbanCommand;
 import world.bentobox.bentobox.api.commands.island.team.IslandTeamCommand;
-import world.bentobox.bentobox.api.commands.island.team.IslandTeamCoopCommand;
-import world.bentobox.bentobox.api.commands.island.team.IslandTeamTrustCommand;
-import world.bentobox.bentobox.api.commands.island.team.IslandTeamUncoopCommand;
-import world.bentobox.bentobox.api.commands.island.team.IslandTeamUntrustCommand;
+import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 
 public class AiCommand extends CompositeCommand {
@@ -44,6 +42,7 @@ public class AiCommand extends CompositeCommand {
         new IslandInfoCommand(this);
         new IslandCreateCommand(this);
         new IslandGoCommand(this);
+        new IslandSpawnCommand(this);
         new IslandResetCommand(this);
         new IslandSetnameCommand(this);
         new IslandResetnameCommand(this);
@@ -55,10 +54,6 @@ public class AiCommand extends CompositeCommand {
         new IslandBanlistCommand(this);
         // Team commands
         new IslandTeamCommand(this);
-        new IslandTeamTrustCommand(this);
-        new IslandTeamUntrustCommand(this);
-        new IslandTeamCoopCommand(this);
-        new IslandTeamUncoopCommand(this);
     }
 
     /* (non-Javadoc)
@@ -77,7 +72,7 @@ public class AiCommand extends CompositeCommand {
             // No islands currently
             return getSubCommand("create").map(createCmd -> createCmd.execute(user, label, new ArrayList<>())).orElse(false);
         }
-        user.sendMessage("general.errors.unknown-command", "[label]", getLabel());
+        user.sendMessage("general.errors.unknown-command", TextVariables.LABEL, getLabel());
         return false;
 
     }

@@ -2,16 +2,14 @@ package world.bentobox.acidisland.listeners;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,13 +41,16 @@ public class AcidEffect implements Listener {
     private final AcidIsland addon;
     private final List<Player> burningPlayers = new ArrayList<>();
     private final List<Player> wetPlayers = new ArrayList<>();
-    private final static List<PotionEffectType> EFFECTS = Arrays.asList(
+    private static final List<PotionEffectType> EFFECTS = Arrays.asList(
             PotionEffectType.BLINDNESS,
             PotionEffectType.CONFUSION,
             PotionEffectType.HUNGER,
             PotionEffectType.SLOW,
             PotionEffectType.SLOW_DIGGING,
             PotionEffectType.WEAKNESS);
+    private static final List<PotionEffectType> IMMUNE_EFFECTS = Arrays.asList(
+            PotionEffectType.WATER_BREATHING,
+            PotionEffectType.CONDUIT_POWER);
 
     public AcidEffect(AcidIsland addon) {
         this.addon = addon;
@@ -89,12 +90,8 @@ public class AcidEffect implements Listener {
         }
         // Slow checks
         Location playerLoc = player.getLocation();
-        Biome biome = playerLoc.getBlock().getBiome();
         // Check for acid rain
-        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm()
-                && !biome.name().contains("DESERT")
-                && !biome.equals(Biome.NETHER)
-                && !biome.name().contains("SAVANNA")) {
+        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm()) {
             if (isSafeFromRain(player)) {
                 wetPlayers.remove(player);
             } else if (!wetPlayers.contains(player)) {
@@ -115,7 +112,7 @@ public class AcidEffect implements Listener {
                             // Check they are still in this world
                         } else {
                             double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
-                            double totalDamage = (addon.getSettings().getAcidRainDamage() - protection);
+                            double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection);
                             AcidRainEvent e = new AcidRainEvent(player, totalDamage, protection);
                             addon.getServer().getPluginManager().callEvent(e);
                             if (!e.isCancelled()) {
@@ -149,7 +146,7 @@ public class AcidEffect implements Listener {
                     this.cancel();
                 } else {
                     double protection = addon.getSettings().getAcidDamage() * getDamageReduced(player);
-                    double totalDamage = addon.getSettings().getAcidDamage() - protection;
+                    double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection);
                     AcidEvent acidEvent = new AcidEvent(player, totalDamage, protection, addon.getSettings().getAcidEffects());
                     addon.getServer().getPluginManager().callEvent(acidEvent);
                     if (!acidEvent.isCancelled()) {
@@ -173,15 +170,11 @@ public class AcidEffect implements Listener {
      */
     private boolean isSafeFromRain(Player player) {
         if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
-                && player.getInventory().getHelmet().getType().name().contains("HELMET"))) {
+                && player.getInventory().getHelmet().getType().name().contains("HELMET"))
+                || player.getLocation().getBlock().getTemperature() < 0.1 // snow falls
+                || player.getLocation().getBlock().getHumidity() == 0 // dry
+                || (player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains))) {
             return true;
-        }
-        // Check potions
-        for (PotionEffect s : player.getActivePotionEffects()) {
-            if (s.getType().equals(PotionEffectType.WATER_BREATHING)) {
-                // Safe!
-                return true;
-            }
         }
         // Check if all air above player
         for (int y = player.getLocation().getBlockY() + 2; y < player.getLocation().getWorld().getMaxHeight(); y++) {
@@ -195,48 +188,26 @@ public class AcidEffect implements Listener {
     /**
      * Check if player can be burned by acid
      * @param player - player
-     * @return true if player is not safe
+     * @return true if player is safe
      */
     private boolean isSafeFromAcid(Player player) {
         // In liquid
-        Material bodyMat = player.getLocation().getBlock().getType();
-        Material headMat = player.getLocation().getBlock().getRelative(BlockFace.UP).getType();
-        // TODO: remove backwards compatibility hack
-        if (bodyMat.name().contains("WATER"))
-            bodyMat = Material.WATER;
-        if (headMat.name().contains("WATER"))
-            headMat = Material.WATER;
-        if (bodyMat != Material.WATER && headMat != Material.WATER) {
+        if (!player.getLocation().getBlock().getType().equals(Material.WATER)
+                && !player.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.WATER)) {
             return true;
         }
         // Check if player is in a boat
-        Entity playersVehicle = player.getVehicle();
-        if (playersVehicle != null && playersVehicle.getType().equals(EntityType.BOAT)) {
-            // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT!
+        if (player.getVehicle() != null && player.getVehicle().getType().equals(EntityType.BOAT)) {
+            // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT! SNL Sketch.
             return true;
         }
         // Check if full armor protects
-        if (addon.getSettings().isFullArmorProtection()) {
-            boolean fullArmor = true;
-            for (ItemStack item : player.getInventory().getArmorContents()) {
-                if (item == null || item.getType().equals(Material.AIR)) {
-                    fullArmor = false;
-                    break;
-                }
-            }
-            if (fullArmor) {
-                return true;
-            }
+        if (addon.getSettings().isFullArmorProtection()
+                && Arrays.stream(player.getInventory().getArmorContents()).allMatch(i -> i != null && !i.getType().equals(Material.AIR))) {
+            return true;
         }
         // Check if player has an active water potion or not
-        Collection<PotionEffect> activePotions = player.getActivePotionEffects();
-        for (PotionEffect s : activePotions) {
-            if (s.getType().equals(PotionEffectType.WATER_BREATHING)) {
-                // Safe!
-                return true;
-            }
-        }
-        return false;
+        return player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains);
     }
 
     /**
@@ -246,7 +217,7 @@ public class AcidEffect implements Listener {
      *         player has on. The higher the value, the more protection they
      *         have.
      */
-    private static double getDamageReduced(Player player) {
+    private double getDamageReduced(Player player) {
         org.bukkit.inventory.PlayerInventory inv = player.getInventory();
         ItemStack boots = inv.getBoots();
         ItemStack helmet = inv.getHelmet();
@@ -256,25 +227,31 @@ public class AcidEffect implements Listener {
         if (helmet != null) {
             switch (helmet.getType()) {
             case LEATHER_HELMET:
-                red = red + 0.04;
+                red += 0.04;
                 break;
             case GOLDEN_HELMET:
-                red = red + 0.08;
+                red += 0.08;
                 break;
             case CHAINMAIL_HELMET:
-                red = red + 0.08;
+                red += 0.08;
                 break;
             case IRON_HELMET:
-                red = red + 0.08;
+                red += 0.08;
                 break;
             case DIAMOND_HELMET:
-                red = red + 0.12;
+                red += 0.12;
                 break;
             default:
                 break;
             }
+            // Check respiration (Bukkit name OXYGEN) enchantment
+            // Each level gives the same protection as a diamond helmet
+            red += helmet.getEnchantments().getOrDefault(Enchantment.OXYGEN, 0) * 0.12;
             // Damage
-            damage(helmet);
+            if (damage(helmet)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                inv.setHelmet(null);
+            }
         }
         if (boots != null) {
             switch (boots.getType()) {
@@ -297,7 +274,10 @@ public class AcidEffect implements Listener {
                 break;
             }
             // Damage
-            damage(boots);
+            if (damage(boots)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                inv.setBoots(null);
+            }
         }
         // Pants
         if (pants != null) {
@@ -321,7 +301,10 @@ public class AcidEffect implements Listener {
                 break;
             }
             // Damage
-            damage(pants);
+            if (damage(pants)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                inv.setLeggings(null);
+            }
         }
         // Chest plate
         if (chest != null) {
@@ -345,17 +328,23 @@ public class AcidEffect implements Listener {
                 break;
             }
             // Damage
-            damage(chest);
+            if (damage(chest)) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                inv.setChestplate(null);
+            }
         }
         return red;
     }
 
-    private static void damage(ItemStack item) {
+    private boolean damage(ItemStack item) {
         ItemMeta im = item.getItemMeta();
+
         if (im instanceof Damageable) {
             Damageable d = ((Damageable)item.getItemMeta());
             d.setDamage(d.getDamage() + 1);
             item.setItemMeta((ItemMeta) d);
+            return d.getDamage() >= item.getType().getMaxDurability();
         }
+        return false;
     }
 }
