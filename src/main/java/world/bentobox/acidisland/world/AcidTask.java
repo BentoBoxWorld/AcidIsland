@@ -53,7 +53,7 @@ public class AcidTask {
                         ((LivingEntity) e).damage(addon.getSettings().getAcidDamageMonster());
                     } else if ((e instanceof Animals) && addon.getSettings().getAcidDamageAnimal() > 0D
                             && (!e.getType().equals(EntityType.CHICKEN) || addon.getSettings().isAcidDamageChickens())) {
-                        ((LivingEntity) e).damage(addon.getSettings().getAcidDamageMonster());
+                        ((LivingEntity) e).damage(addon.getSettings().getAcidDamageAnimal());
                     }
                 }), 0L, 20L);
     }
