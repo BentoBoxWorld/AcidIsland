@@ -50,7 +50,7 @@ public class AcidIsland extends GameModeAddon {
             return false;
         }
         // Save settings
-        new Config<>(this, AISettings.class).saveConfigObject(settings);
+        saveWorldSettings();
         return true;
     }
 
@@ -74,6 +74,8 @@ public class AcidIsland extends GameModeAddon {
     @Override
     public void onDisable(){
         if (settings == null) {
+            // Save settings that have changed
+            new Config<>(this, AISettings.class).saveConfigObject(settings);
             return;
         }
         acidTask.cancelTasks();
@@ -140,6 +142,13 @@ public class AcidIsland extends GameModeAddon {
     @Override
     public @NonNull ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         return chunkGenerator;
+    }
+
+    @Override
+    public void saveWorldSettings() {
+        if (settings != null) {
+            new Config<>(this, AISettings.class).saveConfigObject(settings);
+        }
     }
 
 }

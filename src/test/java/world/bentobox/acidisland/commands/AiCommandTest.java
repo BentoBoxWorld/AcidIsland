@@ -1,9 +1,11 @@
 /**
- * 
+ *
  */
 package world.bentobox.acidisland.commands;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +43,7 @@ public class AiCommandTest {
     private User user;
     private IslandsManager im;
     private Island island;
-    
+
     /**
      * @throws java.lang.Exception
      */
@@ -78,7 +80,7 @@ public class AiCommandTest {
         when(plugin.getIslands()).thenReturn(im);
 
         // Locales
-       // Return the reference (USE THIS IN THE FUTURE)
+        // Return the reference (USE THIS IN THE FUTURE)
         when(user.getTranslation(Mockito.anyString())).thenAnswer((Answer<String>) invocation -> invocation.getArgumentAt(0, String.class));
 
     }
@@ -91,7 +93,7 @@ public class AiCommandTest {
     public void testAiCommand() {
         Addon addon = mock(Addon.class);
         AiCommand cmd = new AiCommand(addon, "ai");
-        assertEquals("ai", cmd.getLabel());    
+        assertEquals("ai", cmd.getLabel());
     }
 
     /**
@@ -107,10 +109,10 @@ public class AiCommandTest {
         assertEquals("commands.ai.parameters", cmd.getParameters());
         assertEquals("commands.island.help.description", cmd.getDescription());
         // Number of commands = sub commands + help
-        assertEquals("Number of sub commands registered", 16, cmd.getSubCommands().values().size());
-        
+        assertEquals("Number of sub commands registered", 17, cmd.getSubCommands().values().size());
+
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.commands.AiCommand#execute(world.bentobox.bentobox.api.user.User, java.lang.String, java.util.List)}.
      */
@@ -119,7 +121,7 @@ public class AiCommandTest {
         Addon addon = mock(Addon.class);
         AiCommand cmd = new AiCommand(addon, "ai");
         assertFalse(cmd.execute(null, "ai", Collections.emptyList()));
-        
+
     }
 
     /**
@@ -130,9 +132,9 @@ public class AiCommandTest {
         Addon addon = mock(Addon.class);
         AiCommand cmd = new AiCommand(addon, "ai");
         assertFalse(cmd.execute(user, "ai", Collections.singletonList("unknown")));
-        Mockito.verify(user).sendMessage("general.errors.unknown-command", TextVariables.LABEL, "ai");      
+        Mockito.verify(user).sendMessage("general.errors.unknown-command", TextVariables.LABEL, "ai");
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.commands.AiCommand#execute(world.bentobox.bentobox.api.user.User, java.lang.String, java.util.List)}.
      */
@@ -142,7 +144,7 @@ public class AiCommandTest {
         AiCommand cmd = new AiCommand(addon, "ai");
         assertTrue(cmd.execute(user, "ai", Collections.emptyList()));
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.commands.AiCommand#execute(world.bentobox.bentobox.api.user.User, java.lang.String, java.util.List)}.
      */
