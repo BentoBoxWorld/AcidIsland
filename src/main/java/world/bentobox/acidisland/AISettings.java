@@ -644,7 +644,7 @@ public class AISettings implements DataObject, WorldSettings {
         return uniqueId;
     }
     /**
-     * @return the visibleSettings
+     * @return the hidden flags
      */
     @Override
     public List<String> getHiddenFlags() {
