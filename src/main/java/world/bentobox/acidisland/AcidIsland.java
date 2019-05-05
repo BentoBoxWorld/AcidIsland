@@ -4,7 +4,6 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.PluginManager;
 import org.eclipse.jdt.annotation.NonNull;
 
 import world.bentobox.acidisland.commands.AcidCommand;
@@ -33,6 +32,16 @@ public class AcidIsland extends GameModeAddon {
 
     @Override
     public void onLoad() {
+        // Save the default config from config.yml
+        saveDefaultConfig();
+        // Load settings from config.yml. This will check if there are any issues with it too.
+        loadSettings();
+        // Chunk generator
+        chunkGenerator = settings.isUseOwnGenerator() ? null : new ChunkGeneratorWorld(this);
+        // Register commands
+        adminCommand = new AcidCommand(this, settings.getAdminCommand());
+        playerCommand = new AiCommand(this, settings.getIslandCommand());
+
         saveDefaultConfig();
         // Load settings
         loadSettings();
@@ -60,13 +69,9 @@ public class AcidIsland extends GameModeAddon {
             return;
         }
         // Register listeners
-        PluginManager manager = getServer().getPluginManager();
         // Acid Effects
-        manager.registerEvents(new AcidEffect(this), this.getPlugin());
-        manager.registerEvents(new LavaCheck(this), this.getPlugin());
-        // Register commands
-        adminCommand = new AcidCommand(this, settings.getAdminCommand());
-        playerCommand = new AiCommand(this, settings.getIslandCommand());
+        registerListener(new AcidEffect(this));
+        registerListener(new LavaCheck(this));
         // Burn everything
         acidTask = new AcidTask(this);
     }
