@@ -41,10 +41,6 @@ public class AcidIsland extends GameModeAddon {
         // Register commands
         adminCommand = new AcidCommand(this, settings.getAdminCommand());
         playerCommand = new AiCommand(this, settings.getIslandCommand());
-
-        saveDefaultConfig();
-        // Load settings
-        loadSettings();
     }
 
     private boolean loadSettings() {
