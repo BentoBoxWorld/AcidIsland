@@ -14,21 +14,24 @@ permissions:
   acidisland.island.home:
     description: Allow teleporting to player island
     default: true
-  acidisland.island.info:
-    description: Let the player check their island level
-    default: true
   acidisland.island.sethome:
-    description: Let the player set their island teleport point
+    description: Let the player use the sethome command
+    default: true
+  acidisland.island.info:
+    description: Let the player check other players info
     default: true
   acidisland.island.lock:
     description: Allows island locking
-    default: false
+    default: true
+  acidisland.island.near:
+    description: Players can see nearby island names
+    default: true
   acidisland.island.expel:
     description: Allows expelling of visitors
     default: true
   acidisland.island.ban:
     description: Allows banning of visitors
-    default: false
+    default: true
   acidisland.island.settings:
     description: Player can see server settings
     default: true
@@ -53,21 +56,18 @@ permissions:
   acidisland.island.team.coop:
     description: Let a player use team coop commands
     default: true
+  acidisland.island.team.promote:
+    description: Let a player use promote commands
+    default: true  
   acidisland.settings.*:
-    description: Allow access to settings panel items
+    description: Allow use of settings on island
     default: true
   acidisland.mod.info:
     description: Let a moderator see info on a player
     default: op
-  acidisland.mod.resethome:
-    description: Allows setting or reseting of a player's home position
-    default: op
   acidisland.mod.clearreset:
     description: Allow clearing of island reset limit
     default: false
-  acidisland.mod.tp:
-    description: Allows teleport to an island
-    default: op
   acidisland.mod.bypasscooldowns:
     description: Allow moderator to bypass cooldowns
     default: op
@@ -83,15 +83,15 @@ permissions:
   acidisland.mod.bypasslock:
     description: Bypasses an island lock
     default: op
+  acidisland.mod.bypassban:
+    description: Bypasses island ban
+    default: op  
   acidisland.mod.team:
     description: Enables modification of teams via kick and add commands
     default: false
-  acidisland.mod.name:
-    description: Enables naming of player's islands
-    default: false
-  acidisland.mod.resetname:
-    description: Enables reset of player's island names
-    default: false
+  acidisland.admin.tp:
+    description: Allows teleport to an island
+    default: op    
   acidisland.admin.clearresetall:
     description: Allow clearing of island reset limit of all players
     default: op
@@ -101,17 +101,11 @@ permissions:
   acidisland.admin.delete:
     description: Let a player completely remove a player (including island)
     default: op
-  acidisland.admin.deleteisland:
-    description: Let a player completely remove the island the player is on
-    default: op
   acidisland.admin.register:
     description: Let a player register the nearest island to another player.
     default: op
   acidisland.admin.unregister:
     description: Removes a player from an island without deleting the island blocks.
-    default: op
-  acidisland.admin.purge:
-    description: Let a player purge old islands.
     default: op
   acidisland.admin.setspawn:
     description: Allows use of spawn tools
@@ -119,14 +113,14 @@ permissions:
   acidisland.admin.setrange:
     description: Allows setting of island protection range
     default: op
-  acidisland.admin.reserve:
-    description: Reserves an empty spot for a player's next island
-    default: op
   acidisland.admin.settingsreset:
     description: Resets all the islands to default protection settings
     default: op
   acidisland.admin.noban:
     description: Player cannot be banned from an island
+    default: op
+  acidisland.admin.noexpel:
+    description: Player cannot be expelled from an island
     default: op
   acidisland.admin.setlanguage:
     description: Resets all player languages and sets the default language
