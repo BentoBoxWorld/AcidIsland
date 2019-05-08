@@ -31,7 +31,7 @@ import world.bentobox.bentobox.database.objects.adapters.PotionEffectListAdapter
  */
 @ConfigComment("AcidIsland Configuration [version]")
 @StoreAt(filename="config.yml", path="addons/AcidIsland") // Explicitly call out what name this should have.
-public class AISettings implements DataObject, WorldSettings {
+public class AISettings implements WorldSettings {
 
     // ---------------------------------------------
 
@@ -385,7 +385,6 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("These settings should not be edited")
     @ConfigEntry(path = "do-not-edit-these-settings.reset-epoch")
     private long resetEpoch = 0;
-    private String uniqueId = "config";
 
 
     /**
@@ -635,13 +634,6 @@ public class AISettings implements DataObject, WorldSettings {
     @Override
     public int getSeaHeight() {
         return seaHeight;
-    }
-    /**
-     * @return the uniqueId
-     */
-    @Override
-    public String getUniqueId() {
-        return uniqueId;
     }
     /**
      * @return the hidden flags
@@ -1241,14 +1233,6 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setTeamJoinDeathReset(boolean teamJoinDeathReset) {
         this.teamJoinDeathReset = teamJoinDeathReset;
-    }
-
-    /**
-     * @param uniqueId - unique ID the uniqueId to set
-     */
-    @Override
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
     }
 
     /**
