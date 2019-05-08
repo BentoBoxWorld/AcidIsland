@@ -1,0 +1,11 @@
+###########################################################################################################
+# Este es un archivo YML. Tenga cuidado al editar. Revisa tus ediciones en un verificador de YAML como    #
+# el de http://yaml-online-parser.appspot.com                                                             #
+###########################################################################################################
+
+acidisland:
+  sign:
+    line0: "&1AcidIsland"
+    line1: "[name]"
+    line2: "El Agua es acida!"
+    line3: "Ten cuidado! &c<3"
