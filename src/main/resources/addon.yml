@@ -1,6 +1,9 @@
 name: AcidIsland
 main: world.bentobox.acidisland.AcidIsland
 version: ${project.version}
+metrics: true
+repository: "BentoBoxWorld/AcidIsland"
+icon: "OAK_BOAT"
 
 authors: tastybento
 
