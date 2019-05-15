@@ -35,8 +35,8 @@ world:
   # Friendly name for this world. Used in admin commands. Must be a single word
   friendly-name: AcidIsland
   # Name of the world - if it does not exist then it will be generated.
-  # It acts like a prefix for nether and end (e.g. AcidIsland_world, AcidIsland_world_nether, AcidIsland_world_end)
-  world-name: AcidIsland_world
+  # It acts like a prefix for nether and end (e.g. acidisland_world, acidisland_world_nether, acidisland_world_end)
+  world-name: acidisland_world
   # World difficulty setting - PEACEFUL, EASY, NORMAL, HARD
   # Other plugins may override this setting
   difficulty: NORMAL
