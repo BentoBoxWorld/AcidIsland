@@ -15,6 +15,7 @@ import world.bentobox.acidisland.world.ChunkGeneratorWorld;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
+import world.bentobox.bentobox.lists.Flags;
 
 /**
  * Add-on to BentoBox that enables AcidIsland
@@ -101,7 +102,8 @@ public class AcidIsland extends GameModeAddon {
         chunkGenerator = new ChunkGeneratorWorld(this);
         islandWorld = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(chunkGenerator)
                 .createWorld();
-
+        // Set default access to boats
+        Flags.BOAT.setDefaultSetting(islandWorld, true);
         // Make the nether if it does not exist
         if (settings.isNetherGenerate()) {
             if (getServer().getWorld(worldName + NETHER) == null) {
@@ -109,6 +111,7 @@ public class AcidIsland extends GameModeAddon {
             }
             if (!settings.isNetherIslands()) {
                 netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.NORMAL).environment(World.Environment.NETHER).createWorld();
+                Flags.BOAT.setDefaultSetting(netherWorld, true);
             } else {
                 netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.FLAT).generator(chunkGenerator)
                         .environment(World.Environment.NETHER).createWorld();
@@ -121,6 +124,7 @@ public class AcidIsland extends GameModeAddon {
             }
             if (!settings.isEndIslands()) {
                 endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.NORMAL).environment(World.Environment.THE_END).createWorld();
+                Flags.BOAT.setDefaultSetting(endWorld, true);
             } else {
                 endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.FLAT).generator(chunkGenerator)
                         .environment(World.Environment.THE_END).createWorld();
