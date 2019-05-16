@@ -1,8 +1,9 @@
 package world.bentobox.acidisland.listeners;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -39,8 +40,8 @@ import world.bentobox.bentobox.util.Util;
 public class AcidEffect implements Listener {
 
     private final AcidIsland addon;
-    private final List<Player> burningPlayers = new ArrayList<>();
-    private final List<Player> wetPlayers = new ArrayList<>();
+    private final Map<Player, Long> burningPlayers = new HashMap<>();
+    private final Map<Player, Long> wetPlayers = new HashMap<>();
     private static final List<PotionEffectType> EFFECTS = Arrays.asList(
             PotionEffectType.BLINDNESS,
             PotionEffectType.CONFUSION,
@@ -94,10 +95,10 @@ public class AcidEffect implements Listener {
         if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm()) {
             if (isSafeFromRain(player)) {
                 wetPlayers.remove(player);
-            } else if (!wetPlayers.contains(player)) {
+            } else if (!wetPlayers.containsKey(player)) {
                 // Start hurting them
                 // Add to the list
-                wetPlayers.add(player);
+                wetPlayers.put(player, + addon.getSettings().getAcidDamageDelay() * 1000);
                 // This runnable continuously hurts the player even if
                 // they are not
                 // moving but are in acid rain.
@@ -110,7 +111,7 @@ public class AcidEffect implements Listener {
                             wetPlayers.remove(player);
                             this.cancel();
                             // Check they are still in this world
-                        } else {
+                        } else if (wetPlayers.containsKey(player) && wetPlayers.get(player) < System.currentTimeMillis()) {
                             double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
                             double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection);
                             AcidRainEvent e = new AcidRainEvent(player, totalDamage, protection);
@@ -127,7 +128,7 @@ public class AcidEffect implements Listener {
 
         }
         // If they are already burning in acid then return
-        if (burningPlayers.contains(player)) {
+        if (burningPlayers.containsKey(player)) {
             return;
         }
         if (isSafeFromAcid(player)) {
@@ -135,7 +136,7 @@ public class AcidEffect implements Listener {
         }
         // ACID!
         // Put the player into the acid list
-        burningPlayers.add(player);
+        burningPlayers.put(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000);
         // This runnable continuously hurts the player even if they are not
         // moving but are in acid.
         new BukkitRunnable() {
@@ -144,7 +145,7 @@ public class AcidEffect implements Listener {
                 if (player.isDead() || isSafeFromAcid(player)) {
                     burningPlayers.remove(player);
                     this.cancel();
-                } else {
+                } else if (burningPlayers.containsKey(player) && burningPlayers.get(player) < System.currentTimeMillis()) {
                     double protection = addon.getSettings().getAcidDamage() * getDamageReduced(player);
                     double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection);
                     AcidEvent acidEvent = new AcidEvent(player, totalDamage, protection, addon.getSettings().getAcidEffects());

@@ -73,6 +73,11 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.rain")
     private int acidRainDamage = 1;
 
+    @ConfigComment("Delay before acid or acid rain starts burning")
+    @ConfigComment("This can give time for conduit power to kick in")
+    @ConfigEntry(path = "acid.damage.delay")
+    private long acidDamageDelay = 2;
+
     @ConfigComment("Portion effects from going into acid water")
     @ConfigComment("You can list multiple effects")
     @ConfigEntry(path = "acid.damage.effects")
@@ -397,6 +402,12 @@ public class AISettings implements WorldSettings {
      */
     public int getAcidDamageAnimal() {
         return acidDamageAnimal;
+    }
+    /**
+     * @return the acidDamageDelay
+     */
+    public long getAcidDamageDelay() {
+        return acidDamageDelay;
     }
     /**
      * @return the acidDamageMonster
@@ -864,6 +875,12 @@ public class AISettings implements WorldSettings {
         this.acidDamageChickens = acidDamageChickens;
     }
     /**
+     * @param acidDamageDelay the acidDamageDelay to set
+     */
+    public void setAcidDamageDelay(long acidDamageDelay) {
+        this.acidDamageDelay = acidDamageDelay;
+    }
+    /**
      * @param acidDamageMonster the acidDamageMonster to set
      */
     public void setAcidDamageMonster(int acidDamageMonster) {
@@ -1268,4 +1285,6 @@ public class AISettings implements WorldSettings {
     public void setWorldName(String worldName) {
         this.worldName = worldName;
     }
+
+
 }
