@@ -73,6 +73,10 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.rain")
     private int acidRainDamage = 1;
 
+    @ConfigComment("Damage from acid snow")
+    @ConfigEntry(path = "acid.damage.snow")
+    private boolean acidDamageSnow;
+
     @ConfigComment("Delay before acid or acid rain starts burning")
     @ConfigComment("This can give time for conduit power to kick in")
     @ConfigEntry(path = "acid.damage.delay")
@@ -1285,6 +1289,17 @@ public class AISettings implements WorldSettings {
     public void setWorldName(String worldName) {
         this.worldName = worldName;
     }
-
+    /**
+     * @return the acidDamageSnow
+     */
+    public boolean isAcidDamageSnow() {
+        return acidDamageSnow;
+    }
+    /**
+     * @param acidDamageSnow the acidDamageSnow to set
+     */
+    public void setAcidDamageSnow(boolean acidDamageSnow) {
+        this.acidDamageSnow = acidDamageSnow;
+    }
 
 }

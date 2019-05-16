@@ -98,7 +98,7 @@ public class AcidEffect implements Listener {
             } else if (!wetPlayers.containsKey(player)) {
                 // Start hurting them
                 // Add to the list
-                wetPlayers.put(player, + addon.getSettings().getAcidDamageDelay() * 1000);
+                wetPlayers.put(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000);
                 // This runnable continuously hurts the player even if
                 // they are not
                 // moving but are in acid rain.
@@ -172,7 +172,7 @@ public class AcidEffect implements Listener {
     private boolean isSafeFromRain(Player player) {
         if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
                 && player.getInventory().getHelmet().getType().name().contains("HELMET"))
-                || player.getLocation().getBlock().getTemperature() < 0.1 // snow falls
+                || (!addon.getSettings().isAcidDamageSnow() && player.getLocation().getBlock().getTemperature() < 0.1) // snow falls
                 || player.getLocation().getBlock().getHumidity() == 0 // dry
                 || (player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains))) {
             return true;
@@ -192,14 +192,15 @@ public class AcidEffect implements Listener {
      * @return true if player is safe
      */
     private boolean isSafeFromAcid(Player player) {
-        // In liquid
+        // Not in liquid or on snow
         if (!player.getLocation().getBlock().getType().equals(Material.WATER)
+                && (!player.getLocation().getBlock().getType().equals(Material.SNOW) || !addon.getSettings().isAcidDamageSnow())
                 && !player.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.WATER)) {
             return true;
         }
-        // Check if player is in a boat
+        // Check if player is on a boat
         if (player.getVehicle() != null && player.getVehicle().getType().equals(EntityType.BOAT)) {
-            // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT! SNL Sketch.
+            // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT! SNL Sketch. https://youtu.be/avaSdC0QOUM.
             return true;
         }
         // Check if full armor protects
