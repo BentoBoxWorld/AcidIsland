@@ -13,6 +13,7 @@ import world.bentobox.bentobox.api.commands.admin.AdminReloadCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminResetFlagsCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSetrankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSetspawnCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminSwitchCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSwitchtoCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminTeleportCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminTrashCommand;
@@ -42,7 +43,7 @@ public class AcidCommand extends CompositeCommand {
         setOnlyPlayer(false);
         setParametersHelp("commands.admin.help.parameters");
         setDescription("commands.admin.help.description");
-        
+
         // Commands
         new AdminVersionCommand(this);
         new AdminTeleportCommand(this, "tp");
@@ -82,7 +83,8 @@ public class AcidCommand extends CompositeCommand {
         new AdminTrashCommand(this);
         new AdminEmptyTrashCommand(this);
         new AdminSwitchtoCommand(this);
-
+        // Switch
+        new AdminSwitchCommand(this);
     }
 
     @Override
