@@ -12,5 +12,6 @@
     "NORMAL": "temple",
     "NETHER": "nether-island",
     "THE_END": "end-island"
-  }
+  },
+  "slot": 5
 }
