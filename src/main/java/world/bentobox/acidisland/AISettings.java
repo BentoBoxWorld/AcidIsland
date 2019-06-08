@@ -363,9 +363,6 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "island.deaths.max")
     private int deathsMax = 10;
 
-    @ConfigEntry(path = "island.deaths.sum-team")
-    private boolean deathsSumTeam = false;
-
     @ConfigComment("When a player joins a team, reset their death count")
     @ConfigEntry(path = "island.deaths.team-join-reset")
     private boolean teamJoinDeathReset = true;
@@ -710,13 +707,6 @@ public class AISettings implements WorldSettings {
         return deathsCounted;
     }
     /**
-     * @return the deathsSumTeam
-     */
-    @Override
-    public boolean isDeathsSumTeam() {
-        return deathsSumTeam;
-    }
-    /**
      * @return the dragonSpawn
      */
     @Override
@@ -731,7 +721,6 @@ public class AISettings implements WorldSettings {
         return endGenerate;
     }
     /**
-     * @return the endIslands
      */
     @Override
     public boolean isEndIslands() {
@@ -955,12 +944,6 @@ public class AISettings implements WorldSettings {
      */
     public void setDeathsMax(int deathsMax) {
         this.deathsMax = deathsMax;
-    }
-    /**
-     * @param deathsSumTeam the deathsSumTeam to set
-     */
-    public void setDeathsSumTeam(boolean deathsSumTeam) {
-        this.deathsSumTeam = deathsSumTeam;
     }
     /**
      * @param defaultBiome the defaultBiome to set
