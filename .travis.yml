@@ -12,8 +12,9 @@ jdk:
     - openjdk8
     
 script:
-    - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package -P sonar sonar:sonar -B
-    - echo "${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
+  # JaCoCo is used to have code coverage, the agent has to be activated
+  #- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent org.jacoco:jacoco-maven-plugin:report package sonar:sonar
+
 cache:
     directories:
         - '$HOME/.m2/repository'

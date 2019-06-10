@@ -13,16 +13,17 @@ import world.bentobox.bentobox.api.commands.admin.AdminReloadCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminResetFlagsCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSetrankCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSetspawnCommand;
+import world.bentobox.bentobox.api.commands.admin.AdminSwitchCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminSwitchtoCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminTeleportCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminTrashCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminUnregisterCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminVersionCommand;
 import world.bentobox.bentobox.api.commands.admin.AdminWhyCommand;
+import world.bentobox.bentobox.api.commands.admin.blueprints.AdminBlueprintCommand;
 import world.bentobox.bentobox.api.commands.admin.deaths.AdminDeathsCommand;
 import world.bentobox.bentobox.api.commands.admin.range.AdminRangeCommand;
 import world.bentobox.bentobox.api.commands.admin.resets.AdminResetsResetCommand;
-import world.bentobox.bentobox.api.commands.admin.schem.AdminSchemCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamAddCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamDisbandCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamKickCommand;
@@ -42,7 +43,7 @@ public class AcidCommand extends CompositeCommand {
         setOnlyPlayer(false);
         setParametersHelp("commands.admin.help.parameters");
         setDescription("commands.admin.help.description");
-        
+
         // Commands
         new AdminVersionCommand(this);
         new AdminTeleportCommand(this, "tp");
@@ -57,7 +58,7 @@ public class AcidCommand extends CompositeCommand {
         new AdminTeamDisbandCommand(this);
         new AdminTeamSetownerCommand(this);
         // Schems
-        new AdminSchemCommand(this);
+        new AdminBlueprintCommand(this);
         // Register/unregister islands
         new AdminRegisterCommand(this);
         new AdminUnregisterCommand(this);
@@ -82,7 +83,8 @@ public class AcidCommand extends CompositeCommand {
         new AdminTrashCommand(this);
         new AdminEmptyTrashCommand(this);
         new AdminSwitchtoCommand(this);
-
+        // Switch
+        new AdminSwitchCommand(this);
     }
 
     @Override

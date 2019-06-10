@@ -1,0 +1,18 @@
+{
+  "uniqueId": "default",
+  "icon": "PRISMARINE",
+  "displayName": "§eThe Original AcidIsland",
+  "description": [
+    "§bAn island with a sheep - baa!",
+    "§aIncludes an Overworld island",
+    "§cIncludes a Nether island",
+    "§6Includes an End island"
+  ],
+  "requirePermission": false,
+  "blueprints": {
+    "NORMAL": "island",
+    "NETHER": "nether-island",
+    "THE_END": "end-island"
+  },
+  "slot": 2
+}

@@ -18,7 +18,6 @@ import world.bentobox.bentobox.api.configuration.ConfigEntry;
 import world.bentobox.bentobox.api.configuration.StoreAt;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.flags.Flag;
-import world.bentobox.bentobox.database.objects.DataObject;
 import world.bentobox.bentobox.database.objects.adapters.Adapter;
 import world.bentobox.bentobox.database.objects.adapters.FlagSerializer;
 import world.bentobox.bentobox.database.objects.adapters.FlagSerializer2;
@@ -31,7 +30,7 @@ import world.bentobox.bentobox.database.objects.adapters.PotionEffectListAdapter
  */
 @ConfigComment("AcidIsland Configuration [version]")
 @StoreAt(filename="config.yml", path="addons/AcidIsland") // Explicitly call out what name this should have.
-public class AISettings implements DataObject, WorldSettings {
+public class AISettings implements WorldSettings {
 
     // ---------------------------------------------
 
@@ -74,6 +73,15 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "acid.damage.rain")
     private int acidRainDamage = 1;
 
+    @ConfigComment("Damage from acid snow")
+    @ConfigEntry(path = "acid.damage.snow")
+    private boolean acidDamageSnow;
+
+    @ConfigComment("Delay before acid or acid rain starts burning")
+    @ConfigComment("This can give time for conduit power to kick in")
+    @ConfigEntry(path = "acid.damage.delay")
+    private long acidDamageDelay = 2;
+
     @ConfigComment("Portion effects from going into acid water")
     @ConfigComment("You can list multiple effects")
     @ConfigEntry(path = "acid.damage.effects")
@@ -95,9 +103,9 @@ public class AISettings implements DataObject, WorldSettings {
     private String friendlyName = "AcidIsland";
 
     @ConfigComment("Name of the world - if it does not exist then it will be generated.")
-    @ConfigComment("It acts like a prefix for nether and end (e.g. AcidIsland_world, AcidIsland_world_nether, AcidIsland_world_end)")
+    @ConfigComment("It acts like a prefix for nether and end (e.g. acidisland_world, acidisland_world_nether, acidisland_world_end)")
     @ConfigEntry(path = "world.world-name", needsReset = true)
-    private String worldName = "AcidIsland_world";
+    private String worldName = "acidisland_world";
 
     @ConfigComment("World difficulty setting - PEACEFUL, EASY, NORMAL, HARD")
     @ConfigComment("Other plugins may override this setting")
@@ -295,8 +303,7 @@ public class AISettings implements DataObject, WorldSettings {
     private boolean leaversLoseReset = false;
 
     @ConfigComment("Allow kicked players to keep their inventory.")
-    @ConfigComment("If false, kicked player's inventory will be thrown at the island leader if the")
-    @ConfigComment("kicked player is online and in the island world.")
+    @ConfigComment("Overrides the on-leave inventory reset for kicked players.")
     @ConfigEntry(path = "island.reset.kicked-keep-inventory")
     private boolean kickedKeepInventory = false;
 
@@ -356,9 +363,6 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigEntry(path = "island.deaths.max")
     private int deathsMax = 10;
 
-    @ConfigEntry(path = "island.deaths.sum-team")
-    private boolean deathsSumTeam = false;
-
     @ConfigComment("When a player joins a team, reset their death count")
     @ConfigEntry(path = "island.deaths.team-join-reset")
     private boolean teamJoinDeathReset = true;
@@ -385,7 +389,6 @@ public class AISettings implements DataObject, WorldSettings {
     @ConfigComment("These settings should not be edited")
     @ConfigEntry(path = "do-not-edit-these-settings.reset-epoch")
     private long resetEpoch = 0;
-    private String uniqueId = "config";
 
 
     /**
@@ -399,6 +402,12 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public int getAcidDamageAnimal() {
         return acidDamageAnimal;
+    }
+    /**
+     * @return the acidDamageDelay
+     */
+    public long getAcidDamageDelay() {
+        return acidDamageDelay;
     }
     /**
      * @return the acidDamageMonster
@@ -637,13 +646,6 @@ public class AISettings implements DataObject, WorldSettings {
         return seaHeight;
     }
     /**
-     * @return the uniqueId
-     */
-    @Override
-    public String getUniqueId() {
-        return uniqueId;
-    }
-    /**
      * @return the hidden flags
      */
     @Override
@@ -705,12 +707,6 @@ public class AISettings implements DataObject, WorldSettings {
         return deathsCounted;
     }
     /**
-     * @return the deathsSumTeam
-     */
-    public boolean isDeathsSumTeam() {
-        return deathsSumTeam;
-    }
-    /**
      * @return the dragonSpawn
      */
     @Override
@@ -725,7 +721,6 @@ public class AISettings implements DataObject, WorldSettings {
         return endGenerate;
     }
     /**
-     * @return the endIslands
      */
     @Override
     public boolean isEndIslands() {
@@ -746,12 +741,14 @@ public class AISettings implements DataObject, WorldSettings {
     /**
      * @return the kickedKeepInventory
      */
+    @Override
     public boolean isKickedKeepInventory() {
         return kickedKeepInventory;
     }
     /**
      * @return the leaversLoseReset
      */
+    @Override
     public boolean isLeaversLoseReset() {
         return leaversLoseReset;
     }
@@ -873,6 +870,12 @@ public class AISettings implements DataObject, WorldSettings {
         this.acidDamageChickens = acidDamageChickens;
     }
     /**
+     * @param acidDamageDelay the acidDamageDelay to set
+     */
+    public void setAcidDamageDelay(long acidDamageDelay) {
+        this.acidDamageDelay = acidDamageDelay;
+    }
+    /**
      * @param acidDamageMonster the acidDamageMonster to set
      */
     public void setAcidDamageMonster(int acidDamageMonster) {
@@ -941,12 +944,6 @@ public class AISettings implements DataObject, WorldSettings {
      */
     public void setDeathsMax(int deathsMax) {
         this.deathsMax = deathsMax;
-    }
-    /**
-     * @param deathsSumTeam the deathsSumTeam to set
-     */
-    public void setDeathsSumTeam(boolean deathsSumTeam) {
-        this.deathsSumTeam = deathsSumTeam;
     }
     /**
      * @param defaultBiome the defaultBiome to set
@@ -1244,14 +1241,6 @@ public class AISettings implements DataObject, WorldSettings {
     }
 
     /**
-     * @param uniqueId - unique ID the uniqueId to set
-     */
-    @Override
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
-    /**
      * @param useOwnGenerator the useOwnGenerator to set
      */
     public void setUseOwnGenerator(boolean useOwnGenerator) {
@@ -1285,4 +1274,17 @@ public class AISettings implements DataObject, WorldSettings {
     public void setWorldName(String worldName) {
         this.worldName = worldName;
     }
+    /**
+     * @return the acidDamageSnow
+     */
+    public boolean isAcidDamageSnow() {
+        return acidDamageSnow;
+    }
+    /**
+     * @param acidDamageSnow the acidDamageSnow to set
+     */
+    public void setAcidDamageSnow(boolean acidDamageSnow) {
+        this.acidDamageSnow = acidDamageSnow;
+    }
+
 }

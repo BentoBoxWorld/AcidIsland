@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package world.bentobox.acidisland.commands;
 
@@ -37,8 +37,9 @@ import world.bentobox.bentobox.managers.CommandsManager;
 @PrepareForTest({Bukkit.class, BentoBox.class, User.class })
 public class AcidCommandTest {
 
+    private static final int NUM_COMMANDS = 27;
     private User user;
- 
+
     /**
      * @throws java.lang.Exception
      */
@@ -64,7 +65,7 @@ public class AcidCommandTest {
         User.setPlugin(plugin);
 
         // Locales
-       // Return the reference (USE THIS IN THE FUTURE)
+        // Return the reference (USE THIS IN THE FUTURE)
         when(user.getTranslation(Mockito.anyString())).thenAnswer((Answer<String>) invocation -> invocation.getArgumentAt(0, String.class));
 
     }
@@ -76,7 +77,7 @@ public class AcidCommandTest {
     public void testAcidCommand() {
         Addon addon = mock(Addon.class);
         AcidCommand cmd = new AcidCommand(addon, "acid");
-        assertEquals("acid", cmd.getLabel());    
+        assertEquals("acid", cmd.getLabel());
     }
 
     /**
@@ -92,7 +93,7 @@ public class AcidCommandTest {
         assertEquals("commands.admin.help.parameters", cmd.getParameters());
         assertEquals("commands.admin.help.description", cmd.getDescription());
         // Number of commands = sub commands + help
-        assertEquals("Number of sub commands registered", 26, cmd.getSubCommands().values().size());
+        assertEquals("Number of sub commands registered", NUM_COMMANDS, cmd.getSubCommands().values().size());
     }
 
     /**
@@ -105,7 +106,7 @@ public class AcidCommandTest {
         assertFalse(cmd.execute(user, "acid", Collections.singletonList("unknown")));
         Mockito.verify(user).sendMessage("general.errors.unknown-command", TextVariables.LABEL, "acid");
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.commands.AcidCommand#execute(world.bentobox.bentobox.api.user.User, java.lang.String, java.util.List)}.
      */

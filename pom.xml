@@ -6,7 +6,7 @@
 
 	<groupId>world.bentobox</groupId>
 	<artifactId>acidisland</artifactId>
-	<version>1.4.0</version>
+	<version>1.5.0</version>
 
 	<name>AcidIsland</name>
 	<description>AcidIsland is an add-on for BentoBox, an expandable Minecraft Bukkit plugin for island-type games like SkyBlock or AcidIsland.</description>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.13.2-R0.1-SNAPSHOT</version>
+			<version>1.14.1-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -84,14 +84,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongodb-driver</artifactId>
-			<version>3.8.0</version>
-		</dependency>
-		<dependency>
 			<groupId>world.bentobox</groupId>
 			<artifactId>bentobox</artifactId>
-			<version>1.4.0</version>
+			<version>1.5.0</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -112,11 +107,12 @@
 				</includes>
 			</resource>
 			<resource>
-				<directory>src/main/resources/schems</directory>
-				<targetPath>./schems</targetPath>
+				<directory>src/main/resources/blueprints</directory>
+				<targetPath>./blueprints</targetPath>
 				<filtering>false</filtering>
 				<includes>
-					<include>*.schem</include>
+					<include>*.blu</include>
+					<include>*.json</include>
 				</includes>
 			</resource>
 		</resources>
@@ -132,7 +128,7 @@
 				<version>3.1.0</version>
 				<configuration>
 					<nonFilteredFileExtensions>
-						<nonFilteredFileExtension>schem</nonFilteredFileExtension>
+						<nonFilteredFileExtension>blu</nonFilteredFileExtension>
 					</nonFilteredFileExtensions>
 				</configuration>
 			</plugin>

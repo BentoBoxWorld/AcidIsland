@@ -1,0 +1,17 @@
+{
+  "uniqueId": "desert_temple",
+  "icon": "CACTUS",
+  "displayName": "Desert Temple",
+  "description": [
+    "You find yourself",
+    "on a desert island",
+    "with a hidden secret!"
+  ],
+  "requirePermission": false,
+  "blueprints": {
+    "NORMAL": "temple",
+    "NETHER": "nether-island",
+    "THE_END": "end-island"
+  },
+  "slot": 5
+}
