@@ -69,10 +69,10 @@ public class AiCommand extends CompositeCommand {
         if (args.isEmpty()) {
             // If in world, go
             if (getPlugin().getIslands().getIsland(getWorld(), user.getUniqueId()) != null) {
-                return getSubCommand("go").map(goCmd -> goCmd.execute(user, label, new ArrayList<>())).orElse(false);
+                return getSubCommand("go").map(goCmd -> goCmd.call(user, label, new ArrayList<>())).orElse(false);
             }
             // No islands currently
-            return getSubCommand("create").map(createCmd -> createCmd.execute(user, label, new ArrayList<>())).orElse(false);
+            return getSubCommand("create").map(createCmd -> createCmd.call(user, label, new ArrayList<>())).orElse(false);
         }
         user.sendMessage("general.errors.unknown-command", TextVariables.LABEL, getLabel());
         return false;
