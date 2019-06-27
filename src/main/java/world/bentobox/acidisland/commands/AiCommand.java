@@ -12,6 +12,7 @@ import world.bentobox.bentobox.api.commands.island.IslandExpelCommand;
 import world.bentobox.bentobox.api.commands.island.IslandGoCommand;
 import world.bentobox.bentobox.api.commands.island.IslandInfoCommand;
 import world.bentobox.bentobox.api.commands.island.IslandLanguageCommand;
+import world.bentobox.bentobox.api.commands.island.IslandNearCommand;
 import world.bentobox.bentobox.api.commands.island.IslandResetCommand;
 import world.bentobox.bentobox.api.commands.island.IslandResetnameCommand;
 import world.bentobox.bentobox.api.commands.island.IslandSethomeCommand;
@@ -54,6 +55,7 @@ public class AiCommand extends CompositeCommand {
         new IslandUnbanCommand(this);
         new IslandBanlistCommand(this);
         new IslandExpelCommand(this);
+        new IslandNearCommand(this);
         // Team commands
         new IslandTeamCommand(this);
     }
