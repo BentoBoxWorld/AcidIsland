@@ -16,6 +16,8 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +31,7 @@ import org.powermock.reflect.Whitebox;
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.Settings;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.blueprints.dataobjects.BlueprintBundle;
@@ -81,6 +84,9 @@ public class AiCommandTest {
         IslandWorldManager iwm = mock(IslandWorldManager.class);
         when(plugin.getIWM()).thenReturn(iwm);
 
+        // Settings
+        Settings s = mock(Settings.class);
+        when(plugin.getSettings()).thenReturn(s);
 
         // Player has island to begin with
         im = mock(IslandsManager.class);
@@ -108,7 +114,13 @@ public class AiCommandTest {
         when(bun.isRequirePermission()).thenReturn(true);
         when(bpm.getBlueprintBundles(Mockito.any())).thenReturn(map);
         when(plugin.getBlueprintsManager()).thenReturn(bpm);
+
+        // Bukkit
         PowerMockito.mockStatic(Bukkit.class);
+        PluginManager pim = mock(PluginManager.class);
+        when(Bukkit.getPluginManager()).thenReturn(pim);
+        BukkitScheduler sch = mock(BukkitScheduler.class);
+        when(Bukkit.getScheduler()).thenReturn(sch);
 
     }
 
