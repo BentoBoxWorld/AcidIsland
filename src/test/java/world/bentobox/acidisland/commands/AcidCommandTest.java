@@ -1,6 +1,3 @@
-/**
- *
- */
 package world.bentobox.acidisland.commands;
 
 import static org.junit.Assert.assertEquals;
@@ -17,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -38,6 +36,7 @@ import world.bentobox.bentobox.managers.CommandsManager;
 public class AcidCommandTest {
 
     private static final int NUM_COMMANDS = 29;
+    @Mock
     private User user;
 
     /**
@@ -56,7 +55,6 @@ public class AcidCommandTest {
         // Player
         Player p = mock(Player.class);
         // Sometimes use Mockito.withSettings().verboseLogging()
-        user = mock(User.class);
         when(user.isOp()).thenReturn(false);
         UUID uuid = UUID.randomUUID();
         when(user.getUniqueId()).thenReturn(uuid);
@@ -66,7 +64,7 @@ public class AcidCommandTest {
 
         // Locales
         // Return the reference (USE THIS IN THE FUTURE)
-        when(user.getTranslation(Mockito.anyString())).thenAnswer((Answer<String>) invocation -> invocation.getArgumentAt(0, String.class));
+        when(user.getTranslation(Mockito.anyString())).thenAnswer((Answer<String>) invocation -> invocation.getArgument(0, String.class));
 
     }
 

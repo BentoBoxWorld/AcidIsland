@@ -9,15 +9,16 @@ import static org.mockito.Mockito.mock;
 import org.bukkit.entity.Player;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 public class AcidRainEventTest {
 
+    @Mock
     private Player player;
     private AcidRainEvent e;
 
     @Before
     public void setUp() throws Exception {
-        player = mock(Player.class);
         e = new AcidRainEvent(player, 10, 5);
     }
 

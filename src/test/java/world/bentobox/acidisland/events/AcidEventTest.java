@@ -15,16 +15,17 @@ import org.bukkit.potion.PotionEffectType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 public class AcidEventTest {
 
+    @Mock
     private Player player;
     private List<PotionEffectType> effects;
     private AcidEvent e;
 
     @Before
     public void setUp() throws Exception {
-        player = mock(Player.class);
         effects = Arrays.asList(PotionEffectType.values());
         e = new AcidEvent(player, 10, 5, effects);
     }

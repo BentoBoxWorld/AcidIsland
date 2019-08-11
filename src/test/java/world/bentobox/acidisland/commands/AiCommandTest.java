@@ -21,6 +21,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -50,9 +51,13 @@ import world.bentobox.bentobox.managers.IslandsManager;
 public class AiCommandTest {
 
     private static final int NUMBER_OF_COMMANDS = 18;
+    @Mock
     private User user;
+    @Mock
     private IslandsManager im;
+    @Mock
     private Island island;
+    @Mock
     private AcidIsland addon;
 
     /**
@@ -71,7 +76,6 @@ public class AiCommandTest {
         // Player
         Player p = mock(Player.class);
         // Sometimes use Mockito.withSettings().verboseLogging()
-        user = mock(User.class);
         when(user.isOp()).thenReturn(false);
         UUID uuid = UUID.randomUUID();
         when(user.getUniqueId()).thenReturn(uuid);
@@ -89,16 +93,14 @@ public class AiCommandTest {
         when(plugin.getSettings()).thenReturn(s);
 
         // Player has island to begin with
-        im = mock(IslandsManager.class);
-        island = mock(Island.class);
         when(im.getIsland(Mockito.any(), Mockito.any(UUID.class))).thenReturn(island);
         when(plugin.getIslands()).thenReturn(im);
 
         // Locales
         // Return the reference (USE THIS IN THE FUTURE)
-        when(user.getTranslation(Mockito.anyString())).thenAnswer((Answer<String>) invocation -> invocation.getArgumentAt(0, String.class));
+        when(user.getTranslation(Mockito.anyString())).thenAnswer((Answer<String>) invocation -> invocation.getArgument(0, String.class));
 
-        addon = mock(AcidIsland.class);
+        // Addon settings
         AISettings settings = mock(AISettings.class);
         when(settings.getIslandCommand()).thenReturn("ai");
         when(addon.getSettings()).thenReturn(settings);

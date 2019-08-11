@@ -1,6 +1,6 @@
 name: AcidIsland
 main: world.bentobox.acidisland.AcidIsland
-version: ${project.version}
+version: ${version}${build.number}
 metrics: true
 repository: "BentoBoxWorld/AcidIsland"
 icon: "OAK_BOAT"
