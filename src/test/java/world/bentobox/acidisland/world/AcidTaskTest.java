@@ -1,6 +1,10 @@
 package world.bentobox.acidisland.world;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.bukkit.Bukkit;
@@ -8,7 +12,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -20,17 +24,17 @@ import world.bentobox.acidisland.AcidIsland;
 @PrepareForTest({Bukkit.class})
 public class AcidTaskTest {
 
+    @Mock
     private BukkitScheduler scheduler;
+    @Mock
     private AISettings settings;
+    @Mock
     private AcidIsland addon;
 
     @Before
     public void setUp() throws Exception {
         PowerMockito.mockStatic(Bukkit.class);
-        scheduler = mock(BukkitScheduler.class);
         when(Bukkit.getScheduler()).thenReturn(scheduler);
-        addon = mock(AcidIsland.class);
-        settings = mock(AISettings.class);
         when(settings.getAcidDestroyItemTime()).thenReturn(0L);
         when(addon.getSettings()).thenReturn(settings);
     }
@@ -38,22 +42,22 @@ public class AcidTaskTest {
     @Test
     public void testAcidTaskDoNotDestroyItems() {
         new AcidTask(addon);
-        Mockito.verify(scheduler).scheduleSyncRepeatingTask(Mockito.any(), Mockito.any(Runnable.class), Mockito.eq(0L), Mockito.eq(20L));
+        verify(scheduler).scheduleSyncRepeatingTask(any(), any(Runnable.class), eq(0L), eq(20L));
     }
 
     @Test
     public void testAcidTaskDestroyItems() {
         when(settings.getAcidDestroyItemTime()).thenReturn(5L);
         new AcidTask(addon);
-        Mockito.verify(scheduler).scheduleSyncRepeatingTask(Mockito.any(), Mockito.any(Runnable.class), Mockito.eq(0L), Mockito.eq(20L));
-        Mockito.verify(scheduler).scheduleSyncRepeatingTask(Mockito.any(), Mockito.any(Runnable.class), Mockito.eq(100L), Mockito.eq(100L));
+        verify(scheduler).scheduleSyncRepeatingTask(any(), any(Runnable.class), eq(0L), eq(20L));
+        verify(scheduler).scheduleSyncRepeatingTask(any(), any(Runnable.class), eq(100L), eq(100L));
     }
 
     @Test
     public void testAcidTaskCancelTasks() {
         AcidTask task = new AcidTask(addon);
         task.cancelTasks();
-        Mockito.verify(scheduler).cancelTask(Mockito.anyInt());
+        verify(scheduler).cancelTask(anyInt());
     }
 
     @Test
@@ -61,7 +65,7 @@ public class AcidTaskTest {
         when(settings.getAcidDestroyItemTime()).thenReturn(5L);
         AcidTask task = new AcidTask(addon);
         task.cancelTasks();
-        Mockito.verify(scheduler, Mockito.times(2)).cancelTask(Mockito.anyInt());
+        verify(scheduler, times(2)).cancelTask(anyInt());
     }
 
 

@@ -194,11 +194,6 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "world.nether.sea-height", needsReset = true)
     private int netherSeaHeight = 54;
 
-    @ConfigComment("Nether trees are made if a player grows a tree in the nether (gravel and glowstone)")
-    @ConfigComment("Applies to both vanilla and islands Nether")
-    @ConfigEntry(path = "world.nether.trees")
-    private boolean netherTrees = true;
-
     @ConfigComment("Make the nether roof, if false, there is nothing up there")
     @ConfigComment("Change to false if lag is a problem from the generation")
     @ConfigComment("Only applies to islands Nether")
@@ -366,6 +361,10 @@ public class AISettings implements WorldSettings {
     @ConfigComment("When a player joins a team, reset their death count")
     @ConfigEntry(path = "island.deaths.team-join-reset")
     private boolean teamJoinDeathReset = true;
+
+    @ConfigComment("Reset player death count when they start a new island or reset and island")
+    @ConfigEntry(path = "island.deaths.reset-on-new-island")
+    private boolean deathsResetOnNewIsland = true;
 
     // Ranks
     @ConfigEntry(path = "island.customranks")
@@ -773,13 +772,6 @@ public class AISettings implements WorldSettings {
         return netherRoof;
     }
     /**
-     * @return the netherTrees
-     */
-    @Override
-    public boolean isNetherTrees() {
-        return netherTrees;
-    }
-    /**
      * @return the onJoinResetEnderChest
      */
     @Override
@@ -1142,12 +1134,6 @@ public class AISettings implements WorldSettings {
         this.netherSpawnRadius = netherSpawnRadius;
     }
     /**
-     * @param netherTrees the netherTrees to set
-     */
-    public void setNetherTrees(boolean netherTrees) {
-        this.netherTrees = netherTrees;
-    }
-    /**
      * @param onJoinResetEnderChest the onJoinResetEnderChest to set
      */
     public void setOnJoinResetEnderChest(boolean onJoinResetEnderChest) {
@@ -1285,6 +1271,19 @@ public class AISettings implements WorldSettings {
      */
     public void setAcidDamageSnow(boolean acidDamageSnow) {
         this.acidDamageSnow = acidDamageSnow;
+    }
+    /**
+     * @return the deathsResetOnNewIsland
+     */
+    @Override
+    public boolean isDeathsResetOnNewIsland() {
+        return deathsResetOnNewIsland;
+    }
+    /**
+     * @param deathsResetOnNewIsland the deathsResetOnNewIsland to set
+     */
+    public void setDeathsResetOnNewIsland(boolean deathsResetOnNewIsland) {
+        this.deathsResetOnNewIsland = deathsResetOnNewIsland;
     }
 
 }

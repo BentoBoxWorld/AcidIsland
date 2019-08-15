@@ -12,6 +12,7 @@ import world.bentobox.bentobox.api.commands.island.IslandExpelCommand;
 import world.bentobox.bentobox.api.commands.island.IslandGoCommand;
 import world.bentobox.bentobox.api.commands.island.IslandInfoCommand;
 import world.bentobox.bentobox.api.commands.island.IslandLanguageCommand;
+import world.bentobox.bentobox.api.commands.island.IslandNearCommand;
 import world.bentobox.bentobox.api.commands.island.IslandResetCommand;
 import world.bentobox.bentobox.api.commands.island.IslandResetnameCommand;
 import world.bentobox.bentobox.api.commands.island.IslandSethomeCommand;
@@ -54,6 +55,7 @@ public class AiCommand extends CompositeCommand {
         new IslandUnbanCommand(this);
         new IslandBanlistCommand(this);
         new IslandExpelCommand(this);
+        new IslandNearCommand(this);
         // Team commands
         new IslandTeamCommand(this);
     }
@@ -69,10 +71,10 @@ public class AiCommand extends CompositeCommand {
         if (args.isEmpty()) {
             // If in world, go
             if (getPlugin().getIslands().getIsland(getWorld(), user.getUniqueId()) != null) {
-                return getSubCommand("go").map(goCmd -> goCmd.execute(user, label, new ArrayList<>())).orElse(false);
+                return getSubCommand("go").map(goCmd -> goCmd.call(user, label, new ArrayList<>())).orElse(false);
             }
             // No islands currently
-            return getSubCommand("create").map(createCmd -> createCmd.execute(user, label, new ArrayList<>())).orElse(false);
+            return getSubCommand("create").map(createCmd -> createCmd.call(user, label, new ArrayList<>())).orElse(false);
         }
         user.sendMessage("general.errors.unknown-command", TextVariables.LABEL, getLabel());
         return false;

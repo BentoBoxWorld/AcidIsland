@@ -283,6 +283,8 @@ island:
     max: 10
     # When a player joins a team, reset their death count
     team-join-reset: true
+    # Reset player death count when they start a new island or reset and island
+    reset-on-new-island: true
   customranks: {}
 protection:
   # Geo restrict mobs.
