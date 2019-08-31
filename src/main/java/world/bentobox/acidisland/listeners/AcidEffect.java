@@ -249,8 +249,8 @@ public class AcidEffect implements Listener {
             // Check respiration (Bukkit name OXYGEN) enchantment
             // Each level gives the same protection as a diamond helmet
             red += helmet.getEnchantments().getOrDefault(Enchantment.OXYGEN, 0) * 0.12;
-            // Damage
-            if (damage(helmet)) {
+            // Damage if helmet
+            if (helmet.getType().name().contains("HELMET") && damage(helmet)) {
                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
                 inv.setHelmet(null);
             }
