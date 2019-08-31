@@ -9,15 +9,17 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -214,131 +216,53 @@ public class AcidEffect implements Listener {
 
     /**
      * Checks what protection armor provides and slightly damages it as a result of the acid
-     * @param player - player
-     * @return A double between 0.0 and 0.80 that reflects how much armor the
+     * @param le - player
+     * @return A double that reflects how much armor the
      *         player has on. The higher the value, the more protection they
      *         have.
      */
-    private double getDamageReduced(Player player) {
-        org.bukkit.inventory.PlayerInventory inv = player.getInventory();
+    public static double getDamageReduced(LivingEntity le) {
+        // Full diamond armor value = 20. This normalizes it to a max of 0.8. Enchantments can raise it out further.
+        double red = le.getAttribute(Attribute.GENERIC_ARMOR).getValue() * 0.04;
+        EntityEquipment inv = le.getEquipment();
         ItemStack boots = inv.getBoots();
         ItemStack helmet = inv.getHelmet();
         ItemStack chest = inv.getChestplate();
         ItemStack pants = inv.getLeggings();
-        double red = 0.0;
         if (helmet != null) {
-            switch (helmet.getType()) {
-            case LEATHER_HELMET:
-                red += 0.04;
-                break;
-            case GOLDEN_HELMET:
-                red += 0.08;
-                break;
-            case CHAINMAIL_HELMET:
-                red += 0.08;
-                break;
-            case IRON_HELMET:
-                red += 0.08;
-                break;
-            case DIAMOND_HELMET:
-                red += 0.12;
-                break;
-            default:
-                break;
-            }
-            // Check respiration (Bukkit name OXYGEN) enchantment
-            // Each level gives the same protection as a diamond helmet
-            red += helmet.getEnchantments().getOrDefault(Enchantment.OXYGEN, 0) * 0.12;
             // Damage if helmet
             if (helmet.getType().name().contains("HELMET") && damage(helmet)) {
-                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
                 inv.setHelmet(null);
             }
         }
         if (boots != null) {
-            switch (boots.getType()) {
-            case LEATHER_BOOTS:
-                red = red + 0.04;
-                break;
-            case GOLDEN_BOOTS:
-                red = red + 0.04;
-                break;
-            case CHAINMAIL_BOOTS:
-                red = red + 0.04;
-                break;
-            case IRON_BOOTS:
-                red = red + 0.08;
-                break;
-            case DIAMOND_BOOTS:
-                red = red + 0.12;
-                break;
-            default:
-                break;
-            }
             // Damage
             if (damage(boots)) {
-                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
                 inv.setBoots(null);
             }
         }
         // Pants
         if (pants != null) {
-            switch (pants.getType()) {
-            case LEATHER_LEGGINGS:
-                red = red + 0.08;
-                break;
-            case GOLDEN_LEGGINGS:
-                red = red + 0.12;
-                break;
-            case CHAINMAIL_LEGGINGS:
-                red = red + 0.16;
-                break;
-            case IRON_LEGGINGS:
-                red = red + 0.20;
-                break;
-            case DIAMOND_LEGGINGS:
-                red = red + 0.24;
-                break;
-            default:
-                break;
-            }
             // Damage
             if (damage(pants)) {
-                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
                 inv.setLeggings(null);
             }
         }
         // Chest plate
         if (chest != null) {
-            switch (chest.getType()) {
-            case LEATHER_CHESTPLATE:
-                red = red + 0.12;
-                break;
-            case GOLDEN_CHESTPLATE:
-                red = red + 0.20;
-                break;
-            case CHAINMAIL_CHESTPLATE:
-                red = red + 0.20;
-                break;
-            case IRON_CHESTPLATE:
-                red = red + 0.24;
-                break;
-            case DIAMOND_CHESTPLATE:
-                red = red + 0.32;
-                break;
-            default:
-                break;
-            }
             // Damage
             if (damage(chest)) {
-                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+                le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
                 inv.setChestplate(null);
             }
         }
         return red;
     }
 
-    private boolean damage(ItemStack item) {
+    private static boolean damage(ItemStack item) {
         ItemMeta im = item.getItemMeta();
 
         if (im instanceof Damageable) {

@@ -81,11 +81,7 @@ public class AcidIsland extends GameModeAddon {
 
     @Override
     public void onDisable(){
-        if (settings == null) {
-            // Save settings that have changed
-            new Config<>(this, AISettings.class).saveConfigObject(settings);
-            return;
-        }
+        saveWorldSettings();
         acidTask.cancelTasks();
     }
 

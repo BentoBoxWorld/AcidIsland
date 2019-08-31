@@ -57,7 +57,7 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.acid.player")
     private int acidDamage = 10;
 
-    @ConfigComment("Damage that monsters experience from acid")
+    @ConfigComment("Damage that monsters experience from acid. Some monsters have armor or natural armor so will take less damage.")
     @ConfigEntry(path = "acid.damage.acid.monster")
     private int acidDamageMonster = 5;
 

@@ -13,7 +13,7 @@ acid:
     acid:
       # Damage that a player will experience in acid. 10 is half their health typically. 5 would be easier.
       player: 10
-      # Damage that monsters experience from acid
+      # Damage that monsters experience from acid. Some monsters have armor or natural armor so will take less damage.
       monster: 5
       # Damage animals experience from acid
       animal: 5

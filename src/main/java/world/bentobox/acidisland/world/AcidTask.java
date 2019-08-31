@@ -20,6 +20,7 @@ import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Monster;
 
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.acidisland.listeners.AcidEffect;
 
 public class AcidTask {
     private final AcidIsland addon;
@@ -50,12 +51,16 @@ public class AcidTask {
                 .filter(w -> w.getLocation().getBlock().getType().equals(Material.WATER))
                 .forEach(e -> {
                     if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
-                        ((LivingEntity) e).damage(addon.getSettings().getAcidDamageMonster());
+                        applyDamage((LivingEntity) e, addon.getSettings().getAcidDamageMonster());
                     } else if ((e instanceof Animals) && addon.getSettings().getAcidDamageAnimal() > 0D
                             && (!e.getType().equals(EntityType.CHICKEN) || addon.getSettings().isAcidDamageChickens())) {
                         ((LivingEntity) e).damage(addon.getSettings().getAcidDamageAnimal());
                     }
                 }), 0L, 20L);
+    }
+
+    private void applyDamage(LivingEntity e, double damage) {
+        e.damage(Math.max(0, damage - damage * AcidEffect.getDamageReduced(e)));
     }
 
     /**
