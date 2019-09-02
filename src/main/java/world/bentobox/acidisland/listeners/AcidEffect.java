@@ -196,6 +196,7 @@ public class AcidEffect implements Listener {
     private boolean isSafeFromAcid(Player player) {
         // Not in liquid or on snow
         if (!player.getLocation().getBlock().getType().equals(Material.WATER)
+                && !player.getLocation().getBlock().getType().equals(Material.BUBBLE_COLUMN)
                 && (!player.getLocation().getBlock().getType().equals(Material.SNOW) || !addon.getSettings().isAcidDamageSnow())
                 && !player.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.WATER)) {
             return true;
