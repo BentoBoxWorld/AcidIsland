@@ -56,8 +56,6 @@ public class AcidIsland extends GameModeAddon {
             }
             return false;
         }
-        // Save settings
-        saveWorldSettings();
         return true;
     }
 
@@ -157,4 +155,13 @@ public class AcidIsland extends GameModeAddon {
         }
     }
 
+    /* (non-Javadoc)
+     * @see world.bentobox.bentobox.api.addons.Addon#allLoaded()
+     */
+    @Override
+    public void allLoaded() {
+        // Reload settings and save them. This will occur after all addons have loaded
+        this.loadSettings();
+        this.saveWorldSettings();
+    }
 }
