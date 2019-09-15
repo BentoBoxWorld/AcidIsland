@@ -1,5 +1,10 @@
-# addon-acidisland
-AcidIsland add-on for BentoBox
+# AcidIsland
+AcidIsland add-on for BentoBox.
+
+## The Story
+You're on an island, in a sea of acid! If you like Skyblock, try AcidIsland for a new challenge!
+
+This is a variation of SkyBlock. Instead of falling, you must contend with acid water when expanding your island and players can boat to each other's islands.
 
 ## Installing
 
