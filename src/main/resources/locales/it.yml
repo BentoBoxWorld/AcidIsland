@@ -1,0 +1,11 @@
+###########################################################################################
+# Questo è un file YML. Fai attenzione quando lo modifichi. Controlla le tue modifiche    #
+# con un correttore YAML come il seguente: https://yaml-online-parser.appspot.com         #
+###########################################################################################
+
+acidisland:
+  sign:
+    line0: "&1AcidIsland"
+    line1: "[name]"
+    line2: "L''acqua è acida!"
+    line3: "Stai attento! &c<3"
