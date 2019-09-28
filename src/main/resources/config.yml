@@ -269,6 +269,11 @@ island:
       inventory: false
       # Reset Ender Chest - if true, the player's Ender Chest will be cleared.
       ender-chest: false
+  commands:
+    # List of commands to run when a player joins.
+    on-join: []
+    # List of commands to run when a player leaves.
+    on-leave: []
   sethome:
     nether:
       allow: true
