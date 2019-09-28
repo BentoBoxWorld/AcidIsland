@@ -267,7 +267,7 @@ public class AcidEffect implements Listener {
         ItemMeta im = item.getItemMeta();
 
         if (im instanceof Damageable) {
-            Damageable d = ((Damageable)item.getItemMeta());
+            Damageable d = (Damageable)im;
             d.setDamage(d.getDamage() + 1);
             item.setItemMeta((ItemMeta) d);
             return d.getDamage() >= item.getType().getMaxDurability();
