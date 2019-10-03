@@ -26,6 +26,7 @@ import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.managers.CommandsManager;
+import world.bentobox.bentobox.managers.FlagsManager;
 
 /**
  * @author tastybento
@@ -38,6 +39,8 @@ public class AcidCommandTest {
     private static final int NUM_COMMANDS = 29;
     @Mock
     private User user;
+    @Mock
+    private FlagsManager fm;
 
     /**
      * @throws java.lang.Exception
@@ -65,6 +68,10 @@ public class AcidCommandTest {
         // Locales
         // Return the reference (USE THIS IN THE FUTURE)
         when(user.getTranslation(Mockito.anyString())).thenAnswer((Answer<String>) invocation -> invocation.getArgument(0, String.class));
+
+        // Flags manager
+        when(plugin.getFlagsManager()).thenReturn(fm);
+        when(fm.getFlags()).thenReturn(Collections.emptyList());
 
     }
 
