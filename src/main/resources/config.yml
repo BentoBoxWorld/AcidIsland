@@ -246,7 +246,7 @@ island:
     # Overrides the on-leave inventory reset for kicked players.
     kicked-keep-inventory: false
     on-join:
-      # What the plugin should reset when the player joins or creates an island
+      # What the addon should reset when the player joins or creates an island
       # Reset Money - if this is true, will reset the player's money to the starting money
       # Recommendation is that this is set to true, but if you run multi-worlds
       # make sure your economy handles multi-worlds too.
@@ -255,6 +255,12 @@ island:
       # Note: if you have MultiInv running or a similar inventory control plugin, that
       # plugin may still reset the inventory when the world changes.
       inventory: false
+      # Reset health - if true, the player's health will be reset.
+      health: true
+      # Reset hunger - if true, the player's hunger will be reset.
+      hunger: true
+      # Reset experience points - if true, the player's experience will be reset.
+      exp: false
       # Reset Ender Chest - if true, the player's Ender Chest will be cleared.
       ender-chest: false
     on-leave:
@@ -267,6 +273,12 @@ island:
       # Note: if you have MultiInv running or a similar inventory control plugin, that
       # plugin may still reset the inventory when the world changes.
       inventory: false
+      # Reset health - if true, the player's health will be reset.
+      health: false
+      # Reset hunger - if true, the player's hunger will be reset.
+      hunger: false
+      # Reset experience - if true, the player's experience will be reset.
+      exp: false
       # Reset Ender Chest - if true, the player's Ender Chest will be cleared.
       ender-chest: false
   commands:
