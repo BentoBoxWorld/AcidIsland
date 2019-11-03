@@ -5,6 +5,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.generator.ChunkGenerator;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import world.bentobox.acidisland.commands.AcidCommand;
 import world.bentobox.acidisland.commands.AiCommand;
@@ -24,9 +25,9 @@ import world.bentobox.bentobox.lists.Flags;
  */
 public class AcidIsland extends GameModeAddon {
 
-    private AISettings settings;
-    private AcidTask acidTask;
-    private @NonNull ChunkGenerator chunkGenerator;
+    private @Nullable AISettings settings;
+    private @Nullable AcidTask acidTask;
+    private @Nullable ChunkGenerator chunkGenerator;
     private Config<AISettings> config = new Config<>(this, AISettings.class);
 
     private static final String NETHER = "_nether";
@@ -78,10 +79,11 @@ public class AcidIsland extends GameModeAddon {
     }
 
     @Override
-    public void onDisable(){
-        acidTask.cancelTasks();
+    public void onDisable() {
+        if (acidTask != null) acidTask.cancelTasks();
     }
 
+    @Nullable
     public AISettings getSettings() {
         return settings;
     }
