@@ -1,5 +1,5 @@
-AcidIsland
-==========
+AcidIsland™
+===========
 [![Build Status](https://ci.codemc.org/buildStatus/icon?job=BentoBoxWorld/AcidIsland)](https://ci.codemc.org/job/BentoBoxWorld/job/AcidIsland/)
 [![Lines Of Code](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=ncloc)](https://sonarcloud.io/component_measures?id=world.bentobox%3Aacidisland&metric=ncloc)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=sqale_rating)](https://sonarcloud.io/component_measures?id=world.bentobox%3Aacidisland&metric=Maintainability)
@@ -8,11 +8,11 @@ AcidIsland
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=bugs)](https://sonarcloud.io/project/issues?id=world.bentobox%3Aacidisland&resolved=false&types=BUG)
 
 # Introduction
-AcidIsland add-on for BentoBox, so to run AcidIsland, you must have BentoBox installed. It is not a Bukkit plugin and trying to use it as one will not work.
+AcidIsland™ add-on for BentoBox, so to run an AcidIsland™ game, you must have BentoBox installed. It is not a Bukkit plugin and trying to use it as one will not work.
 
 
 ## The Story
-You're on an island, in a sea of acid! If you like Skyblock, try AcidIsland for a new challenge!
+You're on an island, in a sea of acid! If you like Skyblock, try the AcidIsland™ game mode for a new challenge!
 
 This is a variation of SkyBlock. Instead of falling, you must contend with acid water when expanding your island and players can boat to each other's islands.
 
@@ -29,7 +29,7 @@ This is a variation of SkyBlock. Instead of falling, you must contend with acid 
 
 ### Other Add-ons
 
-AcidIsland is an add-on that uses the BentoBox API. Here are some other ones that you may be interested in:
+AcidIsland™ add-on uses the BentoBox API. Here are some other ones that you may be interested in:
 
 * Level - provides island level calculation and a top ten
 * Welcome Warps - provides the warp sign feature
