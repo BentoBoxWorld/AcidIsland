@@ -112,14 +112,14 @@
             <id>sonar</id>
             <properties>
                 <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-                <sonar.organization>tastybento-github</sonar.organization>
+                <sonar.organization>bentobox-world</sonar.organization>
             </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.4.1.1168</version>
+                        <version>3.6.0.1398</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>
@@ -182,6 +182,15 @@
             <artifactId>bentobox</artifactId>
             <version>${bentobox.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- Static analysis -->
+        <!-- We are using Eclipse's annotations. If you're using IDEA, update 
+            your project settings to take these into account for in real time static 
+            analysis -->
+        <dependency>
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>org.eclipse.jdt.annotation</artifactId>
+            <version>2.2.200</version>
         </dependency>
     </dependencies>
 
@@ -311,8 +320,8 @@
                 <configuration>
                     <append>true</append>
                     <excludes>
-                        <!-- This is required to prevent Jacoco from adding synthetic fields
-                            to a JavaBean class (causes errors in testing) -->
+                        <!-- This is required to prevent Jacoco from adding 
+                            synthetic fields to a JavaBean class (causes errors in testing) -->
                         <exclude>**/*Names*</exclude>
                     </excludes>
                 </configuration>
