@@ -10,7 +10,6 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.Vector;
@@ -53,8 +52,17 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
 
     @Override
     public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomeGrid) {
-        if (world.getEnvironment().equals(Environment.NORMAL)) biomeGrid = new AcidBiomeGrid();
+        if (world.getEnvironment().equals(Environment.NORMAL)) setBiome(biomeGrid);
         return generateChunks(world);
+    }
+
+    private void setBiome(BiomeGrid biomeGrid) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                biomeGrid.setBiome(x, z, addon.getSettings().getDefaultBiome());
+            }
+        }
+        
     }
 
     // This needs to be set to return true to override minecraft's default
@@ -142,19 +150,5 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
 
     private void setBlock(int x, int y, int z, Material m) {
         roofChunk.put(new Vector(x, y, z), m);       
-    }
-
-    class AcidBiomeGrid implements BiomeGrid {
-
-        @Override
-        public Biome getBiome(int x, int z) {
-            return addon.getSettings().getDefaultBiome();
-        }
-
-        @Override
-        public void setBiome(int x, int z, Biome bio) {
-            // Nothing to do
-        }
-
     }
 }
