@@ -56,7 +56,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <!-- Non-minecraft related dependencies -->
-        <powermock.version>2.0.2</powermock.version>
+        <powermock.version>2.0.4</powermock.version>
         <!-- More visible way how to change dependency versions -->
         <spigot.version>1.14.4-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>1.9.0-SNAPSHOT</bentobox.version>

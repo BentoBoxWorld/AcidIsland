@@ -10,6 +10,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.Vector;
@@ -43,7 +44,10 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
 
     public ChunkData generateChunks(World world) {
         ChunkData result = createChunkData(world);
-        result.setRegion(0, 0, 0, 16, seaHeight.getOrDefault(world.getEnvironment(), 0) + 1, 16, Material.WATER);
+        int sh = seaHeight.getOrDefault(world.getEnvironment(), 0);
+        if (sh > 0) {
+            result.setRegion(0, 0, 0, 16, sh + 1, 16, Material.WATER);
+        }
         if (world.getEnvironment().equals(Environment.NETHER) && addon.getSettings().isNetherRoof()) {
             roofChunk.forEach((k,v) -> result.setBlock(k.getBlockX(), world.getMaxHeight() + k.getBlockY(), k.getBlockZ(), v));
         }
@@ -57,12 +61,13 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     }
 
     private void setBiome(BiomeGrid biomeGrid) {
+        Biome biome = addon.getSettings().getDefaultBiome();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                biomeGrid.setBiome(x, z, addon.getSettings().getDefaultBiome());
+                biomeGrid.setBiome(x, z, biome);
             }
         }
-        
+
     }
 
     // This needs to be set to return true to override minecraft's default
@@ -149,6 +154,6 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     }
 
     private void setBlock(int x, int y, int z, Material m) {
-        roofChunk.put(new Vector(x, y, z), m);       
+        roofChunk.put(new Vector(x, y, z), m);
     }
 }
