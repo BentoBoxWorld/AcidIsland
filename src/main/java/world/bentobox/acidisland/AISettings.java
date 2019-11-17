@@ -277,18 +277,8 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "island.max-homes")
     private int maxHomes = 5;
 
-    @ConfigComment("Island naming")
-    @ConfigComment("Only players with the TODO can name their island")
-    @ConfigComment("It is displayed in the top ten and enter and exit announcements")
-    @ConfigComment("It replaces the owner's name. Players can use & for color coding if they have the TODO permission")
-    @ConfigComment("These set the minimum and maximum size of a name.")
-    @ConfigEntry(path = "island.name.min-length")
-    private int nameMinLength = 4;
-    @ConfigEntry(path = "island.name.max-length")
-    private int nameMaxLength = 20;
-
     // Reset
-    @ConfigComment("How many resets a player is allowed (override with /acid clearresets <player>)")
+    @ConfigComment("How many resets a player is allowed (manage with /acid reset add/remove/reset/set command)")
     @ConfigComment("Value of -1 means unlimited, 0 means hardcore - no resets.")
     @ConfigComment("Example, 2 resets means they get 2 resets or 3 islands lifetime")
     @ConfigEntry(path = "island.reset.reset-limit")
@@ -664,18 +654,6 @@ public class AISettings implements WorldSettings {
     @Override
     public int getMaxTeamSize() {
         return maxTeamSize;
-    }
-    /**
-     * @return the nameMaxLength
-     */
-    public int getNameMaxLength() {
-        return nameMaxLength;
-    }
-    /**
-     * @return the nameMinLength
-     */
-    public int getNameMinLength() {
-        return nameMinLength;
     }
     /**
      * @return the netherSeaHeight
@@ -1218,19 +1196,6 @@ public class AISettings implements WorldSettings {
     public void setMaxTeamSize(int maxTeamSize) {
         this.maxTeamSize = maxTeamSize;
     }
-    /**
-     * @param nameMaxLength the nameMaxLength to set
-     */
-    public void setNameMaxLength(int nameMaxLength) {
-        this.nameMaxLength = nameMaxLength;
-    }
-    /**
-     * @param nameMinLength the nameMinLength to set
-     */
-    public void setNameMinLength(int nameMinLength) {
-        this.nameMinLength = nameMinLength;
-    }
-
     /**
      * @param netherGenerate the netherGenerate to set
      */
