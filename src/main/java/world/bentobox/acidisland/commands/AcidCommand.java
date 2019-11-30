@@ -25,7 +25,7 @@ import world.bentobox.bentobox.api.commands.admin.blueprints.AdminBlueprintComma
 import world.bentobox.bentobox.api.commands.admin.deaths.AdminDeathsCommand;
 import world.bentobox.bentobox.api.commands.admin.purge.AdminPurgeCommand;
 import world.bentobox.bentobox.api.commands.admin.range.AdminRangeCommand;
-import world.bentobox.bentobox.api.commands.admin.resets.AdminResetsResetCommand;
+import world.bentobox.bentobox.api.commands.admin.resets.AdminResetsCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamAddCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamDisbandCommand;
 import world.bentobox.bentobox.api.commands.admin.team.AdminTeamKickCommand;
@@ -67,8 +67,7 @@ public class AcidCommand extends CompositeCommand {
         // Range
         new AdminRangeCommand(this);
         // Resets
-        new AdminResetsResetCommand(this);
-        // TODO new AdminClearresetsallCommand(this);
+        new AdminResetsCommand(this);
         // Delete
         new AdminDeleteCommand(this);
         // Why

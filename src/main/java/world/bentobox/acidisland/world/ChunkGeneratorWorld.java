@@ -1,14 +1,19 @@
 package world.bentobox.acidisland.world;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.util.Vector;
 import org.bukkit.util.noise.PerlinOctaveGenerator;
 
 import world.bentobox.acidisland.AcidIsland;
@@ -22,6 +27,8 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
 
     private final AcidIsland addon;
     private final Random rand = new Random();
+    private Map<Environment, Integer> seaHeight = new EnumMap<>(Environment.class);
+    private Map<Vector, Material> roofChunk = new HashMap<>();
 
     /**
      * @param addon - addon
@@ -29,29 +36,38 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     public ChunkGeneratorWorld(AcidIsland addon) {
         super();
         this.addon = addon;
+        seaHeight.put(Environment.NORMAL, addon.getSettings().getSeaHeight());
+        seaHeight.put(Environment.NETHER, addon.getSettings().getNetherSeaHeight());
+        seaHeight.put(Environment.THE_END, addon.getSettings().getEndSeaHeight());
+        makeNetherRoof();
+    }
+
+    public ChunkData generateChunks(World world) {
+        ChunkData result = createChunkData(world);
+        int sh = seaHeight.getOrDefault(world.getEnvironment(), 0);
+        if (sh > 0) {
+            result.setRegion(0, 0, 0, 16, sh + 1, 16, Material.WATER);
+        }
+        if (world.getEnvironment().equals(Environment.NETHER) && addon.getSettings().isNetherRoof()) {
+            roofChunk.forEach((k,v) -> result.setBlock(k.getBlockX(), world.getMaxHeight() + k.getBlockY(), k.getBlockZ(), v));
+        }
+        return result;
     }
 
     @Override
-    public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, ChunkGenerator.BiomeGrid biomeGrid) {
-        if (world.getEnvironment().equals(World.Environment.NETHER)) {
-            return generateNetherChunks(world, random, chunkX, chunkZ, biomeGrid);
-        }
-        int seaHeight = world.getEnvironment().equals(World.Environment.NORMAL) ? addon.getSettings().getSeaHeight() : addon.getSettings().getEndSeaHeight();
-        ChunkData result = createChunkData(world);
-        if (seaHeight != 0) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    if (world.getEnvironment().equals(Environment.NORMAL)) {
-                        biomeGrid.setBiome(x, z, addon.getSettings().getDefaultBiome());
-                    }
-                    for (int y = 0; y <= seaHeight; y++) {
-                        result.setBlock(x, y, z, Material.WATER);
-                    }
-                }
-            }
+    public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomeGrid) {
+        if (world.getEnvironment().equals(Environment.NORMAL)) setBiome(biomeGrid);
+        return generateChunks(world);
+    }
 
+    private void setBiome(BiomeGrid biomeGrid) {
+        Biome biome = addon.getSettings().getDefaultBiome();
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                biomeGrid.setBiome(x, z, biome);
+            }
         }
-        return result;
+
     }
 
     // This needs to be set to return true to override minecraft's default
@@ -63,95 +79,81 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
 
     @Override
     public List<BlockPopulator> getDefaultPopulators(final World world) {
-        return Arrays.asList(new BlockPopulator[0]);
+        return Collections.emptyList();
     }
 
     /*
      * Nether Section
      */
-    private ChunkData generateNetherChunks(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomeGrid) {
-        ChunkData result = createChunkData(world);
-        rand.setSeed(world.getSeed());
-        PerlinOctaveGenerator gen = new PerlinOctaveGenerator((long) (random.nextLong() * random.nextGaussian()), 8);
-        // This is a nether generator
-        if (!world.getEnvironment().equals(Environment.NETHER)) {
-            return result;
-        }
-        if (addon.getSettings().getSeaHeight() != 0) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    for (int y = 0; y <= addon.getSettings().getNetherSeaHeight(); y++) {
-                        result.setBlock(x, y, z, Material.WATER);
+    private void makeNetherRoof() {
+        rand.setSeed(System.currentTimeMillis());
+        PerlinOctaveGenerator gen = new PerlinOctaveGenerator((long) (rand.nextLong() * rand.nextGaussian()), 8);
+
+        // Make the roof - common across the world
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                // Do the ceiling
+                setBlock(x, -1, z, Material.BEDROCK);
+                // Next three layers are a mix of bedrock and netherrack
+                for (int y = 2; y < 5; y++) {
+                    double r = gen.noise(x, - y, z, 0.5, 0.5);
+                    if (r > 0D) {
+                        setBlock(x, - y, z, Material.BEDROCK);
                     }
                 }
-            }
-
-        }
-        if (addon.getSettings().isNetherRoof()) {
-            // Make the roof - common across the world
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    // Do the ceiling
-                    int maxHeight = world.getMaxHeight();
-                    result.setBlock(x, (maxHeight - 1), z, Material.BEDROCK);
-                    // Next three layers are a mix of bedrock and netherrack
-                    for (int y = 2; y < 5; y++) {
-                        double r = gen.noise(x, (maxHeight - y), z, 0.5, 0.5);
-                        if (r > 0D) {
-                            result.setBlock(x, (maxHeight - y), z, Material.BEDROCK);
-                        }
+                // Next three layers are a mix of netherrack and air
+                for (int y = 5; y < 8; y++) {
+                    double r = gen.noise(x, - y, z, 0.5, 0.5);
+                    if (r > 0D) {
+                        setBlock(x, -y, z, Material.NETHERRACK);
+                    } else {
+                        setBlock(x, -y, z, Material.AIR);
                     }
-                    // Next three layers are a mix of netherrack and air
-                    for (int y = 5; y < 8; y++) {
-                        double r = gen.noise(x, (double)maxHeight - y, z, 0.5, 0.5);
-                        if (r > 0D) {
-                            result.setBlock(x, (maxHeight - y), z, Material.NETHERRACK);
-                        } else {
-                            result.setBlock(x, (maxHeight - y), z, Material.AIR);
+                }
+                // Layer 8 may be glowstone
+                double r = gen.noise(x, - 8, z, rand.nextFloat(), rand.nextFloat());
+                if (r > 0.5D) {
+                    // Have blobs of glowstone
+                    switch (rand.nextInt(4)) {
+                    case 1:
+                        // Single block
+                        setBlock(x, -8, z, Material.GLOWSTONE);
+                        if (x < 14 && z < 14) {
+                            setBlock(x + 1, -8, z + 1, Material.GLOWSTONE);
+                            setBlock(x + 2, -8, z + 2, Material.GLOWSTONE);
+                            setBlock(x + 1, -8, z + 2, Material.GLOWSTONE);
+                            setBlock(x + 1, -8, z + 2, Material.GLOWSTONE);
                         }
-                    }
-                    // Layer 8 may be glowstone
-                    double r = gen.noise(x, (double)maxHeight - 8, z, random.nextFloat(), random.nextFloat());
-                    if (r > 0.5D) {
-                        // Have blobs of glowstone
-                        switch (random.nextInt(4)) {
-                        case 1:
-                            // Single block
-                            result.setBlock(x, (maxHeight - 8), z, Material.GLOWSTONE);
-                            if (x < 14 && z < 14) {
-                                result.setBlock(x + 1, (maxHeight - 8), z + 1, Material.GLOWSTONE);
-                                result.setBlock(x + 2, (maxHeight - 8), z + 2, Material.GLOWSTONE);
-                                result.setBlock(x + 1, (maxHeight - 8), z + 2, Material.GLOWSTONE);
-                                result.setBlock(x + 1, (maxHeight - 8), z + 2, Material.GLOWSTONE);
-                            }
-                            break;
-                        case 2:
-                            // Stalatite
-                            for (int i = 0; i < random.nextInt(10); i++) {
-                                result.setBlock(x, (maxHeight - 8 - i), z, Material.GLOWSTONE);
-                            }
-                            break;
-                        case 3:
-                            result.setBlock(x, (maxHeight - 8), z, Material.GLOWSTONE);
-                            if (x > 3 && z > 3) {
-                                for (int xx = 0; xx < 3; xx++) {
-                                    for (int zz = 0; zz < 3; zz++) {
-                                        result.setBlock(x - xx, (maxHeight - 8 - random.nextInt(2)), z - xx, Material.GLOWSTONE);
-                                    }
+                        break;
+                    case 2:
+                        // Stalatite
+                        for (int i = 0; i < rand.nextInt(10); i++) {
+                            setBlock(x, - 8 - i, z, Material.GLOWSTONE);
+                        }
+                        break;
+                    case 3:
+                        setBlock(x, -8, z, Material.GLOWSTONE);
+                        if (x > 3 && z > 3) {
+                            for (int xx = 0; xx < 3; xx++) {
+                                for (int zz = 0; zz < 3; zz++) {
+                                    setBlock(x - xx, - 8 - rand.nextInt(2), z - xx, Material.GLOWSTONE);
                                 }
                             }
-                            break;
-                        default:
-                            result.setBlock(x, (maxHeight - 8), z, Material.GLOWSTONE);
                         }
-                        result.setBlock(x, (maxHeight - 8), z, Material.GLOWSTONE);
-                    } else {
-                        result.setBlock(x, (maxHeight - 8), z, Material.AIR);
+                        break;
+                    default:
+                        setBlock(x, -8, z, Material.GLOWSTONE);
                     }
+                    setBlock(x, -8, z, Material.GLOWSTONE);
+                } else {
+                    setBlock(x, -8, z, Material.AIR);
                 }
             }
-        }
-        return result;
 
+        }
+    }
+
+    private void setBlock(int x, int y, int z, Material m) {
+        roofChunk.put(new Vector(x, y, z), m);
     }
 }

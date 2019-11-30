@@ -257,6 +257,11 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "world.visitor-banned-commands")
     private List<String> visitorBannedCommands = new ArrayList<>();
 
+    @ConfigComment("Falling banned commands - players cannot use these commands when falling")
+    @ConfigComment("if the PREVENT_TELEPORT_WHEN_FALLING world setting flag is active")
+    @ConfigEntry(path = "world.falling-banned-commands")
+    private List<String> fallingBannedCommands = new ArrayList<>();
+
     // ---------------------------------------------
 
     /*      ISLAND      */
@@ -272,18 +277,8 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "island.max-homes")
     private int maxHomes = 5;
 
-    @ConfigComment("Island naming")
-    @ConfigComment("Only players with the TODO can name their island")
-    @ConfigComment("It is displayed in the top ten and enter and exit announcements")
-    @ConfigComment("It replaces the owner's name. Players can use & for color coding if they have the TODO permission")
-    @ConfigComment("These set the minimum and maximum size of a name.")
-    @ConfigEntry(path = "island.name.min-length")
-    private int nameMinLength = 4;
-    @ConfigEntry(path = "island.name.max-length")
-    private int nameMaxLength = 20;
-
     // Reset
-    @ConfigComment("How many resets a player is allowed (override with /acid clearresets <player>)")
+    @ConfigComment("How many resets a player is allowed (manage with /acid reset add/remove/reset/set command)")
     @ConfigComment("Value of -1 means unlimited, 0 means hardcore - no resets.")
     @ConfigComment("Example, 2 resets means they get 2 resets or 3 islands lifetime")
     @ConfigEntry(path = "island.reset.reset-limit")
@@ -359,6 +354,43 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Reset Ender Chest - if true, the player's Ender Chest will be cleared.")
     @ConfigEntry(path = "island.reset.on-leave.ender-chest")
     private boolean onLeaveResetEnderChest = false;
+
+    @ConfigComment("Toggles the automatic island creation upon the player's first login on your server.")
+    @ConfigComment("If set to true,")
+    @ConfigComment("   * Upon connecting to your server for the first time, the player will be told that")
+    @ConfigComment("    an island will be created for him.")
+    @ConfigComment("  * Make sure you have a Blueprint Bundle called \"default\": this is the one that will")
+    @ConfigComment("    be used to create the island.")
+    @ConfigComment("  * An island will be created for the player without needing him to run the create command.")
+    @ConfigComment("If set to false, this will disable this feature entirely.")
+    @ConfigComment("Warning:")
+    @ConfigComment("  * If you are running multiple gamemodes on your server, and all of them have")
+    @ConfigComment("    this feature enabled, an island in all the gamemodes will be created simultaneously.")
+    @ConfigComment("    However, it is impossible to know on which island the player will be teleported to afterwards.")
+    @ConfigComment("  * Island creation can be resource-intensive, please consider the options below to help mitigate")
+    @ConfigComment("    the potential issues, especially if you expect a lot of players to connect to your server")
+    @ConfigComment("    in a limited period of time.")
+    @ConfigEntry(path = "island.create-island-on-first-login.enable")
+    private boolean createIslandOnFirstLoginEnabled;
+
+    @ConfigComment("Time in seconds after the player logged in, before his island gets created.")
+    @ConfigComment("If set to 0 or less, the island will be created directly upon the player's login.")
+    @ConfigComment("It is recommended to keep this value under a minute's time.")
+    @ConfigEntry(path = "island.create-island-on-first-login.delay")
+    private int createIslandOnFirstLoginDelay = 5;
+
+    @ConfigComment("Toggles whether the island creation should be aborted if the player logged off while the")
+    @ConfigComment("delay (see the option above) has not worn off yet.")
+    @ConfigComment("If set to true,")
+    @ConfigComment("  * If the player has logged off the server while the delay (see the option above) has not")
+    @ConfigComment("    worn off yet, this will cancel the island creation.")
+    @ConfigComment("  * If the player relogs afterward, since he will not be recognized as a new player, no island")
+    @ConfigComment("    would be created for him.")
+    @ConfigComment("  * If the island creation started before the player logged off, it will continue.")
+    @ConfigComment("If set to false, the player's island will be created even if he went offline in the meantime.")
+    @ConfigComment("Note this option has no effect if the delay (see the option above) is set to 0 or less.")
+    @ConfigEntry(path = "island.create-island-on-first-login.abort-on-logout")
+    private boolean createIslandOnFirstLoginAbortOnLogout = true;
 
     // Commands
     @ConfigComment("List of commands to run when a player joins.")
@@ -624,18 +656,6 @@ public class AISettings implements WorldSettings {
         return maxTeamSize;
     }
     /**
-     * @return the nameMaxLength
-     */
-    public int getNameMaxLength() {
-        return nameMaxLength;
-    }
-    /**
-     * @return the nameMinLength
-     */
-    public int getNameMinLength() {
-        return nameMinLength;
-    }
-    /**
      * @return the netherSeaHeight
      */
     public int getNetherSeaHeight() {
@@ -691,6 +711,15 @@ public class AISettings implements WorldSettings {
     public List<String> getVisitorBannedCommands() {
         return visitorBannedCommands;
     }
+
+    /**
+     * @return the fallingBannedCommands
+     */
+    @Override
+    public List<String> getFallingBannedCommands() {
+        return fallingBannedCommands;
+    }
+
     /**
      * @return the worldFlags
      */
@@ -777,6 +806,44 @@ public class AISettings implements WorldSettings {
     public boolean isKickedKeepInventory() {
         return kickedKeepInventory;
     }
+
+
+    /**
+     * This method returns the createIslandOnFirstLoginEnabled boolean value.
+     * @return the createIslandOnFirstLoginEnabled value
+     * @since 1.9.0
+     */
+    @Override
+    public boolean isCreateIslandOnFirstLoginEnabled()
+    {
+        return createIslandOnFirstLoginEnabled;
+    }
+
+
+    /**
+     * This method returns the createIslandOnFirstLoginDelay int value.
+     * @return the createIslandOnFirstLoginDelay value
+     * @since 1.9.0
+     */
+    @Override
+    public int getCreateIslandOnFirstLoginDelay()
+    {
+        return createIslandOnFirstLoginDelay;
+    }
+
+
+    /**
+     * This method returns the createIslandOnFirstLoginAbortOnLogout boolean value.
+     * @return the createIslandOnFirstLoginAbortOnLogout value
+     * @since 1.9.0
+     */
+    @Override
+    public boolean isCreateIslandOnFirstLoginAbortOnLogout()
+    {
+        return createIslandOnFirstLoginAbortOnLogout;
+    }
+
+
     /**
      * @return the leaversLoseReset
      */
@@ -1130,19 +1197,6 @@ public class AISettings implements WorldSettings {
         this.maxTeamSize = maxTeamSize;
     }
     /**
-     * @param nameMaxLength the nameMaxLength to set
-     */
-    public void setNameMaxLength(int nameMaxLength) {
-        this.nameMaxLength = nameMaxLength;
-    }
-    /**
-     * @param nameMinLength the nameMinLength to set
-     */
-    public void setNameMinLength(int nameMinLength) {
-        this.nameMinLength = nameMinLength;
-    }
-
-    /**
      * @param netherGenerate the netherGenerate to set
      */
     public void setNetherGenerate(boolean netherGenerate) {
@@ -1278,6 +1332,13 @@ public class AISettings implements WorldSettings {
      */
     public void setVisitorBannedCommands(List<String> visitorBannedCommands) {
         this.visitorBannedCommands = visitorBannedCommands;
+    }
+
+    /**
+     * @param fallingBannedCommands the fallingBannedCommands to set
+     */
+    public void setFallingBannedCommands(List<String> fallingBannedCommands) {
+        this.fallingBannedCommands = fallingBannedCommands;
     }
 
     /**
@@ -1423,4 +1484,27 @@ public class AISettings implements WorldSettings {
         this.onLeaveResetXP = onLeaveResetXP;
     }
 
+    /**
+     * @param createIslandOnFirstLoginEnabled the createIslandOnFirstLoginEnabled to set
+     */
+    public void setCreateIslandOnFirstLoginEnabled(boolean createIslandOnFirstLoginEnabled)
+    {
+        this.createIslandOnFirstLoginEnabled = createIslandOnFirstLoginEnabled;
+    }
+
+    /**
+     * @param createIslandOnFirstLoginDelay the createIslandOnFirstLoginDelay to set
+     */
+    public void setCreateIslandOnFirstLoginDelay(int createIslandOnFirstLoginDelay)
+    {
+        this.createIslandOnFirstLoginDelay = createIslandOnFirstLoginDelay;
+    }
+
+    /**
+     * @param createIslandOnFirstLoginAbortOnLogout the createIslandOnFirstLoginAbortOnLogout to set
+     */
+    public void setCreateIslandOnFirstLoginAbortOnLogout(boolean createIslandOnFirstLoginAbortOnLogout)
+    {
+        this.createIslandOnFirstLoginAbortOnLogout = createIslandOnFirstLoginAbortOnLogout;
+    }
 }
