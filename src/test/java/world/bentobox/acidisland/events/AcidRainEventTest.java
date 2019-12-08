@@ -7,19 +7,27 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AcidRainEventTest {
 
     @Mock
     private Player player;
+    private List<PotionEffectType> effects;
     private AcidRainEvent e;
 
     @Before
     public void setUp() throws Exception {
-        e = new AcidRainEvent(player, 10, 5);
+        effects = Arrays.asList(PotionEffectType.values());
+        e = new AcidRainEvent(player, 10, 5, effects);
     }
 
     @Test
@@ -53,6 +61,17 @@ public class AcidRainEventTest {
     public void testSetTotalDamage() {
         e.setRainDamage(50);
         assertTrue(e.getRainDamage() == 50D);
+    }
+
+    @Test
+    public void testGetPotionEffects() {
+        Assert.assertArrayEquals(PotionEffectType.values(), e.getPotionEffects().toArray());
+    }
+
+    @Test
+    public void testSetPotionEffects() {
+        e.setPotionEffects(new ArrayList<>());
+        assertTrue(e.getPotionEffects().isEmpty());
     }
 
     @Test

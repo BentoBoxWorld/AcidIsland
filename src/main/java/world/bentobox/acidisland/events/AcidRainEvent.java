@@ -4,6 +4,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.List;
 
 /**
  * This event is fired when a player is going to be burned by acid rain
@@ -17,6 +20,10 @@ public class AcidRainEvent extends Event implements Cancellable {
     private Player player;
     private double rainDamage;
     private final double protection;
+    /**
+     * @since 1.9.1
+     */
+    private List<PotionEffectType> potionEffects;
 
     private boolean cancelled;
 
@@ -26,10 +33,11 @@ public class AcidRainEvent extends Event implements Cancellable {
      * @param rainDamage
      * @param protection
      */
-    public AcidRainEvent(Player player, double rainDamage, double protection) {
+    public AcidRainEvent(Player player, double rainDamage, double protection, List<PotionEffectType> potionEffects) {
         this.player = player;
         this.rainDamage = rainDamage;
         this.protection = protection;
+        this.potionEffects = potionEffects;
     }
 
     /**
@@ -67,6 +75,25 @@ public class AcidRainEvent extends Event implements Cancellable {
      */
     public void setRainDamage(double rainDamage) {
         this.rainDamage = rainDamage;
+    }
+
+    /**
+     * Returns the potion effects that will be applied to the player.
+     * @return
+     * @since 1.9.1
+     */
+    public List<PotionEffectType> getPotionEffects() {
+        return potionEffects;
+    }
+
+    /**
+     *
+     * @param potionEffects the potionEffects to set
+     * @return
+     * @since 1.9.1
+     */
+    public void setPotionEffects(List<PotionEffectType> potionEffects) {
+        this.potionEffects = potionEffects;
     }
 
     @Override

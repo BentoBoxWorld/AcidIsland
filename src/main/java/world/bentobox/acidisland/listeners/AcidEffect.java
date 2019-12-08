@@ -116,11 +116,16 @@ public class AcidEffect implements Listener {
                         } else if (wetPlayers.containsKey(player) && wetPlayers.get(player) < System.currentTimeMillis()) {
                             double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
                             double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection);
-                            AcidRainEvent e = new AcidRainEvent(player, totalDamage, protection);
-                            addon.getServer().getPluginManager().callEvent(e);
-                            if (!e.isCancelled()) {
-                                player.damage(e.getRainDamage());
-                                player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                            AcidRainEvent event = new AcidRainEvent(player, totalDamage, protection, addon.getSettings().getAcidRainEffects());
+                            addon.getServer().getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                event.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
+                                event.getPotionEffects().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
+                                // Apply damage if there is any
+                                if (event.getRainDamage() > 0D) {
+                                    player.damage(event.getRainDamage());
+                                    player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                                }
                             }
                         }
                     }
