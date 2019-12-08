@@ -82,14 +82,30 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.delay")
     private long acidDamageDelay = 2;
 
-    @ConfigComment("Potion effects from going into acid water")
-    @ConfigComment("You can list multiple effects")
+    @ConfigComment("Potion effects from going into acid water.")
+    @ConfigComment("You can list multiple effects.")
+    @ConfigComment("Available effects are:")
+    @ConfigComment("   BLINDNESS")
+    @ConfigComment("   CONFUSION")
+    @ConfigComment("   HUNGER")
+    @ConfigComment("   POISON")
+    @ConfigComment("   SLOW")
+    @ConfigComment("   SLOW_DIGGING")
+    @ConfigComment("   WEAKNESS")
     @ConfigEntry(path = "acid.damage.effects")
     @Adapter(PotionEffectListAdapter.class)
     private List<PotionEffectType> acidEffects = new ArrayList<>();
 
-    @ConfigComment("Potion effects from going into acid rain and snow")
+    @ConfigComment("Potion effects from going into acid rain and snow.")
     @ConfigComment("You can list multiple effects.")
+    @ConfigComment("Available effects are:")
+    @ConfigComment("   BLINDNESS")
+    @ConfigComment("   CONFUSION")
+    @ConfigComment("   HUNGER")
+    @ConfigComment("   POISON")
+    @ConfigComment("   SLOW")
+    @ConfigComment("   SLOW_DIGGING")
+    @ConfigComment("   WEAKNESS")
     @ConfigEntry(path = "acid.damage.rain-effects", since = "1.9.1")
     @Adapter(PotionEffectListAdapter.class)
     private List<PotionEffectType> acidRainEffects = new ArrayList<>();
