@@ -1,12 +1,12 @@
 package world.bentobox.acidisland.events;
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.List;
 
 /**
  * This event is fired when a player is going to be burned by acid rain
@@ -79,7 +79,7 @@ public class AcidRainEvent extends Event implements Cancellable {
 
     /**
      * Returns the potion effects that will be applied to the player.
-     * @return
+     * @return list of potion effect types
      * @since 1.9.1
      */
     public List<PotionEffectType> getPotionEffects() {
@@ -89,7 +89,6 @@ public class AcidRainEvent extends Event implements Cancellable {
     /**
      *
      * @param potionEffects the potionEffects to set
-     * @return
      * @since 1.9.1
      */
     public void setPotionEffects(List<PotionEffectType> potionEffects) {
