@@ -9,6 +9,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
@@ -116,11 +117,16 @@ public class AcidEffect implements Listener {
                         } else if (wetPlayers.containsKey(player) && wetPlayers.get(player) < System.currentTimeMillis()) {
                             double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
                             double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection);
-                            AcidRainEvent e = new AcidRainEvent(player, totalDamage, protection);
-                            addon.getServer().getPluginManager().callEvent(e);
-                            if (!e.isCancelled()) {
-                                player.damage(e.getRainDamage());
-                                player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                            AcidRainEvent event = new AcidRainEvent(player, totalDamage, protection, addon.getSettings().getAcidRainEffects());
+                            addon.getServer().getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                event.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
+                                event.getPotionEffects().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
+                                // Apply damage if there is any
+                                if (event.getRainDamage() > 0D) {
+                                    player.damage(event.getRainDamage());
+                                    player.getWorld().playSound(playerLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                                }
                             }
                         }
                     }
@@ -172,11 +178,13 @@ public class AcidEffect implements Listener {
      * @return true if they are safe
      */
     private boolean isSafeFromRain(Player player) {
-        if (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
-                && player.getInventory().getHelmet().getType().name().contains("HELMET"))
+        if (player.getWorld().getEnvironment().equals(Environment.NETHER)
+                || player.getWorld().getEnvironment().equals(Environment.THE_END)
+                || (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getType().name().contains("HELMET")))
                 || (!addon.getSettings().isAcidDamageSnow() && player.getLocation().getBlock().getTemperature() < 0.1) // snow falls
                 || player.getLocation().getBlock().getHumidity() == 0 // dry
-                || (player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains))) {
+                || (player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains))
+                ) {
             return true;
         }
         // Check if all air above player

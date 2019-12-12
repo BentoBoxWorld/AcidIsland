@@ -69,7 +69,7 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.acid.item")
     private long acidDestroyItemTime = 0;
 
-    @ConfigComment("Damage from acid rain")
+    @ConfigComment("Damage from acid rain (and snow, if toggled on).")
     @ConfigEntry(path = "acid.damage.rain")
     private int acidRainDamage = 1;
 
@@ -82,11 +82,33 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.delay")
     private long acidDamageDelay = 2;
 
-    @ConfigComment("Portion effects from going into acid water")
-    @ConfigComment("You can list multiple effects")
+    @ConfigComment("Potion effects from going into acid water.")
+    @ConfigComment("You can list multiple effects.")
+    @ConfigComment("Available effects are:")
+    @ConfigComment("   BLINDNESS")
+    @ConfigComment("   CONFUSION")
+    @ConfigComment("   HUNGER")
+    @ConfigComment("   POISON")
+    @ConfigComment("   SLOW")
+    @ConfigComment("   SLOW_DIGGING")
+    @ConfigComment("   WEAKNESS")
     @ConfigEntry(path = "acid.damage.effects")
     @Adapter(PotionEffectListAdapter.class)
     private List<PotionEffectType> acidEffects = new ArrayList<>();
+
+    @ConfigComment("Potion effects from going into acid rain and snow.")
+    @ConfigComment("You can list multiple effects.")
+    @ConfigComment("Available effects are:")
+    @ConfigComment("   BLINDNESS")
+    @ConfigComment("   CONFUSION")
+    @ConfigComment("   HUNGER")
+    @ConfigComment("   POISON")
+    @ConfigComment("   SLOW")
+    @ConfigComment("   SLOW_DIGGING")
+    @ConfigComment("   WEAKNESS")
+    @ConfigEntry(path = "acid.damage.rain-effects", since = "1.9.1")
+    @Adapter(PotionEffectListAdapter.class)
+    private List<PotionEffectType> acidRainEffects = new ArrayList<>();
 
     @ConfigComment("If player wears a helmet then they will not suffer from acid rain")
     @ConfigEntry(path = "acid.damage.protection.helmet")
@@ -1506,5 +1528,23 @@ public class AISettings implements WorldSettings {
     public void setCreateIslandOnFirstLoginAbortOnLogout(boolean createIslandOnFirstLoginAbortOnLogout)
     {
         this.createIslandOnFirstLoginAbortOnLogout = createIslandOnFirstLoginAbortOnLogout;
+    }
+
+    /**
+     *
+     * @return
+     * @since 1.9.1
+     */
+    public List<PotionEffectType> getAcidRainEffects() {
+        return acidRainEffects;
+    }
+
+    /**
+     *
+     * @param acidRainEffects
+     * @since 1.9.1
+     */
+    public void setAcidRainEffects(List<PotionEffectType> acidRainEffects) {
+        this.acidRainEffects = acidRainEffects;
     }
 }
