@@ -60,6 +60,7 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
         return generateChunks(world);
     }
 
+    @SuppressWarnings("deprecation")
     private void setBiome(BiomeGrid biomeGrid) {
         Biome biome = addon.getSettings().getDefaultBiome();
         for (int x = 0; x < 16; x++) {
