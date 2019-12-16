@@ -18,6 +18,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
@@ -146,6 +147,7 @@ public class AcidEffectTest {
         when(world.hasStorm()).thenReturn(true);
         when(world.getBlockAt(anyInt(), anyInt(), anyInt())).thenReturn(airBlock);
         when(world.getMaxHeight()).thenReturn(5);
+        when(world.getEnvironment()).thenReturn(Environment.NORMAL);
         
         ae = new AcidEffect(addon);
     }
@@ -303,6 +305,38 @@ public class AcidEffectTest {
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
+     */
+    @Test
+    public void testOnPlayerMoveAcidRainWrongWorld() {
+        World nether = mock(World.class);
+        when(nether.getName()).thenReturn("world_nether");
+        when(nether.getEnvironment()).thenReturn(Environment.NETHER);        
+        when(player.getWorld()).thenReturn(nether);
+       
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        // 2 times only
+        verify(addon, times(2)).getPlugin();
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
+     */
+    @Test
+    public void testOnPlayerMoveAcidRainWrongWorldEnd() {
+        World end = mock(World.class);
+        when(end.getName()).thenReturn("world_end");
+        when(end.getEnvironment()).thenReturn(Environment.THE_END);        
+        when(player.getWorld()).thenReturn(end);
+       
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        // 2 times only
+        verify(addon, times(2)).getPlugin();
     }
     
     /**

@@ -19,18 +19,38 @@ acid:
       animal: 5
       # Destroy items after this many seconds in acid. 0 = do not destroy items
       item: 0
-    # Damage from acid rain
+    # Damage from acid rain (and snow, if toggled on).
     rain: 1
     # Damage from acid snow
     snow: false
     # Delay before acid or acid rain starts burning
     # This can give time for conduit power to kick in
     delay: 2
-    # Portion effects from going into acid water
-    # You can list multiple effects
+    # Potion effects from going into acid water.
+    # You can list multiple effects.
+    # Available effects are:
+    #    BLINDNESS
+    #    CONFUSION
+    #    HUNGER
+    #    POISON
+    #    SLOW
+    #    SLOW_DIGGING
+    #    WEAKNESS
     effects:
     - CONFUSION
     - BLINDNESS
+    # Potion effects from going into acid rain and snow.
+    # You can list multiple effects.
+    # Available effects are:
+    #    BLINDNESS
+    #    CONFUSION
+    #    HUNGER
+    #    POISON
+    #    SLOW
+    #    SLOW_DIGGING
+    #    WEAKNESS
+    # Added since 1.9.1.
+    rain-effects: []
     protection:
       # If player wears a helmet then they will not suffer from acid rain
       helmet: false
@@ -131,10 +151,10 @@ world:
   # This setting is toggled in world flags and set by the settings GUI.
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
-  - ZOMBIE_VILLAGER
-  - WITHER
   - PIG_ZOMBIE
+  - WITHER
   - ENDERMAN
+  - ZOMBIE_VILLAGER
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -173,14 +193,14 @@ world:
     END_PORTAL: 500
     BREEDING: 500
     HURT_VILLAGERS: 500
-    TURTLE_EGGS: 500
     FROST_WALKER: 500
+    TURTLE_EGGS: 500
     COLLECT_LAVA: 500
     LEVER: 500
     ELYTRA: 0
-    RIDING: 500
     HURT_MONSTERS: 0
     CAKE: 500
+    RIDING: 500
     ARMOR_STAND: 500
     NAME_TAG: 500
     TRADING: 0
@@ -189,10 +209,10 @@ world:
     NOTE_BLOCK: 0
     FLINT_AND_STEEL: 500
     NETHER_PORTAL: 500
-    CROP_TRAMPLE: 500
     ITEM_PICKUP: 0
-    BREWING: 500
+    CROP_TRAMPLE: 500
     DROPPER: 500
+    BREWING: 500
     TNT_PRIMING: 500
     COLLECT_WATER: 500
     BUTTON: 500
@@ -203,8 +223,8 @@ world:
     EXPERIENCE_BOTTLE_THROWING: 500
     PRESSURE_PLATE: 0
     DYE: 500
-    ITEM_FRAME: 500
     PLACE_BLOCKS: 500
+    ITEM_FRAME: 500
     CRAFTING: 0
     ENCHANTING: 0
     SHEARING: 500
@@ -217,12 +237,12 @@ world:
     EXPERIENCE_PICKUP: 500
     HOPPER: 500
     LEASH: 500
-    BREAK_BLOCKS: 500
     MOUNT_INVENTORY: 500
+    BREAK_BLOCKS: 500
     CHORUS_FRUIT: 500
     CONTAINER: 500
-    JUKEBOX: 500
     POTION_THROWING: 500
+    JUKEBOX: 500
   # These are the default settings for new islands
   default-island-settings:
     PVP_END: false
@@ -230,8 +250,8 @@ world:
     PVP_NETHER: false
     LEAF_DECAY: true
     TNT_DAMAGE: true
-    FIRE_IGNITE: true
     MONSTER_SPAWN: true
+    FIRE_IGNITE: true
     FIRE_SPREAD: true
     FIRE_BURNING: true
     PVP_OVERWORLD: false
@@ -257,7 +277,7 @@ island:
   # Use this permission to set for specific user groups: acidisland.island.maxhomes.<number>
   max-homes: 1
   reset:
-    # How many resets a player is allowed (override with /acid clearresets <player>)
+    # How many resets a player is allowed (manage with /acid reset add/remove/reset/set command)
     # Value of -1 means unlimited, 0 means hardcore - no resets.
     # Example, 2 resets means they get 2 resets or 3 islands lifetime
     reset-limit: -1

@@ -1,6 +1,5 @@
 package world.bentobox.acidisland.events;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -21,7 +20,7 @@ public class AcidEvent extends Event implements Cancellable {
     private Player player;
     private double totalDamage;
     private final double protection;
-    private List<PotionEffectType> potionEffects = new ArrayList<>();
+    private List<PotionEffectType> potionEffects;
 
     /**
      * @param player - player
