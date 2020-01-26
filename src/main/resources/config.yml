@@ -358,6 +358,11 @@ island:
     # If set to false, the player's island will be created even if he went offline in the meantime.
     # Note this option has no effect if the delay (see the option above) is set to 0 or less.
     abort-on-logout: true
+  # Create Nether or End islands if they are missing when a player goes through a portal.
+  # Nether and End islands are usually pasted when a player makes their island, but if they are
+  # missing for some reason, you can switch this on.
+  # Note that bedrock removal glitches can exploit this option.
+  create-missing-nether-end-islands: false
   commands:
     # List of commands to run when a player joins.
     on-join: []

@@ -414,6 +414,13 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "island.create-island-on-first-login.abort-on-logout")
     private boolean createIslandOnFirstLoginAbortOnLogout = true;
 
+    @ConfigComment("Create Nether or End islands if they are missing when a player goes through a portal.")
+    @ConfigComment("Nether and End islands are usually pasted when a player makes their island, but if they are")
+    @ConfigComment("missing for some reason, you can switch this on.")
+    @ConfigComment("Note that bedrock removal glitches can exploit this option.")
+    @ConfigEntry(path = "island.create-missing-nether-end-islands")
+    private boolean pasteMissingIslands = false;
+
     // Commands
     @ConfigComment("List of commands to run when a player joins.")
     @ConfigEntry(path = "island.commands.on-join")
@@ -1531,8 +1538,25 @@ public class AISettings implements WorldSettings {
     }
 
     /**
-     *
-     * @return
+     * @return the pasteMissingIslands
+     * @since 1.10.0
+     */
+    @Override
+    public boolean isPasteMissingIslands() {
+        return pasteMissingIslands;
+    }
+
+    /**
+     * @param pasteMissingIslands the pasteMissingIslands to set
+     * @since 1.10.0
+     */
+    public void setPasteMissingIslands(boolean pasteMissingIslands) {
+        this.pasteMissingIslands = pasteMissingIslands;
+    }
+
+    /**
+     * Get acid rain potion effects
+     * @return liust of potion effects
      * @since 1.9.1
      */
     public List<PotionEffectType> getAcidRainEffects() {

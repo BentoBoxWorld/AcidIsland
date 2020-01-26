@@ -1,6 +1,5 @@
 package world.bentobox.acidisland.events;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;

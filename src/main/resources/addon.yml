@@ -51,7 +51,25 @@ permissions:
     description: Player can use the island reset or restart command
     default: true  
   acidisland.island.team:
-    description: Let a player use team commands
+    description: Let a player use team command
+    default: true
+  acidisland.island.team.setowner:
+    description: Let a player change the team owner
+    default: true
+  acidisland.island.team.invite:
+    description: Let a player invite others
+    default: true
+  acidisland.island.team.reject:
+    description: Let a player reject invites
+    default: true
+  acidisland.island.team.leave:
+    description: Let a player leave the team
+    default: true
+  acidisland.island.team.kick:
+    description: Let a player kick team members
+    default: true
+  acidisland.island.team.accept:
+    description: Let a player accept invitations
     default: true
   acidisland.island.team.trust:
     description: Let a player use team trust commands
