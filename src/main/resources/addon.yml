@@ -92,6 +92,9 @@ permissions:
   acidisland.mod.bypasscooldowns:
     description: Allow moderator to bypass cooldowns
     default: op
+  acidisland.mod.bypassdelays:
+    description: Allow moderator to bypass delays
+    default: op
   acidisland.mod.bypassprotect:
     description: Allow moderator to bypass island protection
     default: op
