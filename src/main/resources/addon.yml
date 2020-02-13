@@ -7,145 +7,148 @@ icon: "OAK_BOAT"
 
 authors: tastybento
 
-permissions:    
-  acidisland.island:
-   description: Allow island command usage
-   default: true
-  acidisland.island.create:
-    description: Allow island creation
-    default: true
-  acidisland.island.home:
-    description: Allow teleporting to player island
-    default: true
-  acidisland.island.sethome:
-    description: Let the player use the sethome command
-    default: true
-  acidisland.island.info:
-    description: Let the player check other players info
-    default: true
-  acidisland.island.lock:
-    description: Allows island locking
-    default: true
-  acidisland.island.near:
-    description: Players can see nearby island names
-    default: true
-  acidisland.island.expel:
-    description: Allows expelling of visitors
-    default: true
-  acidisland.island.ban:
-    description: Allows banning of visitors
-    default: true
-  acidisland.island.settings:
-    description: Player can see server settings
-    default: true
-  acidisland.island.language:
-    description: Player can select a language
-    default: true
-  acidisland.island.name:
-    description: Player can set the name of their island
-    default: true
-  acidisland.island.spawn:
-    description: Player can use the island spawn command if spawn exists
-    default: true
-  acidisland.island.reset:
-    description: Player can use the island reset or restart command
-    default: true  
-  acidisland.island.team:
-    description: Let a player use team command
-    default: true
-  acidisland.island.team.setowner:
-    description: Let a player change the team owner
-    default: true
-  acidisland.island.team.invite:
-    description: Let a player invite others
-    default: true
-  acidisland.island.team.reject:
-    description: Let a player reject invites
-    default: true
-  acidisland.island.team.leave:
-    description: Let a player leave the team
-    default: true
-  acidisland.island.team.kick:
-    description: Let a player kick team members
-    default: true
-  acidisland.island.team.accept:
-    description: Let a player accept invitations
-    default: true
-  acidisland.island.team.trust:
-    description: Let a player use team trust commands
-    default: true
-  acidisland.island.team.coop:
-    description: Let a player use team coop commands
-    default: true
-  acidisland.island.team.promote:
-    description: Let a player use promote commands
-    default: true  
-  acidisland.settings.*:
-    description: Allow use of settings on island
-    default: true
-  acidisland.mod.info:
-    description: Let a moderator see info on a player
+permissions: 
+  acidisland.admin.clearresetall: 
     default: op
-  acidisland.mod.clearreset:
-    description: Allow clearing of island reset limit
+    description: "Allow clearing of island reset limit of all players"
+  acidisland.admin.delete: 
+    default: op
+    description: "Let a player completely remove a player (including island)"
+  acidisland.admin.noban: 
+    default: op
+    description: "Player cannot be banned from an island"
+  acidisland.admin.noexpel: 
+    default: op
+    description: "Player cannot be expelled from an island"
+  acidisland.admin.register: 
+    default: op
+    description: "Let a player register the nearest island to another player."
+  acidisland.admin.reload: 
+    default: op
+    description: "Reload the config.yml"
+  acidisland.admin.setlanguage: 
+    default: op
+    description: "Resets all player languages and sets the default language"
+  acidisland.admin.setrange: 
+    default: op
+    description: "Allows setting of island protection range"
+  acidisland.admin.setspawn: 
+    default: op
+    description: "Allows use of spawn tools"
+  acidisland.admin.settingsreset: 
+    default: op
+    description: "Resets all the islands to default protection settings"
+  acidisland.admin.tp: 
+    default: op
+    description: "Allows teleport to an island"
+  acidisland.admin.unregister: 
+    default: op
+    description: "Removes a player from an island without deleting the island blocks."
+  acidisland.island: 
+    default: true
+    description: "Allow island command usage"
+  acidisland.island.ban: 
+    default: true
+    description: "Allows banning of visitors"
+  acidisland.island.create: 
+    default: true
+    description: "Allow island creation"
+  acidisland.island.expel: 
+    default: true
+    description: "Allows expelling of visitors"
+  acidisland.island.home: 
+    default: true
+    description: "Allow teleporting to player island"
+  acidisland.island.info: 
+    default: true
+    description: "Let the player check other players info"
+  acidisland.island.language: 
+    default: true
+    description: "Player can select a language"
+  acidisland.island.lock: 
+    default: true
+    description: "Allows island locking"
+  acidisland.island.name: 
+    default: true
+    description: "Player can set the name of their island"
+  acidisland.island.near: 
+    default: true
+    description: "Players can see nearby island names"
+  acidisland.island.reset: 
+    default: true
+    description: "Player can use the island reset or restart command"
+  acidisland.island.sethome: 
+    default: true
+    description: "Let the player use the sethome command"
+  acidisland.island.settings: 
+    default: true
+    description: "Player can see server settings"
+  acidisland.island.spawn: 
+    default: true
+    description: "Player can use the island spawn command if spawn exists"
+  acidisland.island.team: 
+    default: true
+    description: "Let a player use team command"
+  acidisland.island.team.accept: 
+    default: true
+    description: "Let a player accept invitations"
+  acidisland.island.team.coop: 
+    default: true
+    description: "Let a player use team coop commands"
+  acidisland.island.team.invite: 
+    default: true
+    description: "Let a player invite others"
+  acidisland.island.team.kick: 
+    default: true
+    description: "Let a player kick team members"
+  acidisland.island.team.leave: 
+    default: true
+    description: "Let a player leave the team"
+  acidisland.island.team.promote: 
+    default: true
+    description: "Let a player use promote commands"
+  acidisland.island.team.reject: 
+    default: true
+    description: "Let a player reject invites"
+  acidisland.island.team.setowner: 
+    default: true
+    description: "Let a player change the team owner"
+  acidisland.island.team.trust: 
+    default: true
+    description: "Let a player use team trust commands"
+  acidisland.mod.bypassban: 
+    default: op
+    description: "Bypasses island ban"
+  acidisland.mod.bypasscooldowns: 
+    default: op
+    description: "Allow moderator to bypass cooldowns"
+  acidisland.mod.bypassdelays: 
+    default: op
+    description: "Allow moderator to bypass delays"
+  acidisland.mod.bypassexpel: 
+    default: op
+    description: "Allow moderator to bypass island expulsion"
+  acidisland.mod.bypasslock: 
+    default: op
+    description: "Bypasses an island lock"
+  acidisland.mod.bypassprotect: 
+    default: op
+    description: "Allow moderator to bypass island protection"
+  acidisland.mod.clearreset: 
     default: false
-  acidisland.mod.bypasscooldowns:
-    description: Allow moderator to bypass cooldowns
+    description: "Allow clearing of island reset limit"
+  acidisland.mod.info: 
     default: op
-  acidisland.mod.bypassdelays:
-    description: Allow moderator to bypass delays
+    description: "Let a moderator see info on a player"
+  acidisland.mod.lock: 
     default: op
-  acidisland.mod.bypassprotect:
-    description: Allow moderator to bypass island protection
+    description: "Locks or unlocks an island"
+  acidisland.mod.noburn: 
     default: op
-  acidisland.mod.bypassexpel:
-    description: Allow moderator to bypass island expulsion
-    default: op
-  acidisland.mod.lock:
-    description: Locks or unlocks an island
-    default: op
-  acidisland.mod.bypasslock:
-    description: Bypasses an island lock
-    default: op
-  acidisland.mod.bypassban:
-    description: Bypasses island ban
-    default: op  
-  acidisland.mod.team:
-    description: Enables modification of teams via kick and add commands
+    description: "Give mod acid protection"
+  acidisland.mod.team: 
     default: false
-  acidisland.admin.tp:
-    description: Allows teleport to an island
-    default: op    
-  acidisland.admin.clearresetall:
-    description: Allow clearing of island reset limit of all players
-    default: op
-  acidisland.admin.reload:
-    description: Reload the config.yml
-    default: op
-  acidisland.admin.delete:
-    description: Let a player completely remove a player (including island)
-    default: op
-  acidisland.admin.register:
-    description: Let a player register the nearest island to another player.
-    default: op
-  acidisland.admin.unregister:
-    description: Removes a player from an island without deleting the island blocks.
-    default: op
-  acidisland.admin.setspawn:
-    description: Allows use of spawn tools
-    default: op
-  acidisland.admin.setrange:
-    description: Allows setting of island protection range
-    default: op
-  acidisland.admin.settingsreset:
-    description: Resets all the islands to default protection settings
-    default: op
-  acidisland.admin.noban:
-    description: Player cannot be banned from an island
-    default: op
-  acidisland.admin.noexpel:
-    description: Player cannot be expelled from an island
-    default: op
-  acidisland.admin.setlanguage:
-    description: Resets all player languages and sets the default language
-    default: op
+    description: "Enables modification of teams via kick and add commands"
+  acidisland.settings.*: 
+    default: true
+    description: "Allow use of settings on island"
