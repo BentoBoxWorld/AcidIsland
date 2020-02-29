@@ -39,6 +39,8 @@ acid:
     effects:
     - CONFUSION
     - BLINDNESS
+    # Acid effect duration in seconds
+    acid-effect-duation: 30   
     # Potion effects from going into acid rain and snow.
     # You can list multiple effects.
     # Available effects are:
@@ -51,6 +53,8 @@ acid:
     #    WEAKNESS
     # Added since 1.9.1.
     rain-effects: []
+    # Rain effect duration in seconds
+    rain-effect-duation: 10
     protection:
       # If player wears a helmet then they will not suffer from acid rain
       helmet: false
