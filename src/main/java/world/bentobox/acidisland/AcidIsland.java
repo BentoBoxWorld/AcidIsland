@@ -3,6 +3,7 @@ package world.bentobox.acidisland;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.World.Environment;
 import org.bukkit.generator.ChunkGenerator;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -104,33 +105,47 @@ public class AcidIsland extends GameModeAddon {
         }
         // Create the world if it does not exist
         chunkGenerator = new ChunkGeneratorWorld(this);
-        islandWorld = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(chunkGenerator)
-                .createWorld();
+        islandWorld = getWorld(worldName, World.Environment.NORMAL, chunkGenerator);
         // Make the nether if it does not exist
         if (settings.isNetherGenerate()) {
             if (getServer().getWorld(worldName + NETHER) == null) {
                 log("Creating AcidIsland's Nether...");
             }
-            if (!settings.isNetherIslands()) {
-                netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.NORMAL).environment(World.Environment.NETHER).createWorld();
-
-            } else {
-                netherWorld = WorldCreator.name(worldName + NETHER).type(WorldType.FLAT).generator(chunkGenerator)
-                        .environment(World.Environment.NETHER).createWorld();
-            }
+            netherWorld = settings.isNetherIslands() ? getWorld(worldName, World.Environment.NETHER, chunkGenerator) : getWorld(worldName, World.Environment.NETHER, null);
         }
         // Make the end if it does not exist
         if (settings.isEndGenerate()) {
             if (getServer().getWorld(worldName + THE_END) == null) {
                 log("Creating AcidIsland's End World...");
             }
-            if (!settings.isEndIslands()) {
-                endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.NORMAL).environment(World.Environment.THE_END).createWorld();
-            } else {
-                endWorld = WorldCreator.name(worldName + THE_END).type(WorldType.FLAT).generator(chunkGenerator)
-                        .environment(World.Environment.THE_END).createWorld();
-            }
+            endWorld = settings.isEndIslands() ? getWorld(worldName, World.Environment.THE_END, chunkGenerator) : getWorld(worldName, World.Environment.THE_END, null);
         }
+    }
+
+    /**
+     * Gets a world or generates a new world if it does not exist
+     * @param worldName2 - the overworld name
+     * @param env - the environment
+     * @param chunkGenerator2 - the chunk generator. If <tt>null</tt> then the generator will not be specified
+     * @return world loaded or generated
+     */
+    private World getWorld(String worldName2, Environment env, @Nullable ChunkGenerator chunkGenerator2) {
+        // Set world name
+        worldName2 = env.equals(World.Environment.NETHER) ? worldName2 + NETHER : worldName2;
+        worldName2 = env.equals(World.Environment.THE_END) ? worldName2 + THE_END : worldName2;
+        WorldCreator wc = WorldCreator.name(worldName2).type(WorldType.FLAT).environment(env);
+        World w = settings.isUseOwnGenerator() ? wc.createWorld() : wc.generator(chunkGenerator2).createWorld();
+        // Set spawn rates
+        if (w != null) {
+            w.setMonsterSpawnLimit(getSettings().getSpawnLimitMonsters());
+            w.setAmbientSpawnLimit(getSettings().getSpawnLimitAmbient());
+            w.setAnimalSpawnLimit(getSettings().getSpawnLimitAnimals());
+            w.setWaterAnimalSpawnLimit(getSettings().getSpawnLimitWaterAnimals());
+            w.setTicksPerAnimalSpawns(getSettings().getTicksPerAnimalSpawns());
+            w.setTicksPerMonsterSpawns(getSettings().getTicksPerMonsterSpawns());
+        }
+        return w;
+
     }
 
     @Override
