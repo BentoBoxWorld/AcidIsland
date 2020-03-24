@@ -95,6 +95,9 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.effects")
     @Adapter(PotionEffectListAdapter.class)
     private List<PotionEffectType> acidEffects = new ArrayList<>();
+    @ConfigComment("Acid effect duration in seconds")
+    @ConfigEntry(path = "acid.damage.acid-effect-duration", since = "1.11.2")
+    private int acidEffectDuation = 30;
 
     @ConfigComment("Potion effects from going into acid rain and snow.")
     @ConfigComment("You can list multiple effects.")
@@ -109,6 +112,10 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.rain-effects", since = "1.9.1")
     @Adapter(PotionEffectListAdapter.class)
     private List<PotionEffectType> acidRainEffects = new ArrayList<>();
+
+    @ConfigComment("Rain effect duration in seconds")
+    @ConfigEntry(path = "acid.damage.rain-effect-duration", since = "1.11.2")
+    private int rainEffectDuation = 10;
 
     @ConfigComment("If player wears a helmet then they will not suffer from acid rain")
     @ConfigEntry(path = "acid.damage.protection.helmet")
@@ -133,6 +140,25 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Other plugins may override this setting")
     @ConfigEntry(path = "world.difficulty")
     private Difficulty difficulty;
+
+    @ConfigComment("Spawn limits. These override the limits set in bukkit.yml")
+    @ConfigComment("If set to a negative number, the server defaults will be used")
+    @ConfigEntry(path = "world.spawn-limits.monsters", since = "1.11.2")
+    private int spawnLimitMonsters = -1;
+    @ConfigEntry(path = "world.spawn-limits.animals", since = "1.11.2")
+    private int spawnLimitAnimals = -1;
+    @ConfigEntry(path = "world.spawn-limits.water-animals", since = "1.11.2")
+    private int spawnLimitWaterAnimals = -1;
+    @ConfigEntry(path = "world.spawn-limits.ambient", since = "1.11.2")
+    private int spawnLimitAmbient = -1;
+    @ConfigComment("Setting to 0 will disable animal spawns, but this is not recommended. Minecraft default is 400.")
+    @ConfigComment("A negative value uses the server default")
+    @ConfigEntry(path = "world.spawn-limits.ticks-per-animal-spawns", since = "1.11.2")
+    private int ticksPerAnimalSpawns = -1;
+    @ConfigComment("Setting to 0 will disable monster spawns, but this is not recommended. Minecraft default is 400.")
+    @ConfigComment("A negative value uses the server default")
+    @ConfigEntry(path = "world.spawn-limits.ticks-per-monster-spawns", since = "1.11.2")
+    private int ticksPerMonsterSpawns = -1;
 
     @ConfigComment("Radius of island in blocks. (So distance between islands is twice this)")
     @ConfigComment("Will be rounded up to the nearest 16 blocks.")
@@ -1570,5 +1596,101 @@ public class AISettings implements WorldSettings {
      */
     public void setAcidRainEffects(List<PotionEffectType> acidRainEffects) {
         this.acidRainEffects = acidRainEffects;
+    }
+    /**
+     * @return the rainEffectDuation
+     */
+    public int getRainEffectDuation() {
+        return rainEffectDuation;
+    }
+    /**
+     * @param rainEffectDuation the rainEffectDuation to set
+     */
+    public void setRainEffectDuation(int rainEffectDuation) {
+        this.rainEffectDuation = rainEffectDuation;
+    }
+    /**
+     * @return the acidEffectDuation
+     */
+    public int getAcidEffectDuation() {
+        return acidEffectDuation;
+    }
+    /**
+     * @param acidEffectDuation the acidEffectDuation to set
+     */
+    public void setAcidEffectDuation(int acidEffectDuation) {
+        this.acidEffectDuation = acidEffectDuation;
+    }
+    /**
+     * @return the spawnLimitMonsters
+     */
+    public int getSpawnLimitMonsters() {
+        return spawnLimitMonsters;
+    }
+    /**
+     * @param spawnLimitMonsters the spawnLimitMonsters to set
+     */
+    public void setSpawnLimitMonsters(int spawnLimitMonsters) {
+        this.spawnLimitMonsters = spawnLimitMonsters;
+    }
+    /**
+     * @return the spawnLimitAnimals
+     */
+    public int getSpawnLimitAnimals() {
+        return spawnLimitAnimals;
+    }
+    /**
+     * @param spawnLimitAnimals the spawnLimitAnimals to set
+     */
+    public void setSpawnLimitAnimals(int spawnLimitAnimals) {
+        this.spawnLimitAnimals = spawnLimitAnimals;
+    }
+    /**
+     * @return the spawnLimitWaterAnimals
+     */
+    public int getSpawnLimitWaterAnimals() {
+        return spawnLimitWaterAnimals;
+    }
+    /**
+     * @param spawnLimitWaterAnimals the spawnLimitWaterAnimals to set
+     */
+    public void setSpawnLimitWaterAnimals(int spawnLimitWaterAnimals) {
+        this.spawnLimitWaterAnimals = spawnLimitWaterAnimals;
+    }
+    /**
+     * @return the spawnLimitAmbient
+     */
+    public int getSpawnLimitAmbient() {
+        return spawnLimitAmbient;
+    }
+    /**
+     * @param spawnLimitAmbient the spawnLimitAmbient to set
+     */
+    public void setSpawnLimitAmbient(int spawnLimitAmbient) {
+        this.spawnLimitAmbient = spawnLimitAmbient;
+    }
+    /**
+     * @return the ticksPerAnimalSpawns
+     */
+    public int getTicksPerAnimalSpawns() {
+        return ticksPerAnimalSpawns;
+    }
+    /**
+     * @param ticksPerAnimalSpawns the ticksPerAnimalSpawns to set
+     */
+    public void setTicksPerAnimalSpawns(int ticksPerAnimalSpawns) {
+        this.ticksPerAnimalSpawns = ticksPerAnimalSpawns;
+    }
+    /**
+     * @return the ticksPerMonsterSpawns
+     */
+    public int getTicksPerMonsterSpawns() {
+        return ticksPerMonsterSpawns;
+    }
+    /**
+     * @param ticksPerMonsterSpawns the ticksPerMonsterSpawns to set
+     */
+    public void setTicksPerMonsterSpawns(int ticksPerMonsterSpawns) {
+        this.ticksPerMonsterSpawns = ticksPerMonsterSpawns;
     }
 }

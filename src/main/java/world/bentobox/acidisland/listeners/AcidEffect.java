@@ -51,7 +51,8 @@ public class AcidEffect implements Listener {
             PotionEffectType.HUNGER,
             PotionEffectType.SLOW,
             PotionEffectType.SLOW_DIGGING,
-            PotionEffectType.WEAKNESS);
+            PotionEffectType.WEAKNESS,
+            PotionEffectType.POISON);
     private static final List<PotionEffectType> IMMUNE_EFFECTS = Arrays.asList(
             PotionEffectType.WATER_BREATHING,
             PotionEffectType.CONDUIT_POWER);
@@ -88,7 +89,6 @@ public class AcidEffect implements Listener {
                 || addon.getPlayers().isInTeleport(player.getUniqueId())
                 || !Util.sameWorld(addon.getOverWorld(), player.getWorld())
                 || (!player.isOp() && player.hasPermission("acidisland.mod.noburn"))
-                || (!player.isOp() && player.hasPermission("admin.noburn"))
                 || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
             return;
         }
@@ -120,8 +120,7 @@ public class AcidEffect implements Listener {
                             AcidRainEvent event = new AcidRainEvent(player, totalDamage, protection, addon.getSettings().getAcidRainEffects());
                             addon.getServer().getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
-                                event.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
-                                event.getPotionEffects().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
+                                event.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, addon.getSettings().getRainEffectDuation() * 20, 1)));
                                 // Apply damage if there is any
                                 if (event.getRainDamage() > 0D) {
                                     player.damage(event.getRainDamage());
@@ -159,8 +158,7 @@ public class AcidEffect implements Listener {
                     AcidEvent acidEvent = new AcidEvent(player, totalDamage, protection, addon.getSettings().getAcidEffects());
                     addon.getServer().getPluginManager().callEvent(acidEvent);
                     if (!acidEvent.isCancelled()) {
-                        acidEvent.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, 600, 1)));
-                        acidEvent.getPotionEffects().stream().filter(e -> e.equals(PotionEffectType.POISON)).forEach(t -> player.addPotionEffect(new PotionEffect(t, 200, 1)));
+                        acidEvent.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, addon.getSettings().getAcidEffectDuation() * 20, 1)));
                         // Apply damage if there is any
                         if (acidEvent.getTotalDamage() > 0D) {
                             player.damage(acidEvent.getTotalDamage());

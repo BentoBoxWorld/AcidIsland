@@ -39,6 +39,9 @@ acid:
     effects:
     - CONFUSION
     - BLINDNESS
+    # Acid effect duration in seconds
+    # Added since 1.11.2.
+    acid-effect-duration: 30
     # Potion effects from going into acid rain and snow.
     # You can list multiple effects.
     # Available effects are:
@@ -51,6 +54,9 @@ acid:
     #    WEAKNESS
     # Added since 1.9.1.
     rain-effects: []
+    # Rain effect duration in seconds
+    # Added since 1.11.2.
+    rain-effect-duration: 10
     protection:
       # If player wears a helmet then they will not suffer from acid rain
       helmet: false
@@ -67,6 +73,25 @@ world:
   # World difficulty setting - PEACEFUL, EASY, NORMAL, HARD
   # Other plugins may override this setting
   difficulty: NORMAL
+  spawn-limits:
+    # Spawn limits. These override the limits set in bukkit.yml
+    # If set to a negative number, the server defaults will be used
+    # Added since 1.11.2.
+    monsters: -1
+    # Added since 1.11.2.
+    animals: -1
+    # Added since 1.11.2.
+    water-animals: -1
+    # Added since 1.11.2.
+    ambient: -1
+    # Setting to 0 will disable animal spawns, but this is not recommended. Minecraft default is 400.
+    # A negative value uses the server default
+    # Added since 1.11.2.
+    ticks-per-animal-spawns: -1
+    # Setting to 0 will disable monster spawns, but this is not recommended. Minecraft default is 400.
+    # A negative value uses the server default
+    # Added since 1.11.2.
+    ticks-per-monster-spawns: -1
   # Radius of island in blocks. (So distance between islands is twice this)
   # Will be rounded up to the nearest 16 blocks.
   # It is the same for every dimension : Overworld, Nether and End.
@@ -151,10 +176,10 @@ world:
   # This setting is toggled in world flags and set by the settings GUI.
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
-  - PIG_ZOMBIE
-  - WITHER
   - ENDERMAN
   - ZOMBIE_VILLAGER
+  - PIG_ZOMBIE
+  - WITHER
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -187,8 +212,8 @@ world:
     ENDER_PEARL: 500
     DOOR: 500
     FURNACE: 500
-    ANVIL: 500
     MINECART: 500
+    ANVIL: 500
     FISH_SCOOPING: 500
     END_PORTAL: 500
     BREEDING: 500
@@ -199,20 +224,21 @@ world:
     LEVER: 500
     ELYTRA: 0
     HURT_MONSTERS: 0
-    CAKE: 500
     RIDING: 500
-    ARMOR_STAND: 500
+    CAKE: 500
     NAME_TAG: 500
+    ARMOR_STAND: 500
     TRADING: 0
     EGGS: 500
     ITEM_DROP: 0
     NOTE_BLOCK: 0
     FLINT_AND_STEEL: 500
     NETHER_PORTAL: 500
+    LECTERN: 500
     ITEM_PICKUP: 0
     CROP_TRAMPLE: 500
-    DROPPER: 500
     BREWING: 500
+    DROPPER: 500
     TNT_PRIMING: 500
     COLLECT_WATER: 500
     BUTTON: 500
@@ -220,14 +246,14 @@ world:
     COMMAND_RANKS: 500
     BEACON: 500
     TRAPDOOR: 500
-    EXPERIENCE_BOTTLE_THROWING: 500
     PRESSURE_PLATE: 0
+    EXPERIENCE_BOTTLE_THROWING: 500
     DYE: 500
     PLACE_BLOCKS: 500
     ITEM_FRAME: 500
     CRAFTING: 0
-    ENCHANTING: 0
     SHEARING: 500
+    ENCHANTING: 0
     BOAT: 500
     SPAWN_EGGS: 500
     BED: 500
@@ -237,8 +263,8 @@ world:
     EXPERIENCE_PICKUP: 500
     HOPPER: 500
     LEASH: 500
-    MOUNT_INVENTORY: 500
     BREAK_BLOCKS: 500
+    MOUNT_INVENTORY: 500
     CHORUS_FRUIT: 500
     CONTAINER: 500
     POTION_THROWING: 500
@@ -250,8 +276,8 @@ world:
     PVP_NETHER: false
     LEAF_DECAY: true
     TNT_DAMAGE: true
-    MONSTER_SPAWN: true
     FIRE_IGNITE: true
+    MONSTER_SPAWN: true
     FIRE_SPREAD: true
     FIRE_BURNING: true
     PVP_OVERWORLD: false
