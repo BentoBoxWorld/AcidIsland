@@ -91,6 +91,7 @@ public class AcidTask {
             Set<Entity> newItemsInWater = new HashSet<>();
             getEntityStream()
             .filter(e -> e.getType().equals(EntityType.DROPPED_ITEM))
+            .filter(e -> e.getLocation().getChunk().isLoaded())
             .filter(e -> e.getLocation().getBlock().getType().equals(Material.WATER)
                     || (e.getLocation().getY() > 0 && e.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER)))
             .forEach(e -> {
