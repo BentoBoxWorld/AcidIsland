@@ -48,6 +48,8 @@ public class AcidTask {
         entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getPlugin(), () -> getEntityStream()
                 // These entities are immune to acid
                 .filter(e -> !IMMUNE.contains(e.getType()))
+                // Only burn if the chunk is loaded
+                .filter(e -> e.getLocation().getChunk().isLoaded())
                 .filter(w -> w.getLocation().getBlock().getType().equals(Material.WATER))
                 .forEach(e -> {
                     if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
@@ -89,6 +91,7 @@ public class AcidTask {
             Set<Entity> newItemsInWater = new HashSet<>();
             getEntityStream()
             .filter(e -> e.getType().equals(EntityType.DROPPED_ITEM))
+            .filter(e -> e.getLocation().getChunk().isLoaded())
             .filter(e -> e.getLocation().getBlock().getType().equals(Material.WATER)
                     || (e.getLocation().getY() > 0 && e.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER)))
             .forEach(e -> {

@@ -36,7 +36,7 @@ import world.bentobox.bentobox.managers.FlagsManager;
 @PrepareForTest({Bukkit.class, BentoBox.class, User.class })
 public class AcidCommandTest {
 
-    private static final int NUM_COMMANDS = 29;
+    private static final int NUM_COMMANDS = 26;
     @Mock
     private User user;
     @Mock

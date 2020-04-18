@@ -300,6 +300,16 @@ island:
   # Use this permission to set for specific user groups: acidisland.team.maxsize.<number>
   # Permission size cannot be less than the default below.
   max-team-size: 4
+  # Default maximum number of coop rank members per island
+  # Players can have the acidisland.coop.maxsize.<number> permission to be bigger but
+  # permission size cannot be less than the default below.
+  # Added since 1.13.0.
+  max-coop-size: 4
+  # Default maximum number of trusted rank members per island
+  # Players can have the acidisland.trust.maxsize.<number> permission to be bigger but
+  # permission size cannot be less than the default below.
+  # Added since 1.13.0.
+  max-trusted-size: 4
   # Default maximum number of homes a player can have. Min = 1
   # Accessed via /ai sethome <number> or /ai go <number>
   # Use this permission to set for specific user groups: acidisland.island.maxhomes.<number>
