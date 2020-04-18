@@ -50,7 +50,11 @@ public class AISettings implements WorldSettings {
 
     @ConfigComment("The island admin command.")
     @ConfigEntry(path = "acid.command.admin")
+
     private String adminCommand = "acid";
+    @ConfigComment("Use control panel if it exists (ControlPanel addon must be in addons)")
+    @ConfigEntry(path = "acid.use-control-panel", since = "1.13.0")
+    private boolean useControlPanel = false;
 
     // Damage
     @ConfigComment("Damage that a player will experience in acid. 10 is half their health typically. 5 would be easier.")
@@ -1692,5 +1696,17 @@ public class AISettings implements WorldSettings {
      */
     public void setTicksPerMonsterSpawns(int ticksPerMonsterSpawns) {
         this.ticksPerMonsterSpawns = ticksPerMonsterSpawns;
+    }
+    /**
+     * @return the useControlPanel
+     */
+    public boolean isUseControlPanel() {
+        return useControlPanel;
+    }
+    /**
+     * @param useControlPanel the useControlPanel to set
+     */
+    public void setUseControlPanel(boolean useControlPanel) {
+        this.useControlPanel = useControlPanel;
     }
 }

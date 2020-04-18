@@ -9,6 +9,8 @@ acid:
     island: ai
     # The island admin command.
     admin: acid
+  # Use control panel if it exists (ControlPanel addon must be in addons)
+  use-control-panel: false
   damage:
     acid:
       # Damage that a player will experience in acid. 10 is half their health typically. 5 would be easier.
