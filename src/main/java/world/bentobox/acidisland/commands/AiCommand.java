@@ -3,6 +3,7 @@ package world.bentobox.acidisland.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.commands.island.IslandBanCommand;
@@ -71,8 +72,13 @@ public class AiCommand extends CompositeCommand {
         if (args.isEmpty()) {
             // If in world, go
             if (getPlugin().getIslands().getIsland(getWorld(), user.getUniqueId()) != null) {
-                return getSubCommand("go").map(goCmd -> goCmd.call(user, label, new ArrayList<>())).orElse(false);
+                if (((AcidIsland)getAddon()).getSettings().isUseControlPanel()
+                        && getSubCommand("controlpanel").isPresent()) {
+                    return getSubCommand("controlpanel").get().call(user, label, new ArrayList<>());
+                }
+                return getSubCommand("go").map(goCmd -> goCmd.call(user, goCmd.getLabel(), new ArrayList<>())).orElse(false);
             }
+
             // No islands currently
             return getSubCommand("create").map(createCmd -> createCmd.call(user, label, new ArrayList<>())).orElse(false);
         }
