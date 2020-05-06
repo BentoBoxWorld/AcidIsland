@@ -34,6 +34,27 @@ public class AISettings implements WorldSettings {
 
     // ---------------------------------------------
 
+    // Command
+    @ConfigComment("Island Command. What command users will run to access their island")
+    @ConfigEntry(path = "acid.command.island")
+    private String playerCommandAliases = "ai";
+
+    @ConfigComment("The island admin command.")
+    @ConfigEntry(path = "acid.command.admin")
+    private String adminCommandAliases = "acid";
+    
+    @ConfigComment("The default action for new player command call.")
+    @ConfigComment("Sub-command of main player command that will be run on first player command call.")
+    @ConfigComment("By default it is sub-command 'create'.")
+    @ConfigEntry(path = "acid.command.new-player-action", since = "1.13.1")
+    private String defaultNewPlayerAction = "create";
+
+    @ConfigComment("The default action for player command.")
+    @ConfigComment("Sub-command of main player command that will be run on each player command call.")
+    @ConfigComment("By default it is sub-command 'go'.")
+    @ConfigEntry(path = "acid.command.default-action", since = "1.13.1")
+    private String defaultPlayerAction = "go";
+
     /*      ACID        */
     @ConfigComment("Acid can damage ops or not")
     @ConfigEntry(path = "acid.damage-op")
@@ -42,19 +63,6 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Acid can damage chickens - best to leave false because they like to swim")
     @ConfigEntry(path = "acid.damage-chickens")
     private boolean acidDamageChickens = false;
-
-    // Command
-    @ConfigComment("Island Command. What command users will run to access their island")
-    @ConfigEntry(path = "acid.command.island")
-    private String islandCommand = "ai";
-
-    @ConfigComment("The island admin command.")
-    @ConfigEntry(path = "acid.command.admin")
-
-    private String adminCommand = "acid";
-    @ConfigComment("Use control panel if it exists (ControlPanel addon must be in addons)")
-    @ConfigEntry(path = "acid.use-control-panel", since = "1.13.0")
-    private boolean useControlPanel = false;
 
     // Damage
     @ConfigComment("Damage that a player will experience in acid. 10 is half their health typically. 5 would be easier.")
@@ -568,10 +576,7 @@ public class AISettings implements WorldSettings {
     public int getAcidRainDamage() {
         return acidRainDamage;
     }
-    /**
-     * @return the command for accessing your admin command
-     */
-    public String getAdminCommand() { return adminCommand; }
+
     @Override
     public int getBanLimit() {
         return banLimit;
@@ -644,10 +649,6 @@ public class AISettings implements WorldSettings {
     public List<String> getGeoLimitSettings() {
         return geoLimitSettings;
     }
-    /**
-     * @return the command for accessing your island
-     */
-    public String getIslandCommand() { return islandCommand; }
     /**
      * @return the islandDistance
      */
@@ -1071,7 +1072,7 @@ public class AISettings implements WorldSettings {
     /**
      * @param adminCommand what you want your admin command to be
      */
-    public void setAdminCommand(String adminCommand) { this.adminCommand = adminCommand; }
+    public void setAdminCommand(String adminCommand) { this.adminCommandAliases = adminCommand; }
     /**
      * @param allowSetHomeInNether the allowSetHomeInNether to set
      */
@@ -1185,7 +1186,7 @@ public class AISettings implements WorldSettings {
     /**
      * @param islandCommand what you want your island command to be
      */
-    public void setIslandCommand(String islandCommand) { this.islandCommand = islandCommand; }
+    public void setIslandCommand(String islandCommand) { this.playerCommandAliases = islandCommand; }
 
     /**
      * @param islandDistance the islandDistance to set
@@ -1710,18 +1711,6 @@ public class AISettings implements WorldSettings {
         this.ticksPerMonsterSpawns = ticksPerMonsterSpawns;
     }
     /**
-     * @return the useControlPanel
-     */
-    public boolean isUseControlPanel() {
-        return useControlPanel;
-    }
-    /**
-     * @param useControlPanel the useControlPanel to set
-     */
-    public void setUseControlPanel(boolean useControlPanel) {
-        this.useControlPanel = useControlPanel;
-    }
-    /**
      * @return the maxCoopSize
      */
     @Override
@@ -1749,5 +1738,57 @@ public class AISettings implements WorldSettings {
      */
     public void setMaxTrustSize(int maxTrustSize) {
         this.maxTrustSize = maxTrustSize;
+    }
+    /**
+     * @return the playerCommandAliases
+     */
+    @Override
+    public String getPlayerCommandAliases() {
+        return playerCommandAliases;
+    }
+    /**
+     * @param playerCommandAliases the playerCommandAliases to set
+     */
+    public void setPlayerCommandAliases(String playerCommandAliases) {
+        this.playerCommandAliases = playerCommandAliases;
+    }
+    /**
+     * @return the adminCommandAliases
+     */
+    @Override
+    public String getAdminCommandAliases() {
+        return adminCommandAliases;
+    }
+    /**
+     * @param adminCommandAliases the adminCommandAliases to set
+     */
+    public void setAdminCommandAliases(String adminCommandAliases) {
+        this.adminCommandAliases = adminCommandAliases;
+    }
+    /**
+     * @return the defaultNewPlayerAction
+     */
+    @Override
+    public String getDefaultNewPlayerAction() {
+        return defaultNewPlayerAction;
+    }
+    /**
+     * @param defaultNewPlayerAction the defaultNewPlayerAction to set
+     */
+    public void setDefaultNewPlayerAction(String defaultNewPlayerAction) {
+        this.defaultNewPlayerAction = defaultNewPlayerAction;
+    }
+    /**
+     * @return the defaultPlayerAction
+     */
+    @Override
+    public String getDefaultPlayerAction() {
+        return defaultPlayerAction;
+    }
+    /**
+     * @param defaultPlayerAction the defaultPlayerAction to set
+     */
+    public void setDefaultPlayerAction(String defaultPlayerAction) {
+        this.defaultPlayerAction = defaultPlayerAction;
     }
 }

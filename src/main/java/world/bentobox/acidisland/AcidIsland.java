@@ -1,20 +1,21 @@
 package world.bentobox.acidisland;
 
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
-import org.bukkit.World.Environment;
 import org.bukkit.generator.ChunkGenerator;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import world.bentobox.acidisland.commands.AcidCommand;
-import world.bentobox.acidisland.commands.AiCommand;
+import world.bentobox.acidisland.commands.IslandAboutCommand;
 import world.bentobox.acidisland.listeners.AcidEffect;
 import world.bentobox.acidisland.listeners.LavaCheck;
 import world.bentobox.acidisland.world.AcidTask;
 import world.bentobox.acidisland.world.ChunkGeneratorWorld;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
+import world.bentobox.bentobox.api.commands.admin.DefaultAdminCommand;
+import world.bentobox.bentobox.api.commands.island.DefaultPlayerCommand;
 import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.lists.Flags;
@@ -43,8 +44,18 @@ public class AcidIsland extends GameModeAddon {
         // Chunk generator
         chunkGenerator = settings.isUseOwnGenerator() ? null : new ChunkGeneratorWorld(this);
         // Register commands
-        adminCommand = new AcidCommand(this, settings.getAdminCommand());
-        playerCommand = new AiCommand(this, settings.getIslandCommand());
+        // Register commands
+        playerCommand = new DefaultPlayerCommand(this)
+
+        {
+            @Override
+            public void setup()
+            {
+                super.setup();
+                new IslandAboutCommand(this);
+            }
+        };
+        adminCommand = new DefaultAdminCommand(this) {};
     }
 
     private boolean loadSettings() {
