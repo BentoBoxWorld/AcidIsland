@@ -1,34 +1,34 @@
 package world.bentobox.acidisland.world;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.stream.Stream;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Monster;
+import org.bukkit.entity.WaterMob;
+import org.bukkit.scheduler.BukkitTask;
 
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.listeners.AcidEffect;
+import world.bentobox.bentobox.BentoBox;
 
 public class AcidTask {
     private final AcidIsland addon;
-    private static final List<EntityType> IMMUNE = Arrays.asList(EntityType.GUARDIAN, EntityType.ELDER_GUARDIAN,
-            EntityType.SQUID, EntityType.TURTLE, EntityType.POLAR_BEAR, EntityType.DROWNED);
-    private Set<Entity> itemsInWater = Collections.newSetFromMap(new WeakHashMap<Entity, Boolean>());
-    private int entityBurnTask = -1;
-    private int itemBurnTask = -1;
+    private static final List<EntityType> IMMUNE = Arrays.asList(EntityType.TURTLE, EntityType.POLAR_BEAR, EntityType.DROWNED);
+    private Map<Entity, Long> itemsInWater = new ConcurrentHashMap<>();
+    private BukkitTask findMobsTask;
 
     /**
      * Runs repeating tasks to deliver acid damage to mobs, etc.
@@ -36,85 +36,91 @@ public class AcidTask {
      */
     public AcidTask(AcidIsland addon) {
         this.addon = addon;
-        burnEntities();
-        runAcidItemRemovalTask();
+        findMobsTask = Bukkit.getScheduler().runTaskTimerAsynchronously(addon.getPlugin(), () -> findEntities(), 0L, 20L);
     }
 
-    /**
-     * Start the entity burning task
-     */
-    private void burnEntities() {
-        // This part will kill monsters if they fall into the water because it is acid
-        entityBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getPlugin(), () -> getEntityStream()
-                // These entities are immune to acid
-                .filter(e -> !IMMUNE.contains(e.getType()))
-                // Only burn if the chunk is loaded
-                .filter(e -> e.getLocation().getChunk().isLoaded())
-                .filter(w -> w.getLocation().getBlock().getType().equals(Material.WATER))
-                .forEach(e -> {
-                    if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
-                        applyDamage((LivingEntity) e, addon.getSettings().getAcidDamageMonster());
-                    } else if ((e instanceof Animals) && addon.getSettings().getAcidDamageAnimal() > 0D
-                            && (!e.getType().equals(EntityType.CHICKEN) || addon.getSettings().isAcidDamageChickens())) {
-                        ((LivingEntity) e).damage(addon.getSettings().getAcidDamageAnimal());
+    void findEntities() {
+        Map<Entity, Long> burnList = new WeakHashMap<>();
+        for (Entity e : getEntityStream()) {
+            if (e instanceof Item || (!IMMUNE.contains(e.getType()) && !(e instanceof WaterMob))) {
+                int x = e.getLocation().getBlockX() >> 4;
+                int z = e.getLocation().getBlockZ() >> 4;
+                if (e.getWorld().isChunkLoaded(x,z)) {
+                    if (e.getLocation().getBlock().getType().equals(Material.WATER)) {
+                        if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
+                            burnList.put(e, (long)addon.getSettings().getAcidDamageMonster());
+
+                        } else if ((e instanceof Animals) && addon.getSettings().getAcidDamageAnimal() > 0D
+                                && (!e.getType().equals(EntityType.CHICKEN) || addon.getSettings().isAcidDamageChickens())) {
+                            burnList.put(e, (long)addon.getSettings().getAcidDamageAnimal());
+                        } else if (addon.getSettings().getAcidDestroyItemTime() > 0 && e instanceof Item) {
+                            burnList.put(e, System.currentTimeMillis());
+                        }
                     }
-                }), 0L, 20L);
+                }
+            }
+        }
+        // Remove any entities not on the burn list
+        itemsInWater.keySet().removeIf(i -> !burnList.keySet().contains(i));
+
+        if (!burnList.isEmpty()) {
+            Bukkit.getScheduler().runTask(addon.getPlugin(), () ->
+            // Burn everything
+            burnList.forEach(this::applyDamage));
+        }
     }
 
-    private void applyDamage(LivingEntity e, double damage) {
-        e.damage(Math.max(0, damage - damage * AcidEffect.getDamageReduced(e)));
+    void applyDamage(Entity e, long damage) {
+        if (e instanceof LivingEntity) {
+            ((LivingEntity)e).damage(Math.max(0, damage - damage * AcidEffect.getDamageReduced((LivingEntity)e)));
+        } else if (addon.getSettings().getAcidDestroyItemTime() > 0){
+            // Item
+            if (e.getLocation().getBlock().getType().equals(Material.WATER)) {
+                itemsInWater.putIfAbsent(e, damage + addon.getSettings().getAcidDestroyItemTime() * 1000);
+                if (System.currentTimeMillis() > itemsInWater.get(e)) {
+                    e.getWorld().playSound(e.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                    e.remove();
+                    itemsInWater.remove(e);
+                }
+            } else {
+                itemsInWater.remove(e);
+            }
+        }
     }
 
     /**
      * @return a stream of all entities in this world and the nether and end if those are island worlds too.
      */
-    private Stream<Entity> getEntityStream() {
-        Stream<Entity> entityStream = addon.getOverWorld().getEntities().stream();
+    List<Entity> getEntityStream() {
+        List<Entity> entityStream = new ArrayList<>(addon.getOverWorld().getEntities());
         // Nether and end
         if (addon.getSettings().isNetherGenerate() && addon.getSettings().isNetherIslands()) {
-            entityStream = Stream.concat(entityStream, addon.getNetherWorld().getEntities().stream());
+            entityStream.addAll(addon.getNetherWorld().getEntities());
         }
         if (addon.getSettings().isEndGenerate() && addon.getSettings().isEndIslands()) {
-            entityStream = Stream.concat(entityStream, addon.getEndWorld().getEntities().stream());
+            entityStream.addAll(addon.getEndWorld().getEntities());
         }
         return entityStream;
-    }
-
-    /**
-     * Start the item removal in acid task
-     */
-    private void runAcidItemRemovalTask() {
-        if (addon.getSettings().getAcidDestroyItemTime() <= 0) {
-            return;
-        }
-        itemBurnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(addon.getPlugin(), () -> {
-            Set<Entity> newItemsInWater = new HashSet<>();
-            getEntityStream()
-            .filter(e -> e.getType().equals(EntityType.DROPPED_ITEM))
-            .filter(e -> e.getLocation().getChunk().isLoaded())
-            .filter(e -> e.getLocation().getBlock().getType().equals(Material.WATER)
-                    || (e.getLocation().getY() > 0 && e.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WATER)))
-            .forEach(e -> {
-                if (itemsInWater.contains(e)) {
-                    e.getWorld().playSound(e.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
-                    e.remove();
-                } else {
-                    newItemsInWater.add(e);
-                }
-            });
-            itemsInWater = newItemsInWater;
-        }, addon.getSettings().getAcidDestroyItemTime() * 20L, addon.getSettings().getAcidDestroyItemTime() * 20L);
     }
 
     /**
      * Cancel tasks running
      */
     public void cancelTasks() {
-        if (entityBurnTask >= 0) {
-            Bukkit.getScheduler().cancelTask(entityBurnTask);
-        }
-        if (itemBurnTask >= 0) {
-            Bukkit.getScheduler().cancelTask(itemBurnTask);
-        }
+        if (findMobsTask != null) findMobsTask.cancel();
+    }
+
+    /**
+     * @return the itemsInWater
+     */
+    Map<Entity, Long> getItemsInWater() {
+        return itemsInWater;
+    }
+
+    /**
+     * @param itemsInWater the itemsInWater to set
+     */
+    void setItemsInWater(Map<Entity, Long> itemsInWater) {
+        this.itemsInWater = itemsInWater;
     }
 }
