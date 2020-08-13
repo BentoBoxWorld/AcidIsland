@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,6 +30,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import com.earth2me.essentials.Essentials;
+
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.AcidEvent;
 import world.bentobox.acidisland.events.AcidRainEvent;
@@ -45,6 +48,8 @@ public class AcidEffect implements Listener {
     private final AcidIsland addon;
     private final Map<Player, Long> burningPlayers = new HashMap<>();
     private final Map<Player, Long> wetPlayers = new HashMap<>();
+    private Essentials essentials;
+    private boolean essentialsCheck;
     private static final List<PotionEffectType> EFFECTS = Arrays.asList(
             PotionEffectType.BLINDNESS,
             PotionEffectType.CONFUSION,
@@ -176,7 +181,8 @@ public class AcidEffect implements Listener {
      * @return true if they are safe
      */
     private boolean isSafeFromRain(Player player) {
-        if (player.getWorld().getEnvironment().equals(Environment.NETHER)
+        if (isEssentialsGodMode(player)
+                || player.getWorld().getEnvironment().equals(Environment.NETHER)
                 || player.getWorld().getEnvironment().equals(Environment.THE_END)
                 || (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getType().name().contains("HELMET")))
                 || (!addon.getSettings().isAcidDamageSnow() && player.getLocation().getBlock().getTemperature() < 0.1) // snow falls
@@ -200,6 +206,8 @@ public class AcidEffect implements Listener {
      * @return true if player is safe
      */
     private boolean isSafeFromAcid(Player player) {
+        // Check for GodMode
+        if (isEssentialsGodMode(player)) return true;
         // Not in liquid or on snow
         if (!player.getLocation().getBlock().getType().equals(Material.WATER)
                 && !player.getLocation().getBlock().getType().equals(Material.BUBBLE_COLUMN)
@@ -219,6 +227,19 @@ public class AcidEffect implements Listener {
         }
         // Check if player has an active water potion or not
         return player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains);
+    }
+
+    /**
+     * Checks if player has Essentials God Mode enabled.
+     * @param player - player
+     * @return true if God Mode enabled, false if not or if Essentials plug does not exist
+     */
+    private boolean isEssentialsGodMode(Player player) {
+        if (!essentialsCheck && essentials == null) {
+            essentials = (Essentials)Bukkit.getPluginManager().getPlugin("Essentials");
+            essentialsCheck = true;
+        }
+        return essentials != null && essentials.getUser(player).isGodModeEnabled();
     }
 
     /**

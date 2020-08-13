@@ -34,6 +34,7 @@ import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -44,9 +45,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
@@ -91,6 +96,12 @@ public class AcidEffectTest {
     private PlayerInventory inv;
     @Mock
     private ItemMeta itemMeta;
+    @Mock
+    private PluginManager pim;
+    @Mock
+    private Essentials essentials;
+    @Mock
+    private User essentialsUser;
     
 
     /**
@@ -98,10 +109,15 @@ public class AcidEffectTest {
      */
     @Before
     public void setUp() throws Exception {
-        PowerMockito.mockStatic(Bukkit.class);
+        PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
         when(Bukkit.getScheduler()).thenReturn(scheduler);
         when(addon.getSettings()).thenReturn(settings);
         when(addon.getOverWorld()).thenReturn(world);
+        
+        // Essentials
+        when(Bukkit.getPluginManager()).thenReturn(pim);
+        when(pim.getPlugin(eq("Essentials"))).thenReturn(essentials);
+        when(essentials.getUser(any(Player.class))).thenReturn(essentialsUser);
         
         // Player
         when(player.getGameMode()).thenReturn(GameMode.SURVIVAL);
@@ -233,6 +249,17 @@ public class AcidEffectTest {
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
         verify(settings, times(2)).getAcidDamageDelay();
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
+     */
+    @Test
+    public void testOnPlayerMoveGodModeNoAcidAndRainDamage() {
+        when(essentialsUser.isGodModeEnabled()).thenReturn(true);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
     }
     
     /**
