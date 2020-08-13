@@ -58,7 +58,7 @@
         <!-- Non-minecraft related dependencies -->
         <powermock.version>2.0.4</powermock.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.16.1-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.16.2-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>1.14.0</bentobox.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
@@ -136,10 +136,6 @@
 
     <repositories>
         <repository>
-            <id>ess-repo</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/</url>
-        </repository>
-        <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
         </repository>
@@ -151,17 +147,14 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>ess-repo</id>
+            <url>https://ci.ender.zone/plugin/repository/everything/</url>
+        </repository>
     </repositories>
 
 
     <dependencies>
-        <!-- EssentialsX -->
-        <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <version>2.17.2</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- Spigot API -->
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -202,6 +195,13 @@
             <groupId>org.eclipse.jdt</groupId>
             <artifactId>org.eclipse.jdt.annotation</artifactId>
             <version>2.2.200</version>
+        </dependency>
+        <!-- EssentialsX -->
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>EssentialsX</artifactId>
+            <version>2.17.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
