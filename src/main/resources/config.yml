@@ -443,7 +443,6 @@ protection:
   invincible-visitors:
   - BLOCK_EXPLOSION
   - CONTACT
-  - CUSTOM
   - DROWNING
   - ENTITY_ATTACK
   - ENTITY_EXPLOSION

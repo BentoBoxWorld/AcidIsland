@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -55,6 +56,9 @@ import com.earth2me.essentials.User;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.managers.IslandWorldManager;
+import world.bentobox.bentobox.managers.IslandsManager;
 import world.bentobox.bentobox.managers.PlayersManager;
 import world.bentobox.bentobox.util.Util;
 
@@ -102,6 +106,12 @@ public class AcidEffectTest {
     private Essentials essentials;
     @Mock
     private User essentialsUser;
+    @Mock
+    private BentoBox plugin;
+    @Mock
+    private IslandWorldManager iwm;
+    @Mock
+    private IslandsManager im;
     
 
     /**
@@ -164,6 +174,16 @@ public class AcidEffectTest {
         when(world.getBlockAt(anyInt(), anyInt(), anyInt())).thenReturn(airBlock);
         when(world.getMaxHeight()).thenReturn(5);
         when(world.getEnvironment()).thenReturn(Environment.NORMAL);
+        
+        // Plugin
+        when(addon.getPlugin()).thenReturn(plugin);
+        when(plugin.getIWM()).thenReturn(iwm);
+        // CUSTOM damage protection
+        when(iwm.getIvSettings(any())).thenReturn(Collections.singletonList("CUSTOM"));
+        
+        // Island manager
+        when(addon.getIslands()).thenReturn(im);
+        when(im.userIsOnIsland(any(), any())).thenReturn(true);
         
         ae = new AcidEffect(addon);
     }
@@ -246,6 +266,29 @@ public class AcidEffectTest {
      */
     @Test
     public void testOnPlayerMoveAcidAndRainDamage() {
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, times(2)).getAcidDamageDelay();
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
+     */
+    @Test
+    public void testOnPlayerMoveVisitorNoAcidAndRainDamage() {
+        when(im.userIsOnIsland(any(), any())).thenReturn(false);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
+     */
+    @Test
+    public void testOnPlayerMoveVisitorAcidAndRainDamage() {
+        // No protection against CUSTOM damage
+        when(iwm.getIvSettings(any())).thenReturn(Collections.emptyList());
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
         verify(settings, times(2)).getAcidDamageDelay();
@@ -346,8 +389,8 @@ public class AcidEffectTest {
        
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
-        // 2 times only
-        verify(addon, times(2)).getPlugin();
+        // 3 times only
+        verify(addon, times(3)).getPlugin();
     }
     
     /**
@@ -362,8 +405,8 @@ public class AcidEffectTest {
        
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
-        // 2 times only
-        verify(addon, times(2)).getPlugin();
+        // 3 times only
+        verify(addon, times(3)).getPlugin();
     }
     
     /**

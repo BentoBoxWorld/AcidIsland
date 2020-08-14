@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
@@ -36,6 +37,7 @@ import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.AcidEvent;
 import world.bentobox.acidisland.events.AcidRainEvent;
 import world.bentobox.acidisland.world.AcidTask;
+import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.Util;
 
 /**
@@ -188,6 +190,9 @@ public class AcidEffect implements Listener {
                 || (!addon.getSettings().isAcidDamageSnow() && player.getLocation().getBlock().getTemperature() < 0.1) // snow falls
                 || player.getLocation().getBlock().getHumidity() == 0 // dry
                 || (player.getActivePotionEffects().stream().map(PotionEffect::getType).anyMatch(IMMUNE_EFFECTS::contains))
+                // Protect visitors
+                || (addon.getPlugin().getIWM().getIvSettings(player.getWorld()).contains(DamageCause.CUSTOM.name())
+                        && !addon.getIslands().userIsOnIsland(player.getWorld(), User.getInstance(player)))
                 ) {
             return true;
         }
@@ -207,7 +212,13 @@ public class AcidEffect implements Listener {
      */
     private boolean isSafeFromAcid(Player player) {
         // Check for GodMode
-        if (isEssentialsGodMode(player)) return true;
+        if (isEssentialsGodMode(player)
+             // Protect visitors
+                || (addon.getPlugin().getIWM().getIvSettings(player.getWorld()).contains(DamageCause.CUSTOM.name())
+                        && !addon.getIslands().userIsOnIsland(player.getWorld(), User.getInstance(player)))
+                ) {
+            return true;
+        }
         // Not in liquid or on snow
         if (!player.getLocation().getBlock().getType().equals(Material.WATER)
                 && !player.getLocation().getBlock().getType().equals(Material.BUBBLE_COLUMN)

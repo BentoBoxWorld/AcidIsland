@@ -22,7 +22,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.listeners.AcidEffect;
-import world.bentobox.bentobox.BentoBox;
 
 public class AcidTask {
     private final AcidIsland addon;
