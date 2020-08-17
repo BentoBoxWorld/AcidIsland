@@ -1,5 +1,6 @@
 package world.bentobox.acidisland.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
@@ -8,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.bentobox.util.Util;
 
 
 public class LavaCheck implements Listener {
@@ -26,14 +28,13 @@ public class LavaCheck implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCleanstoneGen(BlockFromToEvent e) {
-        // Only do this in AcidIsland over world
-        if (!e.getBlock().getWorld().equals(addon.getOverWorld()) || addon.getSettings().getAcidDamage() <= 0
-                // TODO: backward compatibility hack
-                || !(e.getToBlock().getType().name().equals("WATER"))) {
+        if (!(e.getToBlock().getType().equals(Material.WATER)
+                || !addon.getOverWorld().equals(Util.getWorld(e.getBlock().getWorld())) 
+                || addon.getSettings().getAcidDamage() <= 0)) {
             return;
         }
         Material prev = e.getToBlock().getType();
-        addon.getServer().getScheduler().runTask(addon.getPlugin(), () -> {
+        Bukkit.getScheduler().runTask(addon.getPlugin(), () -> {
             if (e.getToBlock().getType().equals(Material.STONE)) {
                 e.getToBlock().setType(prev);
                 e.getToBlock().getWorld().playSound(e.getToBlock().getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1F, 2F);
