@@ -21,12 +21,11 @@ public class AcidEventTest {
 
     @Mock
     private Player player;
-    private List<PotionEffectType> effects;
     private AcidEvent e;
 
     @Before
-    public void setUp() throws Exception {
-        effects = Arrays.asList(PotionEffectType.values());
+    public void setUp() {
+        List<PotionEffectType> effects = Arrays.asList(PotionEffectType.values());
         e = new AcidEvent(player, 10, 5, effects);
     }
 

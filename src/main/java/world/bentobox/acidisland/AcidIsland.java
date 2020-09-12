@@ -30,7 +30,7 @@ public class AcidIsland extends GameModeAddon {
     private @Nullable AISettings settings;
     private @Nullable AcidTask acidTask;
     private @Nullable ChunkGenerator chunkGenerator;
-    private Config<AISettings> config = new Config<>(this, AISettings.class);
+    private final Config<AISettings> config = new Config<>(this, AISettings.class);
 
     private static final String NETHER = "_nether";
     private static final String THE_END = "_the_end";

@@ -115,10 +115,9 @@ public class AcidEffectTest {
     
 
     /**
-     * @throws java.lang.Exception
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
         when(Bukkit.getScheduler()).thenReturn(scheduler);
         when(addon.getSettings()).thenReturn(settings);
@@ -189,10 +188,9 @@ public class AcidEffectTest {
     }
 
     /**
-     * @throws java.lang.Exception
      */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
     }
 
     /**
