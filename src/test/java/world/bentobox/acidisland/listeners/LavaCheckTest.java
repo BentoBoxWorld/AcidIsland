@@ -88,10 +88,9 @@ public class LavaCheckTest {
     private LavaCheck lc;
     
     /**
-     * @throws java.lang.Exception
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
         when(Bukkit.getScheduler()).thenReturn(scheduler);
         settings = new AISettings();
@@ -107,10 +106,9 @@ public class LavaCheckTest {
     }
 
     /**
-     * @throws java.lang.Exception
      */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
     }
 
     /**

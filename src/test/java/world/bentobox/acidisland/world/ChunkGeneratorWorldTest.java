@@ -54,10 +54,9 @@ public class ChunkGeneratorWorldTest {
     private ChunkData data;
 
     /**
-     * @throws java.lang.Exception
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         // Bukkit
         PowerMockito.mockStatic(Bukkit.class);
         Server server = mock(Server.class);
@@ -76,10 +75,9 @@ public class ChunkGeneratorWorldTest {
     }
 
     /**
-     * @throws java.lang.Exception
      */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
     }
 
     /**
