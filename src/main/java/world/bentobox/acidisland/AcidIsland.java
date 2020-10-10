@@ -161,7 +161,7 @@ public class AcidIsland extends GameModeAddon {
 
     @Override
     public WorldSettings getWorldSettings() {
-        return settings;
+        return getSettings();
     }
 
     @Override

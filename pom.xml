@@ -284,7 +284,7 @@
                     <show>public</show>
                     <failOnError>false</failOnError>
                     <additionalJOption>-Xdoclint:none</additionalJOption>
-                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <!-- <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable> -->
                 </configuration>
                 <executions>
                     <execution>
