@@ -15,7 +15,6 @@ public class ItemFillWithAcidEvent extends IslandBaseEvent {
     private final Player player;
     private final ItemStack item;
 
-    // TODO: dispenser?
     public ItemFillWithAcidEvent(Island island, Player player, ItemStack item) {
         super(island);
         this.player = player;

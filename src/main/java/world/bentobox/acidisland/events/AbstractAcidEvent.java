@@ -80,7 +80,7 @@ public abstract class AbstractAcidEvent extends Event implements Cancellable {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
+        return getHandlerList();
     }
 
     public static HandlerList getHandlerList() {
