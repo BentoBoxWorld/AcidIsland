@@ -1740,7 +1740,7 @@ public class AISettingsTest {
      */
     @Test
     public void testSetAdminCommandAliases() {
-        s.setAdminCommand("adm");
+        s.setAdminCommandAliases("adm");
         assertEquals("adm", s.getAdminCommandAliases());
     }
 
