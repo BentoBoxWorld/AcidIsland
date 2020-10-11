@@ -291,35 +291,24 @@ public class AcidEffect implements Listener {
         ItemStack helmet = inv.getHelmet();
         ItemStack chest = inv.getChestplate();
         ItemStack pants = inv.getLeggings();
-        if (helmet != null) {
-            // Damage if helmet
-            if (helmet.getType().name().contains("HELMET") && damage(helmet)) {
-                le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
-                inv.setHelmet(null);
-            }
+        // Damage if helmet
+        if (helmet != null&& helmet.getType().name().contains("HELMET") && damage(helmet)) {
+            le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+            inv.setHelmet(null);
         }
-        if (boots != null) {
-            // Damage
-            if (damage(boots)) {
-                le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
-                inv.setBoots(null);
-            }
+        if (boots != null && damage(boots)) {
+            le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+            inv.setBoots(null);
         }
         // Pants
-        if (pants != null) {
-            // Damage
-            if (damage(pants)) {
-                le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
-                inv.setLeggings(null);
-            }
+        if (pants != null && damage(pants)) {
+            le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+            inv.setLeggings(null);
         }
         // Chest plate
-        if (chest != null) {
-            // Damage
-            if (damage(chest)) {
-                le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
-                inv.setChestplate(null);
-            }
+        if (chest != null && damage(chest)) {
+            le.getWorld().playSound(le.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+            inv.setChestplate(null);
         }
         return red;
     }
