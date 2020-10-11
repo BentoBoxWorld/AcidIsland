@@ -32,7 +32,7 @@ public abstract class AbstractAcidEvent extends Event implements Cancellable {
      * @param rainDamage
      * @param protection
      */
-    public AbstractAcidEvent(Player player, double protection, List<PotionEffectType> potionEffects) {
+    protected AbstractAcidEvent(Player player, double protection, List<PotionEffectType> potionEffects) {
         this.player = player;
         this.protection = protection;
         this.potionEffects = potionEffects;

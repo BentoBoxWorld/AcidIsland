@@ -48,18 +48,18 @@ public class AcidEventTest {
 
     @Test
     public void testGetTotalDamage() {
-        assertTrue(e.getTotalDamage() == 10D);
+        assertEquals(10D, e.getTotalDamage(), 0D);
     }
 
     @Test
     public void testGetProtection() {
-        assertTrue(e.getProtection() == 5D);
+        assertEquals(5D, e.getProtection(), 0D);
     }
 
     @Test
     public void testSetTotalDamage() {
         e.setTotalDamage(50);
-        assertTrue(e.getTotalDamage() == 50D);
+        assertEquals(50D, e.getTotalDamage(), 0D);
     }
 
     @Test
