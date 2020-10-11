@@ -5,7 +5,7 @@ addons:
         organization: "bentobox-world"
 
 jdk:
-    - openjdk8
+    - openjdk11
     
 script:
   # JaCoCo is used to have code coverage, the agent has to be activated

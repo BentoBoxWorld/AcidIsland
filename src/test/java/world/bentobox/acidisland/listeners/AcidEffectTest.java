@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -34,6 +35,7 @@ import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -44,12 +46,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
+
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.managers.IslandWorldManager;
+import world.bentobox.bentobox.managers.IslandsManager;
 import world.bentobox.bentobox.managers.PlayersManager;
 import world.bentobox.bentobox.util.Util;
 
@@ -91,17 +100,33 @@ public class AcidEffectTest {
     private PlayerInventory inv;
     @Mock
     private ItemMeta itemMeta;
+    @Mock
+    private PluginManager pim;
+    @Mock
+    private Essentials essentials;
+    @Mock
+    private User essentialsUser;
+    @Mock
+    private BentoBox plugin;
+    @Mock
+    private IslandWorldManager iwm;
+    @Mock
+    private IslandsManager im;
     
 
     /**
-     * @throws java.lang.Exception
      */
     @Before
-    public void setUp() throws Exception {
-        PowerMockito.mockStatic(Bukkit.class);
+    public void setUp() {
+        PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
         when(Bukkit.getScheduler()).thenReturn(scheduler);
         when(addon.getSettings()).thenReturn(settings);
         when(addon.getOverWorld()).thenReturn(world);
+        
+        // Essentials
+        when(Bukkit.getPluginManager()).thenReturn(pim);
+        when(pim.getPlugin(eq("Essentials"))).thenReturn(essentials);
+        when(essentials.getUser(any(Player.class))).thenReturn(essentialsUser);
         
         // Player
         when(player.getGameMode()).thenReturn(GameMode.SURVIVAL);
@@ -149,14 +174,23 @@ public class AcidEffectTest {
         when(world.getMaxHeight()).thenReturn(5);
         when(world.getEnvironment()).thenReturn(Environment.NORMAL);
         
+        // Plugin
+        when(addon.getPlugin()).thenReturn(plugin);
+        when(plugin.getIWM()).thenReturn(iwm);
+        // CUSTOM damage protection
+        when(iwm.getIvSettings(any())).thenReturn(Collections.singletonList("CUSTOM"));
+        
+        // Island manager
+        when(addon.getIslands()).thenReturn(im);
+        when(im.userIsOnIsland(any(), any())).thenReturn(true);
+        
         ae = new AcidEffect(addon);
     }
 
     /**
-     * @throws java.lang.Exception
      */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
     }
 
     /**
@@ -233,6 +267,40 @@ public class AcidEffectTest {
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
         verify(settings, times(2)).getAcidDamageDelay();
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
+     */
+    @Test
+    public void testOnPlayerMoveVisitorNoAcidAndRainDamage() {
+        when(im.userIsOnIsland(any(), any())).thenReturn(false);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
+     */
+    @Test
+    public void testOnPlayerMoveVisitorAcidAndRainDamage() {
+        // No protection against CUSTOM damage
+        when(iwm.getIvSettings(any())).thenReturn(Collections.emptyList());
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, times(2)).getAcidDamageDelay();
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
+     */
+    @Test
+    public void testOnPlayerMoveGodModeNoAcidAndRainDamage() {
+        when(essentialsUser.isGodModeEnabled()).thenReturn(true);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
     }
     
     /**
@@ -319,8 +387,8 @@ public class AcidEffectTest {
        
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
-        // 2 times only
-        verify(addon, times(2)).getPlugin();
+        // 3 times only
+        verify(addon, times(3)).getPlugin();
     }
     
     /**
@@ -335,8 +403,8 @@ public class AcidEffectTest {
        
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
-        // 2 times only
-        verify(addon, times(2)).getPlugin();
+        // 3 times only
+        verify(addon, times(3)).getPlugin();
     }
     
     /**

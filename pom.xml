@@ -58,14 +58,14 @@
         <!-- Non-minecraft related dependencies -->
         <powermock.version>2.0.4</powermock.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.16.1-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.16.2-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>1.14.0</bentobox.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
         <!-- Do not change unless you want different name for local builds. -->
         <build.number>-LOCAL</build.number>
         <!-- This allows to change between versions. -->
-        <build.version>1.14.2</build.version>
+        <build.version>1.14.3</build.version>
     </properties>
 
     <!-- Profiles will allow to automatically change build version. -->
@@ -147,6 +147,10 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>ess-repo</id>
+            <url>https://ci.ender.zone/plugin/repository/everything/</url>
+        </repository>
     </repositories>
 
 
@@ -191,6 +195,13 @@
             <groupId>org.eclipse.jdt</groupId>
             <artifactId>org.eclipse.jdt.annotation</artifactId>
             <version>2.2.200</version>
+        </dependency>
+        <!-- EssentialsX -->
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>EssentialsX</artifactId>
+            <version>2.17.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -267,11 +278,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.2.0</version>
                 <configuration>
+                    <source>8</source>
                     <show>public</show>
                     <failOnError>false</failOnError>
                     <additionalJOption>-Xdoclint:none</additionalJOption>
+                    <!-- <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable> -->
                 </configuration>
                 <executions>
                     <execution>

@@ -27,7 +27,7 @@ public class AcidTask {
     private final AcidIsland addon;
     private static final List<EntityType> IMMUNE = Arrays.asList(EntityType.TURTLE, EntityType.POLAR_BEAR, EntityType.DROWNED);
     private Map<Entity, Long> itemsInWater = new ConcurrentHashMap<>();
-    private BukkitTask findMobsTask;
+    private final BukkitTask findMobsTask;
 
     /**
      * Runs repeating tasks to deliver acid damage to mobs, etc.
@@ -35,7 +35,7 @@ public class AcidTask {
      */
     public AcidTask(AcidIsland addon) {
         this.addon = addon;
-        findMobsTask = Bukkit.getScheduler().runTaskTimerAsynchronously(addon.getPlugin(), () -> findEntities(), 0L, 20L);
+        findMobsTask = Bukkit.getScheduler().runTaskTimerAsynchronously(addon.getPlugin(), this::findEntities, 0L, 20L);
     }
 
     void findEntities() {
@@ -60,7 +60,7 @@ public class AcidTask {
             }
         }
         // Remove any entities not on the burn list
-        itemsInWater.keySet().removeIf(i -> !burnList.keySet().contains(i));
+        itemsInWater.keySet().removeIf(i -> !burnList.containsKey(i));
 
         if (!burnList.isEmpty()) {
             Bukkit.getScheduler().runTask(addon.getPlugin(), () ->

@@ -1,5 +1,6 @@
 package world.bentobox.acidisland;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
@@ -30,7 +31,7 @@ public class AcidIsland extends GameModeAddon {
     private @Nullable AISettings settings;
     private @Nullable AcidTask acidTask;
     private @Nullable ChunkGenerator chunkGenerator;
-    private Config<AISettings> config = new Config<>(this, AISettings.class);
+    private final Config<AISettings> config = new Config<>(this, AISettings.class);
 
     private static final String NETHER = "_nether";
     private static final String THE_END = "_the_end";
@@ -100,33 +101,28 @@ public class AcidIsland extends GameModeAddon {
         return settings;
     }
 
-    @Override
-    public void log(String string) {
-        getPlugin().log(string);
-    }
-
     /* (non-Javadoc)
      * @see world.bentobox.bentobox.api.addons.GameModeAddon#createWorlds()
      */
     @Override
     public void createWorlds() {
         String worldName = settings.getWorldName().toLowerCase();
-        if (getServer().getWorld(worldName) == null) {
-            getLogger().info("Creating AcidIsland...");
+        if (Bukkit.getWorld(worldName) == null) {
+            log("Creating AcidIsland...");
         }
         // Create the world if it does not exist
         chunkGenerator = new ChunkGeneratorWorld(this);
         islandWorld = getWorld(worldName, World.Environment.NORMAL, chunkGenerator);
         // Make the nether if it does not exist
         if (settings.isNetherGenerate()) {
-            if (getServer().getWorld(worldName + NETHER) == null) {
+            if (Bukkit.getWorld(worldName + NETHER) == null) {
                 log("Creating AcidIsland's Nether...");
             }
             netherWorld = settings.isNetherIslands() ? getWorld(worldName, World.Environment.NETHER, chunkGenerator) : getWorld(worldName, World.Environment.NETHER, null);
         }
         // Make the end if it does not exist
         if (settings.isEndGenerate()) {
-            if (getServer().getWorld(worldName + THE_END) == null) {
+            if (Bukkit.getWorld(worldName + THE_END) == null) {
                 log("Creating AcidIsland's End World...");
             }
             endWorld = settings.isEndIslands() ? getWorld(worldName, World.Environment.THE_END, chunkGenerator) : getWorld(worldName, World.Environment.THE_END, null);
@@ -161,7 +157,7 @@ public class AcidIsland extends GameModeAddon {
 
     @Override
     public WorldSettings getWorldSettings() {
-        return settings;
+        return getSettings();
     }
 
     @Override

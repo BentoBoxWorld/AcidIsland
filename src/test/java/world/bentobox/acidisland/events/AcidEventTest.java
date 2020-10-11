@@ -21,12 +21,11 @@ public class AcidEventTest {
 
     @Mock
     private Player player;
-    private List<PotionEffectType> effects;
     private AcidEvent e;
 
     @Before
-    public void setUp() throws Exception {
-        effects = Arrays.asList(PotionEffectType.values());
+    public void setUp() {
+        List<PotionEffectType> effects = Arrays.asList(PotionEffectType.values());
         e = new AcidEvent(player, 10, 5, effects);
     }
 
@@ -49,18 +48,18 @@ public class AcidEventTest {
 
     @Test
     public void testGetTotalDamage() {
-        assertTrue(e.getTotalDamage() == 10D);
+        assertEquals(10D, e.getTotalDamage(), 0D);
     }
 
     @Test
     public void testGetProtection() {
-        assertTrue(e.getProtection() == 5D);
+        assertEquals(5D, e.getProtection(), 0D);
     }
 
     @Test
     public void testSetTotalDamage() {
         e.setTotalDamage(50);
-        assertTrue(e.getTotalDamage() == 50D);
+        assertEquals(50D, e.getTotalDamage(), 0D);
     }
 
     @Test

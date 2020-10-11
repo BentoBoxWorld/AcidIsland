@@ -64,8 +64,6 @@ public class AcidTaskTest {
     @Mock
     private World world;
 
-    private List<Entity> mob;
-
     @Mock
     private @Nullable World nether;
     @Mock
@@ -81,10 +79,9 @@ public class AcidTaskTest {
 
 
     /**
-     * @throws java.lang.Exception
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
         when(Bukkit.getScheduler()).thenReturn(scheduler);
         when(scheduler.runTaskTimerAsynchronously(any(), any(Runnable.class), anyLong(), anyLong())).thenReturn(task);
@@ -101,7 +98,7 @@ public class AcidTaskTest {
 
 
         // Default squid
-        mob = new ArrayList<>();
+        List<Entity> mob = new ArrayList<>();
         Squid squid = mock(Squid.class);
         when(squid.getType()).thenReturn(EntityType.SQUID);
         when(squid.getLocation()).thenReturn(l);
@@ -141,10 +138,9 @@ public class AcidTaskTest {
     }
 
     /**
-     * @throws java.lang.Exception
      */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
     }
 
     /**
