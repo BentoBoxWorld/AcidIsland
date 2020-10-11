@@ -153,7 +153,7 @@ public class AISettings implements WorldSettings {
     @ConfigComment("World difficulty setting - PEACEFUL, EASY, NORMAL, HARD")
     @ConfigComment("Other plugins may override this setting")
     @ConfigEntry(path = "world.difficulty")
-    private Difficulty difficulty;
+    private Difficulty difficulty = Difficulty.NORMAL;
 
     @ConfigComment("Spawn limits. These override the limits set in bukkit.yml")
     @ConfigComment("If set to a negative number, the server defaults will be used")
@@ -175,7 +175,6 @@ public class AISettings implements WorldSettings {
     private int ticksPerMonsterSpawns = -1;
 
     @ConfigComment("Radius of island in blocks. (So distance between islands is twice this)")
-    @ConfigComment("Will be rounded up to the nearest 16 blocks.")
     @ConfigComment("It is the same for every dimension : Overworld, Nether and End.")
     @ConfigComment("This value cannot be changed mid-game and the plugin will not start if it is different.")
     @ConfigEntry(path = "world.distance-between-islands", needsReset = true)
@@ -1080,7 +1079,9 @@ public class AISettings implements WorldSettings {
     /**
      * @param adminCommand what you want your admin command to be
      */
-    public void setAdminCommand(String adminCommand) { this.adminCommandAliases = adminCommand; }
+    public void setAdminCommand(String adminCommand) {
+        this.adminCommandAliases = adminCommand;
+    }
     /**
      * @param allowSetHomeInNether the allowSetHomeInNether to set
      */
@@ -1194,7 +1195,9 @@ public class AISettings implements WorldSettings {
     /**
      * @param islandCommand what you want your island command to be
      */
-    public void setIslandCommand(String islandCommand) { this.playerCommandAliases = islandCommand; }
+    public void setIslandCommand(String islandCommand) {
+        this.playerCommandAliases = islandCommand;
+    }
 
     /**
      * @param islandDistance the islandDistance to set
