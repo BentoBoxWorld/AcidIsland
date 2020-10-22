@@ -103,7 +103,6 @@ world:
     # Added since 1.11.2.
     ticks-per-monster-spawns: -1
   # Radius of island in blocks. (So distance between islands is twice this)
-  # Will be rounded up to the nearest 16 blocks.
   # It is the same for every dimension : Overworld, Nether and End.
   # This value cannot be changed mid-game and the plugin will not start if it is different.
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
@@ -141,6 +140,8 @@ world:
   default-game-mode: SURVIVAL
   # The default biome for the overworld
   default-biome: WARM_OCEAN
+  # The default biome for the nether world (this may affect what mobs can spawn)
+  default-nether-biome: NETHER_WASTES
   # The default biome for the end world (this may affect what mobs can spawn)
   default-end-biome: THE_END
   # The maximum number of players a player can ban at any one time in this game mode.
@@ -188,10 +189,10 @@ world:
   # This setting is toggled in world flags and set by the settings GUI.
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
-  - ZOMBIFIED_PIGLIN
   - ZOMBIE_VILLAGER
   - WITHER
   - ENDERMAN
+  - ZOMBIFIED_PIGLIN
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -223,6 +224,7 @@ world:
     LOCK: 0
     ENDER_PEARL: 500
     DOOR: 500
+    BREAK_HOPPERS: 500
     FURNACE: 500
     ANVIL: 500
     MINECART: 500
@@ -236,11 +238,11 @@ world:
     BREAK_SPAWNERS: 500
     LEVER: 500
     ELYTRA: 0
-    RIDING: 500
-    HURT_MONSTERS: 0
     CAKE: 500
-    ARMOR_STAND: 500
+    HURT_MONSTERS: 0
+    RIDING: 500
     NAME_TAG: 500
+    ARMOR_STAND: 500
     TRADING: 0
     EGGS: 500
     ITEM_DROP: 0
@@ -248,8 +250,8 @@ world:
     FLINT_AND_STEEL: 500
     NETHER_PORTAL: 500
     LECTERN: 500
-    CROP_TRAMPLE: 500
     ITEM_PICKUP: 0
+    CROP_TRAMPLE: 500
     DROPPER: 500
     BREWING: 500
     TNT_PRIMING: 500
@@ -259,14 +261,14 @@ world:
     COMMAND_RANKS: 500
     BEACON: 500
     TRAPDOOR: 500
-    EXPERIENCE_BOTTLE_THROWING: 500
     PRESSURE_PLATE: 0
+    EXPERIENCE_BOTTLE_THROWING: 500
     DYE: 500
     ITEM_FRAME: 500
     PLACE_BLOCKS: 500
     CRAFTING: 0
-    ENCHANTING: 0
     SHEARING: 500
+    ENCHANTING: 0
     BOAT: 500
     BED: 500
     SPAWN_EGGS: 500
@@ -276,8 +278,8 @@ world:
     EXPERIENCE_PICKUP: 500
     HOPPER: 500
     LEASH: 500
-    BREAK_BLOCKS: 500
     MOUNT_INVENTORY: 500
+    BREAK_BLOCKS: 500
     CHORUS_FRUIT: 500
     CONTAINER: 500
     JUKEBOX: 500
@@ -286,13 +288,15 @@ world:
   default-island-settings:
     PVP_END: false
     PVP_NETHER: false
-    ANIMAL_SPAWN: true
     LEAF_DECAY: true
+    MONSTER_SPAWNERS_SPAWN: true
     TNT_DAMAGE: true
-    MONSTER_SPAWN: true
+    ANIMAL_NATURAL_SPAWN: true
+    MONSTER_NATURAL_SPAWN: true
     FIRE_IGNITE: true
     FIRE_SPREAD: true
     FIRE_BURNING: true
+    ANIMAL_SPAWNERS_SPAWN: true
     PVP_OVERWORLD: false
   # These settings/flags are hidden from users
   # Ops can toggle hiding in-game using SHIFT-LEFT-CLICK on flags in settings
@@ -407,21 +411,47 @@ island:
     # If set to false, the player's island will be created even if he went offline in the meantime.
     # Note this option has no effect if the delay (see the option above) is set to 0 or less.
     abort-on-logout: true
+  # Toggles whether the player should be teleported automatically to his island when it is created.
+  # If set to false, the player will be told his island is ready but will have to teleport to his island using the command.
+  # Added since 1.10.0.
+  teleport-player-to-island-when-created: true
   # Create Nether or End islands if they are missing when a player goes through a portal.
   # Nether and End islands are usually pasted when a player makes their island, but if they are
   # missing for some reason, you can switch this on.
   # Note that bedrock removal glitches can exploit this option.
   create-missing-nether-end-islands: false
   commands:
-    # List of commands to run when a player joins.
+    # List of commands to run when a player joins an island or creates one.
+    # These commands are run by the console, unless otherwise stated using the [SUDO] prefix,
+    # in which case they are executed by the player.
+    # 
+    # Available placeholders for the commands are the following:
+    #    * [name]: name of the player
+    # 
+    # Here are some examples of valid commands to execute:
+    #    * "[SUDO] bbox version"
+    #    * "acid deaths set [player] 0"
     on-join: []
-    # list of commands to run when a player leaves.
+    # List of commands to run when a player leaves an island, resets his island or gets kicked from it.
+    # These commands are run by the console, unless otherwise stated using the [SUDO] prefix,
+    # in which case they are executed by the player.
+    # 
+    # Available placeholders for the commands are the following:
+    #    * [name]: name of the player
+    # 
+    # Here are some examples of valid commands to execute:
+    #    * '[SUDO] bbox version'
+    #    * 'acid deaths set [player] 0'
+    # 
+    # Note that player-executed commands might not work, as these commands can be run with said player being offline.
     on-leave: []
   sethome:
     nether:
+      # Allow setting home in the nether. Only available on nether islands, not vanilla nether.
       allow: true
       require-confirmation: true
     the-end:
+      # Allow setting home in the end. Only available on end islands, not vanilla end.
       allow: true
       require-confirmation: true
   deaths:
@@ -438,6 +468,9 @@ protection:
   # Geo restrict mobs.
   # Mobs that exit the island space where they were spawned will be removed.
   geo-limit-settings: []
+  # AcidIsland blocked mobs.
+  # List of mobs that should not spawn in AcidIsland.
+  block-mobs: []
   # Invincible visitors. List of damages that will not affect visitors.
   # Make list blank if visitors should receive all damages
   invincible-visitors:
