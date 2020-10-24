@@ -471,6 +471,11 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "island.create-island-on-first-login.abort-on-logout")
     private boolean createIslandOnFirstLoginAbortOnLogout = true;
 
+    @ConfigComment("Toggles whether the player should be teleported automatically to his island when it is created.")
+    @ConfigComment("If set to false, the player will be told his island is ready but will have to teleport to his island using the command.")
+    @ConfigEntry(path = "island.teleport-player-to-island-when-created", since = "1.10.0")
+    private boolean teleportPlayerToIslandUponIslandCreation = true;
+
     @ConfigComment("Create Nether or End islands if they are missing when a player goes through a portal.")
     @ConfigComment("Nether and End islands are usually pasted when a player makes their island, but if they are")
     @ConfigComment("missing for some reason, you can switch this on.")
@@ -479,11 +484,31 @@ public class AISettings implements WorldSettings {
     private boolean pasteMissingIslands = false;
 
     // Commands
-    @ConfigComment("List of commands to run when a player joins.")
+    @ConfigComment("List of commands to run when a player joins an island or creates one.")
+    @ConfigComment("These commands are run by the console, unless otherwise stated using the [SUDO] prefix,")
+    @ConfigComment("in which case they are executed by the player.")
+    @ConfigComment("")
+    @ConfigComment("Available placeholders for the commands are the following:")
+    @ConfigComment("   * [name]: name of the player")
+    @ConfigComment("")
+    @ConfigComment("Here are some examples of valid commands to execute:")
+    @ConfigComment("   * \"[SUDO] bbox version\"")
+    @ConfigComment("   * \"acid deaths set [player] 0\"")
     @ConfigEntry(path = "island.commands.on-join")
     private List<String> onJoinCommands = new ArrayList<>();
 
-    @ConfigComment("list of commands to run when a player leaves.")
+    @ConfigComment("List of commands to run when a player leaves an island, resets his island or gets kicked from it.")
+    @ConfigComment("These commands are run by the console, unless otherwise stated using the [SUDO] prefix,")
+    @ConfigComment("in which case they are executed by the player.")
+    @ConfigComment("")
+    @ConfigComment("Available placeholders for the commands are the following:")
+    @ConfigComment("   * [name]: name of the player")
+    @ConfigComment("")
+    @ConfigComment("Here are some examples of valid commands to execute:")
+    @ConfigComment("   * '[SUDO] bbox version'")
+    @ConfigComment("   * 'acid deaths set [player] 0'")
+    @ConfigComment("")
+    @ConfigComment("Note that player-executed commands might not work, as these commands can be run with said player being offline.")
     @ConfigEntry(path = "island.commands.on-leave")
     private List<String> onLeaveCommands = new ArrayList<>();
 
@@ -530,6 +555,11 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Mobs that exit the island space where they were spawned will be removed.")
     @ConfigEntry(path = "protection.geo-limit-settings")
     private List<String> geoLimitSettings = new ArrayList<>();
+
+    @ConfigComment("AcidIsland blocked mobs.")
+    @ConfigComment("List of mobs that should not spawn in AcidIsland.")
+    @ConfigEntry(path = "protection.block-mobs")
+    private List<String> mobLimitSettings = new ArrayList<>();
 
     // Invincible visitor settings
     @ConfigComment("Invincible visitors. List of damages that will not affect visitors.")
@@ -1827,5 +1857,31 @@ public class AISettings implements WorldSettings {
      */
     public void setDefaultEndBiome(Biome defaultEndBiome) {
         this.defaultEndBiome = defaultEndBiome;
+    }
+    /**
+     * @return the teleportPlayerToIslandUponIslandCreation
+     */
+    @Override
+    public boolean isTeleportPlayerToIslandUponIslandCreation() {
+        return teleportPlayerToIslandUponIslandCreation;
+    }
+    /**
+     * @param teleportPlayerToIslandUponIslandCreation the teleportPlayerToIslandUponIslandCreation to set
+     */
+    public void setTeleportPlayerToIslandUponIslandCreation(boolean teleportPlayerToIslandUponIslandCreation) {
+        this.teleportPlayerToIslandUponIslandCreation = teleportPlayerToIslandUponIslandCreation;
+    }
+    /**
+     * @return the mobLimitSettings
+     */
+    @Override
+    public List<String> getMobLimitSettings() {
+        return mobLimitSettings;
+    }
+    /**
+     * @param mobLimitSettings the mobLimitSettings to set
+     */
+    public void setMobLimitSettings(List<String> mobLimitSettings) {
+        this.mobLimitSettings = mobLimitSettings;
     }
 }

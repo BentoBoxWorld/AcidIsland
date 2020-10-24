@@ -28,9 +28,9 @@ public class LavaCheck implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCleanstoneGen(BlockFromToEvent e) {
-        if (!(e.getToBlock().getType().equals(Material.WATER)
-                || !addon.getOverWorld().equals(Util.getWorld(e.getBlock().getWorld())) 
-                || addon.getSettings().getAcidDamage() <= 0)) {
+        if (!e.getToBlock().getType().equals(Material.WATER)
+                || !addon.getOverWorld().equals(Util.getWorld(e.getToBlock().getWorld()))
+                || addon.getSettings().getAcidDamage() <= 0) {
             return;
         }
         Material prev = e.getToBlock().getType();

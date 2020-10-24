@@ -18,7 +18,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,9 +83,9 @@ public class LavaCheckTest {
     private IslandWorldManager iwm;
     @Mock
     private IslandsManager im;
-    
+
     private LavaCheck lc;
-    
+
     /**
      */
     @Before
@@ -100,15 +99,14 @@ public class LavaCheckTest {
         when(block.getType()).thenReturn(Material.WATER);
         when(block.getWorld()).thenReturn(world);
         when(block.getLocation()).thenReturn(location);
+        when(airBlock.getWorld()).thenReturn(world);
+
+
+        PowerMockito.mockStatic(Util.class);
+        when(Util.getWorld(any())).thenAnswer(arg -> (World)arg.getArgument(0, World.class));
 
         // CUT
         lc = new LavaCheck(addon);
-    }
-
-    /**
-     */
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -117,10 +115,10 @@ public class LavaCheckTest {
     @Test
     public void testOnCleanstoneGen() {
         ArgumentCaptor<Runnable> argument = ArgumentCaptor.forClass(Runnable.class);
-        
+
         BlockFromToEvent e = new BlockFromToEvent(airBlock, block);
         lc.onCleanstoneGen(e);
-        
+
         verify(scheduler).runTask(any(), argument.capture());
         // make block now be stone
         when(block.getType()).thenReturn(Material.STONE);
@@ -129,17 +127,17 @@ public class LavaCheckTest {
         verify(block).setType(eq(Material.WATER));
         verify(world).playSound(eq(location), eq(Sound.ENTITY_CREEPER_PRIMED), eq(1F), eq(2F));
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
     @Test
     public void testOnCleanstoneGenNoStone() {
         ArgumentCaptor<Runnable> argument = ArgumentCaptor.forClass(Runnable.class);
-        
+
         BlockFromToEvent e = new BlockFromToEvent(airBlock, block);
         lc.onCleanstoneGen(e);
-        
+
         verify(scheduler).runTask(any(), argument.capture());
         // make block now be obsidian
         when(block.getType()).thenReturn(Material.OBSIDIAN);
@@ -148,33 +146,34 @@ public class LavaCheckTest {
         verify(block, never()).setType(any());
         verify(world, never()).playSound(any(Location.class), any(Sound.class), anyFloat(),anyFloat());
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
     @Test
     public void testOnCleanstoneGenWrongWorld() {
         when(block.getWorld()).thenReturn(Mockito.mock(World.class));
-        
+        when(airBlock.getWorld()).thenReturn(Mockito.mock(World.class));
         BlockFromToEvent e = new BlockFromToEvent(airBlock, block);
         lc.onCleanstoneGen(e);
         verify(block, never()).setType(any());
         verify(world, never()).playSound(any(Location.class), any(Sound.class), anyFloat(),anyFloat());
     }
-    
+
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
     @Test
     public void testOnCleanstoneGenNotWater() {
         when(block.getType()).thenReturn(Material.LAVA);
-        
+
         BlockFromToEvent e = new BlockFromToEvent(airBlock, block);
         lc.onCleanstoneGen(e);
         verify(block, never()).setType(any());
         verify(world, never()).playSound(any(Location.class), any(Sound.class), anyFloat(),anyFloat());
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
@@ -189,6 +188,6 @@ public class LavaCheckTest {
         verify(block, never()).setType(any());
         verify(world, never()).playSound(any(Location.class), any(Sound.class), anyFloat(),anyFloat());
     }
-    
+
 
 }
