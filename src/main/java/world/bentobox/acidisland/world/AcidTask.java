@@ -21,6 +21,9 @@ import org.bukkit.entity.WaterMob;
 import org.bukkit.scheduler.BukkitTask;
 
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.acidisland.events.EntityDamageByAcidEvent;
+import world.bentobox.acidisland.events.EntityDamageByAcidEvent.Acid;
+import world.bentobox.acidisland.events.ItemDestroyByAcidEvent;
 import world.bentobox.acidisland.listeners.AcidEffect;
 
 public class AcidTask {
@@ -71,8 +74,12 @@ public class AcidTask {
 
     void applyDamage(Entity e, long damage) {
         if (e instanceof LivingEntity) {
-            ((LivingEntity)e).damage(Math.max(0, damage - damage * AcidEffect.getDamageReduced((LivingEntity)e)));
-        } else if (addon.getSettings().getAcidDestroyItemTime() > 0){
+            double actualDamage = Math.max(0, damage - damage * AcidEffect.getDamageReduced((LivingEntity)e));
+            ((LivingEntity)e).damage(actualDamage);
+            EntityDamageByAcidEvent event = new EntityDamageByAcidEvent(e, actualDamage, Acid.WATER);
+            // Fire event
+            Bukkit.getPluginManager().callEvent(event);
+        } else if (addon.getSettings().getAcidDestroyItemTime() > 0 && e instanceof Item){
             // Item
             if (e.getLocation().getBlock().getType().equals(Material.WATER)) {
                 itemsInWater.putIfAbsent(e, damage + addon.getSettings().getAcidDestroyItemTime() * 1000);
@@ -80,6 +87,8 @@ public class AcidTask {
                     e.getWorld().playSound(e.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     e.remove();
                     itemsInWater.remove(e);
+                    // Fire event
+                    Bukkit.getPluginManager().callEvent(new ItemDestroyByAcidEvent((Item)e));
                 }
             } else {
                 itemsInWater.remove(e);
