@@ -3,6 +3,7 @@ package world.bentobox.acidisland.events;
 import java.util.List;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -14,6 +15,16 @@ import org.bukkit.potion.PotionEffectType;
 public class AcidEvent extends AbstractAcidEvent {
 
     private double totalDamage;
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers() {
+        return getHandlerList();
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
     /**
      * @param player - player

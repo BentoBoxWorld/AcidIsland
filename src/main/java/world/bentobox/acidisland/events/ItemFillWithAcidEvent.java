@@ -1,6 +1,7 @@
 package world.bentobox.acidisland.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 import world.bentobox.bentobox.api.events.IslandBaseEvent;
@@ -10,10 +11,23 @@ import world.bentobox.bentobox.database.objects.Island;
  * Fired when an ItemStack (water bottle or bucket) is filled with acid
  * @author Poslovitch
  * @since 1.0
+ * @deprecated never used
  */
+@Deprecated
 public class ItemFillWithAcidEvent extends IslandBaseEvent {
+
     private final Player player;
     private final ItemStack item;
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers() {
+        return getHandlerList();
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
     public ItemFillWithAcidEvent(Island island, Player player, ItemStack item) {
         super(island);

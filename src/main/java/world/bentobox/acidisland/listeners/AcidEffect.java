@@ -36,6 +36,8 @@ import com.earth2me.essentials.Essentials;
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.AcidEvent;
 import world.bentobox.acidisland.events.AcidRainEvent;
+import world.bentobox.acidisland.events.EntityDamageByAcidEvent;
+import world.bentobox.acidisland.events.EntityDamageByAcidEvent.Acid;
 import world.bentobox.acidisland.world.AcidTask;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.Util;
@@ -173,6 +175,9 @@ public class AcidEffect implements Listener {
                 if (event.getRainDamage() > 0D) {
                     player.damage(event.getRainDamage());
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                    EntityDamageByAcidEvent e = new EntityDamageByAcidEvent(player, event.getRainDamage(), Acid.RAIN);
+                    // Fire event
+                    Bukkit.getPluginManager().callEvent(e);
                 }
             }
         }
@@ -194,6 +199,9 @@ public class AcidEffect implements Listener {
                 if (event.getTotalDamage() > 0D) {
                     player.damage(event.getTotalDamage());
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                    EntityDamageByAcidEvent e = new EntityDamageByAcidEvent(player, event.getTotalDamage(), Acid.WATER);
+                    // Fire event
+                    Bukkit.getPluginManager().callEvent(e);
                 }
             }
         }

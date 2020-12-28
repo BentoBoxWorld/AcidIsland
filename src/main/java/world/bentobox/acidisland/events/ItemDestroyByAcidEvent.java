@@ -1,20 +1,29 @@
 package world.bentobox.acidisland.events;
 
 import org.bukkit.entity.Item;
-
-import world.bentobox.bentobox.api.events.IslandBaseEvent;
-import world.bentobox.bentobox.database.objects.Island;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 /**
  * Fired when an item (on the ground) gets destroyed by acid
  * @author Poslovitch
  * @since 1.0
  */
-public class ItemDestroyByAcidEvent extends IslandBaseEvent {
-    private final Item item;
+public class ItemDestroyByAcidEvent extends Event {
 
-    public ItemDestroyByAcidEvent(Island island, Item item) {
-        super(island);
+    private final Item item;
+    private static final HandlerList handlers = new HandlerList();
+
+    @Override
+    public HandlerList getHandlers() {
+        return getHandlerList();
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    public ItemDestroyByAcidEvent(Item item) {
         this.item = item;
     }
 
