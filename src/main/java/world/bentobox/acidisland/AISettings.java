@@ -512,6 +512,21 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "island.commands.on-leave")
     private List<String> onLeaveCommands = new ArrayList<>();
 
+    @ConfigComment("List of commands that should be executed when the player respawns after death if Flags.ISLAND_RESPAWN is true.")
+    @ConfigComment("These commands are run by the console, unless otherwise stated using the [SUDO] prefix,")
+    @ConfigComment("in which case they are executed by the player.")
+    @ConfigComment("")
+    @ConfigComment("Available placeholders for the commands are the following:")
+    @ConfigComment("   * [name]: name of the player")
+    @ConfigComment("")
+    @ConfigComment("Here are some examples of valid commands to execute:")
+    @ConfigComment("   * '[SUDO] bbox version'")
+    @ConfigComment("   * 'bsbadmin deaths set [player] 0'")
+    @ConfigComment("")
+    @ConfigComment("Note that player-executed commands might not work, as these commands can be run with said player being offline.")
+    @ConfigEntry(path = "island.commands.on-respawn", since = "1.14.0")
+    private List<String> onRespawnCommands = new ArrayList<>();
+
     // Sethome
     @ConfigComment("Allow setting home in the nether. Only available on nether islands, not vanilla nether.")
     @ConfigEntry(path = "island.sethome.nether.allow")
@@ -1520,6 +1535,24 @@ public class AISettings implements WorldSettings {
     public void setOnLeaveCommands(List<String> onLeaveCommands) {
         this.onLeaveCommands = onLeaveCommands;
     }
+
+    /**
+     * @return the onRespawnCommands
+     */
+    @Override
+    public List<String> getOnRespawnCommands() {
+        return onRespawnCommands;
+    }
+
+    /**
+     * Sets on respawn commands.
+     *
+     * @param onRespawnCommands the on respawn commands
+     */
+    public void setOnRespawnCommands(List<String> onRespawnCommands) {
+        this.onRespawnCommands = onRespawnCommands;
+    }
+
     /**
      * @return the onJoinResetHealth
      */
