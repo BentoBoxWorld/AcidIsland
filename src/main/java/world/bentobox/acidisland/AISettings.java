@@ -277,7 +277,7 @@ public class AISettings implements WorldSettings {
     @ConfigComment("This option indicates if nether portals should be linked via dimensions.")
     @ConfigComment("Option will simulate vanilla portal mechanics that links portals together")
     @ConfigComment("or creates a new portal, if there is not a portal in that dimension.")
-    @ConfigEntry(path = "world.nether.create-and-link-portals", since = "1.16")
+    @ConfigEntry(path = "world.nether.create-and-link-portals", since = "1.14.6")
     private boolean makeNetherPortals = false;
 
     // End
@@ -297,7 +297,7 @@ public class AISettings implements WorldSettings {
 
     @ConfigComment("This option indicates if obsidian platform in the end should be generated")
     @ConfigComment("when player enters the end world.")
-    @ConfigEntry(path = "world.end.create-obsidian-platform", since = "1.16")
+    @ConfigEntry(path = "world.end.create-obsidian-platform", since = "1.14.6")
     private boolean makeEndPortals = false;
 
     @ConfigEntry(path = "world.end.dragon-spawn", experimental = true)
