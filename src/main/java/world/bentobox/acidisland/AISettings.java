@@ -274,6 +274,12 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "world.nether.spawn-radius")
     private int netherSpawnRadius = 32;
 
+    @ConfigComment("This option indicates if nether portals should be linked via dimensions.")
+    @ConfigComment("Option will simulate vanilla portal mechanics that links portals together")
+    @ConfigComment("or creates a new portal, if there is not a portal in that dimension.")
+    @ConfigEntry(path = "world.nether.create-and-link-portals", since = "1.14.6")
+    private boolean makeNetherPortals = false;
+
     // End
     @ConfigComment("End Nether - if this is false, the end world will not be made and access to")
     @ConfigComment("the end will not occur. Other plugins may still enable portal usage.")
@@ -288,6 +294,11 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Changing mid-game will cause problems!")
     @ConfigEntry(path = "world.end.sea-height", needsReset = true)
     private int endSeaHeight = 54;
+
+    @ConfigComment("This option indicates if obsidian platform in the end should be generated")
+    @ConfigComment("when player enters the end world.")
+    @ConfigEntry(path = "world.end.create-obsidian-platform", since = "1.14.6")
+    private boolean makeEndPortals = false;
 
     @ConfigEntry(path = "world.end.dragon-spawn", experimental = true)
     private boolean dragonSpawn = false;
@@ -511,6 +522,21 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Note that player-executed commands might not work, as these commands can be run with said player being offline.")
     @ConfigEntry(path = "island.commands.on-leave")
     private List<String> onLeaveCommands = new ArrayList<>();
+
+    @ConfigComment("List of commands that should be executed when the player respawns after death if Flags.ISLAND_RESPAWN is true.")
+    @ConfigComment("These commands are run by the console, unless otherwise stated using the [SUDO] prefix,")
+    @ConfigComment("in which case they are executed by the player.")
+    @ConfigComment("")
+    @ConfigComment("Available placeholders for the commands are the following:")
+    @ConfigComment("   * [name]: name of the player")
+    @ConfigComment("")
+    @ConfigComment("Here are some examples of valid commands to execute:")
+    @ConfigComment("   * '[SUDO] bbox version'")
+    @ConfigComment("   * 'bsbadmin deaths set [player] 0'")
+    @ConfigComment("")
+    @ConfigComment("Note that player-executed commands might not work, as these commands can be run with said player being offline.")
+    @ConfigEntry(path = "island.commands.on-respawn", since = "1.14.0")
+    private List<String> onRespawnCommands = new ArrayList<>();
 
     // Sethome
     @ConfigComment("Allow setting home in the nether. Only available on nether islands, not vanilla nether.")
@@ -1520,6 +1546,24 @@ public class AISettings implements WorldSettings {
     public void setOnLeaveCommands(List<String> onLeaveCommands) {
         this.onLeaveCommands = onLeaveCommands;
     }
+
+    /**
+     * @return the onRespawnCommands
+     */
+    @Override
+    public List<String> getOnRespawnCommands() {
+        return onRespawnCommands;
+    }
+
+    /**
+     * Sets on respawn commands.
+     *
+     * @param onRespawnCommands the on respawn commands
+     */
+    public void setOnRespawnCommands(List<String> onRespawnCommands) {
+        this.onRespawnCommands = onRespawnCommands;
+    }
+
     /**
      * @return the onJoinResetHealth
      */
@@ -1883,5 +1927,37 @@ public class AISettings implements WorldSettings {
      */
     public void setMobLimitSettings(List<String> mobLimitSettings) {
         this.mobLimitSettings = mobLimitSettings;
+    }
+
+    /**
+     * @return the makeNetherPortals
+     */
+    @Override
+    public boolean isMakeNetherPortals() {
+        return makeNetherPortals;
+    }
+
+    /**
+     * @return the makeEndPortals
+     */
+    @Override
+    public boolean isMakeEndPortals() {
+        return makeEndPortals;
+    }
+
+    /**
+     * Sets make nether portals.
+     * @param makeNetherPortals the make nether portals
+     */
+    public void setMakeNetherPortals(boolean makeNetherPortals) {
+        this.makeNetherPortals = makeNetherPortals;
+    }
+
+    /**
+     * Sets make end portals.
+     * @param makeEndPortals the make end portals
+     */
+    public void setMakeEndPortals(boolean makeEndPortals) {
+        this.makeEndPortals = makeEndPortals;
     }
 }

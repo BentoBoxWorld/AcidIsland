@@ -171,6 +171,10 @@ world:
     # Minimum is 0 (not recommended), maximum is 100. Default is 25.
     # Only applies to vanilla nether
     spawn-radius: 25
+    # This option indicates if nether portals should be linked via dimensions.
+    # Option will simulate vanilla portal mechanics that links portals together or creates a new portal, if there is not a portal in other dimension.
+    # Added since 1.14.6
+    create-and-link-portals: false
   end:
     # End Nether - if this is false, the end world will not be made and access to
     # the end will not occur. Other plugins may still enable portal usage.
@@ -182,6 +186,9 @@ world:
     # Changing mid-game will cause problems!
     # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
     sea-height: 54
+    # This option indicates if obsidian platform in the end should be generated when player enters the end world.
+    # Added since 1.14.6
+    create-obsidian-platform: false
     # /!\ This feature is experimental and might not work as expected or might not work at all.
     dragon-spawn: false
   # Removing mobs - this kills all monsters in the vicinity. Benefit is that it helps
@@ -445,6 +452,20 @@ island:
     # 
     # Note that player-executed commands might not work, as these commands can be run with said player being offline.
     on-leave: []
+    # Returns a list of commands that should be executed when the player respawns after death if Flags.ISLAND_RESPAWN is true.
+    # These commands are run by the console, unless otherwise stated using the [SUDO] prefix,
+    # in which case they are executed by the player.
+    #
+    # Available placeholders for the commands are the following:
+    #    * [name]: name of the player
+    #
+    # Here are some examples of valid commands to execute:
+    #    * '[SUDO] bbox version'
+    #    * 'bsbadmin deaths set [player] 0'
+    #
+    # Note that player-executed commands might not work, as these commands can be run with said player being offline.
+    # Added since 1.14.0.
+    on-respawn: []
   sethome:
     nether:
       # Allow setting home in the nether. Only available on nether islands, not vanilla nether.
