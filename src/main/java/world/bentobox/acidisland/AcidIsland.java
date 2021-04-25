@@ -196,8 +196,7 @@ public class AcidIsland extends GameModeAddon {
      */
     @Override
     public void allLoaded() {
-        // Reload settings and save them. This will occur after all addons have loaded
-        this.loadSettings();
+        // Save settings. This will occur after all addons have loaded
         this.saveWorldSettings();
     }
 }
