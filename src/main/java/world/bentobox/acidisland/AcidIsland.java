@@ -143,7 +143,7 @@ public class AcidIsland extends GameModeAddon {
         WorldCreator wc = WorldCreator.name(worldName2).type(WorldType.FLAT).environment(env);
         World w = settings.isUseOwnGenerator() ? wc.createWorld() : wc.generator(chunkGenerator2).createWorld();
         // Set spawn rates
-        if (w != null) {
+        if (w != null && getSettings() != null) {
             if (getSettings().getSpawnLimitMonsters() > 0) {
                 w.setMonsterSpawnLimit(getSettings().getSpawnLimitMonsters());
             }
