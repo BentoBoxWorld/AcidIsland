@@ -84,7 +84,7 @@ public class AcidTaskTest {
     public void setUp() {
         PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
         when(Bukkit.getScheduler()).thenReturn(scheduler);
-        when(scheduler.runTaskTimerAsynchronously(any(), any(Runnable.class), anyLong(), anyLong())).thenReturn(task);
+        when(scheduler.runTaskTimer(any(), any(Runnable.class), anyLong(), anyLong())).thenReturn(task);
 
         when(addon.getOverWorld()).thenReturn(world);
         when(addon.getNetherWorld()).thenReturn(nether);
@@ -148,7 +148,7 @@ public class AcidTaskTest {
      */
     @Test
     public void testAcidTask() {
-        verify(scheduler).runTaskTimerAsynchronously(eq(null), any(Runnable.class), eq(0L), eq(20L));
+        verify(scheduler).runTaskTimer(eq(null), any(Runnable.class), eq(0L), eq(20L));
     }
 
     /**
