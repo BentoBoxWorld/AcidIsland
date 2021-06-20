@@ -1,8 +1,7 @@
 name: AcidIsland
 main: world.bentobox.acidisland.AcidIslandPladdon
 version: ${version}
-api-version: 1.16
+api-version: 1.17
 description: AcidIsland
 author: tastybento
-depend:
-  - BentoBox
+depend: [BentoBox]

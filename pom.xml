@@ -54,11 +54,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
         <!-- Non-minecraft related dependencies -->
-        <powermock.version>2.0.4</powermock.version>
+        <powermock.version>2.0.9</powermock.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.16.3-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>1.17.0-SNAPSHOT</bentobox.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
@@ -170,7 +170,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.0.0</version>
+            <version>3.11.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -198,7 +198,7 @@
         <dependency>
             <groupId>org.eclipse.jdt</groupId>
             <artifactId>org.eclipse.jdt.annotation</artifactId>
-            <version>2.2.200</version>
+            <version>2.2.600</version>
         </dependency>
         <!-- EssentialsX -->
         <dependency>
@@ -265,8 +265,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -289,11 +288,11 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <source>8</source>
+                    <source>16</source>
                     <show>public</show>
                     <failOnError>false</failOnError>
                     <additionalJOption>-Xdoclint:none</additionalJOption>
-                    <!-- <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable> -->
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                 </configuration>
                 <executions>
                     <execution>
