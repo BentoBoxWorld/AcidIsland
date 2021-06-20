@@ -38,7 +38,7 @@ public class AcidTask {
      */
     public AcidTask(AcidIsland addon) {
         this.addon = addon;
-        findMobsTask = Bukkit.getScheduler().runTaskTimerAsynchronously(addon.getPlugin(), this::findEntities, 0L, 20L);
+        findMobsTask = Bukkit.getScheduler().runTaskTimer(addon.getPlugin(), this::findEntities, 0L, 20L);
     }
 
     void findEntities() {
