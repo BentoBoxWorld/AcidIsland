@@ -193,7 +193,7 @@ public class AISettingsTest {
      */
     @Test
     public void testGetIslandDistance() {
-        assertEquals(192, s.getIslandDistance());
+        assertEquals(64, s.getIslandDistance());
     }
 
     /**
@@ -209,7 +209,7 @@ public class AISettingsTest {
      */
     @Test
     public void testGetIslandProtectionRange() {
-        assertEquals(100, s.getIslandProtectionRange());
+        assertEquals(50, s.getIslandProtectionRange());
     }
 
     /**

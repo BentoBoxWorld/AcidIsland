@@ -178,13 +178,13 @@ public class AISettings implements WorldSettings {
     @ConfigComment("It is the same for every dimension : Overworld, Nether and End.")
     @ConfigComment("This value cannot be changed mid-game and the plugin will not start if it is different.")
     @ConfigEntry(path = "world.distance-between-islands", needsReset = true)
-    private int islandDistance = 192;
+    private int islandDistance = 64;
 
     @ConfigComment("Default protection range radius in blocks. Cannot be larger than distance.")
     @ConfigComment("Admins can change protection sizes for players individually using /acid range set <player> <new range>")
     @ConfigComment("or set this permission: acidisland.island.range.<number>")
     @ConfigEntry(path = "world.protection-range", overrideOnChange = true)
-    private int islandProtectionRange = 100;
+    private int islandProtectionRange = 50;
 
     @ConfigComment("Start islands at these coordinates. This is where new islands will start in the")
     @ConfigComment("world. These must be a factor of your island distance, but the plugin will auto")

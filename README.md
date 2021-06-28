@@ -8,13 +8,17 @@ AcidIsland™
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=bugs)](https://sonarcloud.io/project/issues?id=world.bentobox%3Aacidisland&resolved=false&types=BUG)
 
 # Introduction
-AcidIsland™ add-on for BentoBox, so to run an AcidIsland™ game, you must have BentoBox installed. It is not a Bukkit plugin and trying to use it as one will not work.
+AcidIsland™ add-on for BentoBox, so to run an AcidIsland™ game, you must have BentoBox installed. Docs can be found at [https://docs.bentobox.world](https://docs.bentobox.world).
 
 
 ## The Story
 You're on an island, in a sea of acid! If you like Skyblock, try the AcidIsland™ game mode for a new challenge!
 
-This is a variation of SkyBlock. Instead of falling, you must contend with acid water when expanding your island and players can boat to each other's islands.
+Instead of falling you must contend with acid water when expanding your island, and players can boat to each other's islands.
+
+## Download
+
+You can download from GitHub, or ready made plugin packs from [https://download.bentobox.world](https://download.bentobox.world).
 
 ## Installation
 
@@ -36,8 +40,8 @@ AcidIsland™ add-on uses the BentoBox API. Here are some other ones that you ma
 * Challenges - challenges
 * Biomes - enables biomes
 
-You can find the projects on GitHub.
+You can find the projects on GitHub or download load from [https://download.bentobox.world](https://download.bentobox.world).
 
 Bugs and Feature requests
 =========================
-File bug and feature requests here: https://github.com/BentoBoxWorld/AcidIsland/issues
+File bug and feature requests here: [https://github.com/BentoBoxWorld/AcidIsland/issues](https://github.com/BentoBoxWorld/AcidIsland/issues)
