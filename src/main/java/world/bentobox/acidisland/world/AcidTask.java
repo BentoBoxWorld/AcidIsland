@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -103,10 +104,10 @@ public class AcidTask {
         List<Entity> entityStream = new ArrayList<>(addon.getOverWorld().getEntities());
         // Nether and end
         if (addon.getSettings().isNetherGenerate() && addon.getSettings().isNetherIslands()) {
-            entityStream.addAll(addon.getNetherWorld().getEntities());
+            entityStream.addAll(Objects.requireNonNull(addon.getNetherWorld()).getEntities());
         }
         if (addon.getSettings().isEndGenerate() && addon.getSettings().isEndIslands()) {
-            entityStream.addAll(addon.getEndWorld().getEntities());
+            entityStream.addAll(Objects.requireNonNull(addon.getEndWorld()).getEntities());
         }
         return entityStream;
     }
