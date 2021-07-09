@@ -1,5 +1,7 @@
 package world.bentobox.acidisland;
 
+import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -96,9 +98,9 @@ public class AcidIsland extends GameModeAddon {
         if (acidTask != null) acidTask.cancelTasks();
     }
 
-    @Nullable
+    @NonNull
     public AISettings getSettings() {
-        return settings;
+        return Objects.requireNonNull(settings);
     }
 
     /* (non-Javadoc)
