@@ -1695,7 +1695,7 @@ public class AISettings implements WorldSettings {
 
     /**
      *
-     * @param acidRainEffects
+     * @param acidRainEffects potion effects from rain
      * @since 1.9.1
      */
     public void setAcidRainEffects(List<PotionEffectType> acidRainEffects) {
