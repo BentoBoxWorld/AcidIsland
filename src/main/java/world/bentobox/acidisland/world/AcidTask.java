@@ -1,7 +1,7 @@
 package world.bentobox.acidisland.world;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -21,6 +21,8 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.WaterMob;
 import org.bukkit.scheduler.BukkitTask;
 
+import com.google.common.base.Enums;
+
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.EntityDamageByAcidEvent;
 import world.bentobox.acidisland.events.EntityDamageByAcidEvent.Acid;
@@ -29,7 +31,15 @@ import world.bentobox.acidisland.listeners.AcidEffect;
 
 public class AcidTask {
     private final AcidIsland addon;
-    private static final List<EntityType> IMMUNE = Arrays.asList(EntityType.TURTLE, EntityType.POLAR_BEAR, EntityType.DROWNED, EntityType.AXOLOTL);
+    private static final List<EntityType> IMMUNE;
+    static {
+        List<EntityType> i = new ArrayList<>();
+        i.add(EntityType.POLAR_BEAR);
+        i.add(EntityType.TURTLE);
+        i.add(EntityType.DROWNED);
+        Enums.getIfPresent(EntityType.class, "AXOLOTL").toJavaUtil().ifPresent(i::add);
+        IMMUNE = Collections.unmodifiableList(i);
+    }
     private Map<Entity, Long> itemsInWater = new ConcurrentHashMap<>();
     private final BukkitTask findMobsTask;
 
