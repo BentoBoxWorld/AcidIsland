@@ -29,7 +29,7 @@ import world.bentobox.acidisland.listeners.AcidEffect;
 
 public class AcidTask {
     private final AcidIsland addon;
-    private static final List<EntityType> IMMUNE = Arrays.asList(EntityType.TURTLE, EntityType.POLAR_BEAR, EntityType.DROWNED);
+    private static final List<EntityType> IMMUNE = Arrays.asList(EntityType.TURTLE, EntityType.POLAR_BEAR, EntityType.DROWNED, EntityType.AXOLOTL);
     private Map<Entity, Long> itemsInWater = new ConcurrentHashMap<>();
     private final BukkitTask findMobsTask;
 
