@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
@@ -206,7 +207,7 @@ public class AISettings implements WorldSettings {
     @ConfigComment("It is the y coordinate of the bedrock block in the schem.")
     @ConfigEntry(path = "world.island-height")
     private int islandHeight = 50;
-
+    
     @ConfigComment("Use your own world generator for this world.")
     @ConfigComment("In this case, the plugin will not generate anything.")
     @ConfigEntry(path = "world.use-own-generator", experimental = true)
@@ -216,6 +217,10 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Minimum is 0, which means you are playing Skyblock!")
     @ConfigEntry(path = "world.sea-height")
     private int seaHeight = 54;
+    
+    @ConfigComment("Water block. This should usually stay as WATER, but may be LAVA for fun")
+    @ConfigEntry(path = "world.water-block", needsReset = true)
+    private Material waterBlock = Material.WATER;
 
     @ConfigComment("Maximum number of islands in the world. Set to -1 or 0 for unlimited. ")
     @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
@@ -260,6 +265,10 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Changing mid-game will cause problems!")
     @ConfigEntry(path = "world.nether.sea-height", needsReset = true)
     private int netherSeaHeight = 54;
+    
+    @ConfigComment("Water block. This should usually stay as WATER, but may be LAVA for fun")
+    @ConfigEntry(path = "world.nether.water-block", needsReset = true)
+    private Material netherWaterBlock = Material.WATER;
 
     @ConfigComment("Make the nether roof, if false, there is nothing up there")
     @ConfigComment("Change to false if lag is a problem from the generation")
@@ -294,6 +303,10 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Changing mid-game will cause problems!")
     @ConfigEntry(path = "world.end.sea-height", needsReset = true)
     private int endSeaHeight = 54;
+    
+    @ConfigComment("Water block. This should usually stay as WATER, but may be LAVA for fun")
+    @ConfigEntry(path = "world.end.water-block", needsReset = true)
+    private Material endWaterBlock = Material.WATER;
 
     @ConfigComment("This option indicates if obsidian platform in the end should be generated")
     @ConfigComment("when player enters the end world.")
@@ -1959,5 +1972,23 @@ public class AISettings implements WorldSettings {
      */
     public void setMakeEndPortals(boolean makeEndPortals) {
         this.makeEndPortals = makeEndPortals;
+    }
+    public Material getWaterBlock() {
+        return waterBlock;
+    }
+    public void setWaterBlock(Material waterBlock) {
+        this.waterBlock = waterBlock;
+    }
+    public Material getNetherWaterBlock() {
+        return netherWaterBlock;
+    }
+    public void setNetherWaterBlock(Material netherWaterBlock) {
+        this.netherWaterBlock = netherWaterBlock;
+    }
+    public Material getEndWaterBlock() {
+        return endWaterBlock;
+    }
+    public void setEndWaterBlock(Material endWaterBlock) {
+        this.endWaterBlock = endWaterBlock;
     }
 }
