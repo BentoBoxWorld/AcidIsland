@@ -1,14 +1,10 @@
 package world.bentobox.acidisland;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
@@ -20,10 +16,8 @@ import world.bentobox.bentobox.api.configuration.ConfigEntry;
 import world.bentobox.bentobox.api.configuration.StoreAt;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.flags.Flag;
-import world.bentobox.bentobox.database.objects.adapters.Adapter;
-import world.bentobox.bentobox.database.objects.adapters.FlagSerializer;
-import world.bentobox.bentobox.database.objects.adapters.FlagSerializer2;
-import world.bentobox.bentobox.database.objects.adapters.PotionEffectListAdapter;
+import world.bentobox.bentobox.database.objects.adapters.*;
+
 
 /**
  * Settings for AcidIsland
@@ -206,7 +200,7 @@ public class AISettings implements WorldSettings {
     @ConfigComment("It is the y coordinate of the bedrock block in the schem.")
     @ConfigEntry(path = "world.island-height")
     private int islandHeight = 50;
-
+    
     @ConfigComment("Use your own world generator for this world.")
     @ConfigComment("In this case, the plugin will not generate anything.")
     @ConfigEntry(path = "world.use-own-generator", experimental = true)
@@ -216,6 +210,10 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Minimum is 0, which means you are playing Skyblock!")
     @ConfigEntry(path = "world.sea-height")
     private int seaHeight = 54;
+    
+    @ConfigComment("Water block. This should usually stay as WATER, but may be LAVA for fun")
+    @ConfigEntry(path = "world.water-block", needsReset = true)
+    private Material waterBlock = Material.WATER;
 
     @ConfigComment("Maximum number of islands in the world. Set to -1 or 0 for unlimited. ")
     @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
@@ -260,6 +258,10 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Changing mid-game will cause problems!")
     @ConfigEntry(path = "world.nether.sea-height", needsReset = true)
     private int netherSeaHeight = 54;
+    
+    @ConfigComment("Water block. This should usually stay as WATER, but may be LAVA for fun")
+    @ConfigEntry(path = "world.nether.water-block", needsReset = true)
+    private Material netherWaterBlock = Material.WATER;
 
     @ConfigComment("Make the nether roof, if false, there is nothing up there")
     @ConfigComment("Change to false if lag is a problem from the generation")
@@ -294,6 +296,10 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Changing mid-game will cause problems!")
     @ConfigEntry(path = "world.end.sea-height", needsReset = true)
     private int endSeaHeight = 54;
+    
+    @ConfigComment("Water block. This should usually stay as WATER, but may be LAVA for fun")
+    @ConfigEntry(path = "world.end.water-block", needsReset = true)
+    private Material endWaterBlock = Material.WATER;
 
     @ConfigComment("This option indicates if obsidian platform in the end should be generated")
     @ConfigComment("when player enters the end world.")
@@ -318,13 +324,12 @@ public class AISettings implements WorldSettings {
     @ConfigComment("The value is the minimum island rank required allowed to do the action")
     @ConfigComment("Ranks are: Visitor = 0, Member = 900, Owner = 1000")
     @ConfigEntry(path = "world.default-island-flags")
-    @Adapter(FlagSerializer.class)
-    private Map<Flag, Integer> defaultIslandFlags = new HashMap<>();
+    private Map<String, Integer> defaultIslandFlagNames = new HashMap<>();
 
     @ConfigComment("These are the default settings for new islands")
     @ConfigEntry(path = "world.default-island-settings")
-    @Adapter(FlagSerializer2.class)
-    private Map<Flag, Integer> defaultIslandSettings = new HashMap<>();
+    @Adapter(FlagBooleanSerializer.class)
+    private Map<String, Integer> defaultIslandSettingNames = new HashMap<>();
 
     @ConfigComment("These settings/flags are hidden from users")
     @ConfigComment("Ops can toggle hiding in-game using SHIFT-LEFT-CLICK on flags in settings")
@@ -673,20 +678,50 @@ public class AISettings implements WorldSettings {
     public GameMode getDefaultGameMode() {
         return defaultGameMode;
     }
+
+
+    /**
+     * @return the defaultIslandFlags
+     * @since 1.21.0
+     */
+    @Override
+    public Map<String, Integer> getDefaultIslandFlagNames()
+    {
+        return defaultIslandFlagNames;
+    }
+
+
+    /**
+     * @return the defaultIslandSettings
+     * @since 1.21.0
+     */
+    @Override
+    public Map<String, Integer> getDefaultIslandSettingNames()
+    {
+        return defaultIslandSettingNames;
+    }
+
+
     /**
      * @return the defaultIslandProtection
+     * @deprecated since 1.21
      */
     @Override
     public Map<Flag, Integer> getDefaultIslandFlags() {
-        return defaultIslandFlags;
+        return Collections.emptyMap();
     }
+
+
     /**
      * @return the defaultIslandSettings
+     * @deprecated since 1.21
      */
     @Override
     public Map<Flag, Integer> getDefaultIslandSettings() {
-        return defaultIslandSettings;
+        return Collections.emptyMap();
     }
+
+
     /**
      * @return the difficulty
      */
@@ -1190,14 +1225,14 @@ public class AISettings implements WorldSettings {
     }
     /**
      */
-    public void setDefaultIslandFlags(Map<Flag, Integer> defaultIslandFlags) {
-        this.defaultIslandFlags = defaultIslandFlags;
+    public void setDefaultIslandFlagNames(Map<String, Integer> defaultIslandFlags) {
+        this.defaultIslandFlagNames = defaultIslandFlags;
     }
     /**
      * @param defaultIslandSettings the defaultIslandSettings to set
      */
-    public void setDefaultIslandSettings(Map<Flag, Integer> defaultIslandSettings) {
-        this.defaultIslandSettings = defaultIslandSettings;
+    public void setDefaultIslandSettingNames(Map<String, Integer> defaultIslandSettings) {
+        this.defaultIslandSettingNames = defaultIslandSettings;
     }
     /**
      * @param difficulty the difficulty to set
@@ -1959,5 +1994,23 @@ public class AISettings implements WorldSettings {
      */
     public void setMakeEndPortals(boolean makeEndPortals) {
         this.makeEndPortals = makeEndPortals;
+    }
+    public Material getWaterBlock() {
+        return waterBlock;
+    }
+    public void setWaterBlock(Material waterBlock) {
+        this.waterBlock = waterBlock;
+    }
+    public Material getNetherWaterBlock() {
+        return netherWaterBlock;
+    }
+    public void setNetherWaterBlock(Material netherWaterBlock) {
+        this.netherWaterBlock = netherWaterBlock;
+    }
+    public Material getEndWaterBlock() {
+        return endWaterBlock;
+    }
+    public void setEndWaterBlock(Material endWaterBlock) {
+        this.endWaterBlock = endWaterBlock;
     }
 }
