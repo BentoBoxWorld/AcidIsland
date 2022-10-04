@@ -1,11 +1,6 @@
 package world.bentobox.acidisland;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
@@ -21,10 +16,8 @@ import world.bentobox.bentobox.api.configuration.ConfigEntry;
 import world.bentobox.bentobox.api.configuration.StoreAt;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.flags.Flag;
-import world.bentobox.bentobox.database.objects.adapters.Adapter;
-import world.bentobox.bentobox.database.objects.adapters.FlagSerializer;
-import world.bentobox.bentobox.database.objects.adapters.FlagSerializer2;
-import world.bentobox.bentobox.database.objects.adapters.PotionEffectListAdapter;
+import world.bentobox.bentobox.database.objects.adapters.*;
+
 
 /**
  * Settings for AcidIsland
@@ -331,13 +324,12 @@ public class AISettings implements WorldSettings {
     @ConfigComment("The value is the minimum island rank required allowed to do the action")
     @ConfigComment("Ranks are: Visitor = 0, Member = 900, Owner = 1000")
     @ConfigEntry(path = "world.default-island-flags")
-    @Adapter(FlagSerializer.class)
-    private Map<Flag, Integer> defaultIslandFlags = new HashMap<>();
+    private Map<String, Integer> defaultIslandFlagNames = new HashMap<>();
 
     @ConfigComment("These are the default settings for new islands")
     @ConfigEntry(path = "world.default-island-settings")
-    @Adapter(FlagSerializer2.class)
-    private Map<Flag, Integer> defaultIslandSettings = new HashMap<>();
+    @Adapter(FlagBooleanSerializer.class)
+    private Map<String, Integer> defaultIslandSettingNames = new HashMap<>();
 
     @ConfigComment("These settings/flags are hidden from users")
     @ConfigComment("Ops can toggle hiding in-game using SHIFT-LEFT-CLICK on flags in settings")
@@ -686,20 +678,50 @@ public class AISettings implements WorldSettings {
     public GameMode getDefaultGameMode() {
         return defaultGameMode;
     }
+
+
+    /**
+     * @return the defaultIslandFlags
+     * @since 1.21.0
+     */
+    @Override
+    public Map<String, Integer> getDefaultIslandFlagNames()
+    {
+        return defaultIslandFlagNames;
+    }
+
+
+    /**
+     * @return the defaultIslandSettings
+     * @since 1.21.0
+     */
+    @Override
+    public Map<String, Integer> getDefaultIslandSettingNames()
+    {
+        return defaultIslandSettingNames;
+    }
+
+
     /**
      * @return the defaultIslandProtection
+     * @deprecated since 1.21
      */
     @Override
     public Map<Flag, Integer> getDefaultIslandFlags() {
-        return defaultIslandFlags;
+        return Collections.emptyMap();
     }
+
+
     /**
      * @return the defaultIslandSettings
+     * @deprecated since 1.21
      */
     @Override
     public Map<Flag, Integer> getDefaultIslandSettings() {
-        return defaultIslandSettings;
+        return Collections.emptyMap();
     }
+
+
     /**
      * @return the difficulty
      */
@@ -1203,14 +1225,14 @@ public class AISettings implements WorldSettings {
     }
     /**
      */
-    public void setDefaultIslandFlags(Map<Flag, Integer> defaultIslandFlags) {
-        this.defaultIslandFlags = defaultIslandFlags;
+    public void setDefaultIslandFlagNames(Map<String, Integer> defaultIslandFlags) {
+        this.defaultIslandFlagNames = defaultIslandFlags;
     }
     /**
      * @param defaultIslandSettings the defaultIslandSettings to set
      */
-    public void setDefaultIslandSettings(Map<Flag, Integer> defaultIslandSettings) {
-        this.defaultIslandSettings = defaultIslandSettings;
+    public void setDefaultIslandSettingNames(Map<String, Integer> defaultIslandSettings) {
+        this.defaultIslandSettingNames = defaultIslandSettings;
     }
     /**
      * @param difficulty the difficulty to set
