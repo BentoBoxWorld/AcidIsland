@@ -190,7 +190,7 @@ public class AcidTaskTest {
         Item e = mock(Item.class);
         at.applyDamage(e, 0);
 
-        verify(world, never()).playSound(any(), any(Sound.class), anyFloat(), anyFloat());
+        verify(world, never()).playSound(any(Location.class), any(Sound.class), anyFloat(), anyFloat());
         verify(e, never()).remove();
     }
 
@@ -213,7 +213,7 @@ public class AcidTaskTest {
         at.setItemsInWater(map);
         at.applyDamage(e, 0);
 
-        verify(world, never()).playSound(any(), any(Sound.class), anyFloat(), anyFloat());
+        verify(world, never()).playSound(any(Location.class), any(Sound.class), anyFloat(), anyFloat());
         verify(e, never()).remove();
         assertTrue(map.isEmpty());
     }
