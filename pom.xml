@@ -54,18 +54,18 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
         <!-- Non-minecraft related dependencies -->
         <powermock.version>2.0.9</powermock.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>1.18.0</bentobox.version>
+        <spigot.version>1.19.3-R0.1-SNAPSHOT</spigot.version>
+        <bentobox.version>1.21.0</bentobox.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
         <!-- Do not change unless you want different name for local builds. -->
         <build.number>-LOCAL</build.number>
         <!-- This allows to change between versions. -->
-        <build.version>1.15.2</build.version>
+        <build.version>1.16.0</build.version>
         <!-- Sonar Cloud -->
         <sonar.projectKey>BentoBoxWorld_AcidIsland</sonar.projectKey>
         <sonar.organization>bentobox-world</sonar.organization>
@@ -289,9 +289,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.4.1</version>
                 <configuration>
-                    <source>16</source>
+                    <source>17</source>
                     <show>public</show>
                     <failOnError>false</failOnError>
                     <additionalJOption>-Xdoclint:none</additionalJOption>
