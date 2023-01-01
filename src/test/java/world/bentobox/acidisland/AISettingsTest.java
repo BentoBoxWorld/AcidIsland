@@ -141,22 +141,6 @@ public class AISettingsTest {
     }
 
     /**
-     * Test method for {@link world.bentobox.acidisland.AISettings#getDefaultIslandFlags()}.
-     */
-    @Test
-    public void testGetDefaultIslandFlags() {
-        assertTrue(s.getDefaultIslandFlags().isEmpty());
-    }
-
-    /**
-     * Test method for {@link world.bentobox.acidisland.AISettings#getDefaultIslandSettings()}.
-     */
-    @Test
-    public void testGetDefaultIslandSettings() {
-        assertTrue(s.getDefaultIslandSettings().isEmpty());
-    }
-
-    /**
      * Test method for {@link world.bentobox.acidisland.AISettings#getDifficulty()}.
      */
     @Test
@@ -778,21 +762,21 @@ public class AISettingsTest {
     }
 
     /**
-     * Test method for {@link world.bentobox.acidisland.AISettings#setDefaultIslandFlags(java.util.Map)}.
+     * Test method for {@link world.bentobox.acidisland.AISettings#setDefaultIslandFlagNames(java.util.Map)}.
      */
     @Test
     public void testSetDefaultIslandFlags() {
-        s.setDefaultIslandFlags(Collections.singletonMap(Flags.ANIMAL_NATURAL_SPAWN, 10));
-        assertEquals(10, (int)s.getDefaultIslandFlags().get(Flags.ANIMAL_NATURAL_SPAWN));
+        s.setDefaultIslandFlagNames(Collections.singletonMap(Flags.ANIMAL_NATURAL_SPAWN.getID(), 10));
+        assertEquals(10, (int)s.getDefaultIslandFlagNames().get(Flags.ANIMAL_NATURAL_SPAWN.getID()));
     }
 
     /**
-     * Test method for {@link world.bentobox.acidisland.AISettings#setDefaultIslandSettings(java.util.Map)}.
+     * Test method for {@link world.bentobox.acidisland.AISettings#setDefaultIslandSettingNames(java.util.Map)}.
      */
     @Test
     public void testSetDefaultIslandSettings() {
-        s.setDefaultIslandSettings(Collections.singletonMap(Flags.ANIMAL_NATURAL_SPAWN, 10));
-        assertEquals(10, (int)s.getDefaultIslandSettings().get(Flags.ANIMAL_NATURAL_SPAWN));
+        s.setDefaultIslandSettingNames(Collections.singletonMap(Flags.ANIMAL_NATURAL_SPAWN.getID(), 10));
+        assertEquals(10, (int)s.getDefaultIslandSettingNames().get(Flags.ANIMAL_NATURAL_SPAWN.getID()));
 
     }
 

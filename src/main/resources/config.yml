@@ -132,6 +132,10 @@ world:
   # Sea height (don't changes this mid-game unless you delete the world)
   # Minimum is 0, which means you are playing Skyblock!
   sea-height: 54
+  # Water block this should usually stay as WATER, but may be LAVA for fun
+  # Changing mid-game will cause problems!
+  # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
+  water-block: WATER
   # Maximum number of islands in the world. Set to -1 or 0 for unlimited. 
   # If the number of islands is greater than this number, no new island will be created.
   max-islands: 0
@@ -162,6 +166,10 @@ world:
     # Changing mid-game will cause problems!
     # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
     sea-height: 54
+    # Water block this should usually stay as WATER, but may be LAVA for fun
+    # Changing mid-game will cause problems!
+    # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
+    water-block: WATER
     # Make the nether roof, if false, there is nothing up there
     # Change to false if lag is a problem from the generation
     # Only applies to islands Nether
@@ -186,6 +194,10 @@ world:
     # Changing mid-game will cause problems!
     # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
     sea-height: 54
+    # Water block this should usually stay as WATER, but may be LAVA for fun
+    # Changing mid-game will cause problems!
+    # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
+    water-block: WATER
     # This option indicates if obsidian platform in the end should be generated when player enters the end world.
     # Added since 1.14.6
     create-obsidian-platform: false
