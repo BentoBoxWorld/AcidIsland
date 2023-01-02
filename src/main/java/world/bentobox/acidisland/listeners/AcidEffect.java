@@ -93,7 +93,7 @@ public class AcidEffect implements Listener {
     public void onSeaBounce(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (!player.getGameMode().equals(GameMode.CREATIVE) && !player.getGameMode().equals(GameMode.SPECTATOR)
-                && player.getWorld().equals(addon.getOverWorld()) && player.getLocation().getBlockY() < 1) {
+                && player.getWorld().equals(addon.getOverWorld()) && player.getLocation().getBlockY() < player.getWorld().getMinHeight()) {
             player.setVelocity(new Vector(player.getVelocity().getX(), 1D, player.getVelocity().getZ()));
         }
     }
@@ -326,7 +326,7 @@ public class AcidEffect implements Listener {
 
         if (im instanceof Damageable d) {
             d.setDamage(d.getDamage() + 1);
-            item.setItemMeta((ItemMeta) d);
+            item.setItemMeta(d);
             return d.getDamage() >= item.getType().getMaxDurability();
         }
         return false;
