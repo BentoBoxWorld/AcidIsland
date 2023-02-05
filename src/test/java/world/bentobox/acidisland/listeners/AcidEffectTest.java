@@ -138,7 +138,7 @@ public class AcidEffectTest {
         when(inv.getArmorContents()).thenReturn(armor);
         
         // Location
-        when(location.getBlockY()).thenReturn(0);
+        when(location.getBlockY()).thenReturn(-66);
         when(location.getWorld()).thenReturn(world);
         when(location.getBlock()).thenReturn(block);
         
@@ -172,6 +172,7 @@ public class AcidEffectTest {
         when(world.hasStorm()).thenReturn(true);
         when(world.getBlockAt(anyInt(), anyInt(), anyInt())).thenReturn(airBlock);
         when(world.getMaxHeight()).thenReturn(5);
+        when(world.getMinHeight()).thenReturn(-65);
         when(world.getEnvironment()).thenReturn(Environment.NORMAL);
         
         // Plugin

@@ -1,7 +1,7 @@
 name: AcidIsland
 main: world.bentobox.acidisland.AcidIsland
 version: ${version}${build.number}
-api-version: 1.19
+api-version: 1.22
 metrics: true
 repository: "BentoBoxWorld/AcidIsland"
 icon: "OAK_BOAT"
