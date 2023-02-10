@@ -58,25 +58,22 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
             chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1, 16, Material.BEDROCK);
             chunkData.setRegion(0, worldInfo.getMinHeight() + 1, 0, 16, sh + 1, 16, wc.waterBlock());
             // Add some noise
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    int n = (int)(25 * gen.noise((chunkX << 4) + x, (chunkZ << 4) + z, 0.5, 0.5, true));
-                    for (int y = worldInfo.getMinHeight(); y < 25 + n; y++) {
-                        chunkData.setBlock(x, y, z, rand.nextBoolean() ? Material.SAND : Material.SANDSTONE);
-                    }
-                }
-            }
-
-
+            addNoise(worldInfo, chunkX, chunkZ, chunkData);
         }
         if (worldInfo.getEnvironment().equals(Environment.NETHER) && addon.getSettings().isNetherRoof()) {
             roofChunk.forEach((k,v) -> chunkData.setBlock(k.getBlockX(), worldInfo.getMaxHeight() + k.getBlockY(), k.getBlockZ(), v));
         }
     }
 
-    @Override
-    public boolean shouldGenerateBedrock() {
-        return true;
+    private void addNoise(@NonNull WorldInfo worldInfo, int chunkX, int chunkZ, @NonNull ChunkData chunkData) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int n = (int)(25 * gen.noise((chunkX << 4) + (double)x, (chunkZ << 4) + (double)z, 0.5, 0.5, true));
+                for (int y = worldInfo.getMinHeight(); y < 25 + n; y++) {
+                    chunkData.setBlock(x, y, z, rand.nextBoolean() ? Material.SAND : Material.SANDSTONE);
+                }
+            }
+        }
     }
 
     @Override

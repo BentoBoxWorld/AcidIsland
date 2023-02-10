@@ -27,19 +27,15 @@ public class AcidBiomeProvider extends BiomeProvider {
     @Override
     public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
         return switch(worldInfo.getEnvironment()) {
-        default -> addon.getSettings().getDefaultBiome();
         case NETHER -> addon.getSettings().getDefaultNetherBiome();
         case THE_END -> addon.getSettings().getDefaultEndBiome();
+        default -> addon.getSettings().getDefaultBiome();
         };
     }
 
     @Override
     public List<Biome> getBiomes(WorldInfo worldInfo) {
-        return switch(worldInfo.getEnvironment()) {
-        default -> List.of(addon.getSettings().getDefaultBiome());
-        case NETHER -> List.of(addon.getSettings().getDefaultNetherBiome());
-        case THE_END -> List.of(addon.getSettings().getDefaultEndBiome());
-        };
+        return List.of(this.getBiome(worldInfo, 0, 0, 0));
     }
 
 }
