@@ -132,10 +132,13 @@ world:
   # Sea height (don't changes this mid-game unless you delete the world)
   # Minimum is 0, which means you are playing Skyblock!
   sea-height: 54
-  # Water block this should usually stay as WATER, but may be LAVA for fun
-  # Changing mid-game will cause problems!
+  # Water block. This should usually stay as WATER, but may be LAVA for fun
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
   water-block: WATER
+  # Ocean Floor
+  # This creates an ocean floor environment, with vanilla elements.
+  # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
+  ocean-floor: false
   # Maximum number of islands in the world. Set to -1 or 0 for unlimited. 
   # If the number of islands is greater than this number, no new island will be created.
   max-islands: 0
@@ -166,8 +169,7 @@ world:
     # Changing mid-game will cause problems!
     # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
     sea-height: 54
-    # Water block this should usually stay as WATER, but may be LAVA for fun
-    # Changing mid-game will cause problems!
+    # Water block. This should usually stay as WATER, but may be LAVA for fun
     # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
     water-block: WATER
     # Make the nether roof, if false, there is nothing up there
@@ -180,8 +182,9 @@ world:
     # Only applies to vanilla nether
     spawn-radius: 25
     # This option indicates if nether portals should be linked via dimensions.
-    # Option will simulate vanilla portal mechanics that links portals together or creates a new portal, if there is not a portal in other dimension.
-    # Added since 1.14.6
+    # Option will simulate vanilla portal mechanics that links portals together
+    # or creates a new portal, if there is not a portal in that dimension.
+    # Added since 1.14.6.
     create-and-link-portals: false
   end:
     # End Nether - if this is false, the end world will not be made and access to
@@ -194,12 +197,12 @@ world:
     # Changing mid-game will cause problems!
     # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
     sea-height: 54
-    # Water block this should usually stay as WATER, but may be LAVA for fun
-    # Changing mid-game will cause problems!
+    # Water block. This should usually stay as WATER, but may be LAVA for fun
     # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
     water-block: WATER
-    # This option indicates if obsidian platform in the end should be generated when player enters the end world.
-    # Added since 1.14.6
+    # This option indicates if obsidian platform in the end should be generated
+    # when player enters the end world.
+    # Added since 1.14.6.
     create-obsidian-platform: false
     # /!\ This feature is experimental and might not work as expected or might not work at all.
     dragon-spawn: false
@@ -209,9 +212,9 @@ world:
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
   - ZOMBIE_VILLAGER
-  - WITHER
   - ENDERMAN
   - ZOMBIFIED_PIGLIN
+  - WITHER
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -227,6 +230,7 @@ world:
     ENTER_EXIT_MESSAGES: true
     ENDERMAN_DEATH_DROP: true
     OFFLINE_REDSTONE: true
+    REMOVE_END_EXIT_ISLAND: true
     OFFLINE_GROWTH: true
     REMOVE_MOBS: true
     ENDER_CHEST: false
@@ -248,6 +252,7 @@ world:
     ANVIL: 500
     MINECART: 500
     FISH_SCOOPING: 500
+    TRAPPED_CHEST: 500
     END_PORTAL: 500
     BREEDING: 500
     HURT_VILLAGERS: 500
@@ -262,37 +267,47 @@ world:
     RIDING: 500
     NAME_TAG: 500
     ARMOR_STAND: 500
+    CHANGE_SETTINGS: 1000
     TRADING: 0
     EGGS: 500
     ITEM_DROP: 0
+    CHEST: 500
     NOTE_BLOCK: 0
     FLINT_AND_STEEL: 500
     NETHER_PORTAL: 500
+    SCULK_SENSOR: 500
     LECTERN: 500
+    SHULKER_BOX: 500
     ITEM_PICKUP: 0
     CROP_TRAMPLE: 500
     DROPPER: 500
     BREWING: 500
     TNT_PRIMING: 500
     COLLECT_WATER: 500
+    AXOLOTL_SCOOPING: 500
     BUTTON: 500
+    COMPOSTER: 500
     FIRE_EXTINGUISH: 500
     COMMAND_RANKS: 500
     BEACON: 500
+    ALLAY: 500
     TRAPDOOR: 500
     PRESSURE_PLATE: 0
     EXPERIENCE_BOTTLE_THROWING: 500
     DYE: 500
+    HIVE: 500
     ITEM_FRAME: 500
     PLACE_BLOCKS: 500
     CRAFTING: 0
     SHEARING: 500
     ENCHANTING: 0
+    FLOWER_POT: 500
     BOAT: 500
     BED: 500
     SPAWN_EGGS: 500
     MILKING: 0
     DISPENSER: 500
+    SCULK_SHRIEKER: 500
     GATE: 0
     EXPERIENCE_PICKUP: 500
     HOPPER: 500
@@ -303,20 +318,23 @@ world:
     CONTAINER: 500
     JUKEBOX: 500
     POTION_THROWING: 500
+    BARREL: 500
+    COLLECT_POWDERED_SNOW: 500
   # These are the default settings for new islands
   default-island-settings:
     PVP_END: false
     PVP_NETHER: false
     LEAF_DECAY: true
-    MONSTER_SPAWNERS_SPAWN: true
-    TNT_DAMAGE: true
     ANIMAL_NATURAL_SPAWN: true
     MONSTER_NATURAL_SPAWN: true
-    FIRE_IGNITE: true
     FIRE_SPREAD: true
     FIRE_BURNING: true
-    ANIMAL_SPAWNERS_SPAWN: true
     PVP_OVERWORLD: false
+    MONSTER_SPAWNERS_SPAWN: true
+    TNT_DAMAGE: true
+    FIRE_IGNITE: true
+    ANIMAL_SPAWNERS_SPAWN: true
+    BLOCK_EXPLODE_DAMAGE: true
   # These settings/flags are hidden from users
   # Ops can toggle hiding in-game using SHIFT-LEFT-CLICK on flags in settings
   hidden-flags: []
@@ -464,17 +482,17 @@ island:
     # 
     # Note that player-executed commands might not work, as these commands can be run with said player being offline.
     on-leave: []
-    # Returns a list of commands that should be executed when the player respawns after death if Flags.ISLAND_RESPAWN is true.
+    # List of commands that should be executed when the player respawns after death if Flags.ISLAND_RESPAWN is true.
     # These commands are run by the console, unless otherwise stated using the [SUDO] prefix,
     # in which case they are executed by the player.
-    #
+    # 
     # Available placeholders for the commands are the following:
     #    * [name]: name of the player
-    #
+    # 
     # Here are some examples of valid commands to execute:
     #    * '[SUDO] bbox version'
     #    * 'bsbadmin deaths set [player] 0'
-    #
+    # 
     # Note that player-executed commands might not work, as these commands can be run with said player being offline.
     # Added since 1.14.0.
     on-respawn: []
@@ -533,3 +551,4 @@ protection:
 do-not-edit-these-settings:
   # These settings should not be edited
   reset-epoch: 0
+
