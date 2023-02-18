@@ -55,10 +55,12 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
         WorldConfig wc = seaHeight.get(worldInfo.getEnvironment());
         int sh = wc.seaHeight();
         if (sh > worldInfo.getMinHeight()) {
-            chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1, 16, Material.BEDROCK);
             chunkData.setRegion(0, worldInfo.getMinHeight() + 1, 0, 16, sh + 1, 16, wc.waterBlock());
             // Add some noise
-            addNoise(worldInfo, chunkX, chunkZ, chunkData);
+            if (addon.getSettings().isOceanFloor()) {
+                chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1, 16, Material.BEDROCK);
+                addNoise(worldInfo, chunkX, chunkZ, chunkData);
+            }
         }
         if (worldInfo.getEnvironment().equals(Environment.NETHER) && addon.getSettings().isNetherRoof()) {
             roofChunk.forEach((k,v) -> chunkData.setBlock(k.getBlockX(), worldInfo.getMaxHeight() + k.getBlockY(), k.getBlockZ(), v));
@@ -82,15 +84,15 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     }
     @Override
     public boolean shouldGenerateSurface()  {
-        return true;
+        return addon.getSettings().isOceanFloor();
     }
     @Override
     public boolean shouldGenerateCaves()  {
-        return true;
+        return addon.getSettings().isOceanFloor();
     }
     @Override
     public boolean shouldGenerateDecorations()  {
-        return true;
+        return addon.getSettings().isOceanFloor();
     }
     @Override
     public boolean shouldGenerateMobs()  {
@@ -98,7 +100,7 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     }
     @Override
     public boolean shouldGenerateStructures()  {
-        return true;
+        return addon.getSettings().isOceanFloor();
     }
 
     @Override

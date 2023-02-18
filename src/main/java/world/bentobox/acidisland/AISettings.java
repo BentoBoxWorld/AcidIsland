@@ -214,6 +214,11 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Water block. This should usually stay as WATER, but may be LAVA for fun")
     @ConfigEntry(path = "world.water-block", needsReset = true)
     private Material waterBlock = Material.WATER;
+    
+    @ConfigComment("Ocean Floor")
+    @ConfigComment("This creates an ocean floor environment, with vanilla elements.")
+    @ConfigEntry(path = "world.ocean-floor", needsReset = true)
+    private boolean oceanFloor = false;
 
     @ConfigComment("Maximum number of islands in the world. Set to -1 or 0 for unlimited. ")
     @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
@@ -2012,5 +2017,11 @@ public class AISettings implements WorldSettings {
     }
     public void setEndWaterBlock(Material endWaterBlock) {
         this.endWaterBlock = endWaterBlock;
+    }
+    public boolean isOceanFloor() {
+        return oceanFloor;
+    }
+    public void setOceanFloor(boolean oceanFloor) {
+        this.oceanFloor = oceanFloor;
     }
 }
