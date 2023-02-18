@@ -141,22 +141,6 @@ public class AISettingsTest {
     }
 
     /**
-     * Test method for {@link world.bentobox.acidisland.AISettings#getDefaultIslandFlags()}.
-     */
-    @Test
-    public void testGetDefaultIslandFlags() {
-        assertTrue(s.getDefaultIslandFlags().isEmpty());
-    }
-
-    /**
-     * Test method for {@link world.bentobox.acidisland.AISettings#getDefaultIslandSettings()}.
-     */
-    @Test
-    public void testGetDefaultIslandSettings() {
-        assertTrue(s.getDefaultIslandSettings().isEmpty());
-    }
-
-    /**
      * Test method for {@link world.bentobox.acidisland.AISettings#getDifficulty()}.
      */
     @Test

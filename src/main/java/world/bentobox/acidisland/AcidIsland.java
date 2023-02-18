@@ -7,6 +7,8 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.entity.SpawnCategory;
+import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.ChunkGenerator;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -14,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import world.bentobox.acidisland.commands.IslandAboutCommand;
 import world.bentobox.acidisland.listeners.AcidEffect;
 import world.bentobox.acidisland.listeners.LavaCheck;
+import world.bentobox.acidisland.world.AcidBiomeProvider;
 import world.bentobox.acidisland.world.AcidTask;
 import world.bentobox.acidisland.world.ChunkGeneratorWorld;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
@@ -34,6 +37,7 @@ public class AcidIsland extends GameModeAddon {
     private @Nullable AcidTask acidTask;
     private @Nullable ChunkGenerator chunkGenerator;
     private final Config<AISettings> config = new Config<>(this, AISettings.class);
+    private BiomeProvider biomeProvider;
 
     private static final String NETHER = "_nether";
     private static final String THE_END = "_the_end";
@@ -44,9 +48,10 @@ public class AcidIsland extends GameModeAddon {
         saveDefaultConfig();
         // Load settings from config.yml. This will check if there are any issues with it too.
         loadSettings();
+        // Make the biome provider
+        this.biomeProvider = new AcidBiomeProvider(this);
         // Chunk generator
         chunkGenerator = settings.isUseOwnGenerator() ? null : new ChunkGeneratorWorld(this);
-        // Register commands
         // Register commands
         playerCommand = new DefaultPlayerCommand(this)
 
@@ -72,6 +77,7 @@ public class AcidIsland extends GameModeAddon {
             }
             return false;
         }
+
         return true;
     }
 
@@ -147,22 +153,22 @@ public class AcidIsland extends GameModeAddon {
         // Set spawn rates
         if (w != null && getSettings() != null) {
             if (getSettings().getSpawnLimitMonsters() > 0) {
-                w.setMonsterSpawnLimit(getSettings().getSpawnLimitMonsters());
+                w.setSpawnLimit(SpawnCategory.MONSTER, getSettings().getSpawnLimitMonsters());
             }
             if (getSettings().getSpawnLimitAmbient() > 0) {
-                w.setAmbientSpawnLimit(getSettings().getSpawnLimitAmbient());
+                w.setSpawnLimit(SpawnCategory.AMBIENT, getSettings().getSpawnLimitAmbient());
             }
             if (getSettings().getSpawnLimitAnimals() > 0) {
-                w.setAnimalSpawnLimit(getSettings().getSpawnLimitAnimals());
+                w.setSpawnLimit(SpawnCategory.ANIMAL, getSettings().getSpawnLimitAnimals());
             }
             if (getSettings().getSpawnLimitWaterAnimals() > 0) {
-                w.setWaterAnimalSpawnLimit(getSettings().getSpawnLimitWaterAnimals());
+                w.setSpawnLimit(SpawnCategory.WATER_ANIMAL, getSettings().getSpawnLimitWaterAnimals());
             }
             if (getSettings().getTicksPerAnimalSpawns() > 0) {
-                w.setTicksPerAnimalSpawns(getSettings().getTicksPerAnimalSpawns());
+                w.setTicksPerSpawns(SpawnCategory.ANIMAL, getSettings().getTicksPerAnimalSpawns());
             }
             if (getSettings().getTicksPerMonsterSpawns() > 0) {
-                w.setTicksPerMonsterSpawns(getSettings().getTicksPerMonsterSpawns());
+                w.setTicksPerSpawns(SpawnCategory.MONSTER, getSettings().getTicksPerMonsterSpawns());
             }
         }
         return w;
@@ -200,5 +206,9 @@ public class AcidIsland extends GameModeAddon {
     public void allLoaded() {
         // Save settings. This will occur after all addons have loaded
         this.saveWorldSettings();
+    }
+
+    public BiomeProvider getBiomeProvider() {
+        return this.biomeProvider;
     }
 }

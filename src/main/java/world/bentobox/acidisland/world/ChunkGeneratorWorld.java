@@ -10,11 +10,13 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.block.Biome;
+import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.generator.WorldInfo;
 import org.bukkit.util.Vector;
 import org.bukkit.util.noise.PerlinOctaveGenerator;
+import org.eclipse.jdt.annotation.NonNull;
 
 import world.bentobox.acidisland.AcidIsland;
 
@@ -29,7 +31,8 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     private final Random rand = new Random();
     private final Map<Environment, WorldConfig> seaHeight = new EnumMap<>(Environment.class);
     private final Map<Vector, Material> roofChunk = new HashMap<>();
-    
+    private PerlinOctaveGenerator gen;
+
     private record WorldConfig(int seaHeight, Material waterBlock) {}
 
     /**
@@ -41,38 +44,66 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
         seaHeight.put(Environment.NORMAL, new WorldConfig(addon.getSettings().getSeaHeight(), addon.getSettings().getWaterBlock()));
         seaHeight.put(Environment.NETHER, new WorldConfig(addon.getSettings().getNetherSeaHeight(), addon.getSettings().getNetherWaterBlock()));
         seaHeight.put(Environment.THE_END, new WorldConfig(addon.getSettings().getEndSeaHeight(), addon.getSettings().getEndWaterBlock()));
+        rand.setSeed(System.currentTimeMillis());
+        gen = new PerlinOctaveGenerator((long) (rand.nextLong() * rand.nextGaussian()), 8);
+        gen.setScale(1.0/30.0);
         makeNetherRoof();
     }
 
-    public ChunkData generateChunks(World world) {
-        ChunkData result = createChunkData(world);
-        WorldConfig wc = seaHeight.get(world.getEnvironment());
+    @Override
+    public void generateNoise(@NonNull WorldInfo worldInfo, @NonNull Random random, int chunkX, int chunkZ, @NonNull ChunkData chunkData) {
+        WorldConfig wc = seaHeight.get(worldInfo.getEnvironment());
         int sh = wc.seaHeight();
-        if (sh > world.getMinHeight()) {
-            result.setRegion(0, world.getMinHeight(), 0, 16, sh + 1, 16, wc.waterBlock());
+        if (sh > worldInfo.getMinHeight()) {
+            chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1, 16, Material.BEDROCK);
+            chunkData.setRegion(0, worldInfo.getMinHeight() + 1, 0, 16, sh + 1, 16, wc.waterBlock());
+            // Add some noise
+            addNoise(worldInfo, chunkX, chunkZ, chunkData);
         }
-        if (world.getEnvironment().equals(Environment.NETHER) && addon.getSettings().isNetherRoof()) {
-            roofChunk.forEach((k,v) -> result.setBlock(k.getBlockX(), world.getMaxHeight() + k.getBlockY(), k.getBlockZ(), v));
+        if (worldInfo.getEnvironment().equals(Environment.NETHER) && addon.getSettings().isNetherRoof()) {
+            roofChunk.forEach((k,v) -> chunkData.setBlock(k.getBlockX(), worldInfo.getMaxHeight() + k.getBlockY(), k.getBlockZ(), v));
         }
-        return result;
+    }
+
+    private void addNoise(@NonNull WorldInfo worldInfo, int chunkX, int chunkZ, @NonNull ChunkData chunkData) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int n = (int)(25 * gen.noise((chunkX << 4) + (double)x, (chunkZ << 4) + (double)z, 0.5, 0.5, true));
+                for (int y = worldInfo.getMinHeight(); y < 25 + n; y++) {
+                    chunkData.setBlock(x, y, z, rand.nextBoolean() ? Material.SAND : Material.SANDSTONE);
+                }
+            }
+        }
     }
 
     @Override
-    public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomeGrid) {
-        setBiome(world, biomeGrid);
-        return generateChunks(world);
+    public boolean shouldGenerateNoise() {
+        return false;
+    }
+    @Override
+    public boolean shouldGenerateSurface()  {
+        return true;
+    }
+    @Override
+    public boolean shouldGenerateCaves()  {
+        return true;
+    }
+    @Override
+    public boolean shouldGenerateDecorations()  {
+        return true;
+    }
+    @Override
+    public boolean shouldGenerateMobs()  {
+        return true;
+    }
+    @Override
+    public boolean shouldGenerateStructures()  {
+        return true;
     }
 
-    private void setBiome(World world, BiomeGrid biomeGrid) {
-        Biome biome = world.getEnvironment() == Environment.NORMAL ? addon.getSettings().getDefaultBiome() :
-            world.getEnvironment() == Environment.NETHER ? addon.getSettings().getDefaultNetherBiome() : addon.getSettings().getDefaultEndBiome();
-            for (int x = 0; x < 16; x+=4) {
-                for (int z = 0; z < 16; z+=4) {
-                    for (int y = world.getMinHeight(); y < world.getMaxHeight(); y+=4) {
-                        biomeGrid.setBiome(x, y, z, biome);
-                    }
-                }
-            }
+    @Override
+    public BiomeProvider getDefaultBiomeProvider(WorldInfo worldInfo) {
+        return addon.getBiomeProvider();
     }
 
     // This needs to be set to return true to override minecraft's default
@@ -91,8 +122,6 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
      * Nether Section
      */
     private void makeNetherRoof() {
-        rand.setSeed(System.currentTimeMillis());
-        PerlinOctaveGenerator gen = new PerlinOctaveGenerator((long) (rand.nextLong() * rand.nextGaussian()), 8);
 
         // Make the roof - common across the world
         for (int x = 0; x < 16; x++) {
@@ -161,4 +190,5 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     private void setBlock(int x, int y, int z, Material m) {
         roofChunk.put(new Vector(x, y, z), m);
     }
+
 }
