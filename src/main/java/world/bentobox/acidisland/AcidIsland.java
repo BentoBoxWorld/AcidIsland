@@ -41,6 +41,14 @@ public class AcidIsland extends GameModeAddon {
 
     private static final String NETHER = "_nether";
     private static final String THE_END = "_the_end";
+    
+    /**
+     * This addon uses the new chunk generation API for the sea bottom
+     */
+    @Override
+    public boolean isUsesNewChunkGeneration() {
+        return true;
+    }
 
     @Override
     public void onLoad() {
