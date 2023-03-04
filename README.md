@@ -1,11 +1,11 @@
 AcidIsland™
 ===========
 [![Build Status](https://ci.codemc.org/buildStatus/icon?job=BentoBoxWorld/AcidIsland)](https://ci.codemc.org/job/BentoBoxWorld/job/AcidIsland/)
-[![Lines Of Code](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=ncloc)](https://sonarcloud.io/component_measures?id=world.bentobox%3Aacidisland&metric=ncloc)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=sqale_rating)](https://sonarcloud.io/component_measures?id=world.bentobox%3Aacidisland&metric=Maintainability)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=reliability_rating)](https://sonarcloud.io/component_measures?id=world.bentobox%3Aacidisland&metric=Reliability)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=security_rating)](https://sonarcloud.io/component_measures?id=world.bentobox%3Aacidisland&metric=Security)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=world.bentobox%3Aacidisland&metric=bugs)](https://sonarcloud.io/project/issues?id=world.bentobox%3Aacidisland&resolved=false&types=BUG)
+[![Lines Of Code](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=ncloc)](https://sonarcloud.io/component_measures?id=BentoBoxWorld_AcidIsland&metric=ncloc)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=sqale_rating)](https://sonarcloud.io/component_measures?id=BentoBoxWorld_AcidIslandd&metric=Maintainability)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=reliability_rating)](https://sonarcloud.io/component_measures?id=BentoBoxWorld_AcidIsland&metric=Reliability)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=security_rating)](https://sonarcloud.io/component_measures?id=BentoBoxWorld_AcidIsland&metric=Security)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=bugs)](https://sonarcloud.io/project/issues?id=BentoBoxWorld_AcidIsland&resolved=false&types=BUG)
 
 # Introduction
 AcidIsland™ add-on for BentoBox, so to run an AcidIsland™ game, you must have BentoBox installed. Docs can be found at [https://docs.bentobox.world](https://docs.bentobox.world).
