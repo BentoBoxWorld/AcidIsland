@@ -76,6 +76,8 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
                 }
             }
         }
+        // Make an solid base so sand doesn't fall into the void
+        chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1 , 16, Material.BEDROCK);
     }
 
     @Override
