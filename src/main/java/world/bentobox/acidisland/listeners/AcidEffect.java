@@ -324,7 +324,7 @@ public class AcidEffect implements Listener {
     private static boolean damage(ItemStack item) {
         ItemMeta im = item.getItemMeta();
 
-        if (im instanceof Damageable d) {
+        if (im instanceof Damageable d && !im.isUnbreakable()) {
             d.setDamage(d.getDamage() + 1);
             item.setItemMeta(d);
             return d.getDamage() >= item.getType().getMaxDurability();
