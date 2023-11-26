@@ -2,6 +2,6 @@
 acidisland:
   sign:
     line0: "&1Кислотний острів"
-    line1: "[ім'я]"
+    line1: "[name]"
     line2: Вода кислотна!
     line3: Будь обережний! &c<3
