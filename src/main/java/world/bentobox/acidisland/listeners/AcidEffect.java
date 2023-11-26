@@ -159,6 +159,11 @@ public class AcidEffect implements Listener {
         }.runTaskTimer(addon.getPlugin(), 0L, 20L);
     }
 
+    /**
+     * Check if it is still raining or player is safe or dead or there is no damage
+     * @param player player
+     * @return true if the acid raid damage should stop
+     */
     protected boolean checkForRain(Player player) {
         if (!addon.getOverWorld().hasStorm() || player.isDead() || isSafeFromRain(player) || addon.getSettings().getAcidRainDamage() <= 0D) {
             wetPlayers.remove(player);
@@ -168,7 +173,7 @@ public class AcidEffect implements Listener {
             double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
             double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection);
             AcidRainEvent event = new AcidRainEvent(player, totalDamage, protection, addon.getSettings().getAcidRainEffects());
-            addon.getServer().getPluginManager().callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
                 event.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player.addPotionEffect(new PotionEffect(t, addon.getSettings().getRainEffectDuation() * 20, 1)));
                 // Apply damage if there is any
@@ -324,7 +329,7 @@ public class AcidEffect implements Listener {
     private static boolean damage(ItemStack item) {
         ItemMeta im = item.getItemMeta();
 
-        if (im instanceof Damageable d) {
+        if (im instanceof Damageable d && !im.isUnbreakable()) {
             d.setDamage(d.getDamage() + 1);
             item.setItemMeta(d);
             return d.getDamage() >= item.getType().getMaxDurability();

@@ -16,6 +16,8 @@ You're on an island, in a sea of acid! If you like Skyblock, try the AcidIslandâ
 
 Instead of falling you must contend with acid water when expanding your island, and players can boat to each other's islands.
 
+<img width="512" alt="acidislandart" src="https://github.com/BentoBoxWorld/AcidIsland/assets/4407265/60e97bba-2b7d-425e-9130-cffef73cf76e">
+
 ## Download
 
 You can download from GitHub, or ready made plugin packs from [https://download.bentobox.world](https://download.bentobox.world).

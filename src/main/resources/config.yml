@@ -124,21 +124,21 @@ world:
   offset-z: 0
   # Island height - Lowest is 5.
   # It is the y coordinate of the bedrock block in the schem.
-  island-height: 50
+  island-height: 60
   # Use your own world generator for this world.
   # In this case, the plugin will not generate anything.
   # /!\ This feature is experimental and might not work as expected or might not work at all.
   use-own-generator: false
   # Sea height (don't changes this mid-game unless you delete the world)
   # Minimum is 0, which means you are playing Skyblock!
-  sea-height: 54
+  sea-height: 64
   # Water block. This should usually stay as WATER, but may be LAVA for fun
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
   water-block: WATER
   # Ocean Floor
   # This creates an ocean floor environment, with vanilla elements.
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
-  ocean-floor: false
+  ocean-floor: true
   # Maximum number of islands in the world. Set to -1 or 0 for unlimited. 
   # If the number of islands is greater than this number, no new island will be created.
   max-islands: 0

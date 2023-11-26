@@ -1,5 +1,6 @@
 package world.bentobox.acidisland.listeners;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -18,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
@@ -69,7 +71,7 @@ import world.bentobox.bentobox.util.Util;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Bukkit.class, Util.class})
 public class AcidEffectTest {
-    
+
     @Mock
     private AcidIsland addon;
     @Mock
@@ -112,7 +114,9 @@ public class AcidEffectTest {
     private IslandWorldManager iwm;
     @Mock
     private IslandsManager im;
-    
+    @Mock
+    private Server server;
+
 
     /**
      */
@@ -122,12 +126,12 @@ public class AcidEffectTest {
         when(Bukkit.getScheduler()).thenReturn(scheduler);
         when(addon.getSettings()).thenReturn(settings);
         when(addon.getOverWorld()).thenReturn(world);
-        
+
         // Essentials
         when(Bukkit.getPluginManager()).thenReturn(pim);
         when(pim.getPlugin(eq("Essentials"))).thenReturn(essentials);
         when(essentials.getUser(any(Player.class))).thenReturn(essentialsUser);
-        
+
         // Player
         when(player.getGameMode()).thenReturn(GameMode.SURVIVAL);
         when(player.getWorld()).thenReturn(world);
@@ -136,12 +140,12 @@ public class AcidEffectTest {
         when(player.getInventory()).thenReturn(inv);
         ItemStack[] armor = { new ItemStack(Material.CHAINMAIL_HELMET) };
         when(inv.getArmorContents()).thenReturn(armor);
-        
+
         // Location
         when(location.getBlockY()).thenReturn(-66);
         when(location.getWorld()).thenReturn(world);
         when(location.getBlock()).thenReturn(block);
-        
+
         // Blocks
         when(block.getType()).thenReturn(Material.WATER);
         when(block.getTemperature()).thenReturn(0.5D);
@@ -149,42 +153,43 @@ public class AcidEffectTest {
         when(block.getRelative(any())).thenReturn(block);
         when(airBlock.getType()).thenReturn(Material.AIR);
         when(solidBlock.getType()).thenReturn(Material.CHISELED_RED_SANDSTONE);
-        
+
         // Settings
         when(settings.getAcidDestroyItemTime()).thenReturn(0L);
         when(settings.getAcidRainDamage()).thenReturn(10);
         when(settings.getAcidDamage()).thenReturn(10);
         when(settings.getAcidDamageDelay()).thenReturn(60L);
-        
+
         // Players Manager
         when(addon.getPlayers()).thenReturn(pm);
-        
+
         // Mock item factory (for itemstacks)
         ItemFactory itemFactory = mock(ItemFactory.class);
         when(Bukkit.getItemFactory()).thenReturn(itemFactory);
         when(itemFactory.getItemMeta(any())).thenReturn(itemMeta);
-        
+
         // Util
         PowerMockito.mockStatic(Util.class);
         when(Util.sameWorld(any(), any())).thenReturn(true);
-        
+
         // World
         when(world.hasStorm()).thenReturn(true);
         when(world.getBlockAt(anyInt(), anyInt(), anyInt())).thenReturn(airBlock);
         when(world.getMaxHeight()).thenReturn(5);
         when(world.getMinHeight()).thenReturn(-65);
         when(world.getEnvironment()).thenReturn(Environment.NORMAL);
-        
+
         // Plugin
         when(addon.getPlugin()).thenReturn(plugin);
         when(plugin.getIWM()).thenReturn(iwm);
         // CUSTOM damage protection
         when(iwm.getIvSettings(any())).thenReturn(Collections.singletonList("CUSTOM"));
-        
+
         // Island manager
         when(addon.getIslands()).thenReturn(im);
         when(im.userIsOnIsland(any(), any())).thenReturn(true);
-        
+
+
         ae = new AcidEffect(addon);
     }
 
@@ -215,7 +220,7 @@ public class AcidEffectTest {
         verify(player).setVelocity(argument.capture());
         assertTrue(argument.getValue().getBlockY() == 1D);
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -226,7 +231,7 @@ public class AcidEffectTest {
         ae.onSeaBounce(e);
         verify(player, never()).setVelocity(any());
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -237,7 +242,7 @@ public class AcidEffectTest {
         ae.onSeaBounce(e);
         verify(player, never()).setVelocity(any());
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -248,7 +253,7 @@ public class AcidEffectTest {
         ae.onSeaBounce(e);
         verify(player, never()).setVelocity(any());
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -269,7 +274,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, times(2)).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -280,7 +285,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, never()).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -292,7 +297,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, times(2)).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -303,7 +308,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, never()).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -314,7 +319,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -326,7 +331,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, times(2)).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -338,7 +343,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -351,7 +356,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -364,7 +369,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, times(2)).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -375,7 +380,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -383,15 +388,15 @@ public class AcidEffectTest {
     public void testOnPlayerMoveAcidRainWrongWorld() {
         World nether = mock(World.class);
         when(nether.getName()).thenReturn("world_nether");
-        when(nether.getEnvironment()).thenReturn(Environment.NETHER);        
+        when(nether.getEnvironment()).thenReturn(Environment.NETHER);
         when(player.getWorld()).thenReturn(nether);
-       
+
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
         // 3 times only
         verify(addon, times(3)).getPlugin();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -399,15 +404,15 @@ public class AcidEffectTest {
     public void testOnPlayerMoveAcidRainWrongWorldEnd() {
         World end = mock(World.class);
         when(end.getName()).thenReturn("world_end");
-        when(end.getEnvironment()).thenReturn(Environment.THE_END);        
+        when(end.getEnvironment()).thenReturn(Environment.THE_END);
         when(player.getWorld()).thenReturn(end);
-       
+
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
         // 3 times only
         verify(addon, times(3)).getPlugin();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -418,7 +423,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -430,7 +435,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, never()).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -442,7 +447,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -455,7 +460,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -468,7 +473,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, never()).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -482,7 +487,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, never()).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -508,7 +513,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, never()).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -522,7 +527,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -535,7 +540,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, never()).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -548,7 +553,7 @@ public class AcidEffectTest {
         ae.onPlayerMove(e);
         verify(settings, never()).getAcidDamageDelay();
     }
-    
+
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
@@ -579,7 +584,66 @@ public class AcidEffectTest {
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
         assertTrue(a == 0.8);
-        
+
+    }
+
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#checkForRain(Player)}.
+     */
+    @Test
+    public void testCheckForRain() {
+        when(world.hasStorm()).thenReturn(true);
+        when(player.isDead()).thenReturn(false);
+        when(settings.getAcidRainDamage()).thenReturn(10);
+        when(world.getEnvironment()).thenReturn(Environment.NORMAL);
+        assertFalse(ae.checkForRain(player));
+        when(world.hasStorm()).thenReturn(false);
+        when(player.isDead()).thenReturn(false);
+        when(settings.getAcidRainDamage()).thenReturn(10);
+        when(world.getEnvironment()).thenReturn(Environment.NORMAL);
+        assertTrue(ae.checkForRain(player));
+        when(world.hasStorm()).thenReturn(true);
+        when(player.isDead()).thenReturn(true);
+        when(settings.getAcidRainDamage()).thenReturn(10);
+        when(world.getEnvironment()).thenReturn(Environment.NORMAL);
+        assertTrue(ae.checkForRain(player));
+        when(world.hasStorm()).thenReturn(true);
+        when(player.isDead()).thenReturn(false);
+        when(settings.getAcidRainDamage()).thenReturn(0);
+        when(world.getEnvironment()).thenReturn(Environment.NORMAL);
+        assertTrue(ae.checkForRain(player));
+        when(world.hasStorm()).thenReturn(true);
+        when(player.isDead()).thenReturn(false);
+        when(settings.getAcidRainDamage()).thenReturn(10);
+        when(world.getEnvironment()).thenReturn(Environment.NETHER);
+        assertTrue(ae.checkForRain(player));
+    }
+
+    /**
+     * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#checkForRain(Player)}.
+     */
+    @Test
+    public void testCheckForRainWetPlayer() {
+        AttributeInstance value = mock(AttributeInstance.class);
+        when(value.getValue()).thenReturn(20D);
+        // Diamond armor
+        when(player.getAttribute(eq(Attribute.GENERIC_ARMOR))).thenReturn(value);
+        EntityEquipment equip = mock(EntityEquipment.class);
+        when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
+        when(equip.getHelmet()).thenReturn(new ItemStack(Material.DIAMOND_HELMET));
+        when(equip.getLeggings()).thenReturn(new ItemStack(Material.DIAMOND_LEGGINGS));
+        when(equip.getChestplate()).thenReturn(new ItemStack(Material.DIAMOND_CHESTPLATE));
+        when(player.getEquipment()).thenReturn(equip);
+
+        when(settings.getAcidDamageDelay()).thenReturn(0L);
+        when(world.hasStorm()).thenReturn(true);
+        when(player.isDead()).thenReturn(false);
+        when(settings.getAcidRainDamage()).thenReturn(10);
+        when(world.getEnvironment()).thenReturn(Environment.NORMAL);
+        testOnPlayerMoveAcidAndRainDamage();
+
+        assertFalse(ae.checkForRain(player));
+        verify(player).damage(2.0d); // Reduced due to armor
     }
 
 }
