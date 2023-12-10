@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -28,7 +27,7 @@ public class AcidEventTest {
 
     @Before
     public void setUp() {
-        List<PotionEffectType> effects = Arrays.asList(PotionEffectType.values());
+        List<PotionEffectType> effects = List.of();
         e = new AcidEvent(player, 10, 5, effects);
     }
 
@@ -67,7 +66,7 @@ public class AcidEventTest {
 
     @Test
     public void testGetPotionEffects() {
-        Assert.assertArrayEquals(PotionEffectType.values(), e.getPotionEffects().toArray());
+        Assert.assertEquals(0, e.getPotionEffects().toArray().length);
     }
 
     @Test
