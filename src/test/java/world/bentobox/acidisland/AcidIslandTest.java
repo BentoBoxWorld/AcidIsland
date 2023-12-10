@@ -1,6 +1,3 @@
-/**
- *
- */
 package world.bentobox.acidisland;
 
 import static org.junit.Assert.assertEquals;
