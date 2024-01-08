@@ -60,13 +60,14 @@ import world.bentobox.bentobox.managers.CommandsManager;
 import world.bentobox.bentobox.managers.FlagsManager;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
+import world.bentobox.bentobox.managers.RanksManager;
 
 /**
  * @author tastybento
  *
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ Bukkit.class, BentoBox.class, User.class, Config.class, DatabaseSetup.class })
+@PrepareForTest({ Bukkit.class, BentoBox.class, User.class, Config.class, DatabaseSetup.class, RanksManager.class })
 public class AcidIslandTest {
 
 	/**
@@ -86,6 +87,8 @@ public class AcidIslandTest {
 	private FlagsManager fm;
 	@Mock
 	private Settings settings;
+    @Mock
+    private RanksManager rm;
 
 	private static AbstractDatabaseHandler<Object> h;
 
@@ -130,6 +133,8 @@ public class AcidIslandTest {
 		// Set up plugin
 		Whitebox.setInternalState(BentoBox.class, "instance", plugin);
 		when(plugin.getLogger()).thenReturn(Logger.getAnonymousLogger());
+
+        Whitebox.setInternalState(RanksManager.class, "instance", rm);
 		// Command manager
 		CommandsManager cm = mock(CommandsManager.class);
 		when(plugin.getCommandsManager()).thenReturn(cm);
@@ -201,6 +206,7 @@ public class AcidIslandTest {
 
 		// Settings
 		when(plugin.getSettings()).thenReturn(settings);
+
 	}
 
 	/**
