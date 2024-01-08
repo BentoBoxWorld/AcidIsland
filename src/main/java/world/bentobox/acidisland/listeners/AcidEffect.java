@@ -258,7 +258,7 @@ public class AcidEffect implements Listener {
      * @param player - player
      * @return true if player is safe
      */
-    private boolean isSafeFromAcid(Player player) {
+    boolean isSafeFromAcid(Player player) {
         // Check for GodMode
         if (isEssentialsGodMode(player)
                 // Protect visitors
@@ -275,7 +275,8 @@ public class AcidEffect implements Listener {
             return true;
         }
         // Check if player is on a boat
-        if (player.getVehicle() != null && player.getVehicle().getType().equals(EntityType.BOAT)) {
+        if (player.getVehicle() != null && (player.getVehicle().getType().equals(EntityType.BOAT)
+                || player.getVehicle().getType().equals(EntityType.CHEST_BOAT))) {
             // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT! SNL Sketch. https://youtu.be/avaSdC0QOUM.
             return true;
         }

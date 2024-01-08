@@ -60,7 +60,6 @@ import world.bentobox.bentobox.managers.CommandsManager;
 import world.bentobox.bentobox.managers.FlagsManager;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
-import world.bentobox.bentobox.managers.RanksManager;
 
 /**
  * @author tastybento
@@ -202,11 +201,6 @@ public class AcidIslandTest {
 
 		// Settings
 		when(plugin.getSettings()).thenReturn(settings);
-
-		// RanksManager
-		RanksManager rm = new RanksManager();
-		when(plugin.getRanksManager()).thenReturn(rm);
-
 	}
 
 	/**
