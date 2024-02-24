@@ -106,7 +106,7 @@ world:
   # It is the same for every dimension : Overworld, Nether and End.
   # This value cannot be changed mid-game and the plugin will not start if it is different.
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
-  distance-between-islands: 64
+  distance-between-islands: 400
   # Default protection range radius in blocks. Cannot be larger than distance.
   # Admins can change protection sizes for players individually using /acid range set <player> <new range>
   # or set this permission: acidisland.island.range.<number>
