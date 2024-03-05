@@ -220,6 +220,21 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "world.ocean-floor", needsReset = true)
     private boolean oceanFloor = false;
 
+    @ConfigComment("Structures")
+    @ConfigComment("This creates an vanilla structures in the worlds.")
+    @ConfigEntry(path = "world.make-structures", needsReset = true)
+    private boolean makeStructures = false;
+
+    @ConfigComment("Caves")
+    @ConfigComment("This creates an vanilla caves in the worlds.")
+    @ConfigEntry(path = "world.make-caves", needsReset = true)
+    private boolean makeCaves = false;
+
+    @ConfigComment("Decorations")
+    @ConfigComment("This creates an vanilla decorations in the worlds.")
+    @ConfigEntry(path = "world.make-decorations", needsReset = true)
+    private boolean makeDecorations = true;
+
     @ConfigComment("Maximum number of islands in the world. Set to -1 or 0 for unlimited. ")
     @ConfigComment("If the number of islands is greater than this number, no new island will be created.")
     @ConfigEntry(path = "world.max-islands")
@@ -2023,5 +2038,47 @@ public class AISettings implements WorldSettings {
     }
     public void setOceanFloor(boolean oceanFloor) {
         this.oceanFloor = oceanFloor;
+    }
+
+    /**
+     * @return the makeStructures
+     */
+    public boolean isMakeStructures() {
+        return makeStructures;
+    }
+
+    /**
+     * @param makeStructures the makeStructures to set
+     */
+    public void setMakeStructures(boolean makeStructures) {
+        this.makeStructures = makeStructures;
+    }
+
+    /**
+     * @return the makeCaves
+     */
+    public boolean isMakeCaves() {
+        return makeCaves;
+    }
+
+    /**
+     * @param makeCaves the makeCaves to set
+     */
+    public void setMakeCaves(boolean makeCaves) {
+        this.makeCaves = makeCaves;
+    }
+
+    /**
+     * @return the makeDecorations
+     */
+    public boolean isMakeDecorations() {
+        return makeDecorations;
+    }
+
+    /**
+     * @param makeDecorations the makeDecorations to set
+     */
+    public void setMakeDecorations(boolean makeDecorations) {
+        this.makeDecorations = makeDecorations;
     }
 }

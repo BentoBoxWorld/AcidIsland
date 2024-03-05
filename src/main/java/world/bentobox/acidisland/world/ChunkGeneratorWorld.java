@@ -27,10 +27,17 @@ import world.bentobox.acidisland.AcidIsland;
  */
 public class ChunkGeneratorWorld extends ChunkGenerator {
 
+    private record FloorMats(Material base, Material top) {
+    }
+
     private final AcidIsland addon;
     private final Random rand = new Random();
     private final Map<Environment, WorldConfig> seaHeight = new EnumMap<>(Environment.class);
     private final Map<Vector, Material> roofChunk = new HashMap<>();
+    private static final Map<Environment, FloorMats> floorMats = Map.of(Environment.NETHER,
+            new FloorMats(Material.NETHERRACK, Material.SOUL_SAND), Environment.NORMAL,
+            new FloorMats(Material.SANDSTONE, Material.SAND), Environment.THE_END,
+            new FloorMats(Material.END_STONE, Material.END_STONE));
     private PerlinOctaveGenerator gen;
 
     private record WorldConfig(int seaHeight, Material waterBlock) {}
@@ -72,7 +79,8 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
             for (int z = 0; z < 16; z++) {
                 int n = (int)(25 * gen.noise((chunkX << 4) + (double)x, (chunkZ << 4) + (double)z, 0.5, 0.5, true));
                 for (int y = worldInfo.getMinHeight(); y < 25 + n; y++) {
-                    chunkData.setBlock(x, y, z, rand.nextBoolean() ? Material.SAND : Material.SANDSTONE);
+                    chunkData.setBlock(x, y, z, rand.nextBoolean() ? floorMats.get(worldInfo.getEnvironment()).top()
+                            : floorMats.get(worldInfo.getEnvironment()).base());
                 }
             }
         }
@@ -90,11 +98,11 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     }
     @Override
     public boolean shouldGenerateCaves()  {
-        return addon.getSettings().isOceanFloor();
+        return addon.getSettings().isMakeCaves();
     }
     @Override
     public boolean shouldGenerateDecorations()  {
-        return addon.getSettings().isOceanFloor();
+        return addon.getSettings().isMakeDecorations();
     }
     @Override
     public boolean shouldGenerateMobs()  {
@@ -102,7 +110,7 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     }
     @Override
     public boolean shouldGenerateStructures()  {
-        return addon.getSettings().isOceanFloor();
+        return addon.getSettings().isMakeStructures();
     }
 
     @Override

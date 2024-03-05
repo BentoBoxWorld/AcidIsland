@@ -139,6 +139,18 @@ world:
   # This creates an ocean floor environment, with vanilla elements.
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
   ocean-floor: true
+  # Structures
+  # This creates an vanilla structures in the worlds.
+  # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
+  make-structures: false
+  # Caves
+  # This creates an vanilla caves in the worlds.
+  # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
+  make-caves: false
+  # Decorations
+  # This creates an vanilla decorations in the worlds.
+  # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
+  make-decorations: true
   # Maximum number of islands in the world. Set to -1 or 0 for unlimited. 
   # If the number of islands is greater than this number, no new island will be created.
   max-islands: 0
@@ -212,9 +224,9 @@ world:
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
   - ZOMBIE_VILLAGER
-  - ENDERMAN
-  - ZOMBIFIED_PIGLIN
   - WITHER
+  - ZOMBIFIED_PIGLIN
+  - ENDERMAN
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -229,18 +241,21 @@ world:
     NATURAL_SPAWNING_OUTSIDE_RANGE: true
     ENTER_EXIT_MESSAGES: true
     ENDERMAN_DEATH_DROP: true
+    LIQUIDS_FLOWING_OUT: false
     OFFLINE_REDSTONE: true
     REMOVE_END_EXIT_ISLAND: true
     OFFLINE_GROWTH: true
     REMOVE_MOBS: true
     ENDER_CHEST: false
     ITEM_FRAME_DAMAGE: false
+    TREES_GROWING_OUTSIDE_RANGE: false
     BOAT: true
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
   # Ranks are: Visitor = 0, Member = 900, Owner = 1000
   default-island-flags:
     HURT_ANIMALS: 500
+    LOOM: 500
     DRAGON_EGG: 500
     REDSTONE: 500
     BUCKET: 500
@@ -256,6 +271,8 @@ world:
     END_PORTAL: 500
     BREEDING: 500
     HURT_VILLAGERS: 500
+    BOOKSHELF: 500
+    HARVEST: 500
     TURTLE_EGGS: 500
     FROST_WALKER: 500
     COLLECT_LAVA: 500
@@ -268,6 +285,7 @@ world:
     NAME_TAG: 500
     ARMOR_STAND: 500
     CHANGE_SETTINGS: 1000
+    SIGN_EDITING: 500
     TRADING: 0
     EGGS: 500
     ITEM_DROP: 0
@@ -278,6 +296,7 @@ world:
     SCULK_SENSOR: 500
     LECTERN: 500
     SHULKER_BOX: 500
+    GRINDSTONE: 500
     ITEM_PICKUP: 0
     CROP_TRAMPLE: 500
     DROPPER: 500
@@ -287,6 +306,7 @@ world:
     AXOLOTL_SCOOPING: 500
     BUTTON: 500
     COMPOSTER: 500
+    STONECUTTING: 500
     FIRE_EXTINGUISH: 500
     COMMAND_RANKS: 500
     BEACON: 500
@@ -298,6 +318,7 @@ world:
     HIVE: 500
     ITEM_FRAME: 500
     PLACE_BLOCKS: 500
+    CROP_PLANTING: 500
     CRAFTING: 0
     SHEARING: 500
     ENCHANTING: 0
@@ -309,6 +330,7 @@ world:
     DISPENSER: 500
     SCULK_SHRIEKER: 500
     GATE: 0
+    SMITHING: 500
     EXPERIENCE_PICKUP: 500
     HOPPER: 500
     LEASH: 500
@@ -320,13 +342,16 @@ world:
     POTION_THROWING: 500
     BARREL: 500
     COLLECT_POWDERED_SNOW: 500
+    CARTOGRAPHY: 500
   # These are the default settings for new islands
   default-island-settings:
     PVP_END: false
     PVP_NETHER: false
     LEAF_DECAY: true
+    ENDERMAN_TELEPORT: true
     ANIMAL_NATURAL_SPAWN: true
     MONSTER_NATURAL_SPAWN: true
+    SHULKER_TELEPORT: true
     FIRE_SPREAD: true
     FIRE_BURNING: true
     PVP_OVERWORLD: false
@@ -551,4 +576,3 @@ protection:
 do-not-edit-these-settings:
   # These settings should not be edited
   reset-epoch: 0
-
