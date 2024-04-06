@@ -201,6 +201,10 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "world.island-height")
     private int islandHeight = 50;
     
+    @ConfigComment("Disallow team members from having their own islands.")
+    @ConfigEntry(path = "world.disallow-team-member-islands")
+    private boolean disallowTeamMemberIslands = false;
+
     @ConfigComment("Use your own world generator for this world.")
     @ConfigComment("In this case, the plugin will not generate anything.")
     @ConfigEntry(path = "world.use-own-generator", experimental = true)
@@ -2080,5 +2084,20 @@ public class AISettings implements WorldSettings {
      */
     public void setMakeDecorations(boolean makeDecorations) {
         this.makeDecorations = makeDecorations;
+    }
+
+    /**
+     * @return the disallowTeamMemberIslands
+     */
+    @Override
+    public boolean isDisallowTeamMemberIslands() {
+        return disallowTeamMemberIslands;
+    }
+
+    /**
+     * @param disallowTeamMemberIslands the disallowTeamMemberIslands to set
+     */
+    public void setDisallowTeamMemberIslands(boolean disallowTeamMemberIslands) {
+        this.disallowTeamMemberIslands = disallowTeamMemberIslands;
     }
 }
