@@ -86,10 +86,12 @@ public class AcidTask {
     void applyDamage(Entity e, long damage) {
         if (e instanceof LivingEntity) {
             double actualDamage = Math.max(0, damage - damage * AcidEffect.getDamageReduced((LivingEntity)e));
-            ((LivingEntity)e).damage(actualDamage);
             EntityDamageByAcidEvent event = new EntityDamageByAcidEvent(e, actualDamage, Acid.WATER);
             // Fire event
             Bukkit.getPluginManager().callEvent(event);
+            if (!event.isCancelled()) {
+                ((LivingEntity)e).damage(actualDamage);
+            }
         } else if (addon.getSettings().getAcidDestroyItemTime() > 0 && e instanceof Item){
             // Item
             if (e.getLocation().getBlock().getType().equals(Material.WATER)) {

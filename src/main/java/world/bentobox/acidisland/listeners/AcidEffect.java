@@ -187,11 +187,13 @@ public class AcidEffect implements Listener {
                         .addPotionEffect(new PotionEffect(t, addon.getSettings().getRainEffectDuation() * 20, 1)));
                 // Apply damage if there is any
                 if (event.getRainDamage() > 0D) {
-                    player.damage(event.getRainDamage());
-                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     EntityDamageByAcidEvent e = new EntityDamageByAcidEvent(player, event.getRainDamage(), Acid.RAIN);
                     // Fire event
                     Bukkit.getPluginManager().callEvent(e);
+                    if (!e.isCancelled()) {
+                        player.damage(event.getRainDamage());
+                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                    }
                 }
             }
         }
@@ -211,12 +213,14 @@ public class AcidEffect implements Listener {
                 event.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player
                         .addPotionEffect(new PotionEffect(t, addon.getSettings().getAcidEffectDuation() * 20, 1)));
                 // Apply damage if there is any
-                if (event.getTotalDamage() > 0D) {
-                    player.damage(event.getTotalDamage());
-                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                if (event.getTotalDamage() > 0D) {               
                     EntityDamageByAcidEvent e = new EntityDamageByAcidEvent(player, event.getTotalDamage(), Acid.WATER);
                     // Fire event
                     Bukkit.getPluginManager().callEvent(e);
+                    if (!e.isCancelled()) {
+                        player.damage(event.getTotalDamage());
+                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                    }
                 }
             }
         }
@@ -232,7 +236,7 @@ public class AcidEffect implements Listener {
         if (isEssentialsGodMode(player) || player.getWorld().getEnvironment().equals(Environment.NETHER)
                 || player.getWorld().getEnvironment().equals(Environment.THE_END)
                 || (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
-                        && player.getInventory().getHelmet().getType().name().contains("HELMET")))
+                && player.getInventory().getHelmet().getType().name().contains("HELMET")))
                 || (!addon.getSettings().isAcidDamageSnow() && player.getLocation().getBlock().getTemperature() < 0.1) // snow falls
                 || player.getLocation().getBlock().getHumidity() == 0 // dry
                 || (player.getActivePotionEffects().stream().map(PotionEffect::getType)

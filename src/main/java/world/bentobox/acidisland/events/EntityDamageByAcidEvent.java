@@ -1,21 +1,23 @@
 package world.bentobox.acidisland.events;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
  * Fired when an entity (items excluded) receives damage from acid
- * @author Poslovitch
+ * @author Poslovitch, tastybento
  * @since 1.0
  */
-public class EntityDamageByAcidEvent extends Event {
+public class EntityDamageByAcidEvent extends Event implements Cancellable {
 
     private final Entity entity;
     private double damage;
 
     public enum Acid { RAIN, WATER }
     private final Acid cause;
+    private boolean cancelled;
     private static final HandlerList handlers = new HandlerList();
 
     @Override
@@ -63,5 +65,16 @@ public class EntityDamageByAcidEvent extends Event {
      */
     public Acid getCause() {
         return cause;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
+        
     }
 }
