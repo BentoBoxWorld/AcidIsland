@@ -234,6 +234,7 @@ public class AcidEffect implements Listener {
      */
     private boolean isSafeFromRain(Player player) {
         if (isEssentialsGodMode(player) || player.getWorld().getEnvironment().equals(Environment.NETHER)
+                || player.getGameMode() != GameMode.SURVIVAL
                 || player.getWorld().getEnvironment().equals(Environment.THE_END)
                 || (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
                 && player.getInventory().getHelmet().getType().name().contains("HELMET")))
@@ -264,7 +265,7 @@ public class AcidEffect implements Listener {
      */
     boolean isSafeFromAcid(Player player) {
         // Check for GodMode
-        if (isEssentialsGodMode(player)
+        if (isEssentialsGodMode(player) || player.getGameMode() != GameMode.SURVIVAL
                 // Protect visitors
                 || (addon.getPlugin().getIWM().getIvSettings(player.getWorld()).contains(DamageCause.CUSTOM.name())
                         && !addon.getIslands().userIsOnIsland(player.getWorld(), User.getInstance(player)))) {
