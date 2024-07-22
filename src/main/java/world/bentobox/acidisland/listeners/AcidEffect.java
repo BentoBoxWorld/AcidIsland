@@ -178,7 +178,14 @@ public class AcidEffect implements Listener {
             // Check they are still in this world
         } else if (wetPlayers.containsKey(player) && wetPlayers.get(player) < System.currentTimeMillis()) {
             double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
-            double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection);
+
+            User user = User.getInstance(player);
+            // Get the percentage reduction and ensure the value is between 0 and 100
+            double percent = (100
+                    - Math.max(0, Math.min(100, user.getPermissionValue("acidisland.protection.rain", 0)))) / 100D;
+
+            double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection) * percent;
+
             AcidRainEvent event = new AcidRainEvent(player, totalDamage, protection,
                     addon.getSettings().getAcidRainEffects());
             Bukkit.getPluginManager().callEvent(event);
@@ -206,7 +213,14 @@ public class AcidEffect implements Listener {
             return true;
         } else if (burningPlayers.containsKey(player) && burningPlayers.get(player) < System.currentTimeMillis()) {
             double protection = addon.getSettings().getAcidDamage() * getDamageReduced(player);
-            double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection);
+
+            User user = User.getInstance(player);
+            // Get the percentage reduction and ensure the value is between 0 and 100
+            double percent = (100
+                    - Math.max(0, Math.min(100, user.getPermissionValue("acidisland.protection.acid", 0)))) / 100D;
+
+            double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection) * percent;
+
             AcidEvent event = new AcidEvent(player, totalDamage, protection, addon.getSettings().getAcidEffects());
             addon.getServer().getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
