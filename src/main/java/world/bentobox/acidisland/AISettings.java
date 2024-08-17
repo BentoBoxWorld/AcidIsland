@@ -202,7 +202,6 @@ public class AISettings implements WorldSettings {
     private int islandHeight = 50;
     
     @ConfigComment("Disallow team members from having their own islands.")
-    @ConfigComment("Only works if players are allowed multiple islands.")
     @ConfigEntry(path = "world.disallow-team-member-islands")
     private boolean disallowTeamMemberIslands = false;
 
