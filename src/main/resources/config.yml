@@ -126,6 +126,7 @@ world:
   # It is the y coordinate of the bedrock block in the schem.
   island-height: 60
   # Disallow team members from having their own islands.
+  # Only works if players are allowed multiple islands.
   disallow-team-member-islands: false
   # Use your own world generator for this world.
   # In this case, the plugin will not generate anything.
