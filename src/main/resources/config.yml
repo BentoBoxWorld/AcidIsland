@@ -106,7 +106,7 @@ world:
   # It is the same for every dimension : Overworld, Nether and End.
   # This value cannot be changed mid-game and the plugin will not start if it is different.
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
-  distance-between-islands: 400
+  distance-between-islands: 64
   # Default protection range radius in blocks. Cannot be larger than distance.
   # Admins can change protection sizes for players individually using /acid range set <player> <new range>
   # or set this permission: acidisland.island.range.<number>
@@ -125,6 +125,8 @@ world:
   # Island height - Lowest is 5.
   # It is the y coordinate of the bedrock block in the schem.
   island-height: 60
+  # Disallow team members from having their own islands.
+  disallow-team-member-islands: false
   # Use your own world generator for this world.
   # In this case, the plugin will not generate anything.
   # /!\ This feature is experimental and might not work as expected or might not work at all.
@@ -223,10 +225,10 @@ world:
   # This setting is toggled in world flags and set by the settings GUI.
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
+  - ENDERMAN
+  - ZOMBIFIED_PIGLIN
   - ZOMBIE_VILLAGER
   - WITHER
-  - ZOMBIFIED_PIGLIN
-  - ENDERMAN
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -241,14 +243,12 @@ world:
     NATURAL_SPAWNING_OUTSIDE_RANGE: true
     ENTER_EXIT_MESSAGES: true
     ENDERMAN_DEATH_DROP: true
-    LIQUIDS_FLOWING_OUT: false
     OFFLINE_REDSTONE: true
     REMOVE_END_EXIT_ISLAND: true
     OFFLINE_GROWTH: true
     REMOVE_MOBS: true
     ENDER_CHEST: false
     ITEM_FRAME_DAMAGE: false
-    TREES_GROWING_OUTSIDE_RANGE: false
     BOAT: true
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
@@ -261,9 +261,11 @@ world:
     BUCKET: 500
     LOCK: 0
     ENDER_PEARL: 500
+    BELL_RINGING: 500
     DOOR: 500
     BREAK_HOPPERS: 500
     FURNACE: 500
+    HURT_TAMED_ANIMALS: 500
     ANVIL: 500
     MINECART: 500
     FISH_SCOOPING: 500
@@ -301,7 +303,9 @@ world:
     CROP_TRAMPLE: 500
     DROPPER: 500
     BREWING: 500
+    MOVE_BOX: 1000
     TNT_PRIMING: 500
+    PARKOUR_CREATIVE: 500
     COLLECT_WATER: 500
     AXOLOTL_SCOOPING: 500
     BUTTON: 500
@@ -333,6 +337,7 @@ world:
     SMITHING: 500
     EXPERIENCE_PICKUP: 500
     HOPPER: 500
+    CANDLES: 500
     LEASH: 500
     MOUNT_INVENTORY: 500
     BREAK_BLOCKS: 500
