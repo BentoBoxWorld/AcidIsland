@@ -178,7 +178,14 @@ public class AcidEffect implements Listener {
             // Check they are still in this world
         } else if (wetPlayers.containsKey(player) && wetPlayers.get(player) < System.currentTimeMillis()) {
             double protection = addon.getSettings().getAcidRainDamage() * getDamageReduced(player);
-            double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection);
+
+            User user = User.getInstance(player);
+            // Get the percentage reduction and ensure the value is between 0 and 100
+            double percent = (100
+                    - Math.max(0, Math.min(100, user.getPermissionValue("acidisland.protection.rain", 0)))) / 100D;
+
+            double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection) * percent;
+
             AcidRainEvent event = new AcidRainEvent(player, totalDamage, protection,
                     addon.getSettings().getAcidRainEffects());
             Bukkit.getPluginManager().callEvent(event);
@@ -187,11 +194,13 @@ public class AcidEffect implements Listener {
                         .addPotionEffect(new PotionEffect(t, addon.getSettings().getRainEffectDuation() * 20, 1)));
                 // Apply damage if there is any
                 if (event.getRainDamage() > 0D) {
-                    player.damage(event.getRainDamage());
-                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     EntityDamageByAcidEvent e = new EntityDamageByAcidEvent(player, event.getRainDamage(), Acid.RAIN);
                     // Fire event
                     Bukkit.getPluginManager().callEvent(e);
+                    if (!e.isCancelled()) {
+                        player.damage(event.getRainDamage());
+                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                    }
                 }
             }
         }
@@ -204,19 +213,28 @@ public class AcidEffect implements Listener {
             return true;
         } else if (burningPlayers.containsKey(player) && burningPlayers.get(player) < System.currentTimeMillis()) {
             double protection = addon.getSettings().getAcidDamage() * getDamageReduced(player);
-            double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection);
+
+            User user = User.getInstance(player);
+            // Get the percentage reduction and ensure the value is between 0 and 100
+            double percent = (100
+                    - Math.max(0, Math.min(100, user.getPermissionValue("acidisland.protection.acid", 0)))) / 100D;
+
+            double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection) * percent;
+
             AcidEvent event = new AcidEvent(player, totalDamage, protection, addon.getSettings().getAcidEffects());
             addon.getServer().getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
                 event.getPotionEffects().stream().filter(EFFECTS::contains).forEach(t -> player
                         .addPotionEffect(new PotionEffect(t, addon.getSettings().getAcidEffectDuation() * 20, 1)));
                 // Apply damage if there is any
-                if (event.getTotalDamage() > 0D) {
-                    player.damage(event.getTotalDamage());
-                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                if (event.getTotalDamage() > 0D) {               
                     EntityDamageByAcidEvent e = new EntityDamageByAcidEvent(player, event.getTotalDamage(), Acid.WATER);
                     // Fire event
                     Bukkit.getPluginManager().callEvent(e);
+                    if (!e.isCancelled()) {
+                        player.damage(event.getTotalDamage());
+                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                    }
                 }
             }
         }
@@ -230,9 +248,10 @@ public class AcidEffect implements Listener {
      */
     private boolean isSafeFromRain(Player player) {
         if (isEssentialsGodMode(player) || player.getWorld().getEnvironment().equals(Environment.NETHER)
+                || player.getGameMode() != GameMode.SURVIVAL
                 || player.getWorld().getEnvironment().equals(Environment.THE_END)
                 || (addon.getSettings().isHelmetProtection() && (player.getInventory().getHelmet() != null
-                        && player.getInventory().getHelmet().getType().name().contains("HELMET")))
+                && player.getInventory().getHelmet().getType().name().contains("HELMET")))
                 || (!addon.getSettings().isAcidDamageSnow() && player.getLocation().getBlock().getTemperature() < 0.1) // snow falls
                 || player.getLocation().getBlock().getHumidity() == 0 // dry
                 || (player.getActivePotionEffects().stream().map(PotionEffect::getType)
@@ -260,7 +279,7 @@ public class AcidEffect implements Listener {
      */
     boolean isSafeFromAcid(Player player) {
         // Check for GodMode
-        if (isEssentialsGodMode(player)
+        if (isEssentialsGodMode(player) || player.getGameMode() != GameMode.SURVIVAL
                 // Protect visitors
                 || (addon.getPlugin().getIWM().getIvSettings(player.getWorld()).contains(DamageCause.CUSTOM.name())
                         && !addon.getIslands().userIsOnIsland(player.getWorld(), User.getInstance(player)))) {
