@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.google.common.base.Enums;
 
+import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.configuration.ConfigComment;
 import world.bentobox.bentobox.api.configuration.ConfigEntry;
 import world.bentobox.bentobox.api.configuration.StoreAt;
@@ -201,9 +202,14 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "world.island-height")
     private int islandHeight = 50;
     
-    @ConfigComment("Disallow team members from having their own islands.")
+    @ConfigComment("The number of concurrent islands a player can have in the world")
+    @ConfigComment("A value of 0 will use the BentoBox config.yml default")
+    @ConfigEntry(path = "world.concurrent-islands")
+    private int concurrentIslands = 0;
+
+    @ConfigComment("Disallow players to have other islands if they are in a team.")
     @ConfigEntry(path = "world.disallow-team-member-islands")
-    private boolean disallowTeamMemberIslands = false;
+    boolean disallowTeamMemberIslands = true;
 
     @ConfigComment("Use your own world generator for this world.")
     @ConfigComment("In this case, the plugin will not generate anything.")
@@ -2099,5 +2105,23 @@ public class AISettings implements WorldSettings {
      */
     public void setDisallowTeamMemberIslands(boolean disallowTeamMemberIslands) {
         this.disallowTeamMemberIslands = disallowTeamMemberIslands;
+    }
+
+    /**
+     * @return the concurrentIslands
+     */
+    @Override
+    public int getConcurrentIslands() {
+        if (concurrentIslands <= 0) {
+            return BentoBox.getInstance().getSettings().getIslandNumber();
+        }
+        return concurrentIslands;
+    }
+
+    /**
+     * @param concurrentIslands the concurrentIslands to set
+     */
+    public void setConcurrentIslands(int concurrentIslands) {
+        this.concurrentIslands = concurrentIslands;
     }
 }

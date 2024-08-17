@@ -125,9 +125,11 @@ world:
   # Island height - Lowest is 5.
   # It is the y coordinate of the bedrock block in the schem.
   island-height: 60
-  # Disallow team members from having their own islands.
-  # Only works if players are allowed multiple islands.
-  disallow-team-member-islands: false
+  # The number of concurrent islands a player can have in the world
+  # A value of 0 will use the BentoBox config.yml default
+  concurrent-islands: 1
+  # Disallow players to have other islands if they are in a team.
+  disallow-team-member-islands: true
   # Use your own world generator for this world.
   # In this case, the plugin will not generate anything.
   # /!\ This feature is experimental and might not work as expected or might not work at all.
@@ -227,9 +229,9 @@ world:
   # Mob white list - these mobs will NOT be removed when logging in or doing /island
   remove-mobs-whitelist:
   - ENDERMAN
-  - ZOMBIFIED_PIGLIN
   - ZOMBIE_VILLAGER
   - WITHER
+  - ZOMBIFIED_PIGLIN
   # World flags. These are boolean settings for various flags for this world
   flags:
     CREEPER_DAMAGE: true
@@ -243,13 +245,16 @@ world:
     PREVENT_TELEPORT_WHEN_FALLING: false
     NATURAL_SPAWNING_OUTSIDE_RANGE: true
     ENTER_EXIT_MESSAGES: true
+    ALLOW_MOVE_BOX: true
     ENDERMAN_DEATH_DROP: true
+    LIQUIDS_FLOWING_OUT: false
     OFFLINE_REDSTONE: true
     REMOVE_END_EXIT_ISLAND: true
     OFFLINE_GROWTH: true
     REMOVE_MOBS: true
     ENDER_CHEST: false
     ITEM_FRAME_DAMAGE: false
+    TREES_GROWING_OUTSIDE_RANGE: false
     BOAT: true
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
