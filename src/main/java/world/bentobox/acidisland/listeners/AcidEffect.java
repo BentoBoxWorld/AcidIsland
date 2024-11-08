@@ -12,7 +12,6 @@ import org.bukkit.Sound;
 import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -56,9 +55,9 @@ public class AcidEffect implements Listener {
     private static final List<PotionEffectType> EFFECTS;
     static {
         if (!inTest()) {
-            EFFECTS = List.of(PotionEffectType.BLINDNESS, PotionEffectType.CONFUSION, PotionEffectType.HUNGER,
-                    PotionEffectType.SLOW, PotionEffectType.SLOW_DIGGING, PotionEffectType.WEAKNESS,
-                    PotionEffectType.POISON);
+            EFFECTS = List.of(PotionEffectType.BLINDNESS, PotionEffectType.NAUSEA, PotionEffectType.HUNGER,
+                    PotionEffectType.SLOWNESS, PotionEffectType.MINING_FATIGUE, PotionEffectType.WEAKNESS,
+                    PotionEffectType.POISON, PotionEffectType.DARKNESS, PotionEffectType.UNLUCK);
         } else {
             EFFECTS = List.of();
         }
@@ -294,8 +293,8 @@ public class AcidEffect implements Listener {
             return true;
         }
         // Check if player is on a boat
-        if (player.getVehicle() != null && (player.getVehicle().getType().equals(EntityType.BOAT)
-                || player.getVehicle().getType().equals(EntityType.CHEST_BOAT))) {
+        if (player.getVehicle() != null && (player.getVehicle().getType().getKey().getKey().contains("boat")
+                || player.getVehicle().getType().getKey().getKey().contains("raft"))) {
             // I'M ON A BOAT! I'M ON A BOAT! A %^&&* BOAT! SNL Sketch. https://youtu.be/avaSdC0QOUM.
             return true;
         }
@@ -330,7 +329,7 @@ public class AcidEffect implements Listener {
      */
     public static double getDamageReduced(LivingEntity le) {
         // Full diamond armor value = 20. This normalizes it to a max of 0.8. Enchantments can raise it out further.
-        double red = le.getAttribute(Attribute.GENERIC_ARMOR).getValue() * 0.04;
+        double red = le.getAttribute(Attribute.ARMOR).getValue() * 0.04;
         EntityEquipment inv = le.getEquipment();
         ItemStack boots = inv.getBoots();
         ItemStack helmet = inv.getHelmet();

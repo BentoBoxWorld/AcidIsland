@@ -24,6 +24,7 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -44,6 +45,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +61,7 @@ import com.earth2me.essentials.User;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.acidisland.mocks.ServerMocks;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
@@ -118,8 +121,11 @@ public class AcidEffectTest {
     @Mock
     private Server server;
 
-    /**
-     */
+    @BeforeClass
+    public static void beforeClass() {
+        ServerMocks.newServer();
+    }
+
     @Before
     public void setUp() {
         PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
@@ -480,7 +486,7 @@ public class AcidEffectTest {
     public void testOnPlayerMoveInBoat() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         Entity boat = mock(Boat.class);
-        when(boat.getType()).thenReturn(EntityType.BOAT);
+        when(boat.getType()).thenReturn(EntityType.ACACIA_BOAT);
         when(player.getVehicle()).thenReturn(boat);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -574,10 +580,11 @@ public class AcidEffectTest {
      */
     @Test
     public void testGetDamageReducedFullDiamond() {
-        AttributeInstance value = mock(AttributeInstance.class);
-        when(value.getValue()).thenReturn(20D);
+        Att value = new Att();
+        //AttributeInstance value = new AttributeInstance();
+        //when(value.getValue()).thenReturn(20D);
         // Diamond armor
-        when(player.getAttribute(eq(Attribute.GENERIC_ARMOR))).thenReturn(value);
+        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
         when(equip.getHelmet()).thenReturn(new ItemStack(Material.DIAMOND_HELMET));
@@ -586,6 +593,57 @@ public class AcidEffectTest {
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
         assertTrue(a == 0.8);
+
+    }
+
+    class Att implements AttributeInstance {
+
+        @Override
+        public Attribute getAttribute() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public double getBaseValue() {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public void setBaseValue(double value) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public Collection<AttributeModifier> getModifiers() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public void addModifier(AttributeModifier modifier) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void removeModifier(AttributeModifier modifier) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public double getValue() {
+            return 20;
+        }
+
+        @Override
+        public double getDefaultValue() {
+            // TODO Auto-generated method stub
+            return 0;
+        }
 
     }
 
@@ -629,7 +687,7 @@ public class AcidEffectTest {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(20D);
         // Diamond armor
-        when(player.getAttribute(eq(Attribute.GENERIC_ARMOR))).thenReturn(value);
+        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
         when(equip.getHelmet()).thenReturn(new ItemStack(Material.DIAMOND_HELMET));
@@ -672,7 +730,7 @@ public class AcidEffectTest {
     public void testIsSafeFromAcidBoat() {
         when(player.isInsideVehicle()).thenReturn(true);
         Entity boat = mock(Entity.class);
-        when(boat.getType()).thenReturn(EntityType.BOAT);
+        when(boat.getType()).thenReturn(EntityType.ACACIA_BOAT);
         when(player.getVehicle()).thenReturn(boat);
         assertTrue(ae.isSafeFromAcid(player));
     }
@@ -684,7 +742,7 @@ public class AcidEffectTest {
     public void testIsSafeFromAcidChestBoat() {
         when(player.isInsideVehicle()).thenReturn(true);
         Entity boat = mock(Entity.class);
-        when(boat.getType()).thenReturn(EntityType.CHEST_BOAT);
+        when(boat.getType()).thenReturn(EntityType.ACACIA_CHEST_BOAT);
         when(player.getVehicle()).thenReturn(boat);
         assertTrue(ae.isSafeFromAcid(player));
     }

@@ -54,11 +54,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <!-- Non-minecraft related dependencies -->
         <powermock.version>2.0.9</powermock.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.20.4-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.21.3-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>2.5.0-SNAPSHOT</bentobox.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
@@ -121,11 +121,7 @@
         </repository>
         <repository>
             <id>codemc-repo</id>
-            <url>https://repo.codemc.org/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>codemc</id>
-            <url>https://repo.codemc.org/repository/maven-snapshots/</url>
+            <url>https://repo.codemc.io/repository/tastybento/</url>
         </repository>
         <repository>
             <id>ess-repo</id>

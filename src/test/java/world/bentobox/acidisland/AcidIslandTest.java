@@ -46,6 +46,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import world.bentobox.acidisland.mocks.ServerMocks;
 import world.bentobox.acidisland.world.ChunkGeneratorWorld;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.Settings;
@@ -104,6 +105,7 @@ public class AcidIslandTest {
 		when(DatabaseSetup.getDatabase()).thenReturn(dbSetup);
 		when(dbSetup.getHandler(any())).thenReturn(h);
 		when(h.saveObject(any())).thenReturn(CompletableFuture.completedFuture(true));
+        ServerMocks.newServer();
 	}
 
 	@After
