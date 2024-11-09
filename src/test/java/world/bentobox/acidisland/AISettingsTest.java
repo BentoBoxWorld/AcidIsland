@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.block.Biome;
@@ -14,21 +15,35 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import world.bentobox.acidisland.mocks.ServerMocks;
 import world.bentobox.bentobox.lists.Flags;
 
 /**
  * @author tastybento
  *
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ Bukkit.class })
 public class AISettingsTest {
 
     /**
      * Class under test
      */
     private AISettings s;
+
+    @BeforeClass
+    public static void beforeClass() {
+        ServerMocks.newServer();
+    }
 
     /**
      * @throws java.lang.Exception

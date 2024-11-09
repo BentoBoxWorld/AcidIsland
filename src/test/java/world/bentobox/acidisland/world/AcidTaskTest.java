@@ -34,6 +34,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -44,6 +45,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.acidisland.mocks.ServerMocks;
 
 /**
  * @author tastybento
@@ -77,9 +79,11 @@ public class AcidTaskTest {
     @Mock
     private Location l;
 
+    @BeforeClass
+    public static void beforeClass() {
+        ServerMocks.newServer();
+    }
 
-    /**
-     */
     @Before
     public void setUp() {
         PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
@@ -116,7 +120,7 @@ public class AcidTaskTest {
         mob.add(mock(Cod.class));
         Item i = mock(Item.class);
         when(i.getLocation()).thenReturn(l);
-        when(i.getType()).thenReturn(EntityType.DROPPED_ITEM);
+        when(i.getType()).thenReturn(EntityType.ITEM);
         when(i.getWorld()).thenReturn(world);
         mob.add(i);
         when(world.getEntities()).thenReturn(mob);
@@ -176,7 +180,7 @@ public class AcidTaskTest {
         at.setItemsInWater(map);
         at.applyDamage(e, 0);
 
-        verify(world).playSound(eq(l), any(Sound.class), anyFloat(), anyFloat());
+        verify(world).playSound(eq(l), (Sound) Mockito.isNull(), anyFloat(), anyFloat());
         verify(e).remove();
         assertTrue(map.isEmpty());
     }

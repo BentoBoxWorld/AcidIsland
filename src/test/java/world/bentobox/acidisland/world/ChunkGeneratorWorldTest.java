@@ -1,24 +1,23 @@
 package world.bentobox.acidisland.world;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.acidisland.mocks.ServerMocks;
 
 /**
  * @author tastybento
@@ -33,19 +32,18 @@ public class ChunkGeneratorWorldTest {
     private ChunkGeneratorWorld cg;
     @Mock
     private World world;
+
     private AISettings settings;
     @Mock
     private ChunkData data;
 
-    /**
-     */
+    @BeforeClass
+    public static void beforeClass() {
+        ServerMocks.newServer();
+    }
+
     @Before
     public void setUp() {
-        // Bukkit
-        PowerMockito.mockStatic(Bukkit.class);
-        Server server = mock(Server.class);
-        when(server.createChunkData(any())).thenReturn(data);
-        when(Bukkit.getServer()).thenReturn(server);
         // World
         when(world.getEnvironment()).thenReturn(World.Environment.NORMAL);
         when(world.getMaxHeight()).thenReturn(256);
