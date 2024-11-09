@@ -41,12 +41,8 @@
     </issueManagement>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.org/repository/bentoboxworld/</url>
-        </snapshotRepository>
         <repository>
-            <id>codemc-releases</id>
+            <id>bentoboxworld</id>
             <url>https://repo.codemc.org/repository/bentoboxworld/</url>
         </repository>
     </distributionManagement>
