@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -33,6 +34,7 @@ import com.earth2me.essentials.User;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.acidisland.mocks.ServerMocks;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
@@ -86,8 +88,11 @@ public class LavaCheckTest {
 
     private LavaCheck lc;
 
-    /**
-     */
+    @BeforeClass
+    public static void beforeClass() {
+        ServerMocks.newServer();
+    }
+
     @Before
     public void setUp() {
         PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
