@@ -19,6 +19,7 @@ import world.bentobox.acidisland.listeners.LavaCheck;
 import world.bentobox.acidisland.world.AcidBiomeProvider;
 import world.bentobox.acidisland.world.AcidTask;
 import world.bentobox.acidisland.world.ChunkGeneratorWorld;
+import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.commands.admin.DefaultAdminCommand;
 import world.bentobox.bentobox.api.commands.island.DefaultPlayerCommand;
@@ -156,7 +157,7 @@ public class AcidIsland extends GameModeAddon {
         // Set world name
         worldName2 = env.equals(World.Environment.NETHER) ? worldName2 + NETHER : worldName2;
         worldName2 = env.equals(World.Environment.THE_END) ? worldName2 + THE_END : worldName2;
-        WorldCreator wc = WorldCreator.name(worldName2).environment(env);
+        WorldCreator wc = WorldCreator.name(worldName2).environment(env).type(WorldType.NORMAL);
         World w = settings.isUseOwnGenerator() ? wc.createWorld() : wc.generator(chunkGenerator2).createWorld();
         // Set spawn rates
         if (w != null && getSettings() != null) {

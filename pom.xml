@@ -120,8 +120,8 @@
             <url>https://repo.codemc.io/repository/bentoboxworld/</url>
         </repository>
         <repository>
-            <id>ess-repo</id>
-            <url>https://ci.ender.zone/plugin/repository/everything/</url>
+            <id>EssentialsX</id>
+            <url>https://repo.essentialsx.net/releases/</url>
         </repository>
     </repositories>
 
@@ -170,9 +170,9 @@
         </dependency>
         <!-- EssentialsX -->
         <dependency>
-            <groupId>net.ess3</groupId>
+            <groupId>net.essentialsx</groupId>
             <artifactId>EssentialsX</artifactId>
-            <version>2.17.2</version>
+            <version>2.21.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
