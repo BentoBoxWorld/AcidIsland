@@ -112,6 +112,13 @@
 
     <repositories>
         <repository>
+            <id>papermc-public</id>
+            <name>PaperMC Official</name>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+      </repository>
+        <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
         </repository>

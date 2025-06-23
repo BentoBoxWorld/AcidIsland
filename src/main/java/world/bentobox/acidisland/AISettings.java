@@ -1,6 +1,12 @@
 package world.bentobox.acidisland;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
@@ -9,15 +15,15 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 
-import com.google.common.base.Enums;
-
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.configuration.ConfigComment;
 import world.bentobox.bentobox.api.configuration.ConfigEntry;
 import world.bentobox.bentobox.api.configuration.StoreAt;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.flags.Flag;
-import world.bentobox.bentobox.database.objects.adapters.*;
+import world.bentobox.bentobox.database.objects.adapters.Adapter;
+import world.bentobox.bentobox.database.objects.adapters.FlagBooleanSerializer;
+import world.bentobox.bentobox.database.objects.adapters.PotionEffectListAdapter;
 
 
 /**
