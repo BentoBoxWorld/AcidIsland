@@ -38,7 +38,7 @@ jobs:
       - run: mvn --batch-mode clean org.jacoco:jacoco-maven-plugin:prepare-agent install
       - run: mkdir staging && cp target/*.jar staging
       - name: Save artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Package
           path: staging
