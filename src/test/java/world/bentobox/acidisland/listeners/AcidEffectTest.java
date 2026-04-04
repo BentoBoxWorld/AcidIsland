@@ -1,5 +1,6 @@
 package world.bentobox.acidisland.listeners;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -746,6 +747,139 @@ public class AcidEffectTest {
         when(inv.getArmorContents()).thenReturn(armor);
         when(player.getInventory()).thenReturn(inv);
         assertTrue(ae.isSafeFromAcid(player));
+    }
+
+    // --- Additional coverage tests ---
+
+    /**
+     * Test that dead player is ignored by onPlayerMove.
+     */
+    @Test
+    public void testOnPlayerMoveDeadPlayer() {
+        when(player.isDead()).thenReturn(true);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+
+    /**
+     * Test that player in teleport is ignored by onPlayerMove.
+     */
+    @Test
+    public void testOnPlayerMoveInTeleport() {
+        when(pm.isInTeleport(any())).thenReturn(true);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+
+    /**
+     * Test that player with noburn permission is ignored.
+     */
+    @Test
+    public void testOnPlayerMoveNoburnPermission() {
+        when(player.isOp()).thenReturn(false);
+        when(player.hasPermission("acidisland.mod.noburn")).thenReturn(true);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+
+    /**
+     * Test that OP player with acidDamageOp=false is ignored.
+     */
+    @Test
+    public void testOnPlayerMoveOpNoDamage() {
+        when(player.isOp()).thenReturn(true);
+        when(settings.isAcidDamageOp()).thenReturn(false);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+
+    /**
+     * Test isSafeFromAcid when player is not in water (standing on air).
+     */
+    @Test
+    public void testIsSafeFromAcidNotInWater() {
+        when(block.getType()).thenReturn(Material.AIR);
+        when(block.getRelative(any())).thenReturn(airBlock);
+        assertTrue(ae.isSafeFromAcid(player));
+    }
+
+    /**
+     * Test isSafeFromAcid when player is in creative mode.
+     */
+    @Test
+    public void testIsSafeFromAcidCreative() {
+        when(player.getGameMode()).thenReturn(GameMode.CREATIVE);
+        assertTrue(ae.isSafeFromAcid(player));
+    }
+
+    /**
+     * Test isSafeFromAcid for visitors with CUSTOM protection and not on island.
+     */
+    @Test
+    public void testIsSafeFromAcidVisitorProtection() {
+        when(im.userIsOnIsland(any(), any())).thenReturn(false);
+        assertTrue(ae.isSafeFromAcid(player));
+    }
+
+    /**
+     * Test checkForRain returns true (safe) when no storm.
+     */
+    @Test
+    public void testCheckForRainNoStorm() {
+        when(world.hasStorm()).thenReturn(false);
+        assertTrue(ae.checkForRain(player));
+    }
+
+    /**
+     * Test checkForRain returns true (safe) when player is dead.
+     */
+    @Test
+    public void testCheckForRainDeadPlayer() {
+        when(player.isDead()).thenReturn(true);
+        assertTrue(ae.checkForRain(player));
+    }
+
+    /**
+     * Test checkForRain returns true (safe) when rain damage is zero.
+     */
+    @Test
+    public void testCheckForRainZeroDamage() {
+        when(settings.getAcidRainDamage()).thenReturn(0);
+        assertTrue(ae.checkForRain(player));
+    }
+
+    /**
+     * Test getDamageReduced returns 0 when no armor.
+     */
+    @Test
+    public void testGetDamageReducedNoArmor() {
+        AttributeInstance value = mock(AttributeInstance.class);
+        when(value.getValue()).thenReturn(0D);
+        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        EntityEquipment equip = mock(EntityEquipment.class);
+        when(player.getEquipment()).thenReturn(equip);
+        double a = AcidEffect.getDamageReduced(player);
+        assertTrue(a == 0D);
+    }
+
+    /**
+     * Test getDamageReduced with partial armor (some null slots).
+     */
+    @Test
+    public void testGetDamageReducedPartialArmor() {
+        AttributeInstance value = mock(AttributeInstance.class);
+        when(value.getValue()).thenReturn(8D); // partial armor
+        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        EntityEquipment equip = mock(EntityEquipment.class);
+        when(equip.getHelmet()).thenReturn(new ItemStack(Material.IRON_HELMET));
+        // boots, chest, pants are null
+        when(player.getEquipment()).thenReturn(equip);
+        double a = AcidEffect.getDamageReduced(player);
+        assertEquals(0.32, a, 0.001);
     }
 
 }

@@ -1,6 +1,7 @@
 package world.bentobox.acidisland;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -303,6 +304,37 @@ public class AcidIslandTest {
     @Test
     public void testSaveWorldSettings() {
         addon.saveWorldSettings();
+    }
+
+    /**
+     * Test onDisable cancels acidTask.
+     */
+    @Test
+    public void testOnDisable() {
+        testOnEnable();
+        addon.onDisable();
+        // Should not throw - acidTask.cancelTasks() is called
+    }
+
+    /**
+     * Test onDisable when acidTask is null (no prior onEnable).
+     */
+    @Test
+    public void testOnDisableNoTask() {
+        // No onEnable called, acidTask is null
+        addon.onDisable();
+        // Should not throw
+    }
+
+    /**
+     * Test onEnable does nothing when settings is null.
+     */
+    @Test
+    public void testOnEnableNullSettings() {
+        // Don't call onLoad, so settings is null
+        addon.onEnable();
+        // Should return early without registering listeners
+        assertFalse(addon.getPlayerCommand().isPresent());
     }
 
 }

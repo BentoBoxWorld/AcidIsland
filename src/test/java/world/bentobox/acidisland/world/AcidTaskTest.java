@@ -3,6 +3,7 @@ package world.bentobox.acidisland.world;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -22,6 +23,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Cod;
 import org.bukkit.entity.Entity;
@@ -29,6 +31,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Squid;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.eclipse.jdt.annotation.Nullable;
@@ -46,6 +49,7 @@ import org.mockito.quality.Strictness;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
+import world.bentobox.acidisland.events.EntityDamageByAcidEvent;
 import world.bentobox.acidisland.mocks.ServerMocks;
 
 /**
@@ -239,6 +243,87 @@ public class AcidTaskTest {
     public void testCancelTasks() {
         at.cancelTasks();
         verify(task).cancel();
+    }
+
+    // --- Additional coverage tests ---
+
+    /**
+     * Test getEntityStream with nether and end disabled.
+     */
+    @Test
+    public void testGetEntityStreamOverworldOnly() {
+        settings.setNetherGenerate(false);
+        settings.setEndGenerate(false);
+        // Recreate to use updated settings
+        at = new AcidTask(addon);
+        List<Entity> es = at.getEntityStream();
+        // Only overworld entities (4)
+        assertEquals(4, es.size());
+    }
+
+    /**
+     * Test getEntityStream with nether enabled but netherIslands disabled.
+     */
+    @Test
+    public void testGetEntityStreamNetherNoIslands() {
+        settings.setNetherIslands(false);
+        settings.setEndGenerate(false);
+        at = new AcidTask(addon);
+        List<Entity> es = at.getEntityStream();
+        // Only overworld entities (4)
+        assertEquals(4, es.size());
+    }
+
+    /**
+     * Test that applyDamage on LivingEntity with cancelled event does no damage.
+     */
+    @Test
+    public void testApplyDamageLivingEntityCancelled() {
+        Skeleton s = mock(Skeleton.class);
+        when(s.getLocation()).thenReturn(l);
+        when(s.getWorld()).thenReturn(world);
+        AttributeInstance attr = mock(AttributeInstance.class);
+        when(attr.getValue()).thenReturn(0D);
+        when(s.getAttribute(any())).thenReturn(attr);
+        EntityEquipment equip = mock(EntityEquipment.class);
+        when(s.getEquipment()).thenReturn(equip);
+
+        // Cancel the event via plugin manager
+        mockedBukkit.when(Bukkit::getPluginManager).thenReturn(mock(org.bukkit.plugin.PluginManager.class));
+        org.bukkit.plugin.PluginManager pm = Bukkit.getPluginManager();
+        Mockito.doAnswer(inv -> {
+            Object event = inv.getArgument(0);
+            if (event instanceof EntityDamageByAcidEvent) {
+                ((EntityDamageByAcidEvent) event).setCancelled(true);
+            }
+            return null;
+        }).when(pm).callEvent(any());
+
+        at.applyDamage(s, 10);
+        verify(s, never()).damage(anyDouble());
+    }
+
+    /**
+     * Test that applyDamage removes item from tracking when not in water.
+     */
+    @Test
+    public void testApplyDamageItemNotInWaterAnymore() {
+        Item e = mock(Item.class);
+        Location loc = mock(Location.class);
+        Block b = mock(Block.class);
+        when(b.getType()).thenReturn(Material.AIR);
+        when(loc.getBlock()).thenReturn(b);
+        when(e.getLocation()).thenReturn(loc);
+        when(e.getWorld()).thenReturn(world);
+
+        Map<Entity, Long> map = new HashMap<>();
+        map.put(e, 0L);
+        at.setItemsInWater(map);
+        at.applyDamage(e, System.currentTimeMillis());
+
+        // Item should be removed from tracking since it's not in water
+        assertTrue(at.getItemsInWater().isEmpty());
+        verify(e, never()).remove();
     }
 
 }
