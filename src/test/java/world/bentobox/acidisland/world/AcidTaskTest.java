@@ -1,7 +1,7 @@
 package world.bentobox.acidisland.world;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -32,16 +32,17 @@ import org.bukkit.entity.Squid;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
@@ -51,8 +52,8 @@ import world.bentobox.acidisland.mocks.ServerMocks;
  * @author tastybento
  *
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Bukkit.class})
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AcidTaskTest {
 
     @Mock
@@ -79,15 +80,17 @@ public class AcidTaskTest {
     @Mock
     private Location l;
 
-    @BeforeClass
-    public static void beforeClass() {
+    private MockedStatic<Bukkit> mockedBukkit;
+
+    @BeforeAll
+    public static void beforeAll() {
         ServerMocks.newServer();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
-        when(Bukkit.getScheduler()).thenReturn(scheduler);
+        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
+        mockedBukkit.when(Bukkit::getScheduler).thenReturn(scheduler);
         when(scheduler.runTaskTimer(any(), any(Runnable.class), anyLong(), anyLong())).thenReturn(task);
 
         when(addon.getOverWorld()).thenReturn(world);
@@ -141,10 +144,9 @@ public class AcidTaskTest {
         at = new AcidTask(addon);
     }
 
-    /**
-     */
-    @After
+    @AfterEach
     public void tearDown() {
+        mockedBukkit.close();
     }
 
     /**

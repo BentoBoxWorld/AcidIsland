@@ -25,6 +25,18 @@ import org.eclipse.jdt.annotation.NonNull;
 public final class ServerMocks {
 
     public static @NonNull Server newServer() {
+        // If the server is already set, return it to avoid "Cannot redefine singleton Server"
+        try {
+            Field serverField = Bukkit.class.getDeclaredField("server");
+            serverField.setAccessible(true);
+            Server existing = (Server) serverField.get(null);
+            if (existing != null) {
+                return existing;
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         Server mock = mock(Server.class);
 
         Logger noOp = mock(Logger.class);
