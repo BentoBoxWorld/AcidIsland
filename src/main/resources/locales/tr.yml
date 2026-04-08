@@ -1,7 +1,7 @@
 ---
 acidisland:
   sign:
-    line0: "& 1AsitAdası"
-    line1: "[isim]"
-    line2: Dikkat et!
-    line3: Su asitli!
+    line0: "<dark_blue>AsitAdası"
+    line1: "[name]"
+    line2: Su asitli!
+    line3: "Dikkat et! <red><3"

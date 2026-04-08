@@ -1,7 +1,7 @@
 ---
 acidisland:
   sign:
-    line0: "&1Đảo Axit"
-    line1: "[tên]"
+    line0: "<dark_blue>Đảo Axit"
+    line1: "[name]"
     line2: Nước là axit!
-    line3: Hãy cẩn thận! &c<3
+    line3: "Hãy cẩn thận! <red><3"

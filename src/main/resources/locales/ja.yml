@@ -1,7 +1,7 @@
 ---
 acidisland:
   sign:
-    line0: "＆1AcidIsland"
-    line2: 水は酸性です！
+    line0: "<dark_blue>AcidIsland"
     line1: "[name]"
-    line3: 注意してください！ &c<3
+    line2: 水は酸性です！
+    line3: "注意してください！ <red><3"
