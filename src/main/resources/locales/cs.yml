@@ -7,8 +7,8 @@
 
 acidisland:
   sign:
-    line0: "&1AcidIsland"
+    line0: "<dark_blue>AcidIsland"
     line1: "[name]"
     line2: "Voda je kyselina!"
-    line3: "Buď opatrný! &c<3"
+    line3: "Buď opatrný! <red><3"
     
