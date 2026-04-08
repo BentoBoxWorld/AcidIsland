@@ -35,7 +35,7 @@ This is a BentoBox addon, not a standalone plugin. The lifecycle flows through:
 
 ### Testing
 
-Tests use **JUnit 4 + PowerMock + Mockito**. PowerMock is needed to mock static Bukkit methods. The Surefire plugin is configured with extensive `--add-opens` JVM args for Java 21 compatibility. `ServerMocks` utility class provides reusable mock server setup.
+Tests use **JUnit 5 + Mockito**. For static Bukkit methods, use Mockito static mocking via `Mockito.mockStatic` rather than adding new JUnit 4/PowerMock-based tests. The Surefire plugin is configured with extensive `--add-opens` JVM args for Java 21 compatibility. `ServerMocks` utility class provides reusable mock server setup.
 
 ### Configuration
 
