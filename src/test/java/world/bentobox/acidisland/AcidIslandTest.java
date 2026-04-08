@@ -30,7 +30,6 @@ import java.util.jar.JarOutputStream;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.AfterAll;
@@ -47,7 +46,8 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
-import world.bentobox.acidisland.mocks.ServerMocks;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import world.bentobox.acidisland.world.ChunkGeneratorWorld;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.Settings;
@@ -94,6 +94,7 @@ public class AcidIslandTest {
     private static AbstractDatabaseHandler<Object> h;
     private static MockedStatic<DatabaseSetup> mockedDbSetup;
 
+    private ServerMock server;
     private MockedStatic<Bukkit> mockedBukkit;
 
     @SuppressWarnings("unchecked")
@@ -107,7 +108,6 @@ public class AcidIslandTest {
         mockedDbSetup.when(DatabaseSetup::getDatabase).thenReturn(dbSetup);
         when(dbSetup.getHandler(any())).thenReturn(h);
         when(h.saveObject(any())).thenReturn(CompletableFuture.completedFuture(true));
-        ServerMocks.newServer();
     }
 
     @AfterAll
@@ -119,8 +119,9 @@ public class AcidIslandTest {
     public void tearDown() throws IOException {
         User.clearUsers();
         if (mockedBukkit != null) {
-            mockedBukkit.close();
+            mockedBukkit.closeOnDemand();
         }
+        MockBukkit.unmock();
         deleteAll(new File("database"));
         deleteAll(new File("database_backup"));
         deleteAll(new File("addon.jar"));
@@ -173,8 +174,9 @@ public class AcidIslandTest {
                 .thenAnswer((Answer<String>) invocation -> invocation.getArgument(0, String.class));
 
         // Server
-        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
-        Server server = mock(Server.class);
+        server = MockBukkit.mock();
+        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
+        mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
         mockedBukkit.when(Bukkit::getServer).thenReturn(server);
         mockedBukkit.when(Bukkit::getLogger).thenReturn(Logger.getAnonymousLogger());
         mockedBukkit.when(Bukkit::getPluginManager).thenReturn(mock(PluginManager.class));

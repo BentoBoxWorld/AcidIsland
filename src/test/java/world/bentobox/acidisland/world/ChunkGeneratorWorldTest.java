@@ -5,16 +5,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.bukkit.World;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
-import world.bentobox.acidisland.mocks.ServerMocks;
 
 /**
  * @author tastybento
@@ -31,16 +32,17 @@ public class ChunkGeneratorWorldTest {
 
     private AISettings settings;
 
-    @BeforeAll
-    public static void beforeAll() {
-        ServerMocks.newServer();
-    }
-
     @BeforeEach
     public void setUp() {
+        MockBukkit.mock();
         // Settings
         settings = new AISettings();
         when(addon.getSettings()).thenReturn(settings);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        MockBukkit.unmock();
     }
 
     /**

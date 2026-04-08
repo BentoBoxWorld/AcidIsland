@@ -12,15 +12,13 @@ import org.bukkit.GameMode;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import world.bentobox.acidisland.mocks.ServerMocks;
-import world.bentobox.bentobox.lists.Flags;
 
 /**
  * @author tastybento
@@ -34,14 +32,15 @@ public class AISettingsTest {
      */
     private AISettings s;
 
-    @BeforeAll
-    public static void beforeAll() {
-        ServerMocks.newServer();
-    }
-
     @BeforeEach
     public void setUp() throws Exception {
+        MockBukkit.mock();
         s = new AISettings();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        MockBukkit.unmock();
     }
 
     @Test
@@ -502,14 +501,14 @@ public class AISettingsTest {
 
     @Test
     public void testSetDefaultIslandFlags() {
-        s.setDefaultIslandFlagNames(Collections.singletonMap(Flags.ANIMAL_NATURAL_SPAWN.getID(), 10));
-        assertEquals(10, (int) s.getDefaultIslandFlagNames().get(Flags.ANIMAL_NATURAL_SPAWN.getID()));
+        s.setDefaultIslandFlagNames(Collections.singletonMap("ANIMAL_NATURAL_SPAWN", 10));
+        assertEquals(10, (int) s.getDefaultIslandFlagNames().get("ANIMAL_NATURAL_SPAWN"));
     }
 
     @Test
     public void testSetDefaultIslandSettings() {
-        s.setDefaultIslandSettingNames(Collections.singletonMap(Flags.ANIMAL_NATURAL_SPAWN.getID(), 10));
-        assertEquals(10, (int) s.getDefaultIslandSettingNames().get(Flags.ANIMAL_NATURAL_SPAWN.getID()));
+        s.setDefaultIslandSettingNames(Collections.singletonMap("ANIMAL_NATURAL_SPAWN", 10));
+        assertEquals(10, (int) s.getDefaultIslandSettingNames().get("ANIMAL_NATURAL_SPAWN"));
     }
 
     @Test

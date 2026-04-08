@@ -45,11 +45,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
@@ -63,7 +64,6 @@ import com.earth2me.essentials.User;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
-import world.bentobox.acidisland.mocks.ServerMocks;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
@@ -123,17 +123,16 @@ public class AcidEffectTest {
     @Mock
     private Server server;
 
+    private ServerMock mockServer;
     private MockedStatic<Bukkit> mockedBukkit;
     private MockedStatic<Util> mockedUtil;
 
-    @BeforeAll
-    public static void beforeAll() {
-        ServerMocks.newServer();
-    }
-
     @BeforeEach
     public void setUp() {
-        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
+        mockServer = MockBukkit.mock();
+        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
+        mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
+        mockedBukkit.when(Bukkit::getServer).thenReturn(mockServer);
         mockedBukkit.when(Bukkit::getScheduler).thenReturn(scheduler);
         when(addon.getSettings()).thenReturn(settings);
         when(addon.getOverWorld()).thenReturn(world);
@@ -205,8 +204,9 @@ public class AcidEffectTest {
 
     @AfterEach
     public void tearDown() {
-        mockedUtil.close();
-        mockedBukkit.close();
+        mockedUtil.closeOnDemand();
+        mockedBukkit.closeOnDemand();
+        MockBukkit.unmock();
     }
 
     /**
@@ -531,7 +531,7 @@ public class AcidEffectTest {
     public void testOnPlayerMoveNotFullArmor() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         when(settings.isFullArmorProtection()).thenReturn(true);
-        ItemStack[] partial = { new ItemStack(Material.CHAINMAIL_HELMET), new ItemStack(Material.AIR) };
+        ItemStack[] partial = { new ItemStack(Material.CHAINMAIL_HELMET), null };
         when(inv.getArmorContents()).thenReturn(partial);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -585,7 +585,8 @@ public class AcidEffectTest {
      */
     @Test
     public void testGetDamageReducedFullDiamond() {
-        Att value = new Att();
+        AttributeInstance value = mock(AttributeInstance.class);
+        when(value.getValue()).thenReturn(20.0);
         when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
@@ -595,46 +596,6 @@ public class AcidEffectTest {
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
         assertTrue(a == 0.8);
-    }
-
-    class Att implements AttributeInstance {
-
-        @Override
-        public Attribute getAttribute() {
-            return null;
-        }
-
-        @Override
-        public double getBaseValue() {
-            return 0;
-        }
-
-        @Override
-        public void setBaseValue(double value) {
-        }
-
-        @Override
-        public Collection<AttributeModifier> getModifiers() {
-            return null;
-        }
-
-        @Override
-        public void addModifier(AttributeModifier modifier) {
-        }
-
-        @Override
-        public void removeModifier(AttributeModifier modifier) {
-        }
-
-        @Override
-        public double getValue() {
-            return 20;
-        }
-
-        @Override
-        public double getDefaultValue() {
-            return 0;
-        }
     }
 
     /**

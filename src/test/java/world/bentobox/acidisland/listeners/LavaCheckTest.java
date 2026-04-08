@@ -19,10 +19,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
@@ -36,7 +37,6 @@ import com.earth2me.essentials.User;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
-import world.bentobox.acidisland.mocks.ServerMocks;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
@@ -90,17 +90,16 @@ public class LavaCheckTest {
 
     private LavaCheck lc;
 
+    private ServerMock server;
     private MockedStatic<Bukkit> mockedBukkit;
     private MockedStatic<Util> mockedUtil;
 
-    @BeforeAll
-    public static void beforeAll() {
-        ServerMocks.newServer();
-    }
-
     @BeforeEach
     public void setUp() {
-        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
+        server = MockBukkit.mock();
+        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
+        mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
+        mockedBukkit.when(Bukkit::getServer).thenReturn(server);
         mockedBukkit.when(Bukkit::getScheduler).thenReturn(scheduler);
         settings = new AISettings();
         when(addon.getSettings()).thenReturn(settings);
@@ -120,8 +119,10 @@ public class LavaCheckTest {
 
     @AfterEach
     public void tearDown() {
-        mockedUtil.close();
-        mockedBukkit.close();
+        mockedUtil.closeOnDemand();
+        mockedBukkit.closeOnDemand();
+        Mockito.framework().clearInlineMocks();
+        MockBukkit.unmock();
     }
 
     /**

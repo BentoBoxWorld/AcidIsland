@@ -36,10 +36,11 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -50,7 +51,6 @@ import org.mockito.quality.Strictness;
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.EntityDamageByAcidEvent;
-import world.bentobox.acidisland.mocks.ServerMocks;
 
 /**
  * @author tastybento
@@ -84,16 +84,15 @@ public class AcidTaskTest {
     @Mock
     private Location l;
 
+    private ServerMock server;
     private MockedStatic<Bukkit> mockedBukkit;
-
-    @BeforeAll
-    public static void beforeAll() {
-        ServerMocks.newServer();
-    }
 
     @BeforeEach
     public void setUp() {
-        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
+        server = MockBukkit.mock();
+        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
+        mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
+        mockedBukkit.when(Bukkit::getServer).thenReturn(server);
         mockedBukkit.when(Bukkit::getScheduler).thenReturn(scheduler);
         when(scheduler.runTaskTimer(any(), any(Runnable.class), anyLong(), anyLong())).thenReturn(task);
 
@@ -150,7 +149,8 @@ public class AcidTaskTest {
 
     @AfterEach
     public void tearDown() {
-        mockedBukkit.close();
+        mockedBukkit.closeOnDemand();
+        MockBukkit.unmock();
     }
 
     /**
@@ -186,7 +186,7 @@ public class AcidTaskTest {
         at.setItemsInWater(map);
         at.applyDamage(e, 0);
 
-        verify(world).playSound(eq(l), (Sound) Mockito.isNull(), anyFloat(), anyFloat());
+        verify(world).playSound(eq(l), any(Sound.class), anyFloat(), anyFloat());
         verify(e).remove();
         assertTrue(map.isEmpty());
     }

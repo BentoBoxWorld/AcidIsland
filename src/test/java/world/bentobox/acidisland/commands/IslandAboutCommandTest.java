@@ -11,10 +11,11 @@ import java.util.Collections;
 
 import org.bukkit.Bukkit;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -23,7 +24,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import world.bentobox.acidisland.AcidIsland;
-import world.bentobox.acidisland.mocks.ServerMocks;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.AddonDescription;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
@@ -43,17 +43,16 @@ public class IslandAboutCommandTest {
     @Mock
     private BentoBox plugin;
 
+    private ServerMock server;
     private MockedStatic<Bukkit> mockedBukkit;
     private IslandAboutCommand command;
 
-    @BeforeAll
-    public static void beforeAll() {
-        ServerMocks.newServer();
-    }
-
     @BeforeEach
     public void setUp() {
-        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
+        server = MockBukkit.mock();
+        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
+        mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
+        mockedBukkit.when(Bukkit::getServer).thenReturn(server);
 
         when(parentCommand.getAddon()).thenReturn(addon);
         when(parentCommand.getWorld()).thenReturn(mock(org.bukkit.World.class));
@@ -73,7 +72,9 @@ public class IslandAboutCommandTest {
 
     @AfterEach
     public void tearDown() {
-        mockedBukkit.close();
+        mockedBukkit.closeOnDemand();
+        Mockito.framework().clearInlineMocks();
+        MockBukkit.unmock();
     }
 
     @Test

@@ -6,16 +6,16 @@ import static org.mockito.Mockito.when;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.generator.WorldInfo;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
-import world.bentobox.acidisland.mocks.ServerMocks;
 
 @ExtendWith(MockitoExtension.class)
 public class AcidBiomeProviderTest {
@@ -28,16 +28,17 @@ public class AcidBiomeProviderTest {
     private AISettings settings;
     private AcidBiomeProvider provider;
 
-    @BeforeAll
-    public static void beforeAll() {
-        ServerMocks.newServer();
-    }
-
     @BeforeEach
     public void setUp() {
+        MockBukkit.mock();
         settings = new AISettings();
         when(addon.getSettings()).thenReturn(settings);
         provider = new AcidBiomeProvider(addon);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        MockBukkit.unmock();
     }
 
     @Test
