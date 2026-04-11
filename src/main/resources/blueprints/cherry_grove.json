@@ -1,0 +1,19 @@
+{
+  "uniqueId": "cherry_grove",
+  "icon": "CHERRY_SAPLING",
+  "displayName": "§dCherry Grove Sanctuary",
+  "description": [
+    "§dA pink-petaled island",
+    "§acradled in cherry blossoms.",
+    "§7Hides an ancient tuff sanctum",
+    "§7beneath the roots —",
+    "§6can you find the way in?"
+  ],
+  "requirePermission": false,
+  "blueprints": {
+    "NORMAL": "cherry-grove",
+    "NETHER": "nether-island",
+    "THE_END": "end-island"
+  },
+  "slot": 8
+}
