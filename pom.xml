@@ -238,7 +238,7 @@
                 <targetPath>./blueprints</targetPath>
                 <filtering>false</filtering>
                 <includes>
-                    <include>*.blu</include>
+                    <include>*.blueprint</include>
                     <include>*.json</include>
                 </includes>
             </resource>
