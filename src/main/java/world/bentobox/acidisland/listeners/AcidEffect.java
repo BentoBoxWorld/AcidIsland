@@ -317,7 +317,9 @@ public class AcidEffect implements Listener {
             essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
             essentialsCheck = true;
         }
-        return essentials != null && essentials.getUser(player).isGodModeEnabled();
+        if (essentials == null) return false;
+        com.earth2me.essentials.User user = essentials.getUser(player);
+        return user != null && user.isGodModeEnabled();
     }
 
     /**

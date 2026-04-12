@@ -1,9 +1,9 @@
 package world.bentobox.acidisland.events;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
@@ -11,21 +11,20 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(PowerMockRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AcidRainEventTest {
 
     @Mock
     private Player player;
     private AcidRainEvent e;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         List<PotionEffectType> effects = List.of();
         e = new AcidRainEvent(player, 10, 5, effects);
@@ -66,7 +65,7 @@ public class AcidRainEventTest {
 
     @Test
     public void testGetPotionEffects() {
-        Assert.assertEquals(0, e.getPotionEffects().toArray().length);
+        assertEquals(0, e.getPotionEffects().toArray().length);
     }
 
     @Test

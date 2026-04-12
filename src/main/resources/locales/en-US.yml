@@ -5,8 +5,8 @@
 
 acidisland:
   sign:
-    line0: "&1AcidIsland"
+    line0: "<dark_blue>AcidIsland"
     line1: "[name]"
     line2: "Water is acid!"
-    line3: "Be careful! &c<3"
+    line3: "Be careful! <red><3"
     

@@ -1,7 +1,8 @@
 package world.bentobox.acidisland.listeners;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,25 +44,26 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
-import world.bentobox.acidisland.mocks.ServerMocks;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
@@ -72,8 +74,8 @@ import world.bentobox.bentobox.util.Util;
  * @author tastybento
  *
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Bukkit.class, Util.class })
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AcidEffectTest {
 
     @Mock
@@ -121,20 +123,22 @@ public class AcidEffectTest {
     @Mock
     private Server server;
 
-    @BeforeClass
-    public static void beforeClass() {
-        ServerMocks.newServer();
-    }
+    private ServerMock mockServer;
+    private MockedStatic<Bukkit> mockedBukkit;
+    private MockedStatic<Util> mockedUtil;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
-        when(Bukkit.getScheduler()).thenReturn(scheduler);
+        mockServer = MockBukkit.mock();
+        mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
+        mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
+        mockedBukkit.when(Bukkit::getServer).thenReturn(mockServer);
+        mockedBukkit.when(Bukkit::getScheduler).thenReturn(scheduler);
         when(addon.getSettings()).thenReturn(settings);
         when(addon.getOverWorld()).thenReturn(world);
 
         // Essentials
-        when(Bukkit.getPluginManager()).thenReturn(pim);
+        mockedBukkit.when(Bukkit::getPluginManager).thenReturn(pim);
         when(pim.getPlugin(eq("Essentials"))).thenReturn(essentials);
         when(essentials.getUser(any(Player.class))).thenReturn(essentialsUser);
 
@@ -171,12 +175,12 @@ public class AcidEffectTest {
 
         // Mock item factory (for itemstacks)
         ItemFactory itemFactory = mock(ItemFactory.class);
-        when(Bukkit.getItemFactory()).thenReturn(itemFactory);
+        mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
         when(itemFactory.getItemMeta(any())).thenReturn(itemMeta);
 
         // Util
-        PowerMockito.mockStatic(Util.class);
-        when(Util.sameWorld(any(), any())).thenReturn(true);
+        mockedUtil = Mockito.mockStatic(Util.class);
+        mockedUtil.when(() -> Util.sameWorld(any(), any())).thenReturn(true);
 
         // World
         when(world.hasStorm()).thenReturn(true);
@@ -198,10 +202,11 @@ public class AcidEffectTest {
         ae = new AcidEffect(addon);
     }
 
-    /**
-     */
-    @After
+    @AfterEach
     public void tearDown() {
+        mockedUtil.closeOnDemand();
+        mockedBukkit.closeOnDemand();
+        MockBukkit.unmock();
     }
 
     /**
@@ -526,7 +531,7 @@ public class AcidEffectTest {
     public void testOnPlayerMoveNotFullArmor() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         when(settings.isFullArmorProtection()).thenReturn(true);
-        ItemStack[] partial = { new ItemStack(Material.CHAINMAIL_HELMET), new ItemStack(Material.AIR) };
+        ItemStack[] partial = { new ItemStack(Material.CHAINMAIL_HELMET), null };
         when(inv.getArmorContents()).thenReturn(partial);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -537,7 +542,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    @Ignore("Cannot be tested because of the PotionEffectType issue")
+    @Disabled("Cannot be tested because of the PotionEffectType issue")
     public void testOnPlayerMoveActivePotions() {
         Collection<PotionEffect> potions = new ArrayList<>();
         potions.add(new PotionEffect(PotionEffectType.WATER_BREATHING, 0, 0, false, false, false));
@@ -551,7 +556,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    @Ignore("Cannot be tested because of the PotionEffectType issue")
+    @Disabled("Cannot be tested because of the PotionEffectType issue")
     public void testOnPlayerMoveActivePotionsConduit() {
         Collection<PotionEffect> potions = new ArrayList<>();
         potions.add(new PotionEffect(PotionEffectType.CONDUIT_POWER, 0, 0, false, false, false));
@@ -565,7 +570,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    @Ignore("Cannot be tested because of the PotionEffectType issue")
+    @Disabled("Cannot be tested because of the PotionEffectType issue")
     public void testOnPlayerMoveActivePotionsBadOmen() {
         Collection<PotionEffect> potions = new ArrayList<>();
         potions.add(new PotionEffect(PotionEffectType.BAD_OMEN, 0, 0, false, false, false));
@@ -580,10 +585,8 @@ public class AcidEffectTest {
      */
     @Test
     public void testGetDamageReducedFullDiamond() {
-        Att value = new Att();
-        //AttributeInstance value = new AttributeInstance();
-        //when(value.getValue()).thenReturn(20D);
-        // Diamond armor
+        AttributeInstance value = mock(AttributeInstance.class);
+        when(value.getValue()).thenReturn(20.0);
         when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
@@ -593,58 +596,6 @@ public class AcidEffectTest {
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
         assertTrue(a == 0.8);
-
-    }
-
-    class Att implements AttributeInstance {
-
-        @Override
-        public Attribute getAttribute() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public double getBaseValue() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        @Override
-        public void setBaseValue(double value) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public Collection<AttributeModifier> getModifiers() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public void addModifier(AttributeModifier modifier) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void removeModifier(AttributeModifier modifier) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public double getValue() {
-            return 20;
-        }
-
-        @Override
-        public double getDefaultValue() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
     }
 
     /**
@@ -757,6 +708,139 @@ public class AcidEffectTest {
         when(inv.getArmorContents()).thenReturn(armor);
         when(player.getInventory()).thenReturn(inv);
         assertTrue(ae.isSafeFromAcid(player));
+    }
+
+    // --- Additional coverage tests ---
+
+    /**
+     * Test that dead player is ignored by onPlayerMove.
+     */
+    @Test
+    public void testOnPlayerMoveDeadPlayer() {
+        when(player.isDead()).thenReturn(true);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+
+    /**
+     * Test that player in teleport is ignored by onPlayerMove.
+     */
+    @Test
+    public void testOnPlayerMoveInTeleport() {
+        when(pm.isInTeleport(any())).thenReturn(true);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+
+    /**
+     * Test that player with noburn permission is ignored.
+     */
+    @Test
+    public void testOnPlayerMoveNoburnPermission() {
+        when(player.isOp()).thenReturn(false);
+        when(player.hasPermission("acidisland.mod.noburn")).thenReturn(true);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+
+    /**
+     * Test that OP player with acidDamageOp=false is ignored.
+     */
+    @Test
+    public void testOnPlayerMoveOpNoDamage() {
+        when(player.isOp()).thenReturn(true);
+        when(settings.isAcidDamageOp()).thenReturn(false);
+        PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
+        ae.onPlayerMove(e);
+        verify(settings, never()).getAcidDamageDelay();
+    }
+
+    /**
+     * Test isSafeFromAcid when player is not in water (standing on air).
+     */
+    @Test
+    public void testIsSafeFromAcidNotInWater() {
+        when(block.getType()).thenReturn(Material.AIR);
+        when(block.getRelative(any())).thenReturn(airBlock);
+        assertTrue(ae.isSafeFromAcid(player));
+    }
+
+    /**
+     * Test isSafeFromAcid when player is in creative mode.
+     */
+    @Test
+    public void testIsSafeFromAcidCreative() {
+        when(player.getGameMode()).thenReturn(GameMode.CREATIVE);
+        assertTrue(ae.isSafeFromAcid(player));
+    }
+
+    /**
+     * Test isSafeFromAcid for visitors with CUSTOM protection and not on island.
+     */
+    @Test
+    public void testIsSafeFromAcidVisitorProtection() {
+        when(im.userIsOnIsland(any(), any())).thenReturn(false);
+        assertTrue(ae.isSafeFromAcid(player));
+    }
+
+    /**
+     * Test checkForRain returns true (safe) when no storm.
+     */
+    @Test
+    public void testCheckForRainNoStorm() {
+        when(world.hasStorm()).thenReturn(false);
+        assertTrue(ae.checkForRain(player));
+    }
+
+    /**
+     * Test checkForRain returns true (safe) when player is dead.
+     */
+    @Test
+    public void testCheckForRainDeadPlayer() {
+        when(player.isDead()).thenReturn(true);
+        assertTrue(ae.checkForRain(player));
+    }
+
+    /**
+     * Test checkForRain returns true (safe) when rain damage is zero.
+     */
+    @Test
+    public void testCheckForRainZeroDamage() {
+        when(settings.getAcidRainDamage()).thenReturn(0);
+        assertTrue(ae.checkForRain(player));
+    }
+
+    /**
+     * Test getDamageReduced returns 0 when no armor.
+     */
+    @Test
+    public void testGetDamageReducedNoArmor() {
+        AttributeInstance value = mock(AttributeInstance.class);
+        when(value.getValue()).thenReturn(0D);
+        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        EntityEquipment equip = mock(EntityEquipment.class);
+        when(player.getEquipment()).thenReturn(equip);
+        double a = AcidEffect.getDamageReduced(player);
+        assertTrue(a == 0D);
+    }
+
+    /**
+     * Test getDamageReduced with partial armor (some null slots).
+     */
+    @Test
+    public void testGetDamageReducedPartialArmor() {
+        AttributeInstance value = mock(AttributeInstance.class);
+        when(value.getValue()).thenReturn(8D); // partial armor
+        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        EntityEquipment equip = mock(EntityEquipment.class);
+        when(equip.getHelmet()).thenReturn(new ItemStack(Material.IRON_HELMET));
+        // boots, chest, pants are null
+        when(player.getEquipment()).thenReturn(equip);
+        double a = AcidEffect.getDamageReduced(player);
+        assertEquals(0.32, a, 0.001);
     }
 
 }

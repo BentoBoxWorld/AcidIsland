@@ -1,30 +1,27 @@
 package world.bentobox.acidisland.world;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
-import world.bentobox.acidisland.mocks.ServerMocks;
 
 /**
  * @author tastybento
  *
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Bukkit.class})
+@ExtendWith(MockitoExtension.class)
 public class ChunkGeneratorWorldTest {
 
     @Mock
@@ -34,40 +31,34 @@ public class ChunkGeneratorWorldTest {
     private World world;
 
     private AISettings settings;
-    @Mock
-    private ChunkData data;
 
-    @BeforeClass
-    public static void beforeClass() {
-        ServerMocks.newServer();
-    }
-
-    @Before
+    @BeforeEach
     public void setUp() {
-        // World
-        when(world.getEnvironment()).thenReturn(World.Environment.NORMAL);
-        when(world.getMaxHeight()).thenReturn(256);
+        MockBukkit.mock();
         // Settings
         settings = new AISettings();
         when(addon.getSettings()).thenReturn(settings);
     }
 
+    @AfterEach
+    public void tearDown() {
+        MockBukkit.unmock();
+    }
+
     /**
-     * Test method for {@link world.bentobox.bskyblock.generators.ChunkGeneratorWorld#canSpawn(org.bukkit.World, int, int)}.
+     * Test method for {@link world.bentobox.acidisland.world.ChunkGeneratorWorld#canSpawn(org.bukkit.World, int, int)}.
      */
     @Test
     public void testCanSpawnWorldIntInt() {
-        // Instance
         cg = new ChunkGeneratorWorld(addon);
         assertTrue(cg.canSpawn(mock(World.class), 0, 1));
     }
 
     /**
-     * Test method for {@link world.bentobox.bskyblock.generators.ChunkGeneratorWorld#getDefaultPopulators(org.bukkit.World)}.
+     * Test method for {@link world.bentobox.acidisland.world.ChunkGeneratorWorld#getDefaultPopulators(org.bukkit.World)}.
      */
     @Test
     public void testGetDefaultPopulatorsWorld() {
-        // Instance
         cg = new ChunkGeneratorWorld(addon);
         assertTrue(cg.getDefaultPopulators(mock(World.class)).isEmpty());
     }

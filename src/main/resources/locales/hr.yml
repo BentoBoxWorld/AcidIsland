@@ -1,7 +1,7 @@
 ---
 acidisland:
   sign:
-    line0: "&1Otok kiseline"
-    line1: "[Ime]"
+    line0: "<dark_blue>Otok kiseline"
+    line1: "[name]"
     line2: Voda je kiselina!
-    line3: Budi oprezan! &c<3
+    line3: "Budi oprezan! <red><3"

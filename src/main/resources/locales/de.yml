@@ -1,7 +1,7 @@
 ---
 acidisland:
   sign:
-    line0: "&1AcidIsland"
+    line0: "<dark_blue>AcidIsland"
     line1: "[name]"
     line2: Achtung! Das Wasser
-    line3: ist vergiftet! &c<3
+    line3: "ist vergiftet! <red><3"
