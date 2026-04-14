@@ -1,5 +1,6 @@
 package world.bentobox.acidisland;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -305,7 +306,7 @@ public class AcidIslandTest {
      */
     @Test
     void testSaveWorldSettings() {
-        addon.saveWorldSettings();
+        assertDoesNotThrow(() -> addon.saveWorldSettings());
     }
 
     /**
@@ -314,8 +315,7 @@ public class AcidIslandTest {
     @Test
     void testOnDisable() {
         testOnEnable();
-        addon.onDisable();
-        // Should not throw - acidTask.cancelTasks() is called
+        assertDoesNotThrow(() -> addon.onDisable());
     }
 
     /**
@@ -323,9 +323,7 @@ public class AcidIslandTest {
      */
     @Test
     void testOnDisableNoTask() {
-        // No onEnable called, acidTask is null
-        addon.onDisable();
-        // Should not throw
+        assertDoesNotThrow(() -> addon.onDisable());
     }
 
     /**
