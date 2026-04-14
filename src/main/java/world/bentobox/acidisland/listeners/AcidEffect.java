@@ -134,8 +134,7 @@ public class AcidEffect implements Listener {
         }
         if (isSafeFromRain(player)) {
             wetPlayers.remove(player);
-        } else if (!wetPlayers.containsKey(player)) {
-            wetPlayers.put(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000);
+        } else if (wetPlayers.putIfAbsent(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000L) == null) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -175,8 +174,7 @@ public class AcidEffect implements Listener {
 
             User user = User.getInstance(player);
             // Get the percentage reduction and ensure the value is between 0 and 100
-            double percent = (100
-                    - Math.max(0, Math.min(100, user.getPermissionValue("acidisland.protection.rain", 0)))) / 100D;
+            double percent = (100 - Math.clamp(user.getPermissionValue("acidisland.protection.rain", 0), 0, 100)) / 100D;
 
             double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection) * percent;
 
@@ -210,8 +208,7 @@ public class AcidEffect implements Listener {
 
             User user = User.getInstance(player);
             // Get the percentage reduction and ensure the value is between 0 and 100
-            double percent = (100
-                    - Math.max(0, Math.min(100, user.getPermissionValue("acidisland.protection.acid", 0)))) / 100D;
+            double percent = (100 - Math.clamp(user.getPermissionValue("acidisland.protection.acid", 0), 0, 100)) / 100D;
 
             double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection) * percent;
 
