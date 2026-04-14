@@ -210,11 +210,11 @@ public class AcidTaskTest {
     @Test
     void testApplyDamageKeepItems() {
         Item e = mock(Item.class);
-        Location l = mock(Location.class);
+        Location loc = mock(Location.class);
         Block block = mock(Block.class);
         when(block.getType()).thenReturn(Material.AIR);
-        when(l.getBlock()).thenReturn(block);
-        when(e.getLocation()).thenReturn(l);
+        when(loc.getBlock()).thenReturn(block);
+        when(e.getLocation()).thenReturn(loc);
         when(e.getWorld()).thenReturn(world);
         // Put the item in the water
 
