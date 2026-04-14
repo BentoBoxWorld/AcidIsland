@@ -426,7 +426,7 @@ public class AISettingsTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("PotionEffectType cannot be mocked without full server initialisation")
     void testSetAcidEffects() {
         List<PotionEffectType> list = Collections.singletonList(PotionEffectType.ABSORPTION);
         s.setAcidEffects(list);
