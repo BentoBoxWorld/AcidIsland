@@ -57,31 +57,35 @@ public class AcidTask {
     void findEntities() {
         Map<Entity, Long> burnList = new WeakHashMap<>();
         for (Entity e : getEntityStream()) {
-            if (e instanceof Item || (!IMMUNE.contains(e.getType()) && !(e instanceof WaterMob))) {
+            if (isAcidSusceptible(e)) {
                 int x = e.getLocation().getBlockX() >> 4;
                 int z = e.getLocation().getBlockZ() >> 4;
-                if (e.getWorld().isChunkLoaded(x,z)) {
-                    if (e.getLocation().getBlock().getType().equals(Material.WATER)) {
-                        if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
-                            burnList.put(e, (long)addon.getSettings().getAcidDamageMonster());
-
-                        } else if ((e instanceof Animals) && addon.getSettings().getAcidDamageAnimal() > 0D
-                                && (!e.getType().equals(EntityType.CHICKEN) || addon.getSettings().isAcidDamageChickens())) {
-                            burnList.put(e, (long)addon.getSettings().getAcidDamageAnimal());
-                        } else if (addon.getSettings().getAcidDestroyItemTime() > 0 && e instanceof Item) {
-                            burnList.put(e, System.currentTimeMillis());
-                        }
-                    }
+                if (e.getWorld().isChunkLoaded(x, z)
+                        && e.getLocation().getBlock().getType().equals(Material.WATER)) {
+                    addToBurnList(e, burnList);
                 }
             }
         }
         // Remove any entities not on the burn list
         itemsInWater.keySet().removeIf(i -> !burnList.containsKey(i));
-
         if (!burnList.isEmpty()) {
-            Bukkit.getScheduler().runTask(addon.getPlugin(), () ->
             // Burn everything
-            burnList.forEach(this::applyDamage));
+            Bukkit.getScheduler().runTask(addon.getPlugin(), () -> burnList.forEach(this::applyDamage));
+        }
+    }
+
+    private boolean isAcidSusceptible(Entity e) {
+        return e instanceof Item || (!IMMUNE.contains(e.getType()) && !(e instanceof WaterMob));
+    }
+
+    private void addToBurnList(Entity e, Map<Entity, Long> burnList) {
+        if ((e instanceof Monster || e instanceof MagmaCube) && addon.getSettings().getAcidDamageMonster() > 0D) {
+            burnList.put(e, (long) addon.getSettings().getAcidDamageMonster());
+        } else if (e instanceof Animals && addon.getSettings().getAcidDamageAnimal() > 0D
+                && (!e.getType().equals(EntityType.CHICKEN) || addon.getSettings().isAcidDamageChickens())) {
+            burnList.put(e, (long) addon.getSettings().getAcidDamageAnimal());
+        } else if (addon.getSettings().getAcidDestroyItemTime() > 0 && e instanceof Item) {
+            burnList.put(e, System.currentTimeMillis());
         }
     }
 
