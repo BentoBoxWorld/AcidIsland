@@ -23,51 +23,51 @@ public class EntityDamageByAcidEventTest {
     private EntityDamageByAcidEvent rainEvent;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         waterEvent = new EntityDamageByAcidEvent(entity, 10.0, Acid.WATER);
         rainEvent = new EntityDamageByAcidEvent(entity, 5.0, Acid.RAIN);
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertNotNull(waterEvent);
         assertNotNull(rainEvent);
     }
 
     @Test
-    public void testGetEntity() {
+    void testGetEntity() {
         assertEquals(entity, waterEvent.getEntity());
     }
 
     @Test
-    public void testGetDamage() {
+    void testGetDamage() {
         assertEquals(10.0, waterEvent.getDamage(), 0D);
         assertEquals(5.0, rainEvent.getDamage(), 0D);
     }
 
     @Test
-    public void testSetDamage() {
+    void testSetDamage() {
         waterEvent.setDamage(25.0);
         assertEquals(25.0, waterEvent.getDamage(), 0D);
     }
 
     @Test
-    public void testGetCauseWater() {
+    void testGetCauseWater() {
         assertEquals(Acid.WATER, waterEvent.getCause());
     }
 
     @Test
-    public void testGetCauseRain() {
+    void testGetCauseRain() {
         assertEquals(Acid.RAIN, rainEvent.getCause());
     }
 
     @Test
-    public void testIsCancelled() {
+    void testIsCancelled() {
         assertFalse(waterEvent.isCancelled());
     }
 
     @Test
-    public void testSetCancelled() {
+    void testSetCancelled() {
         waterEvent.setCancelled(true);
         assertTrue(waterEvent.isCancelled());
         waterEvent.setCancelled(false);
@@ -75,12 +75,12 @@ public class EntityDamageByAcidEventTest {
     }
 
     @Test
-    public void testGetHandlers() {
+    void testGetHandlers() {
         assertNotNull(waterEvent.getHandlers());
     }
 
     @Test
-    public void testGetHandlerList() {
+    void testGetHandlerList() {
         assertNotNull(EntityDamageByAcidEvent.getHandlerList());
     }
 }

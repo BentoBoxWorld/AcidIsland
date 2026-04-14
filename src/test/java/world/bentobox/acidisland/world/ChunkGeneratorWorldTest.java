@@ -33,7 +33,7 @@ public class ChunkGeneratorWorldTest {
     private AISettings settings;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockBukkit.mock();
         // Settings
         settings = new AISettings();
@@ -41,7 +41,7 @@ public class ChunkGeneratorWorldTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         MockBukkit.unmock();
     }
 
@@ -49,7 +49,7 @@ public class ChunkGeneratorWorldTest {
      * Test method for {@link world.bentobox.acidisland.world.ChunkGeneratorWorld#canSpawn(org.bukkit.World, int, int)}.
      */
     @Test
-    public void testCanSpawnWorldIntInt() {
+    void testCanSpawnWorldIntInt() {
         cg = new ChunkGeneratorWorld(addon);
         assertTrue(cg.canSpawn(mock(World.class), 0, 1));
     }
@@ -58,7 +58,7 @@ public class ChunkGeneratorWorldTest {
      * Test method for {@link world.bentobox.acidisland.world.ChunkGeneratorWorld#getDefaultPopulators(org.bukkit.World)}.
      */
     @Test
-    public void testGetDefaultPopulatorsWorld() {
+    void testGetDefaultPopulatorsWorld() {
         cg = new ChunkGeneratorWorld(addon);
         assertTrue(cg.getDefaultPopulators(mock(World.class)).isEmpty());
     }

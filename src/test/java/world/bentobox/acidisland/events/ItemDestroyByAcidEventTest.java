@@ -18,27 +18,27 @@ public class ItemDestroyByAcidEventTest {
     private ItemDestroyByAcidEvent event;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         event = new ItemDestroyByAcidEvent(item);
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         assertNotNull(event);
     }
 
     @Test
-    public void testGetItem() {
+    void testGetItem() {
         assertEquals(item, event.getItem());
     }
 
     @Test
-    public void testGetHandlers() {
+    void testGetHandlers() {
         assertNotNull(event.getHandlers());
     }
 
     @Test
-    public void testGetHandlerList() {
+    void testGetHandlerList() {
         assertNotNull(ItemDestroyByAcidEvent.getHandlerList());
     }
 }

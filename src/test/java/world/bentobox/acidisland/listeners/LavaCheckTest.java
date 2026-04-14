@@ -95,7 +95,7 @@ public class LavaCheckTest {
     private MockedStatic<Util> mockedUtil;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         server = MockBukkit.mock();
         mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
         mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
@@ -118,7 +118,7 @@ public class LavaCheckTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         mockedUtil.closeOnDemand();
         mockedBukkit.closeOnDemand();
         Mockito.framework().clearInlineMocks();
@@ -129,7 +129,7 @@ public class LavaCheckTest {
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
     @Test
-    public void testOnCleanstoneGen() {
+    void testOnCleanstoneGen() {
         ArgumentCaptor<Runnable> argument = ArgumentCaptor.forClass(Runnable.class);
 
         BlockFromToEvent e = new BlockFromToEvent(airBlock, block);
@@ -148,7 +148,7 @@ public class LavaCheckTest {
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
     @Test
-    public void testOnCleanstoneGenNoStone() {
+    void testOnCleanstoneGenNoStone() {
         ArgumentCaptor<Runnable> argument = ArgumentCaptor.forClass(Runnable.class);
 
         BlockFromToEvent e = new BlockFromToEvent(airBlock, block);
@@ -167,7 +167,7 @@ public class LavaCheckTest {
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
     @Test
-    public void testOnCleanstoneGenWrongWorld() {
+    void testOnCleanstoneGenWrongWorld() {
         when(block.getWorld()).thenReturn(Mockito.mock(World.class));
         when(airBlock.getWorld()).thenReturn(Mockito.mock(World.class));
         BlockFromToEvent e = new BlockFromToEvent(airBlock, block);
@@ -181,7 +181,7 @@ public class LavaCheckTest {
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
     @Test
-    public void testOnCleanstoneGenNotWater() {
+    void testOnCleanstoneGenNotWater() {
         when(block.getType()).thenReturn(Material.LAVA);
 
         BlockFromToEvent e = new BlockFromToEvent(airBlock, block);
@@ -194,7 +194,7 @@ public class LavaCheckTest {
      * Test method for {@link world.bentobox.acidisland.listeners.LavaCheck#onCleanstoneGen(org.bukkit.event.block.BlockFromToEvent)}.
      */
     @Test
-    public void testOnCleanstoneGenNoAcid() {
+    void testOnCleanstoneGenNoAcid() {
         // No acid damage
         settings.setAcidDamage(0);
 

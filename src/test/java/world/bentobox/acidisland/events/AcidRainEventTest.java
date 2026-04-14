@@ -25,62 +25,62 @@ public class AcidRainEventTest {
     private AcidRainEvent e;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         List<PotionEffectType> effects = List.of();
         e = new AcidRainEvent(player, 10, 5, effects);
     }
 
     @Test
-    public void testAcidEvent() {
+    void testAcidEvent() {
         assertNotNull(e);
     }
 
     @Test
-    public void testGetPlayer() {
+    void testGetPlayer() {
         assertEquals(player, e.getPlayer());
     }
 
     @Test
-    public void testSetPlayer() {
+    void testSetPlayer() {
         Player player2 = mock(Player.class);
         e.setPlayer(player2);
         assertEquals(player2, e.getPlayer());
     }
 
     @Test
-    public void testGetTotalDamage() {
+    void testGetTotalDamage() {
         assertTrue(e.getRainDamage() == 10D);
     }
 
     @Test
-    public void testGetProtection() {
+    void testGetProtection() {
         assertTrue(e.getProtection() == 5D);
     }
 
     @Test
-    public void testSetTotalDamage() {
+    void testSetTotalDamage() {
         e.setRainDamage(50);
         assertTrue(e.getRainDamage() == 50D);
     }
 
     @Test
-    public void testGetPotionEffects() {
+    void testGetPotionEffects() {
         assertEquals(0, e.getPotionEffects().toArray().length);
     }
 
     @Test
-    public void testSetPotionEffects() {
+    void testSetPotionEffects() {
         e.setPotionEffects(new ArrayList<>());
         assertTrue(e.getPotionEffects().isEmpty());
     }
 
     @Test
-    public void testIsCancelled() {
+    void testIsCancelled() {
         assertFalse(e.isCancelled());
     }
 
     @Test
-    public void testSetCancelled() {
+    void testSetCancelled() {
         e.setCancelled(true);
         assertTrue(e.isCancelled());
         e.setCancelled(false);

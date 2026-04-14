@@ -99,7 +99,7 @@ public class AcidIslandTest {
 
     @SuppressWarnings("unchecked")
     @BeforeAll
-    public static void beforeAll() throws Exception {
+    static void beforeAll() throws Exception {
         // This has to be done beforeAll otherwise the tests will interfere with each other
         h = mock(AbstractDatabaseHandler.class);
         // Database
@@ -111,12 +111,12 @@ public class AcidIslandTest {
     }
 
     @AfterAll
-    public static void afterAll() {
+    static void afterAll() {
         mockedDbSetup.close();
     }
 
     @AfterEach
-    public void tearDown() throws IOException {
+    void tearDown() throws IOException {
         User.clearUsers();
         if (mockedBukkit != null) {
             mockedBukkit.closeOnDemand();
@@ -136,7 +136,7 @@ public class AcidIslandTest {
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         // Set up plugin via reflection
         Field instanceField = BentoBox.class.getDeclaredField("instance");
         instanceField.setAccessible(true);
@@ -221,7 +221,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#onLoad()}.
      */
     @Test
-    public void testOnLoad() {
+    void testOnLoad() {
         addon.onLoad();
         // Check that config.yml file has been saved
         File check = new File("addons/AcidIsland", "config.yml");
@@ -232,7 +232,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#onEnable()}.
      */
     @Test
-    public void testOnEnable() {
+    void testOnEnable() {
         testOnLoad();
         addon.onEnable();
         assertTrue(addon.getPlayerCommand().isPresent());
@@ -243,7 +243,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#onReload()}.
      */
     @Test
-    public void testOnReload() {
+    void testOnReload() {
         addon.onReload();
         // Check that config.yml file has been saved
         File check = new File("addons/AcidIsland", "config.yml");
@@ -254,7 +254,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#createWorlds()}.
      */
     @Test
-    public void testCreateWorlds() {
+    void testCreateWorlds() {
         addon.onLoad();
         addon.createWorlds();
         Mockito.verify(plugin).log("[AcidIsland] Creating AcidIsland...");
@@ -266,7 +266,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#getSettings()}.
      */
     @Test
-    public void testGetSettings() {
+    void testGetSettings() {
         addon.onLoad();
         assertNotNull(addon.getSettings());
     }
@@ -275,7 +275,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#getWorldSettings()}.
      */
     @Test
-    public void testGetWorldSettings() {
+    void testGetWorldSettings() {
         addon.onLoad();
         assertEquals(addon.getSettings(), addon.getWorldSettings());
     }
@@ -284,7 +284,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#getDefaultWorldGenerator(java.lang.String, java.lang.String)}.
      */
     @Test
-    public void testGetDefaultWorldGeneratorStringString() {
+    void testGetDefaultWorldGeneratorStringString() {
         assertNull(addon.getDefaultWorldGenerator("", ""));
         addon.onLoad();
         addon.createWorlds();
@@ -296,7 +296,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#allLoaded()}.
      */
     @Test
-    public void testAllLoaded() {
+    void testAllLoaded() {
         addon.allLoaded();
     }
 
@@ -304,7 +304,7 @@ public class AcidIslandTest {
      * Test method for {@link world.bentobox.acidisland.AcidIsland#saveWorldSettings()}.
      */
     @Test
-    public void testSaveWorldSettings() {
+    void testSaveWorldSettings() {
         addon.saveWorldSettings();
     }
 
@@ -312,7 +312,7 @@ public class AcidIslandTest {
      * Test onDisable cancels acidTask.
      */
     @Test
-    public void testOnDisable() {
+    void testOnDisable() {
         testOnEnable();
         addon.onDisable();
         // Should not throw - acidTask.cancelTasks() is called
@@ -322,7 +322,7 @@ public class AcidIslandTest {
      * Test onDisable when acidTask is null (no prior onEnable).
      */
     @Test
-    public void testOnDisableNoTask() {
+    void testOnDisableNoTask() {
         // No onEnable called, acidTask is null
         addon.onDisable();
         // Should not throw
@@ -332,7 +332,7 @@ public class AcidIslandTest {
      * Test onEnable does nothing when settings is null.
      */
     @Test
-    public void testOnEnableNullSettings() {
+    void testOnEnableNullSettings() {
         // Don't call onLoad, so settings is null
         addon.onEnable();
         // Should return early without registering listeners

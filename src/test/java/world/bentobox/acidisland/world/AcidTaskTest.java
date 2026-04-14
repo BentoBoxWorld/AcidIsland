@@ -88,7 +88,7 @@ public class AcidTaskTest {
     private MockedStatic<Bukkit> mockedBukkit;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         server = MockBukkit.mock();
         mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
         mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
@@ -148,7 +148,7 @@ public class AcidTaskTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         mockedBukkit.closeOnDemand();
         MockBukkit.unmock();
     }
@@ -157,7 +157,7 @@ public class AcidTaskTest {
      * Test method for {@link world.bentobox.acidisland.world.AcidTask#AcidTask(world.bentobox.acidisland.AcidIsland)}.
      */
     @Test
-    public void testAcidTask() {
+    void testAcidTask() {
         verify(scheduler).runTaskTimer(eq(null), any(Runnable.class), eq(0L), eq(20L));
     }
 
@@ -165,7 +165,7 @@ public class AcidTaskTest {
      * Test method for {@link world.bentobox.acidisland.world.AcidTask#findEntities()}.
      */
     @Test
-    public void testFindEntities() {
+    void testFindEntities() {
 
         at.findEntities();
         verify(scheduler).runTask(eq(null), any(Runnable.class));
@@ -175,7 +175,7 @@ public class AcidTaskTest {
      * Test method for {@link world.bentobox.acidisland.world.AcidTask#applyDamage(org.bukkit.entity.Entity, long)}.
      */
     @Test
-    public void testApplyDamageRemoveItems() {
+    void testApplyDamageRemoveItems() {
         Item e = mock(Item.class);
         when(e.getLocation()).thenReturn(l);
         when(e.getWorld()).thenReturn(world);
@@ -195,7 +195,7 @@ public class AcidTaskTest {
      * Test method for {@link world.bentobox.acidisland.world.AcidTask#applyDamage(org.bukkit.entity.Entity, long)}.
      */
     @Test
-    public void testApplyDamageNoItemDamage() {
+    void testApplyDamageNoItemDamage() {
         settings.setAcidDestroyItemTime(0L);
         Item e = mock(Item.class);
         at.applyDamage(e, 0);
@@ -208,7 +208,7 @@ public class AcidTaskTest {
      * Test method for {@link world.bentobox.acidisland.world.AcidTask#applyDamage(org.bukkit.entity.Entity, long)}.
      */
     @Test
-    public void testApplyDamageKeepItems() {
+    void testApplyDamageKeepItems() {
         Item e = mock(Item.class);
         Location l = mock(Location.class);
         Block block = mock(Block.class);
@@ -231,7 +231,7 @@ public class AcidTaskTest {
      * Test method for {@link world.bentobox.acidisland.world.AcidTask#getEntityStream()}.
      */
     @Test
-    public void testGetEntityStream() {
+    void testGetEntityStream() {
         List<Entity> es = at.getEntityStream();
         assertEquals(12, es.size());
     }
@@ -240,7 +240,7 @@ public class AcidTaskTest {
      * Test method for {@link world.bentobox.acidisland.world.AcidTask#cancelTasks()}.
      */
     @Test
-    public void testCancelTasks() {
+    void testCancelTasks() {
         at.cancelTasks();
         verify(task).cancel();
     }
@@ -251,7 +251,7 @@ public class AcidTaskTest {
      * Test getEntityStream with nether and end disabled.
      */
     @Test
-    public void testGetEntityStreamOverworldOnly() {
+    void testGetEntityStreamOverworldOnly() {
         settings.setNetherGenerate(false);
         settings.setEndGenerate(false);
         // Recreate to use updated settings
@@ -265,7 +265,7 @@ public class AcidTaskTest {
      * Test getEntityStream with nether enabled but netherIslands disabled.
      */
     @Test
-    public void testGetEntityStreamNetherNoIslands() {
+    void testGetEntityStreamNetherNoIslands() {
         settings.setNetherIslands(false);
         settings.setEndGenerate(false);
         at = new AcidTask(addon);
@@ -278,7 +278,7 @@ public class AcidTaskTest {
      * Test that applyDamage on LivingEntity with cancelled event does no damage.
      */
     @Test
-    public void testApplyDamageLivingEntityCancelled() {
+    void testApplyDamageLivingEntityCancelled() {
         Skeleton s = mock(Skeleton.class);
         when(s.getLocation()).thenReturn(l);
         when(s.getWorld()).thenReturn(world);
@@ -307,7 +307,7 @@ public class AcidTaskTest {
      * Test that applyDamage removes item from tracking when not in water.
      */
     @Test
-    public void testApplyDamageItemNotInWaterAnymore() {
+    void testApplyDamageItemNotInWaterAnymore() {
         Item e = mock(Item.class);
         Location loc = mock(Location.class);
         Block b = mock(Block.class);
