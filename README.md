@@ -1,5 +1,5 @@
-AcidIsland™
-===========
+AcidIsland
+==========
 [![Build Status](https://ci.codemc.org/buildStatus/icon?job=BentoBoxWorld/AcidIsland)](https://ci.codemc.org/job/BentoBoxWorld/job/AcidIsland/)
 [![Lines Of Code](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=ncloc)](https://sonarcloud.io/component_measures?id=BentoBoxWorld_AcidIsland&metric=ncloc)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=sqale_rating)](https://sonarcloud.io/component_measures?id=BentoBoxWorld_AcidIslandd&metric=Maintainability)
@@ -8,15 +8,14 @@ AcidIsland™
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=bugs)](https://sonarcloud.io/project/issues?id=BentoBoxWorld_AcidIsland&resolved=false&types=BUG)
 
 # Introduction
-AcidIsland™ add-on for BentoBox, so to run an AcidIsland™ game, you must have BentoBox installed. Docs can be found at [https://docs.bentobox.world](https://docs.bentobox.world).
+AcidIsland add-on for BentoBox, so to run an AcidIsland game, you must have BentoBox installed. Docs can be found at [https://docs.bentobox.world](https://docs.bentobox.world).
 
+<img width="512" alt="AcidIsland" src="https://github.com/user-attachments/assets/a4fe5284-e20f-457b-8337-3bfe60ddf21d" />
 
 ## The Story
 You're on an island, in a sea of acid! If you like Skyblock, try the AcidIsland™ game mode for a new challenge!
 
 Instead of falling you must contend with acid water when expanding your island, and players can boat to each other's islands.
-
-<img width="512" alt="acidislandart" src="https://github.com/BentoBoxWorld/AcidIsland/assets/4407265/60e97bba-2b7d-425e-9130-cffef73cf76e">
 
 ## Download
 
