@@ -742,6 +742,7 @@ public class AISettings implements WorldSettings {
      * @return the defaultIslandProtection
      * @deprecated since 1.21
      */
+    @Deprecated(since = "1.21")
     @Override
     public Map<Flag, Integer> getDefaultIslandFlags() {
         return Collections.emptyMap();
@@ -752,6 +753,7 @@ public class AISettings implements WorldSettings {
      * @return the defaultIslandSettings
      * @deprecated since 1.21
      */
+    @Deprecated(since = "1.21")
     @Override
     public Map<Flag, Integer> getDefaultIslandSettings() {
         return Collections.emptyMap();

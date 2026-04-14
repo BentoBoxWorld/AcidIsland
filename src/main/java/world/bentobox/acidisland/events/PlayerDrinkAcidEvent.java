@@ -12,7 +12,7 @@ import world.bentobox.bentobox.database.objects.Island;
  * @since 1.0
  * @deprecated - never fired
  */
-@Deprecated
+@Deprecated(since = "1.0", forRemoval = true)
 public class PlayerDrinkAcidEvent extends IslandBaseEvent {
 
     private final Player player;
