@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
@@ -191,7 +192,8 @@ public class AcidEffect implements Listener {
                     Bukkit.getPluginManager().callEvent(e);
                     if (!e.isCancelled()) {
                         player.damage(event.getRainDamage());
-                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                        Location rainLoc = player.getLocation();
+                        if (rainLoc != null) player.getWorld().playSound(rainLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     }
                 }
             }
@@ -224,7 +226,8 @@ public class AcidEffect implements Listener {
                     Bukkit.getPluginManager().callEvent(e);
                     if (!e.isCancelled()) {
                         player.damage(event.getTotalDamage());
-                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                        Location acidLoc = player.getLocation();
+                        if (acidLoc != null) player.getWorld().playSound(acidLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     }
                 }
             }
