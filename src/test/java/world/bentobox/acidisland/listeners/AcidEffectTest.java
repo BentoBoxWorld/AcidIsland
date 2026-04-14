@@ -228,7 +228,7 @@ public class AcidEffectTest {
         ae.onSeaBounce(e);
         ArgumentCaptor<Vector> argument = ArgumentCaptor.forClass(Vector.class);
         verify(player).setVelocity(argument.capture());
-        assertTrue(argument.getValue().getBlockY() == 1D);
+        assertEquals(1D, argument.getValue().getBlockY());
     }
 
     /**
@@ -595,7 +595,7 @@ public class AcidEffectTest {
         when(equip.getChestplate()).thenReturn(new ItemStack(Material.DIAMOND_CHESTPLATE));
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
-        assertTrue(a == 0.8);
+        assertEquals(0.8, a);
     }
 
     /**
@@ -824,7 +824,7 @@ public class AcidEffectTest {
         EntityEquipment equip = mock(EntityEquipment.class);
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
-        assertTrue(a == 0D);
+        assertEquals(0D, a);
     }
 
     /**
