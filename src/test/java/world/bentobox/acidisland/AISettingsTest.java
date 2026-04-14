@@ -33,7 +33,7 @@ public class AISettingsTest {
     private AISettings s;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         MockBukkit.mock();
         s = new AISettings();
     }

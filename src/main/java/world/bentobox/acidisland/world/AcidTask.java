@@ -90,15 +90,15 @@ public class AcidTask {
     }
 
     void applyDamage(Entity e, long damage) {
-        if (e instanceof LivingEntity) {
-            double actualDamage = Math.max(0, damage - damage * AcidEffect.getDamageReduced((LivingEntity)e));
+        if (e instanceof LivingEntity livingEntity) {
+            double actualDamage = Math.max(0, damage - damage * AcidEffect.getDamageReduced(livingEntity));
             EntityDamageByAcidEvent event = new EntityDamageByAcidEvent(e, actualDamage, Acid.WATER);
             // Fire event
             Bukkit.getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                ((LivingEntity)e).damage(actualDamage);
+                livingEntity.damage(actualDamage);
             }
-        } else if (addon.getSettings().getAcidDestroyItemTime() > 0 && e instanceof Item){
+        } else if (addon.getSettings().getAcidDestroyItemTime() > 0 && e instanceof Item item) {
             // Item
             if (e.getLocation().getBlock().getType().equals(Material.WATER)) {
                 itemsInWater.putIfAbsent(e, damage + addon.getSettings().getAcidDestroyItemTime() * 1000);
@@ -107,7 +107,7 @@ public class AcidTask {
                     e.remove();
                     itemsInWater.remove(e);
                     // Fire event
-                    Bukkit.getPluginManager().callEvent(new ItemDestroyByAcidEvent((Item)e));
+                    Bukkit.getPluginManager().callEvent(new ItemDestroyByAcidEvent(item));
                 }
             } else {
                 itemsInWater.remove(e);
