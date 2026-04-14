@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -25,7 +24,6 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -139,7 +137,7 @@ public class AcidEffectTest {
 
         // Essentials
         mockedBukkit.when(Bukkit::getPluginManager).thenReturn(pim);
-        when(pim.getPlugin(eq("Essentials"))).thenReturn(essentials);
+        when(pim.getPlugin("Essentials")).thenReturn(essentials);
         when(essentials.getUser(any(Player.class))).thenReturn(essentialsUser);
 
         // Player
@@ -587,7 +585,7 @@ public class AcidEffectTest {
     void testGetDamageReducedFullDiamond() {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(20.0);
-        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        when(player.getAttribute(Attribute.ARMOR)).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
         when(equip.getHelmet()).thenReturn(new ItemStack(Material.DIAMOND_HELMET));
@@ -638,7 +636,7 @@ public class AcidEffectTest {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(20D);
         // Diamond armor
-        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        when(player.getAttribute(Attribute.ARMOR)).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
         when(equip.getHelmet()).thenReturn(new ItemStack(Material.DIAMOND_HELMET));
@@ -820,7 +818,7 @@ public class AcidEffectTest {
     void testGetDamageReducedNoArmor() {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(0D);
-        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        when(player.getAttribute(Attribute.ARMOR)).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
@@ -834,7 +832,7 @@ public class AcidEffectTest {
     void testGetDamageReducedPartialArmor() {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(8D); // partial armor
-        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        when(player.getAttribute(Attribute.ARMOR)).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getHelmet()).thenReturn(new ItemStack(Material.IRON_HELMET));
         // boots, chest, pants are null
