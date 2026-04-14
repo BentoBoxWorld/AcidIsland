@@ -108,58 +108,53 @@ public class AcidEffect implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        // Fast checks
-        if ((addon.getSettings().getAcidRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0)
-                || player.isDead() || player.getGameMode().equals(GameMode.CREATIVE)
+        if (isExemptFromAcid(player)) {
+            return;
+        }
+        handleRainExposure(player);
+        if (!burningPlayers.containsKey(player) && !isSafeFromAcid(player)) {
+            startAcidBurn(player);
+        }
+    }
+
+    private boolean isExemptFromAcid(Player player) {
+        return (addon.getSettings().getAcidRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0)
+                || player.isDead()
+                || player.getGameMode().equals(GameMode.CREATIVE)
                 || player.getGameMode().equals(GameMode.SPECTATOR)
                 || addon.getPlayers().isInTeleport(player.getUniqueId())
                 || !Util.sameWorld(addon.getOverWorld(), player.getWorld())
                 || (!player.isOp() && player.hasPermission("acidisland.mod.noburn"))
-                || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
+                || (player.isOp() && !addon.getSettings().isAcidDamageOp());
+    }
+
+    private void handleRainExposure(Player player) {
+        if (addon.getSettings().getAcidRainDamage() <= 0D || !addon.getOverWorld().hasStorm()) {
             return;
         }
-        // Slow checks
-        // Check for acid rain
-        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm()) {
-            if (isSafeFromRain(player)) {
-                wetPlayers.remove(player);
-            } else if (!wetPlayers.containsKey(player)) {
-                // Start hurting them
-                // Add to the list
-                wetPlayers.put(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000);
-                // This runnable continuously hurts the player even if
-                // they are not
-                // moving but are in acid rain.
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        // Check if it is still raining or player is safe or dead or there is no damage
-                        if (checkForRain(player)) {
-                            this.cancel();
-                        }
-
+        if (isSafeFromRain(player)) {
+            wetPlayers.remove(player);
+        } else if (!wetPlayers.containsKey(player)) {
+            wetPlayers.put(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (checkForRain(player)) {
+                        this.cancel();
                     }
-                }.runTaskTimer(addon.getPlugin(), 0L, 20L);
-            }
+                }
+            }.runTaskTimer(addon.getPlugin(), 0L, 20L);
+        }
+    }
 
-        }
-        // If they are already burning in acid then return
-        if (burningPlayers.containsKey(player) || isSafeFromAcid(player)) {
-            return;
-        }
-        // ACID!
-        // Put the player into the acid list
+    private void startAcidBurn(Player player) {
         burningPlayers.put(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000);
-        // This runnable continuously hurts the player even if they are not
-        // moving but are in acid.
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (continuouslyHurtPlayer(player)) {
                     this.cancel();
                 }
-
             }
         }.runTaskTimer(addon.getPlugin(), 0L, 20L);
     }
