@@ -2,7 +2,6 @@ package world.bentobox.acidisland.listeners;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyFloat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -140,8 +139,8 @@ public class LavaCheckTest {
         when(block.getType()).thenReturn(Material.STONE);
         // Run runnable
         argument.getValue().run();
-        verify(block).setType(eq(Material.WATER));
-        verify(world).playSound(eq(location), eq(Sound.ENTITY_CREEPER_PRIMED), eq(1F), eq(2F));
+        verify(block).setType(Material.WATER);
+        verify(world).playSound(location, Sound.ENTITY_CREEPER_PRIMED, 1F, 2F);
     }
 
     /**
