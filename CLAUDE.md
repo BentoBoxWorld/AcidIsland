@@ -45,7 +45,7 @@ public class MyTest {
     private MockedStatic<Bukkit> mockedBukkit;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         server = MockBukkit.mock();  // always first
         mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
         mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
@@ -54,7 +54,7 @@ public class MyTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         mockedBukkit.closeOnDemand();
         MockBukkit.unmock();
     }
@@ -68,6 +68,12 @@ Key rules:
 - MockBukkit's JUnit transitive deps are excluded in `pom.xml` to avoid JUnit 6 version conflicts with surefire.
 - Do not use `new ItemStack(Material.AIR)` in tests — use `null` for empty armor slots; Paper 1.21's ItemStack handles AIR differently.
 - Do not reference `world.bentobox.bentobox.lists.Flags` static fields in tests — the class static initializer requires full BentoBox initialization. Use the string flag ID instead (e.g., `"ANIMAL_NATURAL_SPAWN"`).
+- **No `public` modifier** on test methods (`@Test`, `@BeforeEach`, `@AfterEach`, `@BeforeAll`, `@AfterAll`) — JUnit 5 does not require it and SonarCloud flags it.
+- **No `throws Exception`** on `@BeforeEach`/`@AfterEach` unless the method body actually declares a checked exception.
+- **`assertDoesNotThrow(() -> ...)`** for tests that verify no exception is thrown — bare method calls with no assertions are flagged by SonarCloud.
+- **`assertEquals(expected, actual)`** for numeric equality — `assertTrue(x == y)` is flagged (S5785).
+- **`@Disabled` must include a reason string** — e.g. `@Disabled("PotionEffectType cannot be mocked without full server initialisation")`.
+- **Do not use `eq()` in `verify()` or `when()` for concrete values** — pass the value directly; `eq()` wrappers on non-matcher arguments are redundant and flagged (S6068).
 
 ### Locales
 
@@ -79,6 +85,27 @@ All 24 locale files use **MiniMessage format** (e.g., `<red>`, `<dark_blue>`). L
 - `src/main/resources/addon.yml` — BentoBox addon metadata and permissions (requires `api-version: 3.12.0`)
 - `src/main/resources/locales/` — 24 language translation files (MiniMessage format)
 - `src/main/resources/blueprints/` — Island templates (overworld, nether, end)
+
+## Code Conventions
+
+### Java 21 idioms (enforced by SonarCloud)
+
+- **Pattern-matching instanceof** — use `instanceof Type varName` instead of `instanceof Type` + explicit cast (S6201).
+- **`Math.clamp`** — use `Math.clamp(value, min, max)` instead of `Math.max(min, Math.min(max, value))` (S6885).
+- **`Map.putIfAbsent`** — replace `if (!map.containsKey(k)) { map.put(k, v); ... }` with `if (map.putIfAbsent(k, v) == null) { ... }` (S3824).
+- **`@Deprecated` annotation** — always include `since` and `forRemoval` arguments, e.g. `@Deprecated(since = "1.21", forRemoval = true)` (S6355). If `forRemoval` intent is unclear use `since` only (S1123).
+- **Reduce cognitive complexity** by extracting private helper methods rather than nesting conditions.
+
+### SonarCloud issue lookup
+
+Query open issues via the public API (no auth needed for public projects):
+
+```bash
+curl -s "https://sonarcloud.io/api/issues/search?componentKeys=BentoBoxWorld_AcidIsland&statuses=OPEN&impactSeverities=MEDIUM&ps=100" \
+  | python3 -c "import json,sys; [print(f'{i[\"component\"].split(\":\",1)[-1]}:{i.get(\"line\",\"?\")} [{i[\"rule\"]}] {i[\"message\"]}') for i in json.load(sys.stdin)[\"issues\"]]"
+```
+
+Change `impactSeverities` to `HIGH`, `MEDIUM`, or `LOW` as needed.
 
 ## CI
 
