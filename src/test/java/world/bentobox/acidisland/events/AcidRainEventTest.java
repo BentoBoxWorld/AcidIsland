@@ -49,18 +49,18 @@ public class AcidRainEventTest {
 
     @Test
     void testGetTotalDamage() {
-        assertTrue(e.getRainDamage() == 10D);
+        assertEquals(10D, e.getRainDamage());
     }
 
     @Test
     void testGetProtection() {
-        assertTrue(e.getProtection() == 5D);
+        assertEquals(5D, e.getProtection());
     }
 
     @Test
     void testSetTotalDamage() {
         e.setRainDamage(50);
-        assertTrue(e.getRainDamage() == 50D);
+        assertEquals(50D, e.getRainDamage());
     }
 
     @Test
