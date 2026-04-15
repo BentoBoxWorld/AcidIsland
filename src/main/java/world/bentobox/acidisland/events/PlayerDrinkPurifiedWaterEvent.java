@@ -3,21 +3,20 @@ package world.bentobox.acidisland.events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 
 import world.bentobox.bentobox.api.events.IslandBaseEvent;
 import world.bentobox.bentobox.database.objects.Island;
 
 /**
- * Fired when an ItemStack (water bottle or bucket) is filled with acid water.
- * Cancel this event to prevent the acid bottle from being given to the player.
- * @author Poslovitch
- * @since 1.0
+ * Fired when a player drinks purified water from a bottle.
+ * Cancel this event to prevent the healing from being applied.
+ * @author tastybento
+ * @since 1.21
  */
-public class ItemFillWithAcidEvent extends IslandBaseEvent implements Cancellable {
+public class PlayerDrinkPurifiedWaterEvent extends IslandBaseEvent implements Cancellable {
 
     private final Player player;
-    private final ItemStack item;
+    private double healAmount;
     private boolean cancelled;
     private static final HandlerList handlers = new HandlerList();
 
@@ -30,26 +29,34 @@ public class ItemFillWithAcidEvent extends IslandBaseEvent implements Cancellabl
         return handlers;
     }
 
-    public ItemFillWithAcidEvent(Island island, Player player, ItemStack item) {
+    public PlayerDrinkPurifiedWaterEvent(Island island, Player player, double healAmount) {
         super(island);
         this.player = player;
-        this.item = item;
+        this.healAmount = healAmount;
     }
 
     /**
-     * Gets the player who triggered the event
-     * @return the player who triggered the event
+     * Gets the player who drank purified water
+     * @return the player
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * Gets the item that will be acid-ified
-     * @return the item that will be acid-ified
+     * Gets the amount of health that will be restored
+     * @return heal amount in half-hearts
      */
-    public ItemStack getItem() {
-        return item;
+    public double getHealAmount() {
+        return healAmount;
+    }
+
+    /**
+     * Sets the amount of health that will be restored
+     * @param healAmount new heal amount in half-hearts
+     */
+    public void setHealAmount(double healAmount) {
+        this.healAmount = healAmount;
     }
 
     @Override

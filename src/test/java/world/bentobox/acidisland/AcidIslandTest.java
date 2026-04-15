@@ -62,6 +62,7 @@ import world.bentobox.bentobox.managers.CommandsManager;
 import world.bentobox.bentobox.managers.FlagsManager;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
+import world.bentobox.bentobox.managers.LocalesManager;
 import world.bentobox.bentobox.managers.RanksManager;
 
 /**
@@ -91,6 +92,8 @@ public class AcidIslandTest {
     private Settings settings;
     @Mock
     private RanksManager rm;
+    @Mock
+    private LocalesManager localesManager;
 
     private static AbstractDatabaseHandler<Object> h;
     private static MockedStatic<DatabaseSetup> mockedDbSetup;
@@ -216,6 +219,9 @@ public class AcidIslandTest {
 
         // Settings
         when(plugin.getSettings()).thenReturn(settings);
+        // Locales
+        when(plugin.getLocalesManager()).thenReturn(localesManager);
+        when(localesManager.getOrDefault(any(), any())).thenAnswer(inv -> inv.getArgument(1));
     }
 
     /**

@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import world.bentobox.acidisland.commands.IslandAboutCommand;
 import world.bentobox.acidisland.listeners.AcidEffect;
 import world.bentobox.acidisland.listeners.LavaCheck;
+import world.bentobox.acidisland.listeners.PurifiedWaterListener;
 import world.bentobox.acidisland.world.AcidBiomeProvider;
 import world.bentobox.acidisland.world.AcidTask;
 import world.bentobox.acidisland.world.ChunkGeneratorWorld;
@@ -103,6 +104,7 @@ public class AcidIsland extends GameModeAddon {
         // Acid Effects
         registerListener(new AcidEffect(this));
         registerListener(new LavaCheck(this));
+        registerListener(new PurifiedWaterListener(this));
         // Burn everything
         acidTask = new AcidTask(this);
     }
