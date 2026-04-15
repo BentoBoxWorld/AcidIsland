@@ -29,7 +29,10 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.block.CauldronLevelChangeEvent.ChangeReason;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -57,6 +60,7 @@ import org.mockito.quality.Strictness;
 import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.ItemFillWithAcidEvent;
+import world.bentobox.acidisland.events.PlayerDrinkPurifiedWaterEvent;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.managers.IslandsManager;
@@ -570,14 +574,53 @@ class PurifiedWaterListenerTest {
     // -----------------------------------------------------------------------
 
     @Test
-    void testBucketFillInAcidWorldGivesAcidBucket() {
+    void testBucketFillFromOceanGivesAcidBucket() {
         ItemStack waterBucket = mock(ItemStack.class);
         when(waterBucket.getType()).thenReturn(Material.WATER_BUCKET);
-        when(waterBucket.getItemMeta()).thenReturn(null); // plain, untagged
+        when(block.getType()).thenReturn(Material.WATER);
 
         PlayerBucketFillEvent e = mock(PlayerBucketFillEvent.class);
         when(e.getPlayer()).thenReturn(player);
         when(e.getItemStack()).thenReturn(waterBucket);
+        when(e.getBlock()).thenReturn(block);
+
+        listener.onBucketFill(e);
+
+        verify(pluginManager).callEvent(any(ItemFillWithAcidEvent.class));
+        verify(e).setItemStack(any(ItemStack.class));
+    }
+
+    @Test
+    void testBucketFillFromPurifiedCauldronGivesPurifiedBucket() {
+        listener.getCauldronPurity().put(location, true);
+
+        ItemStack waterBucket = mock(ItemStack.class);
+        when(waterBucket.getType()).thenReturn(Material.WATER_BUCKET);
+        when(block.getType()).thenReturn(Material.WATER_CAULDRON);
+
+        PlayerBucketFillEvent e = mock(PlayerBucketFillEvent.class);
+        when(e.getPlayer()).thenReturn(player);
+        when(e.getItemStack()).thenReturn(waterBucket);
+        when(e.getBlock()).thenReturn(block);
+
+        listener.onBucketFill(e);
+
+        verify(pluginManager, never()).callEvent(any(ItemFillWithAcidEvent.class));
+        verify(e).setItemStack(any(ItemStack.class));
+    }
+
+    @Test
+    void testBucketFillFromAcidCauldronGivesAcidBucket() {
+        listener.getCauldronPurity().put(location, false);
+
+        ItemStack waterBucket = mock(ItemStack.class);
+        when(waterBucket.getType()).thenReturn(Material.WATER_BUCKET);
+        when(block.getType()).thenReturn(Material.WATER_CAULDRON);
+
+        PlayerBucketFillEvent e = mock(PlayerBucketFillEvent.class);
+        when(e.getPlayer()).thenReturn(player);
+        when(e.getItemStack()).thenReturn(waterBucket);
+        when(e.getBlock()).thenReturn(block);
 
         listener.onBucketFill(e);
 
@@ -636,13 +679,125 @@ class PurifiedWaterListenerTest {
             return null;
         }).when(pluginManager).callEvent(any(ItemFillWithAcidEvent.class));
 
+        when(block.getType()).thenReturn(Material.WATER);
+
         PlayerBucketFillEvent e = mock(PlayerBucketFillEvent.class);
         when(e.getPlayer()).thenReturn(player);
         when(e.getItemStack()).thenReturn(waterBucket);
+        when(e.getBlock()).thenReturn(block);
 
         listener.onBucketFill(e);
 
         verify(e, never()).setItemStack(any());
+    }
+
+    // -----------------------------------------------------------------------
+    // PlayerItemConsumeEvent — drinking purified water
+    // -----------------------------------------------------------------------
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void testDrinkPurifiedBottleHealsPlayer() {
+        ItemStack purifiedBottle = mock(ItemStack.class);
+        when(purifiedBottle.getType()).thenReturn(Material.POTION);
+        ItemMeta meta = mock(ItemMeta.class);
+        PersistentDataContainer pdc = mock(PersistentDataContainer.class);
+        when(purifiedBottle.getItemMeta()).thenReturn(meta);
+        when(meta.getPersistentDataContainer()).thenReturn(pdc);
+        when(pdc.get(any(), any())).thenReturn(PurifiedWaterListener.PURIFIED);
+
+        AttributeInstance maxHealthAttr = mock(AttributeInstance.class);
+        when(maxHealthAttr.getValue()).thenReturn(20.0);
+        when(player.getAttribute(Attribute.MAX_HEALTH)).thenReturn(maxHealthAttr);
+        when(player.getHealth()).thenReturn(10.0);
+        when(settings.getPurifiedWaterHeal()).thenReturn(4.0);
+
+        PlayerItemConsumeEvent e = mock(PlayerItemConsumeEvent.class);
+        when(e.getItem()).thenReturn(purifiedBottle);
+        when(e.getPlayer()).thenReturn(player);
+
+        listener.onDrinkPurified(e);
+
+        verify(pluginManager).callEvent(any(PlayerDrinkPurifiedWaterEvent.class));
+        verify(player).setHealth(14.0); // 10 + 4
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void testDrinkPurifiedBottleCapsAtMaxHealth() {
+        ItemStack purifiedBottle = mock(ItemStack.class);
+        when(purifiedBottle.getType()).thenReturn(Material.POTION);
+        ItemMeta meta = mock(ItemMeta.class);
+        PersistentDataContainer pdc = mock(PersistentDataContainer.class);
+        when(purifiedBottle.getItemMeta()).thenReturn(meta);
+        when(meta.getPersistentDataContainer()).thenReturn(pdc);
+        when(pdc.get(any(), any())).thenReturn(PurifiedWaterListener.PURIFIED);
+
+        AttributeInstance maxHealthAttr = mock(AttributeInstance.class);
+        when(maxHealthAttr.getValue()).thenReturn(20.0);
+        when(player.getAttribute(Attribute.MAX_HEALTH)).thenReturn(maxHealthAttr);
+        when(player.getHealth()).thenReturn(18.0);
+        when(settings.getPurifiedWaterHeal()).thenReturn(4.0);
+
+        PlayerItemConsumeEvent e = mock(PlayerItemConsumeEvent.class);
+        when(e.getItem()).thenReturn(purifiedBottle);
+        when(e.getPlayer()).thenReturn(player);
+
+        listener.onDrinkPurified(e);
+
+        verify(player).setHealth(20.0); // capped at max
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void testDrinkPurifiedEventCancellable() {
+        ItemStack purifiedBottle = mock(ItemStack.class);
+        when(purifiedBottle.getType()).thenReturn(Material.POTION);
+        ItemMeta meta = mock(ItemMeta.class);
+        PersistentDataContainer pdc = mock(PersistentDataContainer.class);
+        when(purifiedBottle.getItemMeta()).thenReturn(meta);
+        when(meta.getPersistentDataContainer()).thenReturn(pdc);
+        when(pdc.get(any(), any())).thenReturn(PurifiedWaterListener.PURIFIED);
+
+        Mockito.doAnswer(inv -> {
+            PlayerDrinkPurifiedWaterEvent event = inv.getArgument(0);
+            event.setCancelled(true);
+            return null;
+        }).when(pluginManager).callEvent(any(PlayerDrinkPurifiedWaterEvent.class));
+
+        PlayerItemConsumeEvent e = mock(PlayerItemConsumeEvent.class);
+        when(e.getItem()).thenReturn(purifiedBottle);
+        when(e.getPlayer()).thenReturn(player);
+
+        listener.onDrinkPurified(e);
+
+        verify(player, never()).setHealth(any(Double.class));
+    }
+
+    @Test
+    void testDrinkNonPurifiedBottleIgnored() {
+        ItemStack acidBottle = acidBottleMock();
+
+        PlayerItemConsumeEvent e = mock(PlayerItemConsumeEvent.class);
+        when(e.getItem()).thenReturn(acidBottle);
+        when(e.getPlayer()).thenReturn(player);
+
+        listener.onDrinkPurified(e);
+
+        verify(pluginManager, never()).callEvent(any(PlayerDrinkPurifiedWaterEvent.class));
+        verify(player, never()).setHealth(any(Double.class));
+    }
+
+    @Test
+    void testDrinkPurifiedIgnoredWhenFeatureDisabled() {
+        when(settings.isPurifiedWaterEnabled()).thenReturn(false);
+
+        PlayerItemConsumeEvent e = mock(PlayerItemConsumeEvent.class);
+        when(e.getPlayer()).thenReturn(player);
+        when(e.getItem()).thenReturn(mock(ItemStack.class));
+
+        assertDoesNotThrow(() -> listener.onDrinkPurified(e));
+        verify(player, never()).setHealth(any(Double.class));
     }
 
     // -----------------------------------------------------------------------

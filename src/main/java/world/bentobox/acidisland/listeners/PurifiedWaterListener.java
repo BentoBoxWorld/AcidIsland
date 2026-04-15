@@ -23,6 +23,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.PointedDripstone;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,6 +34,7 @@ import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.PlayerInventory;
@@ -46,6 +48,7 @@ import org.bukkit.potion.PotionType;
 
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.ItemFillWithAcidEvent;
+import world.bentobox.acidisland.events.PlayerDrinkPurifiedWaterEvent;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.util.Util;
 
@@ -167,7 +170,7 @@ public class PurifiedWaterListener implements Listener {
     ItemStack makePurifiedBottle() {
         ItemStack bottle = new ItemStack(Material.POTION);
         PotionMeta meta = (PotionMeta) bottle.getItemMeta();
-        meta.setBasePotionType(PotionType.HEALING);
+        meta.setBasePotionType(PotionType.WATER);
         meta.lore(List.of(lore("lore-purified")));
         meta.getPersistentDataContainer().set(WATER_TYPE_KEY, PersistentDataType.STRING, PURIFIED);
         bottle.setItemMeta(meta);
@@ -340,12 +343,41 @@ public class PurifiedWaterListener implements Listener {
         if (result == null || result.getType() != Material.WATER_BUCKET) return;
 
         Player player = e.getPlayer();
-        ItemFillWithAcidEvent fillEvent = new ItemFillWithAcidEvent(
-                getIsland(player).orElse(null), player, makeAcidBucket());
-        Bukkit.getPluginManager().callEvent(fillEvent);
-        if (fillEvent.isCancelled()) return;
 
-        e.setItemStack(makeAcidBucket());
+        // A purified cauldron yields a purified bucket; everything else is acid.
+        boolean purified = e.getBlock().getType() == Material.WATER_CAULDRON
+                && cauldronPurity.getOrDefault(e.getBlock().getLocation(), false);
+
+        if (purified) {
+            e.setItemStack(makePurifiedBucket());
+        } else {
+            ItemFillWithAcidEvent fillEvent = new ItemFillWithAcidEvent(
+                    getIsland(player).orElse(null), player, makeAcidBucket());
+            Bukkit.getPluginManager().callEvent(fillEvent);
+            if (fillEvent.isCancelled()) return;
+            e.setItemStack(makeAcidBucket());
+        }
+    }
+
+    /**
+     * When a player drinks a purified water bottle, apply a configurable health boost.
+     * Vanilla handles returning the glass bottle; we only need to add the heal.
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onDrinkPurified(PlayerItemConsumeEvent e) {
+        if (!addon.getSettings().isPurifiedWaterEnabled()) return;
+        ItemStack item = e.getItem();
+        if (item.getType() != Material.POTION || !isPurified(item)) return;
+
+        Player player = e.getPlayer();
+        double healAmount = addon.getSettings().getPurifiedWaterHeal();
+        PlayerDrinkPurifiedWaterEvent drinkEvent = new PlayerDrinkPurifiedWaterEvent(
+                getIsland(player).orElse(null), player, healAmount);
+        Bukkit.getPluginManager().callEvent(drinkEvent);
+        if (drinkEvent.isCancelled()) return;
+
+        double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
+        player.setHealth(Math.min(maxHealth, player.getHealth() + drinkEvent.getHealAmount()));
     }
 
     /**
