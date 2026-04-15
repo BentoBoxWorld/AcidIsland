@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -25,7 +24,6 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -128,7 +126,7 @@ public class AcidEffectTest {
     private MockedStatic<Util> mockedUtil;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mockServer = MockBukkit.mock();
         mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
         mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
@@ -139,7 +137,7 @@ public class AcidEffectTest {
 
         // Essentials
         mockedBukkit.when(Bukkit::getPluginManager).thenReturn(pim);
-        when(pim.getPlugin(eq("Essentials"))).thenReturn(essentials);
+        when(pim.getPlugin("Essentials")).thenReturn(essentials);
         when(essentials.getUser(any(Player.class))).thenReturn(essentialsUser);
 
         // Player
@@ -203,7 +201,7 @@ public class AcidEffectTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         mockedUtil.closeOnDemand();
         mockedBukkit.closeOnDemand();
         MockBukkit.unmock();
@@ -213,7 +211,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerDeath(org.bukkit.event.entity.PlayerDeathEvent)}.
      */
     @Test
-    public void testOnPlayerDeath() {
+    void testOnPlayerDeath() {
         PlayerDeathEvent e = mock(PlayerDeathEvent.class);
         ae.onPlayerDeath(e);
         verify(e, times(2)).getEntity();
@@ -223,19 +221,19 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnSeaBounce() {
+    void testOnSeaBounce() {
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onSeaBounce(e);
         ArgumentCaptor<Vector> argument = ArgumentCaptor.forClass(Vector.class);
         verify(player).setVelocity(argument.capture());
-        assertTrue(argument.getValue().getBlockY() == 1D);
+        assertEquals(1D, argument.getValue().getBlockY());
     }
 
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnSeaBounceCreative() {
+    void testOnSeaBounceCreative() {
         when(player.getGameMode()).thenReturn(GameMode.CREATIVE);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onSeaBounce(e);
@@ -246,7 +244,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnSeaBounceSpectator() {
+    void testOnSeaBounceSpectator() {
         when(player.getGameMode()).thenReturn(GameMode.SPECTATOR);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onSeaBounce(e);
@@ -257,7 +255,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnSeaBounceWrongWorld() {
+    void testOnSeaBounceWrongWorld() {
         when(addon.getOverWorld()).thenReturn(mock(World.class));
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onSeaBounce(e);
@@ -268,7 +266,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onSeaBounce(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnSeaBounceNotAtBottom() {
+    void testOnSeaBounceNotAtBottom() {
         when(location.getBlockY()).thenReturn(10);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onSeaBounce(e);
@@ -279,7 +277,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveAcidAndRainDamage() {
+    void testOnPlayerMoveAcidAndRainDamage() {
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
         verify(settings, times(2)).getAcidDamageDelay();
@@ -289,7 +287,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveVisitorNoAcidAndRainDamage() {
+    void testOnPlayerMoveVisitorNoAcidAndRainDamage() {
         when(im.userIsOnIsland(any(), any())).thenReturn(false);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -300,7 +298,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveVisitorAcidAndRainDamage() {
+    void testOnPlayerMoveVisitorAcidAndRainDamage() {
         // No protection against CUSTOM damage
         when(iwm.getIvSettings(any())).thenReturn(Collections.emptyList());
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
@@ -312,7 +310,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveGodModeNoAcidAndRainDamage() {
+    void testOnPlayerMoveGodModeNoAcidAndRainDamage() {
         when(essentialsUser.isGodModeEnabled()).thenReturn(true);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -323,7 +321,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveDryNoDamage() {
+    void testOnPlayerMoveDryNoDamage() {
         when(block.getHumidity()).thenReturn(0D);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -334,7 +332,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveSnowDamage() {
+    void testOnPlayerMoveSnowDamage() {
         when(block.getTemperature()).thenReturn(0D); // Cold
         when(settings.isAcidDamageSnow()).thenReturn(true);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
@@ -346,7 +344,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveNoSnowDamage() {
+    void testOnPlayerMoveNoSnowDamage() {
         when(block.getTemperature()).thenReturn(0D); // Cold
         when(settings.isAcidDamageSnow()).thenReturn(false);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
@@ -358,7 +356,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveHelmetProtection() {
+    void testOnPlayerMoveHelmetProtection() {
         when(inv.getHelmet()).thenReturn(new ItemStack(Material.DIAMOND_HELMET));
         when(player.getInventory()).thenReturn(inv);
         when(settings.isHelmetProtection()).thenReturn(true);
@@ -371,7 +369,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveNoHelmetProtection() {
+    void testOnPlayerMoveNoHelmetProtection() {
         when(inv.getHelmet()).thenReturn(new ItemStack(Material.CARVED_PUMPKIN));
         when(player.getInventory()).thenReturn(inv);
         when(settings.isHelmetProtection()).thenReturn(true);
@@ -384,7 +382,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveUnderObject() {
+    void testOnPlayerMoveUnderObject() {
         when(world.getBlockAt(anyInt(), anyInt(),anyInt())).thenReturn(solidBlock);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -395,7 +393,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveAcidRainWrongWorld() {
+    void testOnPlayerMoveAcidRainWrongWorld() {
         World nether = mock(World.class);
         when(nether.getName()).thenReturn("world_nether");
         when(nether.getEnvironment()).thenReturn(Environment.NETHER);
@@ -411,7 +409,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveAcidRainWrongWorldEnd() {
+    void testOnPlayerMoveAcidRainWrongWorldEnd() {
         World end = mock(World.class);
         when(end.getName()).thenReturn("world_end");
         when(end.getEnvironment()).thenReturn(Environment.THE_END);
@@ -427,7 +425,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveNoAcidRain() {
+    void testOnPlayerMoveNoAcidRain() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -438,7 +436,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveNoAcidDamage() {
+    void testOnPlayerMoveNoAcidDamage() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         when(settings.getAcidDamage()).thenReturn(0);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
@@ -450,7 +448,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveBubbleColumn() {
+    void testOnPlayerMoveBubbleColumn() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         when(block.getType()).thenReturn(Material.BUBBLE_COLUMN);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
@@ -462,7 +460,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveSnow() {
+    void testOnPlayerMoveSnow() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         when(block.getType()).thenReturn(Material.SNOW);
         when(settings.isAcidDamageSnow()).thenReturn(true);
@@ -475,7 +473,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveNoSnowAcidDamage() {
+    void testOnPlayerMoveNoSnowAcidDamage() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         when(block.getType()).thenReturn(Material.SNOW);
         when(settings.isAcidDamageSnow()).thenReturn(false);
@@ -488,7 +486,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveInBoat() {
+    void testOnPlayerMoveInBoat() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         Entity boat = mock(Boat.class);
         when(boat.getType()).thenReturn(EntityType.ACACIA_BOAT);
@@ -502,7 +500,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveNotInBoat() {
+    void testOnPlayerMoveNotInBoat() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         Entity horse = mock(Horse.class);
         when(horse.getType()).thenReturn(EntityType.HORSE);
@@ -516,7 +514,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveFullArmor() {
+    void testOnPlayerMoveFullArmor() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         when(settings.isFullArmorProtection()).thenReturn(true);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
@@ -528,7 +526,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    public void testOnPlayerMoveNotFullArmor() {
+    void testOnPlayerMoveNotFullArmor() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         when(settings.isFullArmorProtection()).thenReturn(true);
         ItemStack[] partial = { new ItemStack(Material.CHAINMAIL_HELMET), null };
@@ -543,7 +541,7 @@ public class AcidEffectTest {
      */
     @Test
     @Disabled("Cannot be tested because of the PotionEffectType issue")
-    public void testOnPlayerMoveActivePotions() {
+    void testOnPlayerMoveActivePotions() {
         Collection<PotionEffect> potions = new ArrayList<>();
         potions.add(new PotionEffect(PotionEffectType.WATER_BREATHING, 0, 0, false, false, false));
         when(player.getActivePotionEffects()).thenReturn(potions);
@@ -557,7 +555,7 @@ public class AcidEffectTest {
      */
     @Test
     @Disabled("Cannot be tested because of the PotionEffectType issue")
-    public void testOnPlayerMoveActivePotionsConduit() {
+    void testOnPlayerMoveActivePotionsConduit() {
         Collection<PotionEffect> potions = new ArrayList<>();
         potions.add(new PotionEffect(PotionEffectType.CONDUIT_POWER, 0, 0, false, false, false));
         when(player.getActivePotionEffects()).thenReturn(potions);
@@ -571,7 +569,7 @@ public class AcidEffectTest {
      */
     @Test
     @Disabled("Cannot be tested because of the PotionEffectType issue")
-    public void testOnPlayerMoveActivePotionsBadOmen() {
+    void testOnPlayerMoveActivePotionsBadOmen() {
         Collection<PotionEffect> potions = new ArrayList<>();
         potions.add(new PotionEffect(PotionEffectType.BAD_OMEN, 0, 0, false, false, false));
         when(player.getActivePotionEffects()).thenReturn(potions);
@@ -584,10 +582,10 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#getDamageReduced(org.bukkit.entity.LivingEntity)}.
      */
     @Test
-    public void testGetDamageReducedFullDiamond() {
+    void testGetDamageReducedFullDiamond() {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(20.0);
-        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        when(player.getAttribute(Attribute.ARMOR)).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
         when(equip.getHelmet()).thenReturn(new ItemStack(Material.DIAMOND_HELMET));
@@ -595,14 +593,14 @@ public class AcidEffectTest {
         when(equip.getChestplate()).thenReturn(new ItemStack(Material.DIAMOND_CHESTPLATE));
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
-        assertTrue(a == 0.8);
+        assertEquals(0.8, a);
     }
 
     /**
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#checkForRain(Player)}.
      */
     @Test
-    public void testCheckForRain() {
+    void testCheckForRain() {
         when(world.hasStorm()).thenReturn(true);
         when(player.isDead()).thenReturn(false);
         when(settings.getAcidRainDamage()).thenReturn(10);
@@ -634,11 +632,11 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#checkForRain(Player)}.
      */
     @Test
-    public void testCheckForRainWetPlayer() {
+    void testCheckForRainWetPlayer() {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(20D);
         // Diamond armor
-        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        when(player.getAttribute(Attribute.ARMOR)).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getBoots()).thenReturn(new ItemStack(Material.DIAMOND_BOOTS));
         when(equip.getHelmet()).thenReturn(new ItemStack(Material.DIAMOND_HELMET));
@@ -661,7 +659,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#isSafeFromAcid(Player)}.
      */
     @Test
-    public void testIsSafeFromAcid() {
+    void testIsSafeFromAcid() {
         assertFalse(ae.isSafeFromAcid(player));
     }
 
@@ -669,7 +667,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#isSafeFromAcid(Player)}.
      */
     @Test
-    public void testIsSafeFromAcidEssentialGodMode() {
+    void testIsSafeFromAcidEssentialGodMode() {
         when(essentialsUser.isGodModeEnabled()).thenReturn(true);
         assertTrue(ae.isSafeFromAcid(player));
     }
@@ -678,7 +676,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#isSafeFromAcid(Player)}.
      */
     @Test
-    public void testIsSafeFromAcidBoat() {
+    void testIsSafeFromAcidBoat() {
         when(player.isInsideVehicle()).thenReturn(true);
         Entity boat = mock(Entity.class);
         when(boat.getType()).thenReturn(EntityType.ACACIA_BOAT);
@@ -690,7 +688,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#isSafeFromAcid(Player)}.
      */
     @Test
-    public void testIsSafeFromAcidChestBoat() {
+    void testIsSafeFromAcidChestBoat() {
         when(player.isInsideVehicle()).thenReturn(true);
         Entity boat = mock(Entity.class);
         when(boat.getType()).thenReturn(EntityType.ACACIA_CHEST_BOAT);
@@ -702,7 +700,7 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#isSafeFromAcid(Player)}.
      */
     @Test
-    public void testIsSafeFromAcidFullArmor() {
+    void testIsSafeFromAcidFullArmor() {
         when(settings.isFullArmorProtection()).thenReturn(true);
         ItemStack[] armor = { new ItemStack(Material.CHAINMAIL_CHESTPLATE), new ItemStack(Material.CHAINMAIL_HELMET) };
         when(inv.getArmorContents()).thenReturn(armor);
@@ -716,7 +714,7 @@ public class AcidEffectTest {
      * Test that dead player is ignored by onPlayerMove.
      */
     @Test
-    public void testOnPlayerMoveDeadPlayer() {
+    void testOnPlayerMoveDeadPlayer() {
         when(player.isDead()).thenReturn(true);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -727,7 +725,7 @@ public class AcidEffectTest {
      * Test that player in teleport is ignored by onPlayerMove.
      */
     @Test
-    public void testOnPlayerMoveInTeleport() {
+    void testOnPlayerMoveInTeleport() {
         when(pm.isInTeleport(any())).thenReturn(true);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
         ae.onPlayerMove(e);
@@ -738,7 +736,7 @@ public class AcidEffectTest {
      * Test that player with noburn permission is ignored.
      */
     @Test
-    public void testOnPlayerMoveNoburnPermission() {
+    void testOnPlayerMoveNoburnPermission() {
         when(player.isOp()).thenReturn(false);
         when(player.hasPermission("acidisland.mod.noburn")).thenReturn(true);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
@@ -750,7 +748,7 @@ public class AcidEffectTest {
      * Test that OP player with acidDamageOp=false is ignored.
      */
     @Test
-    public void testOnPlayerMoveOpNoDamage() {
+    void testOnPlayerMoveOpNoDamage() {
         when(player.isOp()).thenReturn(true);
         when(settings.isAcidDamageOp()).thenReturn(false);
         PlayerMoveEvent e = new PlayerMoveEvent(player, from, to);
@@ -762,7 +760,7 @@ public class AcidEffectTest {
      * Test isSafeFromAcid when player is not in water (standing on air).
      */
     @Test
-    public void testIsSafeFromAcidNotInWater() {
+    void testIsSafeFromAcidNotInWater() {
         when(block.getType()).thenReturn(Material.AIR);
         when(block.getRelative(any())).thenReturn(airBlock);
         assertTrue(ae.isSafeFromAcid(player));
@@ -772,7 +770,7 @@ public class AcidEffectTest {
      * Test isSafeFromAcid when player is in creative mode.
      */
     @Test
-    public void testIsSafeFromAcidCreative() {
+    void testIsSafeFromAcidCreative() {
         when(player.getGameMode()).thenReturn(GameMode.CREATIVE);
         assertTrue(ae.isSafeFromAcid(player));
     }
@@ -781,7 +779,7 @@ public class AcidEffectTest {
      * Test isSafeFromAcid for visitors with CUSTOM protection and not on island.
      */
     @Test
-    public void testIsSafeFromAcidVisitorProtection() {
+    void testIsSafeFromAcidVisitorProtection() {
         when(im.userIsOnIsland(any(), any())).thenReturn(false);
         assertTrue(ae.isSafeFromAcid(player));
     }
@@ -790,7 +788,7 @@ public class AcidEffectTest {
      * Test checkForRain returns true (safe) when no storm.
      */
     @Test
-    public void testCheckForRainNoStorm() {
+    void testCheckForRainNoStorm() {
         when(world.hasStorm()).thenReturn(false);
         assertTrue(ae.checkForRain(player));
     }
@@ -799,7 +797,7 @@ public class AcidEffectTest {
      * Test checkForRain returns true (safe) when player is dead.
      */
     @Test
-    public void testCheckForRainDeadPlayer() {
+    void testCheckForRainDeadPlayer() {
         when(player.isDead()).thenReturn(true);
         assertTrue(ae.checkForRain(player));
     }
@@ -808,7 +806,7 @@ public class AcidEffectTest {
      * Test checkForRain returns true (safe) when rain damage is zero.
      */
     @Test
-    public void testCheckForRainZeroDamage() {
+    void testCheckForRainZeroDamage() {
         when(settings.getAcidRainDamage()).thenReturn(0);
         assertTrue(ae.checkForRain(player));
     }
@@ -817,24 +815,24 @@ public class AcidEffectTest {
      * Test getDamageReduced returns 0 when no armor.
      */
     @Test
-    public void testGetDamageReducedNoArmor() {
+    void testGetDamageReducedNoArmor() {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(0D);
-        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        when(player.getAttribute(Attribute.ARMOR)).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(player.getEquipment()).thenReturn(equip);
         double a = AcidEffect.getDamageReduced(player);
-        assertTrue(a == 0D);
+        assertEquals(0D, a);
     }
 
     /**
      * Test getDamageReduced with partial armor (some null slots).
      */
     @Test
-    public void testGetDamageReducedPartialArmor() {
+    void testGetDamageReducedPartialArmor() {
         AttributeInstance value = mock(AttributeInstance.class);
         when(value.getValue()).thenReturn(8D); // partial armor
-        when(player.getAttribute(eq(Attribute.ARMOR))).thenReturn(value);
+        when(player.getAttribute(Attribute.ARMOR)).thenReturn(value);
         EntityEquipment equip = mock(EntityEquipment.class);
         when(equip.getHelmet()).thenReturn(new ItemStack(Material.IRON_HELMET));
         // boots, chest, pants are null

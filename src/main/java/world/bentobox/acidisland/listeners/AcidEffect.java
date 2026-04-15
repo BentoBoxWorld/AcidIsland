@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World.Environment;
@@ -108,58 +109,52 @@ public class AcidEffect implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        // Fast checks
-        if ((addon.getSettings().getAcidRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0)
-                || player.isDead() || player.getGameMode().equals(GameMode.CREATIVE)
+        if (isExemptFromAcid(player)) {
+            return;
+        }
+        handleRainExposure(player);
+        if (!burningPlayers.containsKey(player) && !isSafeFromAcid(player)) {
+            startAcidBurn(player);
+        }
+    }
+
+    private boolean isExemptFromAcid(Player player) {
+        return (addon.getSettings().getAcidRainDamage() == 0 && addon.getSettings().getAcidDamage() == 0)
+                || player.isDead()
+                || player.getGameMode().equals(GameMode.CREATIVE)
                 || player.getGameMode().equals(GameMode.SPECTATOR)
                 || addon.getPlayers().isInTeleport(player.getUniqueId())
                 || !Util.sameWorld(addon.getOverWorld(), player.getWorld())
                 || (!player.isOp() && player.hasPermission("acidisland.mod.noburn"))
-                || (player.isOp() && !addon.getSettings().isAcidDamageOp())) {
+                || (player.isOp() && !addon.getSettings().isAcidDamageOp());
+    }
+
+    private void handleRainExposure(Player player) {
+        if (addon.getSettings().getAcidRainDamage() <= 0D || !addon.getOverWorld().hasStorm()) {
             return;
         }
-        // Slow checks
-        // Check for acid rain
-        if (addon.getSettings().getAcidRainDamage() > 0D && addon.getOverWorld().hasStorm()) {
-            if (isSafeFromRain(player)) {
-                wetPlayers.remove(player);
-            } else if (!wetPlayers.containsKey(player)) {
-                // Start hurting them
-                // Add to the list
-                wetPlayers.put(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000);
-                // This runnable continuously hurts the player even if
-                // they are not
-                // moving but are in acid rain.
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        // Check if it is still raining or player is safe or dead or there is no damage
-                        if (checkForRain(player)) {
-                            this.cancel();
-                        }
-
+        if (isSafeFromRain(player)) {
+            wetPlayers.remove(player);
+        } else if (wetPlayers.putIfAbsent(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000L) == null) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (checkForRain(player)) {
+                        this.cancel();
                     }
-                }.runTaskTimer(addon.getPlugin(), 0L, 20L);
-            }
+                }
+            }.runTaskTimer(addon.getPlugin(), 0L, 20L);
+        }
+    }
 
-        }
-        // If they are already burning in acid then return
-        if (burningPlayers.containsKey(player) || isSafeFromAcid(player)) {
-            return;
-        }
-        // ACID!
-        // Put the player into the acid list
+    private void startAcidBurn(Player player) {
         burningPlayers.put(player, System.currentTimeMillis() + addon.getSettings().getAcidDamageDelay() * 1000);
-        // This runnable continuously hurts the player even if they are not
-        // moving but are in acid.
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (continuouslyHurtPlayer(player)) {
                     this.cancel();
                 }
-
             }
         }.runTaskTimer(addon.getPlugin(), 0L, 20L);
     }
@@ -180,8 +175,7 @@ public class AcidEffect implements Listener {
 
             User user = User.getInstance(player);
             // Get the percentage reduction and ensure the value is between 0 and 100
-            double percent = (100
-                    - Math.max(0, Math.min(100, user.getPermissionValue("acidisland.protection.rain", 0)))) / 100D;
+            double percent = (100 - Math.clamp(user.getPermissionValue("acidisland.protection.rain", 0), 0, 100)) / 100D;
 
             double totalDamage = Math.max(0, addon.getSettings().getAcidRainDamage() - protection) * percent;
 
@@ -198,7 +192,8 @@ public class AcidEffect implements Listener {
                     Bukkit.getPluginManager().callEvent(e);
                     if (!e.isCancelled()) {
                         player.damage(event.getRainDamage());
-                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                        Location rainLoc = player.getLocation();
+                        if (rainLoc != null) player.getWorld().playSound(rainLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     }
                 }
             }
@@ -215,8 +210,7 @@ public class AcidEffect implements Listener {
 
             User user = User.getInstance(player);
             // Get the percentage reduction and ensure the value is between 0 and 100
-            double percent = (100
-                    - Math.max(0, Math.min(100, user.getPermissionValue("acidisland.protection.acid", 0)))) / 100D;
+            double percent = (100 - Math.clamp(user.getPermissionValue("acidisland.protection.acid", 0), 0, 100)) / 100D;
 
             double totalDamage = Math.max(0, addon.getSettings().getAcidDamage() - protection) * percent;
 
@@ -232,7 +226,8 @@ public class AcidEffect implements Listener {
                     Bukkit.getPluginManager().callEvent(e);
                     if (!e.isCancelled()) {
                         player.damage(event.getTotalDamage());
-                        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
+                        Location acidLoc = player.getLocation();
+                        if (acidLoc != null) player.getWorld().playSound(acidLoc, Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     }
                 }
             }

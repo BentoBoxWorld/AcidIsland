@@ -33,420 +33,420 @@ public class AISettingsTest {
     private AISettings s;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         MockBukkit.mock();
         s = new AISettings();
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         MockBukkit.unmock();
     }
 
     @Test
-    public void testGetAcidDamage() {
+    void testGetAcidDamage() {
         assertEquals(10, s.getAcidDamage());
     }
 
     @Test
-    public void testGetAcidDamageAnimal() {
+    void testGetAcidDamageAnimal() {
         assertEquals(1, s.getAcidDamageAnimal());
     }
 
     @Test
-    public void testGetAcidDamageDelay() {
+    void testGetAcidDamageDelay() {
         assertEquals(2, s.getAcidDamageDelay());
     }
 
     @Test
-    public void testGetAcidDamageMonster() {
+    void testGetAcidDamageMonster() {
         assertEquals(5, s.getAcidDamageMonster());
     }
 
     @Test
-    public void testGetAcidDestroyItemTime() {
+    void testGetAcidDestroyItemTime() {
         assertEquals(0, s.getAcidDestroyItemTime());
     }
 
     @Test
-    public void testGetAcidEffects() {
+    void testGetAcidEffects() {
         assertTrue(s.getAcidEffects().isEmpty());
     }
 
     @Test
-    public void testGetAcidRainDamage() {
+    void testGetAcidRainDamage() {
         assertEquals(1, s.getAcidRainDamage());
     }
 
     @Test
-    public void testGetBanLimit() {
+    void testGetBanLimit() {
         assertEquals(-1, s.getBanLimit());
     }
 
     @Test
-    public void testGetCustomRanks() {
+    void testGetCustomRanks() {
         assertTrue(s.getCustomRanks().isEmpty());
     }
 
     @Test
-    public void testGetDeathsMax() {
+    void testGetDeathsMax() {
         assertEquals(10, s.getDeathsMax());
     }
 
     @Test
-    public void testGetDefaultBiome() {
+    void testGetDefaultBiome() {
         assertEquals(Biome.WARM_OCEAN, s.getDefaultBiome());
     }
 
     @Test
-    public void testGetDefaultGameMode() {
+    void testGetDefaultGameMode() {
         assertEquals(GameMode.SURVIVAL, s.getDefaultGameMode());
     }
 
     @Test
-    public void testGetDifficulty() {
+    void testGetDifficulty() {
         assertEquals(Difficulty.NORMAL, s.getDifficulty());
     }
 
     @Test
-    public void testGetEndSeaHeight() {
+    void testGetEndSeaHeight() {
         assertEquals(54, s.getEndSeaHeight());
     }
 
     @Test
-    public void testGetFriendlyName() {
+    void testGetFriendlyName() {
         assertEquals("AcidIsland", s.getFriendlyName());
     }
 
     @Test
-    public void testGetGeoLimitSettings() {
+    void testGetGeoLimitSettings() {
         assertTrue(s.getGeoLimitSettings().isEmpty());
     }
 
     @Test
-    public void testGetIslandDistance() {
+    void testGetIslandDistance() {
         assertEquals(64, s.getIslandDistance());
     }
 
     @Test
-    public void testGetIslandHeight() {
+    void testGetIslandHeight() {
         assertEquals(50, s.getIslandHeight());
     }
 
     @Test
-    public void testGetIslandProtectionRange() {
+    void testGetIslandProtectionRange() {
         assertEquals(50, s.getIslandProtectionRange());
     }
 
     @Test
-    public void testGetIslandStartX() {
+    void testGetIslandStartX() {
         assertEquals(0, s.getIslandStartX());
     }
 
     @Test
-    public void testGetIslandStartZ() {
+    void testGetIslandStartZ() {
         assertEquals(0, s.getIslandStartZ());
     }
 
     @Test
-    public void testGetIslandXOffset() {
+    void testGetIslandXOffset() {
         assertEquals(0, s.getIslandXOffset());
     }
 
     @Test
-    public void testGetIslandZOffset() {
+    void testGetIslandZOffset() {
         assertEquals(0, s.getIslandZOffset());
     }
 
     @Test
-    public void testGetIvSettings() {
+    void testGetIvSettings() {
         assertTrue(s.getIvSettings().isEmpty());
     }
 
     @Test
-    public void testGetMaxHomes() {
+    void testGetMaxHomes() {
         assertEquals(5, s.getMaxHomes());
     }
 
     @Test
-    public void testGetMaxIslands() {
+    void testGetMaxIslands() {
         assertEquals(-1, s.getMaxIslands());
     }
 
     @Test
-    public void testGetMaxTeamSize() {
+    void testGetMaxTeamSize() {
         assertEquals(4, s.getMaxTeamSize());
     }
 
     @Test
-    public void testGetNetherSeaHeight() {
+    void testGetNetherSeaHeight() {
         assertEquals(54, s.getNetherSeaHeight());
     }
 
     @Test
-    public void testGetNetherSpawnRadius() {
+    void testGetNetherSpawnRadius() {
         assertEquals(32, s.getNetherSpawnRadius());
     }
 
     @Test
-    public void testGetPermissionPrefix() {
+    void testGetPermissionPrefix() {
         assertEquals("acidisland", s.getPermissionPrefix());
     }
 
     @Test
-    public void testGetRemoveMobsWhitelist() {
+    void testGetRemoveMobsWhitelist() {
         assertTrue(s.getRemoveMobsWhitelist().isEmpty());
     }
 
     @Test
-    public void testGetResetEpoch() {
+    void testGetResetEpoch() {
         assertEquals(0, s.getResetEpoch());
     }
 
     @Test
-    public void testGetResetLimit() {
+    void testGetResetLimit() {
         assertEquals(-1, s.getResetLimit());
     }
 
     @Test
-    public void testGetSeaHeight() {
+    void testGetSeaHeight() {
         assertEquals(54, s.getSeaHeight());
     }
 
     @Test
-    public void testGetHiddenFlags() {
+    void testGetHiddenFlags() {
         assertTrue(s.getHiddenFlags().isEmpty());
     }
 
     @Test
-    public void testGetVisitorBannedCommands() {
+    void testGetVisitorBannedCommands() {
         assertTrue(s.getVisitorBannedCommands().isEmpty());
     }
 
     @Test
-    public void testGetFallingBannedCommands() {
+    void testGetFallingBannedCommands() {
         assertTrue(s.getFallingBannedCommands().isEmpty());
     }
 
     @Test
-    public void testGetWorldFlags() {
+    void testGetWorldFlags() {
         assertTrue(s.getWorldFlags().isEmpty());
     }
 
     @Test
-    public void testGetWorldName() {
+    void testGetWorldName() {
         assertEquals("acidisland_world", s.getWorldName());
     }
 
     @Test
-    public void testIsAcidDamageChickens() {
+    void testIsAcidDamageChickens() {
         assertFalse(s.isAcidDamageChickens());
     }
 
     @Test
-    public void testIsAcidDamageOp() {
+    void testIsAcidDamageOp() {
         assertFalse(s.isAcidDamageOp());
     }
 
     @Test
-    public void testIsAllowSetHomeInNether() {
+    void testIsAllowSetHomeInNether() {
         assertTrue(s.isAllowSetHomeInNether());
     }
 
     @Test
-    public void testIsAllowSetHomeInTheEnd() {
+    void testIsAllowSetHomeInTheEnd() {
         assertTrue(s.isAllowSetHomeInTheEnd());
     }
 
     @Test
-    public void testIsDeathsCounted() {
+    void testIsDeathsCounted() {
         assertTrue(s.isDeathsCounted());
     }
 
     @Test
-    public void testIsDragonSpawn() {
+    void testIsDragonSpawn() {
         assertFalse(s.isDragonSpawn());
     }
 
     @Test
-    public void testIsEndGenerate() {
+    void testIsEndGenerate() {
         assertTrue(s.isEndGenerate());
     }
 
     @Test
-    public void testIsEndIslands() {
+    void testIsEndIslands() {
         assertTrue(s.isEndIslands());
     }
 
     @Test
-    public void testIsFullArmorProtection() {
+    void testIsFullArmorProtection() {
         assertFalse(s.isFullArmorProtection());
     }
 
     @Test
-    public void testIsHelmetProtection() {
+    void testIsHelmetProtection() {
         assertFalse(s.isHelmetProtection());
     }
 
     @Test
-    public void testIsKickedKeepInventory() {
+    void testIsKickedKeepInventory() {
         assertFalse(s.isKickedKeepInventory());
     }
 
     @Test
-    public void testIsCreateIslandOnFirstLoginEnabled() {
+    void testIsCreateIslandOnFirstLoginEnabled() {
         assertFalse(s.isCreateIslandOnFirstLoginEnabled());
     }
 
     @Test
-    public void testGetCreateIslandOnFirstLoginDelay() {
+    void testGetCreateIslandOnFirstLoginDelay() {
         assertEquals(5, s.getCreateIslandOnFirstLoginDelay());
     }
 
     @Test
-    public void testIsCreateIslandOnFirstLoginAbortOnLogout() {
+    void testIsCreateIslandOnFirstLoginAbortOnLogout() {
         assertTrue(s.isCreateIslandOnFirstLoginAbortOnLogout());
     }
 
     @Test
-    public void testIsLeaversLoseReset() {
+    void testIsLeaversLoseReset() {
         assertFalse(s.isLeaversLoseReset());
     }
 
     @Test
-    public void testIsNetherGenerate() {
+    void testIsNetherGenerate() {
         assertTrue(s.isNetherGenerate());
     }
 
     @Test
-    public void testIsNetherIslands() {
+    void testIsNetherIslands() {
         assertTrue(s.isNetherIslands());
     }
 
     @Test
-    public void testIsNetherRoof() {
+    void testIsNetherRoof() {
         assertTrue(s.isNetherRoof());
     }
 
     @Test
-    public void testIsOnJoinResetEnderChest() {
+    void testIsOnJoinResetEnderChest() {
         assertFalse(s.isOnJoinResetEnderChest());
     }
 
     @Test
-    public void testIsOnJoinResetInventory() {
+    void testIsOnJoinResetInventory() {
         assertFalse(s.isOnJoinResetInventory());
     }
 
     @Test
-    public void testIsOnJoinResetMoney() {
+    void testIsOnJoinResetMoney() {
         assertFalse(s.isOnJoinResetMoney());
     }
 
     @Test
-    public void testIsOnLeaveResetEnderChest() {
+    void testIsOnLeaveResetEnderChest() {
         assertFalse(s.isOnLeaveResetEnderChest());
     }
 
     @Test
-    public void testIsOnLeaveResetInventory() {
+    void testIsOnLeaveResetInventory() {
         assertFalse(s.isOnLeaveResetInventory());
     }
 
     @Test
-    public void testIsOnLeaveResetMoney() {
+    void testIsOnLeaveResetMoney() {
         assertFalse(s.isOnLeaveResetMoney());
     }
 
     @Test
-    public void testIsRequireConfirmationToSetHomeInNether() {
+    void testIsRequireConfirmationToSetHomeInNether() {
         assertTrue(s.isRequireConfirmationToSetHomeInNether());
     }
 
     @Test
-    public void testIsRequireConfirmationToSetHomeInTheEnd() {
+    void testIsRequireConfirmationToSetHomeInTheEnd() {
         assertTrue(s.isRequireConfirmationToSetHomeInTheEnd());
     }
 
     @Test
-    public void testIsTeamJoinDeathReset() {
+    void testIsTeamJoinDeathReset() {
         assertTrue(s.isTeamJoinDeathReset());
     }
 
     @Test
-    public void testIsUseOwnGenerator() {
+    void testIsUseOwnGenerator() {
         assertFalse(s.isUseOwnGenerator());
     }
 
     @Test
-    public void testIsWaterUnsafe() {
+    void testIsWaterUnsafe() {
         assertTrue(s.isWaterUnsafe());
     }
 
     @Test
-    public void testSetAcidDamage() {
+    void testSetAcidDamage() {
         s.setAcidDamage(99);
         assertEquals(99, s.getAcidDamage());
     }
 
     @Test
-    public void testSetAcidDamageAnimal() {
+    void testSetAcidDamageAnimal() {
         s.setAcidDamageAnimal(99);
         assertEquals(99, s.getAcidDamageAnimal());
     }
 
     @Test
-    public void testSetAcidDamageChickens() {
+    void testSetAcidDamageChickens() {
         s.setAcidDamageChickens(true);
         assertTrue(s.isAcidDamageChickens());
     }
 
     @Test
-    public void testSetAcidDamageDelay() {
+    void testSetAcidDamageDelay() {
         s.setAcidDamageDelay(99);
         assertEquals(99, s.getAcidDamageDelay());
     }
 
     @Test
-    public void testSetAcidDamageMonster() {
+    void testSetAcidDamageMonster() {
         s.setAcidDamageMonster(99);
         assertEquals(99, s.getAcidDamageMonster());
     }
 
     @Test
-    public void testSetAcidDamageOp() {
+    void testSetAcidDamageOp() {
         s.setAcidDamageOp(true);
         assertTrue(s.isAcidDamageOp());
     }
 
     @Test
-    public void testSetAcidDestroyItemTime() {
+    void testSetAcidDestroyItemTime() {
         s.setAcidDestroyItemTime(99);
         assertEquals(99, s.getAcidDestroyItemTime());
     }
 
     @Test
-    @Disabled
-    public void testSetAcidEffects() {
+    @Disabled("PotionEffectType cannot be mocked without full server initialisation")
+    void testSetAcidEffects() {
         List<PotionEffectType> list = Collections.singletonList(PotionEffectType.ABSORPTION);
         s.setAcidEffects(list);
         assertEquals(list, s.getAcidEffects());
     }
 
     @Test
-    public void testSetAcidRainDamage() {
+    void testSetAcidRainDamage() {
         s.setAcidRainDamage(99);
         assertEquals(99, s.getAcidRainDamage());
     }
 
     @Test
-    public void testSetAdminCommand() {
+    void testSetAdminCommand() {
         s.setAdminCommand("admin");
         assertEquals("admin", s.getAdminCommandAliases());
     }
 
     @Test
-    public void testSetAllowSetHomeInNether() {
+    void testSetAllowSetHomeInNether() {
         s.setAllowSetHomeInNether(false);
         assertFalse(s.isAllowSetHomeInNether());
         s.setAllowSetHomeInNether(true);
@@ -454,7 +454,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetAllowSetHomeInTheEnd() {
+    void testSetAllowSetHomeInTheEnd() {
         s.setAllowSetHomeInTheEnd(false);
         assertFalse(s.isAllowSetHomeInTheEnd());
         s.setAllowSetHomeInTheEnd(true);
@@ -462,19 +462,19 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetBanLimit() {
+    void testSetBanLimit() {
         s.setBanLimit(99);
         assertEquals(99, s.getBanLimit());
     }
 
     @Test
-    public void testSetCustomRanks() {
+    void testSetCustomRanks() {
         s.setCustomRanks(Collections.singletonMap("string", 10));
         assertEquals(10, (int) s.getCustomRanks().get("string"));
     }
 
     @Test
-    public void testSetDeathsCounted() {
+    void testSetDeathsCounted() {
         s.setDeathsCounted(false);
         assertFalse(s.isDeathsCounted());
         s.setDeathsCounted(true);
@@ -482,43 +482,43 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetDeathsMax() {
+    void testSetDeathsMax() {
         s.setDeathsMax(99);
         assertEquals(99, s.getDeathsMax());
     }
 
     @Test
-    public void testSetDefaultBiome() {
+    void testSetDefaultBiome() {
         s.setDefaultBiome(Biome.BADLANDS);
         assertEquals(Biome.BADLANDS, s.getDefaultBiome());
     }
 
     @Test
-    public void testSetDefaultGameMode() {
+    void testSetDefaultGameMode() {
         s.setDefaultGameMode(GameMode.SPECTATOR);
         assertEquals(GameMode.SPECTATOR, s.getDefaultGameMode());
     }
 
     @Test
-    public void testSetDefaultIslandFlags() {
+    void testSetDefaultIslandFlags() {
         s.setDefaultIslandFlagNames(Collections.singletonMap("ANIMAL_NATURAL_SPAWN", 10));
         assertEquals(10, (int) s.getDefaultIslandFlagNames().get("ANIMAL_NATURAL_SPAWN"));
     }
 
     @Test
-    public void testSetDefaultIslandSettings() {
+    void testSetDefaultIslandSettings() {
         s.setDefaultIslandSettingNames(Collections.singletonMap("ANIMAL_NATURAL_SPAWN", 10));
         assertEquals(10, (int) s.getDefaultIslandSettingNames().get("ANIMAL_NATURAL_SPAWN"));
     }
 
     @Test
-    public void testSetDifficulty() {
+    void testSetDifficulty() {
         s.setDifficulty(Difficulty.PEACEFUL);
         assertEquals(Difficulty.PEACEFUL, s.getDifficulty());
     }
 
     @Test
-    public void testSetDragonSpawn() {
+    void testSetDragonSpawn() {
         s.setDragonSpawn(false);
         assertFalse(s.isDragonSpawn());
         s.setDragonSpawn(true);
@@ -526,7 +526,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetEndGenerate() {
+    void testSetEndGenerate() {
         s.setEndGenerate(false);
         assertFalse(s.isEndGenerate());
         s.setEndGenerate(true);
@@ -534,7 +534,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetEndIslands() {
+    void testSetEndIslands() {
         s.setEndIslands(false);
         assertFalse(s.isEndIslands());
         s.setEndIslands(true);
@@ -542,13 +542,13 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetFriendlyName() {
+    void testSetFriendlyName() {
         s.setFriendlyName("hshshs");
         assertEquals("hshshs", s.getFriendlyName());
     }
 
     @Test
-    public void testSetFullArmorProtection() {
+    void testSetFullArmorProtection() {
         s.setFullArmorProtection(false);
         assertFalse(s.isFullArmorProtection());
         s.setFullArmorProtection(true);
@@ -556,13 +556,13 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetGeoLimitSettings() {
+    void testSetGeoLimitSettings() {
         s.setGeoLimitSettings(Collections.singletonList("ghghhg"));
         assertEquals("ghghhg", s.getGeoLimitSettings().get(0));
     }
 
     @Test
-    public void testSetHelmetProtection() {
+    void testSetHelmetProtection() {
         s.setHelmetProtection(false);
         assertFalse(s.isHelmetProtection());
         s.setHelmetProtection(true);
@@ -570,61 +570,61 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetIslandCommand() {
+    void testSetIslandCommand() {
         s.setIslandCommand("command");
         assertEquals("command", s.getPlayerCommandAliases());
     }
 
     @Test
-    public void testSetIslandDistance() {
+    void testSetIslandDistance() {
         s.setIslandDistance(99);
         assertEquals(99, s.getIslandDistance());
     }
 
     @Test
-    public void testSetIslandHeight() {
+    void testSetIslandHeight() {
         s.setIslandHeight(99);
         assertEquals(99, s.getIslandHeight());
     }
 
     @Test
-    public void testSetIslandProtectionRange() {
+    void testSetIslandProtectionRange() {
         s.setIslandProtectionRange(99);
         assertEquals(99, s.getIslandProtectionRange());
     }
 
     @Test
-    public void testSetIslandStartX() {
+    void testSetIslandStartX() {
         s.setIslandStartX(99);
         assertEquals(99, s.getIslandStartX());
     }
 
     @Test
-    public void testSetIslandStartZ() {
+    void testSetIslandStartZ() {
         s.setIslandStartZ(99);
         assertEquals(99, s.getIslandStartZ());
     }
 
     @Test
-    public void testSetIslandXOffset() {
+    void testSetIslandXOffset() {
         s.setIslandXOffset(99);
         assertEquals(99, s.getIslandXOffset());
     }
 
     @Test
-    public void testSetIslandZOffset() {
+    void testSetIslandZOffset() {
         s.setIslandZOffset(99);
         assertEquals(99, s.getIslandZOffset());
     }
 
     @Test
-    public void testSetIvSettings() {
+    void testSetIvSettings() {
         s.setIvSettings(Collections.singletonList("ffff"));
         assertEquals("ffff", s.getIvSettings().get(0));
     }
 
     @Test
-    public void testSetKickedKeepInventory() {
+    void testSetKickedKeepInventory() {
         s.setKickedKeepInventory(false);
         assertFalse(s.isKickedKeepInventory());
         s.setKickedKeepInventory(true);
@@ -632,7 +632,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetLeaversLoseReset() {
+    void testSetLeaversLoseReset() {
         s.setLeaversLoseReset(false);
         assertFalse(s.isLeaversLoseReset());
         s.setLeaversLoseReset(true);
@@ -640,25 +640,25 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetMaxHomes() {
+    void testSetMaxHomes() {
         s.setMaxHomes(99);
         assertEquals(99, s.getMaxHomes());
     }
 
     @Test
-    public void testSetMaxIslands() {
+    void testSetMaxIslands() {
         s.setMaxIslands(99);
         assertEquals(99, s.getMaxIslands());
     }
 
     @Test
-    public void testSetMaxTeamSize() {
+    void testSetMaxTeamSize() {
         s.setMaxTeamSize(99);
         assertEquals(99, s.getMaxTeamSize());
     }
 
     @Test
-    public void testSetNetherGenerate() {
+    void testSetNetherGenerate() {
         s.setNetherGenerate(false);
         assertFalse(s.isNetherGenerate());
         s.setNetherGenerate(true);
@@ -666,7 +666,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetNetherIslands() {
+    void testSetNetherIslands() {
         s.setNetherIslands(false);
         assertFalse(s.isNetherIslands());
         s.setNetherIslands(true);
@@ -674,7 +674,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetNetherRoof() {
+    void testSetNetherRoof() {
         s.setNetherRoof(false);
         assertFalse(s.isNetherRoof());
         s.setNetherRoof(true);
@@ -682,13 +682,13 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetNetherSpawnRadius() {
+    void testSetNetherSpawnRadius() {
         s.setNetherSpawnRadius(99);
         assertEquals(99, s.getNetherSpawnRadius());
     }
 
     @Test
-    public void testSetOnJoinResetEnderChest() {
+    void testSetOnJoinResetEnderChest() {
         s.setOnJoinResetEnderChest(false);
         assertFalse(s.isOnJoinResetEnderChest());
         s.setOnJoinResetEnderChest(true);
@@ -696,7 +696,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetOnJoinResetInventory() {
+    void testSetOnJoinResetInventory() {
         s.setOnJoinResetInventory(false);
         assertFalse(s.isOnJoinResetInventory());
         s.setOnJoinResetInventory(true);
@@ -704,7 +704,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetOnJoinResetMoney() {
+    void testSetOnJoinResetMoney() {
         s.setOnJoinResetMoney(false);
         assertFalse(s.isOnJoinResetMoney());
         s.setOnJoinResetMoney(true);
@@ -712,7 +712,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetOnLeaveResetEnderChest() {
+    void testSetOnLeaveResetEnderChest() {
         s.setOnLeaveResetEnderChest(false);
         assertFalse(s.isOnLeaveResetEnderChest());
         s.setOnLeaveResetEnderChest(true);
@@ -720,7 +720,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetOnLeaveResetInventory() {
+    void testSetOnLeaveResetInventory() {
         s.setOnLeaveResetInventory(false);
         assertFalse(s.isOnLeaveResetInventory());
         s.setOnLeaveResetInventory(true);
@@ -728,7 +728,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetOnLeaveResetMoney() {
+    void testSetOnLeaveResetMoney() {
         s.setOnLeaveResetMoney(false);
         assertFalse(s.isOnLeaveResetMoney());
         s.setOnLeaveResetMoney(true);
@@ -736,13 +736,13 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetRemoveMobsWhitelist() {
+    void testSetRemoveMobsWhitelist() {
         s.setRemoveMobsWhitelist(Collections.singleton(EntityType.GHAST));
         assertTrue(s.getRemoveMobsWhitelist().contains(EntityType.GHAST));
     }
 
     @Test
-    public void testSetRequireConfirmationToSetHomeInNether() {
+    void testSetRequireConfirmationToSetHomeInNether() {
         s.setRequireConfirmationToSetHomeInNether(false);
         assertFalse(s.isRequireConfirmationToSetHomeInNether());
         s.setRequireConfirmationToSetHomeInNether(true);
@@ -750,7 +750,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetRequireConfirmationToSetHomeInTheEnd() {
+    void testSetRequireConfirmationToSetHomeInTheEnd() {
         s.setRequireConfirmationToSetHomeInTheEnd(false);
         assertFalse(s.isRequireConfirmationToSetHomeInTheEnd());
         s.setRequireConfirmationToSetHomeInTheEnd(true);
@@ -758,37 +758,37 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetResetEpoch() {
+    void testSetResetEpoch() {
         s.setResetEpoch(3456L);
         assertEquals(3456L, s.getResetEpoch());
     }
 
     @Test
-    public void testSetResetLimit() {
+    void testSetResetLimit() {
         s.setResetLimit(99);
         assertEquals(99, s.getResetLimit());
     }
 
     @Test
-    public void testSetSeaHeight() {
+    void testSetSeaHeight() {
         s.setSeaHeight(99);
         assertEquals(99, s.getSeaHeight());
     }
 
     @Test
-    public void testSetNetherSeaHeight() {
+    void testSetNetherSeaHeight() {
         s.setNetherSeaHeight(99);
         assertEquals(99, s.getNetherSeaHeight());
     }
 
     @Test
-    public void testSetEndSeaHeight() {
+    void testSetEndSeaHeight() {
         s.setEndSeaHeight(99);
         assertEquals(99, s.getEndSeaHeight());
     }
 
     @Test
-    public void testSetTeamJoinDeathReset() {
+    void testSetTeamJoinDeathReset() {
         s.setTeamJoinDeathReset(false);
         assertFalse(s.isTeamJoinDeathReset());
         s.setTeamJoinDeathReset(true);
@@ -796,7 +796,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetUseOwnGenerator() {
+    void testSetUseOwnGenerator() {
         s.setUseOwnGenerator(false);
         assertFalse(s.isUseOwnGenerator());
         s.setUseOwnGenerator(true);
@@ -804,42 +804,42 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetHiddenFlags() {
+    void testSetHiddenFlags() {
         s.setHiddenFlags(Collections.singletonList("flag"));
         assertEquals("flag", s.getHiddenFlags().get(0));
     }
 
     @Test
-    public void testSetVisitorBannedCommands() {
+    void testSetVisitorBannedCommands() {
         s.setVisitorBannedCommands(Collections.singletonList("flag"));
         assertEquals("flag", s.getVisitorBannedCommands().get(0));
     }
 
     @Test
-    public void testSetFallingBannedCommands() {
+    void testSetFallingBannedCommands() {
         s.setFallingBannedCommands(Collections.singletonList("flag"));
         assertEquals("flag", s.getFallingBannedCommands().get(0));
     }
 
     @Test
-    public void testSetWorldFlags() {
+    void testSetWorldFlags() {
         s.setWorldFlags(Collections.singletonMap("flag", true));
         assertTrue(s.getWorldFlags().get("flag"));
     }
 
     @Test
-    public void testSetWorldName() {
+    void testSetWorldName() {
         s.setWorldName("ugga");
         assertEquals("ugga", s.getWorldName());
     }
 
     @Test
-    public void testIsAcidDamageSnow() {
+    void testIsAcidDamageSnow() {
         assertFalse(s.isAcidDamageSnow());
     }
 
     @Test
-    public void testSetAcidDamageSnow() {
+    void testSetAcidDamageSnow() {
         s.setAcidDamageSnow(false);
         assertFalse(s.isAcidDamageSnow());
         s.setAcidDamageSnow(true);
@@ -847,12 +847,12 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testIsDeathsResetOnNewIsland() {
+    void testIsDeathsResetOnNewIsland() {
         assertTrue(s.isDeathsResetOnNewIsland());
     }
 
     @Test
-    public void testSetDeathsResetOnNewIsland() {
+    void testSetDeathsResetOnNewIsland() {
         s.setDeathsResetOnNewIsland(false);
         assertFalse(s.isDeathsResetOnNewIsland());
         s.setDeathsResetOnNewIsland(true);
@@ -860,34 +860,34 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testGetOnJoinCommands() {
+    void testGetOnJoinCommands() {
         assertTrue(s.getOnJoinCommands().isEmpty());
     }
 
     @Test
-    public void testSetOnJoinCommands() {
+    void testSetOnJoinCommands() {
         s.setOnJoinCommands(Collections.singletonList("command"));
         assertEquals("command", s.getOnJoinCommands().get(0));
     }
 
     @Test
-    public void testGetOnLeaveCommands() {
+    void testGetOnLeaveCommands() {
         assertTrue(s.getOnLeaveCommands().isEmpty());
     }
 
     @Test
-    public void testSetOnLeaveCommands() {
+    void testSetOnLeaveCommands() {
         s.setOnLeaveCommands(Collections.singletonList("command"));
         assertEquals("command", s.getOnLeaveCommands().get(0));
     }
 
     @Test
-    public void testIsOnJoinResetHealth() {
+    void testIsOnJoinResetHealth() {
         assertTrue(s.isOnJoinResetHealth());
     }
 
     @Test
-    public void testSetOnJoinResetHealth() {
+    void testSetOnJoinResetHealth() {
         s.setOnJoinResetHealth(false);
         assertFalse(s.isOnJoinResetHealth());
         s.setOnJoinResetHealth(true);
@@ -895,12 +895,12 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testIsOnJoinResetHunger() {
+    void testIsOnJoinResetHunger() {
         assertTrue(s.isOnJoinResetHunger());
     }
 
     @Test
-    public void testSetOnJoinResetHunger() {
+    void testSetOnJoinResetHunger() {
         s.setOnJoinResetHunger(false);
         assertFalse(s.isOnJoinResetHunger());
         s.setOnJoinResetHunger(true);
@@ -908,12 +908,12 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testIsOnJoinResetXP() {
+    void testIsOnJoinResetXP() {
         assertFalse(s.isOnJoinResetXP());
     }
 
     @Test
-    public void testSetOnJoinResetXP() {
+    void testSetOnJoinResetXP() {
         s.setOnJoinResetXP(false);
         assertFalse(s.isOnJoinResetXP());
         s.setOnJoinResetXP(true);
@@ -921,12 +921,12 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testIsOnLeaveResetHealth() {
+    void testIsOnLeaveResetHealth() {
         assertFalse(s.isOnLeaveResetHealth());
     }
 
     @Test
-    public void testSetOnLeaveResetHealth() {
+    void testSetOnLeaveResetHealth() {
         s.setOnLeaveResetHealth(false);
         assertFalse(s.isOnLeaveResetHealth());
         s.setOnLeaveResetHealth(true);
@@ -934,12 +934,12 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testIsOnLeaveResetHunger() {
+    void testIsOnLeaveResetHunger() {
         assertFalse(s.isOnLeaveResetHunger());
     }
 
     @Test
-    public void testSetOnLeaveResetHunger() {
+    void testSetOnLeaveResetHunger() {
         s.setOnLeaveResetHunger(false);
         assertFalse(s.isOnLeaveResetHunger());
         s.setOnLeaveResetHunger(true);
@@ -947,12 +947,12 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testIsOnLeaveResetXP() {
+    void testIsOnLeaveResetXP() {
         assertFalse(s.isOnLeaveResetXP());
     }
 
     @Test
-    public void testSetOnLeaveResetXP() {
+    void testSetOnLeaveResetXP() {
         s.setOnLeaveResetXP(false);
         assertFalse(s.isOnLeaveResetXP());
         s.setOnLeaveResetXP(true);
@@ -960,7 +960,7 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetCreateIslandOnFirstLoginEnabled() {
+    void testSetCreateIslandOnFirstLoginEnabled() {
         s.setCreateIslandOnFirstLoginEnabled(false);
         assertFalse(s.isCreateIslandOnFirstLoginEnabled());
         s.setCreateIslandOnFirstLoginEnabled(true);
@@ -968,13 +968,13 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testSetCreateIslandOnFirstLoginDelay() {
+    void testSetCreateIslandOnFirstLoginDelay() {
         s.setCreateIslandOnFirstLoginDelay(40);
         assertEquals(40, s.getCreateIslandOnFirstLoginDelay());
     }
 
     @Test
-    public void testSetCreateIslandOnFirstLoginAbortOnLogout() {
+    void testSetCreateIslandOnFirstLoginAbortOnLogout() {
         s.setCreateIslandOnFirstLoginAbortOnLogout(false);
         assertFalse(s.isCreateIslandOnFirstLoginAbortOnLogout());
         s.setCreateIslandOnFirstLoginAbortOnLogout(true);
@@ -982,12 +982,12 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testIsPasteMissingIslands() {
+    void testIsPasteMissingIslands() {
         assertFalse(s.isPasteMissingIslands());
     }
 
     @Test
-    public void testSetPasteMissingIslands() {
+    void testSetPasteMissingIslands() {
         s.setPasteMissingIslands(false);
         assertFalse(s.isPasteMissingIslands());
         s.setPasteMissingIslands(true);
@@ -995,189 +995,189 @@ public class AISettingsTest {
     }
 
     @Test
-    public void testGetAcidRainEffects() {
+    void testGetAcidRainEffects() {
         assertTrue(s.getAcidRainEffects().isEmpty());
     }
 
     @Test
     @Disabled("Bukkit made this so we can't test")
-    public void testSetAcidRainEffects() {
+    void testSetAcidRainEffects() {
         s.setAcidRainEffects(Collections.singletonList(PotionEffectType.BAD_OMEN));
         assertEquals(PotionEffectType.BAD_OMEN, s.getAcidRainEffects().get(0));
     }
 
     @Test
-    public void testGetRainEffectDuation() {
+    void testGetRainEffectDuation() {
         assertEquals(10, s.getRainEffectDuation());
     }
 
     @Test
-    public void testSetRainEffectDuation() {
+    void testSetRainEffectDuation() {
         s.setRainEffectDuation(99);
         assertEquals(99, s.getRainEffectDuation());
     }
 
     @Test
-    public void testGetAcidEffectDuation() {
+    void testGetAcidEffectDuation() {
         assertEquals(30, s.getAcidEffectDuation());
     }
 
     @Test
-    public void testSetAcidEffectDuation() {
+    void testSetAcidEffectDuation() {
         s.setAcidEffectDuation(99);
         assertEquals(99, s.getAcidEffectDuation());
     }
 
     @Test
-    public void testGetSpawnLimitMonsters() {
+    void testGetSpawnLimitMonsters() {
         assertEquals(-1, s.getSpawnLimitMonsters());
     }
 
     @Test
-    public void testSetSpawnLimitMonsters() {
+    void testSetSpawnLimitMonsters() {
         s.setSpawnLimitMonsters(99);
         assertEquals(99, s.getSpawnLimitMonsters());
     }
 
     @Test
-    public void testGetSpawnLimitAnimals() {
+    void testGetSpawnLimitAnimals() {
         assertEquals(-1, s.getSpawnLimitAnimals());
     }
 
     @Test
-    public void testSetSpawnLimitAnimals() {
+    void testSetSpawnLimitAnimals() {
         s.setSpawnLimitAnimals(99);
         assertEquals(99, s.getSpawnLimitAnimals());
     }
 
     @Test
-    public void testGetSpawnLimitWaterAnimals() {
+    void testGetSpawnLimitWaterAnimals() {
         assertEquals(-1, s.getSpawnLimitWaterAnimals());
     }
 
     @Test
-    public void testSetSpawnLimitWaterAnimals() {
+    void testSetSpawnLimitWaterAnimals() {
         s.setSpawnLimitWaterAnimals(99);
         assertEquals(99, s.getSpawnLimitWaterAnimals());
     }
 
     @Test
-    public void testGetSpawnLimitAmbient() {
+    void testGetSpawnLimitAmbient() {
         assertEquals(-1, s.getSpawnLimitAmbient());
     }
 
     @Test
-    public void testSetSpawnLimitAmbient() {
+    void testSetSpawnLimitAmbient() {
         s.setSpawnLimitAmbient(99);
         assertEquals(99, s.getSpawnLimitAmbient());
     }
 
     @Test
-    public void testGetTicksPerAnimalSpawns() {
+    void testGetTicksPerAnimalSpawns() {
         assertEquals(-1, s.getTicksPerAnimalSpawns());
     }
 
     @Test
-    public void testSetTicksPerAnimalSpawns() {
+    void testSetTicksPerAnimalSpawns() {
         s.setTicksPerAnimalSpawns(99);
         assertEquals(99, s.getTicksPerAnimalSpawns());
     }
 
     @Test
-    public void testGetTicksPerMonsterSpawns() {
+    void testGetTicksPerMonsterSpawns() {
         assertEquals(-1, s.getTicksPerMonsterSpawns());
     }
 
     @Test
-    public void testSetTicksPerMonsterSpawns() {
+    void testSetTicksPerMonsterSpawns() {
         s.setTicksPerMonsterSpawns(99);
         assertEquals(99, s.getTicksPerMonsterSpawns());
     }
 
     @Test
-    public void testGetMaxCoopSize() {
+    void testGetMaxCoopSize() {
         assertEquals(4, s.getMaxCoopSize());
     }
 
     @Test
-    public void testSetMaxCoopSize() {
+    void testSetMaxCoopSize() {
         s.setMaxCoopSize(99);
         assertEquals(99, s.getMaxCoopSize());
     }
 
     @Test
-    public void testGetMaxTrustSize() {
+    void testGetMaxTrustSize() {
         assertEquals(4, s.getMaxTrustSize());
     }
 
     @Test
-    public void testSetMaxTrustSize() {
+    void testSetMaxTrustSize() {
         s.setMaxTrustSize(99);
         assertEquals(99, s.getMaxTrustSize());
     }
 
     @Test
-    public void testGetPlayerCommandAliases() {
+    void testGetPlayerCommandAliases() {
         assertEquals("ai", s.getPlayerCommandAliases());
     }
 
     @Test
-    public void testSetPlayerCommandAliases() {
+    void testSetPlayerCommandAliases() {
         s.setPlayerCommandAliases("adm");
         assertEquals("adm", s.getPlayerCommandAliases());
     }
 
     @Test
-    public void testGetAdminCommandAliases() {
+    void testGetAdminCommandAliases() {
         assertEquals("acid", s.getAdminCommandAliases());
     }
 
     @Test
-    public void testSetAdminCommandAliases() {
+    void testSetAdminCommandAliases() {
         s.setAdminCommandAliases("adm");
         assertEquals("adm", s.getAdminCommandAliases());
     }
 
     @Test
-    public void testGetDefaultNewPlayerAction() {
+    void testGetDefaultNewPlayerAction() {
         assertEquals("create", s.getDefaultNewPlayerAction());
     }
 
     @Test
-    public void testSetDefaultNewPlayerAction() {
+    void testSetDefaultNewPlayerAction() {
         s.setDefaultNewPlayerAction("cr");
         assertEquals("cr", s.getDefaultNewPlayerAction());
     }
 
     @Test
-    public void testGetDefaultPlayerAction() {
+    void testGetDefaultPlayerAction() {
         assertEquals("go", s.getDefaultPlayerAction());
     }
 
     @Test
-    public void testSetDefaultPlayerAction() {
+    void testSetDefaultPlayerAction() {
         s.setDefaultPlayerAction("go2");
         assertEquals("go2", s.getDefaultPlayerAction());
     }
 
     @Test
-    public void testGetDefaultNetherBiome() {
+    void testGetDefaultNetherBiome() {
         assertEquals(Biome.NETHER_WASTES, s.getDefaultNetherBiome());
     }
 
     @Test
-    public void testSetDefaultNetherBiome() {
+    void testSetDefaultNetherBiome() {
         s.setDefaultNetherBiome(Biome.END_BARRENS);
         assertEquals(Biome.END_BARRENS, s.getDefaultNetherBiome());
     }
 
     @Test
-    public void testGetDefaultEndBiome() {
+    void testGetDefaultEndBiome() {
         assertEquals(Biome.THE_END, s.getDefaultEndBiome());
     }
 
     @Test
-    public void testSetDefaultEndBiome() {
+    void testSetDefaultEndBiome() {
         s.setDefaultEndBiome(Biome.END_BARRENS);
         assertEquals(Biome.END_BARRENS, s.getDefaultEndBiome());
     }

@@ -140,6 +140,29 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.damage.protection.full-armor")
     private boolean fullArmorProtection;
 
+    /*  PURIFIED WATER  */
+    @ConfigComment("Enable the purified water mechanic. Drinking acid water from a bottle damages")
+    @ConfigComment("the player; drinking purified water heals them. Purified water can be made by")
+    @ConfigComment("collecting rain in a cauldron (dripstone fills it as purified; rain/bucket fills")
+    @ConfigComment("it as acid), smelting a water bottle in a furnace, brewing water bottles with coal,")
+    @ConfigComment("or smelting a water bucket in a furnace (if bucket-furnace-enabled is true).")
+    @ConfigEntry(path = "acid.purified-water.enabled", since = "1.21")
+    private boolean purifiedWaterEnabled = true;
+
+    @ConfigComment("Damage dealt to a player who drinks an acid water bottle (in half-hearts)")
+    @ConfigEntry(path = "acid.purified-water.drink-damage", since = "1.21")
+    private double acidDrinkDamage = 4.0;
+
+    @ConfigComment("Health restored to a player who drinks a purified water bottle (in half-hearts)")
+    @ConfigEntry(path = "acid.purified-water.heal-amount", since = "1.21")
+    private double purifiedWaterHeal = 4.0;
+
+    @ConfigComment("Allow purifying a water bucket by smelting it in a furnace.")
+    @ConfigComment("The cook time is 2000 ticks (100 seconds) to simulate the effort of boiling.")
+    @ConfigComment("Disable if this feels too easy for your server's balance.")
+    @ConfigEntry(path = "acid.purified-water.bucket-furnace-enabled", since = "1.21")
+    private boolean purifiedBucketFurnaceEnabled = true;
+
 
     /*      WORLD       */
     @ConfigComment("Friendly name for this world. Used in admin commands. Must be a single word")
@@ -671,6 +694,12 @@ public class AISettings implements WorldSettings {
         return acidDestroyItemTime;
     }
     /**
+     * @return damage dealt when drinking an acid water bottle (half-hearts)
+     */
+    public double getAcidDrinkDamage() {
+        return acidDrinkDamage;
+    }
+    /**
      * @return the acidEffects
      */
     public List<PotionEffectType> getAcidEffects() {
@@ -681,6 +710,24 @@ public class AISettings implements WorldSettings {
      */
     public int getAcidRainDamage() {
         return acidRainDamage;
+    }
+    /**
+     * @return health restored when drinking purified water (half-hearts)
+     */
+    public double getPurifiedWaterHeal() {
+        return purifiedWaterHeal;
+    }
+    /**
+     * @return true if the purified water mechanic is enabled
+     */
+    public boolean isPurifiedWaterEnabled() {
+        return purifiedWaterEnabled;
+    }
+    /**
+     * @return true if water buckets can be purified by smelting in a furnace
+     */
+    public boolean isPurifiedBucketFurnaceEnabled() {
+        return purifiedBucketFurnaceEnabled;
     }
 
     @Override
@@ -742,6 +789,7 @@ public class AISettings implements WorldSettings {
      * @return the defaultIslandProtection
      * @deprecated since 1.21
      */
+    @Deprecated(since = "1.21")
     @Override
     public Map<Flag, Integer> getDefaultIslandFlags() {
         return Collections.emptyMap();
@@ -752,6 +800,7 @@ public class AISettings implements WorldSettings {
      * @return the defaultIslandSettings
      * @deprecated since 1.21
      */
+    @Deprecated(since = "1.21")
     @Override
     public Map<Flag, Integer> getDefaultIslandSettings() {
         return Collections.emptyMap();
@@ -1156,6 +1205,30 @@ public class AISettings implements WorldSettings {
      */
     public void setAcidDamage(int acidDamage) {
         this.acidDamage = acidDamage;
+    }
+    /**
+     * @param acidDrinkDamage damage dealt when drinking an acid water bottle (half-hearts)
+     */
+    public void setAcidDrinkDamage(double acidDrinkDamage) {
+        this.acidDrinkDamage = acidDrinkDamage;
+    }
+    /**
+     * @param purifiedWaterEnabled true to enable the purified water mechanic
+     */
+    public void setPurifiedWaterEnabled(boolean purifiedWaterEnabled) {
+        this.purifiedWaterEnabled = purifiedWaterEnabled;
+    }
+    /**
+     * @param purifiedWaterHeal health restored when drinking purified water (half-hearts)
+     */
+    public void setPurifiedWaterHeal(double purifiedWaterHeal) {
+        this.purifiedWaterHeal = purifiedWaterHeal;
+    }
+    /**
+     * @param purifiedBucketFurnaceEnabled true to allow furnace-purifying water buckets
+     */
+    public void setPurifiedBucketFurnaceEnabled(boolean purifiedBucketFurnaceEnabled) {
+        this.purifiedBucketFurnaceEnabled = purifiedBucketFurnaceEnabled;
     }
     /**
      * @param acidDamageAnimal the acidDamageAnimal to set

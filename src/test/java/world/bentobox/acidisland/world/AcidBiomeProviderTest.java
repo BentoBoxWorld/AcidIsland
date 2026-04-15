@@ -29,7 +29,7 @@ public class AcidBiomeProviderTest {
     private AcidBiomeProvider provider;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockBukkit.mock();
         settings = new AISettings();
         when(addon.getSettings()).thenReturn(settings);
@@ -37,37 +37,37 @@ public class AcidBiomeProviderTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         MockBukkit.unmock();
     }
 
     @Test
-    public void testGetBiomeNormal() {
+    void testGetBiomeNormal() {
         when(worldInfo.getEnvironment()).thenReturn(Environment.NORMAL);
         assertEquals(Biome.WARM_OCEAN, provider.getBiome(worldInfo, 0, 0, 0));
     }
 
     @Test
-    public void testGetBiomeNether() {
+    void testGetBiomeNether() {
         when(worldInfo.getEnvironment()).thenReturn(Environment.NETHER);
         assertEquals(Biome.NETHER_WASTES, provider.getBiome(worldInfo, 0, 0, 0));
     }
 
     @Test
-    public void testGetBiomeEnd() {
+    void testGetBiomeEnd() {
         when(worldInfo.getEnvironment()).thenReturn(Environment.THE_END);
         assertEquals(Biome.THE_END, provider.getBiome(worldInfo, 0, 0, 0));
     }
 
     @Test
-    public void testGetBiomeCustom() {
+    void testGetBiomeCustom() {
         settings.setDefaultBiome(Biome.DEEP_OCEAN);
         when(worldInfo.getEnvironment()).thenReturn(Environment.NORMAL);
         assertEquals(Biome.DEEP_OCEAN, provider.getBiome(worldInfo, 0, 0, 0));
     }
 
     @Test
-    public void testGetBiomeCustomNether() {
+    void testGetBiomeCustomNether() {
         settings.setDefaultNetherBiome(Biome.SOUL_SAND_VALLEY);
         when(worldInfo.getEnvironment()).thenReturn(Environment.NETHER);
         assertEquals(Biome.SOUL_SAND_VALLEY, provider.getBiome(worldInfo, 0, 0, 0));

@@ -72,6 +72,20 @@ acid:
       helmet: false
       # If player wears any set of full armor, they will not suffer from acid damage
       full-armor: false
+  # Purified water mechanic. Enable to allow players to collect and purify water.
+  # Acid water damages the player when drunk; purified water heals them.
+  # Added since 1.21.
+  purified-water:
+    # Enable or disable the entire purified water mechanic.
+    enabled: true
+    # Damage (in half-hearts) dealt to a player who drinks an acid water bottle.
+    drink-damage: 4.0
+    # Health (in half-hearts) restored to a player who drinks a purified water bottle.
+    heal-amount: 4.0
+    # Allow purifying a water bucket by smelting it in a furnace.
+    # Cook time is 2000 ticks (100 seconds) to balance the effort.
+    # Disable if this feels too easy for your server's balance.
+    bucket-furnace-enabled: true
 world:
   # Friendly name for this world. Used in admin commands. Must be a single word
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.

@@ -48,7 +48,7 @@ public class IslandAboutCommandTest {
     private IslandAboutCommand command;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         server = MockBukkit.mock();
         mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
         mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
@@ -71,14 +71,14 @@ public class IslandAboutCommandTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         mockedBukkit.closeOnDemand();
         Mockito.framework().clearInlineMocks();
         MockBukkit.unmock();
     }
 
     @Test
-    public void testExecute() {
+    void testExecute() {
         boolean result = command.execute(user, "about", Collections.emptyList());
         assertTrue(result);
         verify(user, atLeastOnce()).sendRawMessage(anyString());
