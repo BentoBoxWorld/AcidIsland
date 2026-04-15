@@ -10,3 +10,6 @@ acidisland:
     line2: "水是酸的！"
     line3: "要小心哟！<red><3"
     
+  purified-water:
+    lore-acid: "<red>酸水"
+    lore-purified: "<green>纯净水"

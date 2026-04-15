@@ -122,7 +122,6 @@ class PurifiedWaterListenerTest {
 
         when(settings.isPurifiedWaterEnabled()).thenReturn(true);
         when(settings.isPurifiedBucketFurnaceEnabled()).thenReturn(true);
-        when(settings.getAcidDrinkDamage()).thenReturn(4.0);
         when(settings.getPurifiedWaterHeal()).thenReturn(4.0);
 
         when(player.getWorld()).thenReturn(world);

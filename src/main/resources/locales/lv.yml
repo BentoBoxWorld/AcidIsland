@@ -5,3 +5,6 @@ acidisland:
     line1: "[name]"
     line2: Ūdens satur skābi!
     line3: "Esi uzmanīgs! <red><3"
+  purified-water:
+    lore-acid: "<red>Skābes ūdens"
+    lore-purified: "<green>Attīrīts ūdens"
