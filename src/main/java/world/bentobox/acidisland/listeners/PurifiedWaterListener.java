@@ -46,6 +46,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionType;
 
+import world.bentobox.acidisland.AISettings;
 import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.ItemFillWithAcidEvent;
 import world.bentobox.acidisland.events.PlayerDrinkPurifiedWaterEvent;
@@ -226,7 +227,7 @@ public class PurifiedWaterListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onCauldronChange(CauldronLevelChangeEvent e) {
         if (!addon.getSettings().isPurifiedWaterEnabled()) return;
-        if (!e.getBlock().getWorld().equals(addon.getOverWorld())) return;
+        if (!isAcidIslandWorld(e.getBlock().getWorld())) return;
 
         Location loc = e.getBlock().getLocation();
         ChangeReason reason = e.getReason();
@@ -276,7 +277,7 @@ public class PurifiedWaterListener implements Listener {
         if (!addon.getSettings().isPurifiedWaterEnabled()) return;
 
         Player player = e.getPlayer();
-        if (!player.getWorld().equals(addon.getOverWorld())) return;
+        if (!isAcidIslandWorld(player.getWorld())) return;
 
         ItemStack item = e.getItem();
         if (item == null || item.getType() != Material.GLASS_BOTTLE) return;
@@ -337,7 +338,7 @@ public class PurifiedWaterListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBucketFill(PlayerBucketFillEvent e) {
         if (!addon.getSettings().isPurifiedWaterEnabled()) return;
-        if (!e.getPlayer().getWorld().equals(addon.getOverWorld())) return;
+        if (!isAcidIslandWorld(e.getPlayer().getWorld())) return;
 
         ItemStack result = e.getItemStack();
         if (result == null || result.getType() != Material.WATER_BUCKET) return;
@@ -449,6 +450,25 @@ public class PurifiedWaterListener implements Listener {
 
     private Optional<Island> getIsland(Player player) {
         return addon.getIslands().getIslandAt(player.getLocation());
+    }
+
+    /**
+     * @return {@code true} if the purified water mechanic should operate in the given world.
+     * The mechanic always runs in the AcidIsland overworld. It also runs in the addon's Nether
+     * and End worlds (whether they are island or vanilla) when the per-dimension config toggle
+     * is enabled.
+     */
+    private boolean isAcidIslandWorld(World world) {
+        if (world == null) return false;
+        if (world.equals(addon.getOverWorld())) return true;
+        AISettings s = addon.getSettings();
+        if (world.equals(addon.getNetherWorld()) && s.isPurifiedWaterNetherEnabled()) {
+            return true;
+        }
+        if (world.equals(addon.getEndWorld()) && s.isPurifiedWaterEndEnabled()) {
+            return true;
+        }
+        return false;
     }
 
     /**

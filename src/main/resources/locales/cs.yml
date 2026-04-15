@@ -12,3 +12,6 @@ acidisland:
     line2: "Voda je kyselina!"
     line3: "Buď opatrný! <red><3"
     
+  purified-water:
+    lore-acid: "<red>Kyselá voda"
+    lore-purified: "<green>Čistá voda"

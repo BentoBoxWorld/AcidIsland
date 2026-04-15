@@ -5,3 +5,6 @@ acidisland:
     line1: "[name]"
     line2: Su asitli!
     line3: "Dikkat et! <red><3"
+  purified-water:
+    lore-acid: "<red>Asitli Su"
+    lore-purified: "<green>Arıtılmış Su"

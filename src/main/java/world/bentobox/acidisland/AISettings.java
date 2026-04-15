@@ -149,10 +149,6 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "acid.purified-water.enabled", since = "1.21")
     private boolean purifiedWaterEnabled = true;
 
-    @ConfigComment("Damage dealt to a player who drinks an acid water bottle (in half-hearts)")
-    @ConfigEntry(path = "acid.purified-water.drink-damage", since = "1.21")
-    private double acidDrinkDamage = 4.0;
-
     @ConfigComment("Health restored to a player who drinks a purified water bottle (in half-hearts)")
     @ConfigEntry(path = "acid.purified-water.heal-amount", since = "1.21")
     private double purifiedWaterHeal = 4.0;
@@ -162,6 +158,14 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Disable if this feels too easy for your server's balance.")
     @ConfigEntry(path = "acid.purified-water.bucket-furnace-enabled", since = "1.21")
     private boolean purifiedBucketFurnaceEnabled = true;
+
+    @ConfigComment("Run the purified water mechanic in the addon's Nether world (island or vanilla).")
+    @ConfigEntry(path = "acid.purified-water.nether-enabled", since = "1.22")
+    private boolean purifiedWaterNetherEnabled = true;
+
+    @ConfigComment("Run the purified water mechanic in the addon's End world (island or vanilla).")
+    @ConfigEntry(path = "acid.purified-water.end-enabled", since = "1.22")
+    private boolean purifiedWaterEndEnabled = true;
 
 
     /*      WORLD       */
@@ -694,12 +698,6 @@ public class AISettings implements WorldSettings {
         return acidDestroyItemTime;
     }
     /**
-     * @return damage dealt when drinking an acid water bottle (half-hearts)
-     */
-    public double getAcidDrinkDamage() {
-        return acidDrinkDamage;
-    }
-    /**
      * @return the acidEffects
      */
     public List<PotionEffectType> getAcidEffects() {
@@ -728,6 +726,18 @@ public class AISettings implements WorldSettings {
      */
     public boolean isPurifiedBucketFurnaceEnabled() {
         return purifiedBucketFurnaceEnabled;
+    }
+    /**
+     * @return true if the purified water mechanic runs in the island Nether
+     */
+    public boolean isPurifiedWaterNetherEnabled() {
+        return purifiedWaterNetherEnabled;
+    }
+    /**
+     * @return true if the purified water mechanic runs in the island End
+     */
+    public boolean isPurifiedWaterEndEnabled() {
+        return purifiedWaterEndEnabled;
     }
 
     @Override
@@ -1207,12 +1217,6 @@ public class AISettings implements WorldSettings {
         this.acidDamage = acidDamage;
     }
     /**
-     * @param acidDrinkDamage damage dealt when drinking an acid water bottle (half-hearts)
-     */
-    public void setAcidDrinkDamage(double acidDrinkDamage) {
-        this.acidDrinkDamage = acidDrinkDamage;
-    }
-    /**
      * @param purifiedWaterEnabled true to enable the purified water mechanic
      */
     public void setPurifiedWaterEnabled(boolean purifiedWaterEnabled) {
@@ -1229,6 +1233,18 @@ public class AISettings implements WorldSettings {
      */
     public void setPurifiedBucketFurnaceEnabled(boolean purifiedBucketFurnaceEnabled) {
         this.purifiedBucketFurnaceEnabled = purifiedBucketFurnaceEnabled;
+    }
+    /**
+     * @param purifiedWaterNetherEnabled true to run the mechanic in the island Nether
+     */
+    public void setPurifiedWaterNetherEnabled(boolean purifiedWaterNetherEnabled) {
+        this.purifiedWaterNetherEnabled = purifiedWaterNetherEnabled;
+    }
+    /**
+     * @param purifiedWaterEndEnabled true to run the mechanic in the island End
+     */
+    public void setPurifiedWaterEndEnabled(boolean purifiedWaterEndEnabled) {
+        this.purifiedWaterEndEnabled = purifiedWaterEndEnabled;
     }
     /**
      * @param acidDamageAnimal the acidDamageAnimal to set

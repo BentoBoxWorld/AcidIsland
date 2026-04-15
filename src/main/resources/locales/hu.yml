@@ -10,3 +10,6 @@ acidisland:
     line2: "A víz savas!"
     line3: "Légy óvatos! <red><3"
     
+  purified-water:
+    lore-acid: "<red>Savas víz"
+    lore-purified: "<green>Tisztított víz"

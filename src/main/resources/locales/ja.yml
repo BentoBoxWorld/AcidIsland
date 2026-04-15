@@ -5,3 +5,6 @@ acidisland:
     line1: "[name]"
     line2: 水は酸性です！
     line3: "注意してください！ <red><3"
+  purified-water:
+    lore-acid: "<red>酸性の水"
+    lore-purified: "<green>浄化された水"

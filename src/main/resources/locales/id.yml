@@ -6,3 +6,6 @@ acidisland:
     line2: Airnya Asam!
     line3: "Hati-hati! <red><3"
 
+  purified-water:
+    lore-acid: "<red>Air asam"
+    lore-purified: "<green>Air murni"

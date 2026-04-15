@@ -9,3 +9,6 @@ acidisland:
     line1: "[name]"
     line2: "El Agua es acida!"
     line3: "Ten cuidado! <red><3"
+  purified-water:
+    lore-acid: "<red>Agua ácida"
+    lore-purified: "<green>Agua purificada"

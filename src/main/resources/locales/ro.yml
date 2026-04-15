@@ -6,3 +6,6 @@ acidisland:
     line2: Apa este acida!
     line3: "Ai grija! <red><3"
 
+  purified-water:
+    lore-acid: "<red>Apă acidă"
+    lore-purified: "<green>Apă purificată"
