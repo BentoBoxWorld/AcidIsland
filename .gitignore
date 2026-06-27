@@ -4,6 +4,7 @@ bin/
 *.class
 /target/
 /.classpath
-/.DS_Store
+.DS_Store
 /.project
 /.gitignore
+.claude/
