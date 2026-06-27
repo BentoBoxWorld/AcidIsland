@@ -84,6 +84,7 @@ jobs:
             26.1
             26.1.1
             26.1.2
+            26.2
 
           # Path to the built JAR
           files: target/AcidIsland-${{ github.event.release.tag_name || inputs.tag }}.jar
