@@ -62,7 +62,7 @@
         <!-- Do not change unless you want different name for local builds. -->
         <build.number>-LOCAL</build.number>
         <!-- This allows to change between versions. -->
-        <build.version>1.22.0</build.version>
+        <build.version>1.22.1</build.version>
         <!-- Sonar Cloud -->
         <sonar.projectKey>BentoBoxWorld_AcidIsland</sonar.projectKey>
         <sonar.organization>bentobox-world</sonar.organization>
@@ -141,9 +141,9 @@
     <dependencies>
         <!-- MockBukkit -->
         <dependency>
-            <groupId>com.github.MockBukkit</groupId>
-            <artifactId>MockBukkit</artifactId>
-            <version>v1.21-SNAPSHOT</version>
+            <groupId>org.mockbukkit.mockbukkit</groupId>
+            <artifactId>mockbukkit-v1.21</artifactId>
+            <version>4.110.0</version>
             <scope>test</scope>
             <exclusions>
                 <!-- Exclude MockBukkit's JUnit 6 transitive deps; we manage JUnit ourselves -->

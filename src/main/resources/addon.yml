@@ -72,22 +72,13 @@ permissions:
     description: Allow use of '/ai settings' command - display island settings
     default: TRUE
   acidisland.island.name:
-    description: Allow use of '/ai setname' command - set a name for your island
-    default: TRUE
-  acidisland.island.name:
-    description: Allow use of '/ai resetname' command - reset your island name
+    description: Allow use of '/ai setname' or '/ai resetname' command - set or reset your island name
     default: TRUE
   acidisland.island.language:
     description: Allow use of '/ai language' command - select language
     default: TRUE
   acidisland.island.ban:
-    description: Allow use of '/ai ban' command - ban a player from your island
-    default: TRUE
-  acidisland.island.ban:
-    description: Allow use of '/ai unban' command - unban a player from your island
-    default: TRUE
-  acidisland.island.ban:
-    description: Allow use of '/ai banlist' command - list banned players
+    description: Allow use of '/ai ban' or '/ai unban' or '/ai banlist' command - manage banned players
     default: TRUE
   acidisland.island.expel:
     description: Allow use of '/ai expel' command - expel a player from your island
@@ -117,22 +108,13 @@ permissions:
     description: Allow use of '/ai team reject' command - reject an invitation
     default: TRUE
   acidisland.island.team.coop:
-    description: Allow use of '/ai team coop' command - make a player coop rank on your island
-    default: TRUE
-  acidisland.island.team.coop:
-    description: Allow use of '/ai team uncoop' command - remove a coop rank from player
+    description: Allow use of '/ai team coop' or '/ai team uncoop' command - manage coop rank for a player
     default: TRUE
   acidisland.island.team.trust:
-    description: Allow use of '/ai team trust' command - give a player trusted rank on your island
-    default: TRUE
-  acidisland.island.team.trust:
-    description: Allow use of '/ai team untrust' command - remove trusted player rank from player
+    description: Allow use of '/ai team trust' or '/ai team untrust' command - manage trusted rank for a player
     default: TRUE
   acidisland.island.team.promote:
-    description: Allow use of '/ai team promote' command - promote a player on your island up a rank
-    default: TRUE
-  acidisland.island.team.promote:
-    description: Allow use of '/ai team demote' command - demote a player on your island down a rank
+    description: Allow use of '/ai team promote' or '/ai team demote' command - promote or demote a player a rank
     default: TRUE
   acidisland.island.sethome:
     description: Allow use of '/ai sethome' command - set your home teleport point
@@ -153,13 +135,7 @@ permissions:
     description: Allow use of '/acid version' command - display BentoBox and addons versions
     default: OP
   acidisland.admin.tp:
-    description: Allow use of '/acid tp' command - teleport to a player's island
-    default: OP
-  acidisland.admin.tp:
-    description: Allow use of '/acid tpnether' command - teleport to a player's island
-    default: OP
-  acidisland.admin.tp:
-    description: Allow use of '/acid tpend' command - teleport to a player's island
+    description: Allow use of '/acid tp/tpnether/tpend' command - teleport to a player's island
     default: OP
   acidisland.admin.getrank:
     description: Allow use of '/acid getrank' command - get a player's rank on their island or the island of the owner
@@ -174,34 +150,19 @@ permissions:
     description: Allow use of '/acid team' command - manage teams
     default: FALSE
   acidisland.mod.team.add:
-    description: Allow use of '/acid team add' command - add player to owner's team
+    description: Allow use of '/acid team add' or '/acid add' command - add player to owner's team
     default: OP
   acidisland.mod.team.disband:
-    description: Allow use of '/acid team disband' command - disband owner's team
+    description: Allow use of '/acid team disband' or '/acid disband' command - disband owner's team
     default: OP
   acidisland.mod.team.fix:
-    description: Allow use of '/acid team fix' command - scans and fixes cross island membership in database
+    description: Allow use of '/acid team fix' or '/acid fix' command - scans and fixes cross island membership in database
     default: OP
   acidisland.mod.team.kick:
-    description: Allow use of '/acid team kick' command - kick a player from a team
+    description: Allow use of '/acid team kick' or '/acid kick' command - kick a player from a team
     default: OP
   acidisland.mod.team.setowner:
-    description: Allow use of '/acid team setowner' command - transfers island ownership to the player
-    default: OP
-  acidisland.mod.team.add:
-    description: Allow use of '/acid add' command - add player to owner's team
-    default: OP
-  acidisland.mod.team.kick:
-    description: Allow use of '/acid kick' command - kick a player from a team
-    default: OP
-  acidisland.mod.team.disband:
-    description: Allow use of '/acid disband' command - disband owner's team
-    default: OP
-  acidisland.mod.team.setowner:
-    description: Allow use of '/acid setowner' command - transfers island ownership to the player
-    default: OP
-  acidisland.mod.team.fix:
-    description: Allow use of '/acid fix' command - scans and fixes cross island membership in database
+    description: Allow use of '/acid team setowner' or '/acid setowner' command - transfers island ownership to the player
     default: OP
   acidisland.admin.blueprint:
     description: Allow use of '/acid blueprint' command - manipulate blueprints
@@ -266,14 +227,11 @@ permissions:
   acidisland.admin.resets.set:
     description: Allow use of '/acid resets set' command - sets how many times this player has reset his island
     default: OP
-  acidisland.admin.resets.remove:
-    description: Allow use of '/acid resets reset' command - sets the player's island reset count to 0
-    default: OP
   acidisland.admin.resets.add:
     description: Allow use of '/acid resets add' command - adds this player's island reset count
     default: OP
   acidisland.admin.resets.remove:
-    description: Allow use of '/acid resets remove' command - reduces the player's island reset count
+    description: Allow use of '/acid resets reset' or '/acid resets remove' command - reset to 0 or reduce the player's island reset count
     default: OP
   acidisland.admin.delete:
     description: Allow use of '/acid delete' command - deletes a player's island
