@@ -42,7 +42,7 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     private static final Material POTENT_SULFUR = Material.getMaterial("POTENT_SULFUR");
     // Depth of the vent cap below the sea surface. Must be 4 or less for the potent
     // sulfur to gas the surface, and sets the geyser height (5 x water depth)
-    private static final int VENT_DEPTH = 3;
+    private static final int VENT_DEPTH = 2;
     private PerlinOctaveGenerator gen;
 
     private record WorldConfig(int seaHeight, Material waterBlock) {}
