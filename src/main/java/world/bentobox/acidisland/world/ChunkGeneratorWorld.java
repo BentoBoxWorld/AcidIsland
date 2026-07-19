@@ -38,6 +38,11 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
             new FloorMats(Material.NETHERRACK, Material.SOUL_SAND), Environment.NORMAL,
             new FloorMats(Material.SANDSTONE, Material.SAND), Environment.THE_END,
             new FloorMats(Material.END_STONE, Material.END_STONE));
+    // Only exists on Minecraft 26.2 and later; null on older servers, which disables sulfur vents
+    private static final Material POTENT_SULFUR = Material.getMaterial("POTENT_SULFUR");
+    // Depth of the vent cap below the sea surface. Must be 4 or less for the potent
+    // sulfur to gas the surface, and sets the geyser height (5 x water depth)
+    private static final int VENT_DEPTH = 3;
     private PerlinOctaveGenerator gen;
 
     private record WorldConfig(int seaHeight, Material waterBlock) {}
@@ -68,10 +73,30 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
                 chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1, 16, Material.BEDROCK);
                 addNoise(worldInfo, chunkX, chunkZ, chunkData);
             }
+            addSulfurVent(worldInfo, random, chunkData, wc);
         }
         if (worldInfo.getEnvironment().equals(Environment.NETHER) && addon.getSettings().isNetherRoof()) {
             roofChunk.forEach((k,v) -> chunkData.setBlock(k.getBlockX(), worldInfo.getMaxHeight() + k.getBlockY(), k.getBlockZ(), v));
         }
+    }
+
+    /**
+     * Randomly places a sulfur vent just below the sea surface: a potent sulfur cap over
+     * a magma block, which bubbles, gasses the surface with nausea, and periodically
+     * erupts as a geyser. Minecraft 26.2+ only - does nothing on older servers.
+     */
+    private void addSulfurVent(@NonNull WorldInfo worldInfo, @NonNull Random random, @NonNull ChunkData chunkData,
+            WorldConfig wc) {
+        int capY = wc.seaHeight() - VENT_DEPTH;
+        if (POTENT_SULFUR == null || !worldInfo.getEnvironment().equals(Environment.NORMAL)
+                || !wc.waterBlock().equals(Material.WATER) || capY - 1 <= worldInfo.getMinHeight()
+                || random.nextInt(100) >= Math.clamp(addon.getSettings().getSulfurVentChance(), 0, 100)) {
+            return;
+        }
+        int x = random.nextInt(16);
+        int z = random.nextInt(16);
+        chunkData.setBlock(x, capY, z, POTENT_SULFUR);
+        chunkData.setBlock(x, capY - 1, z, Material.MAGMA_BLOCK);
     }
 
     private void addNoise(@NonNull WorldInfo worldInfo, int chunkX, int chunkZ, @NonNull ChunkData chunkData) {

@@ -263,6 +263,13 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "world.ocean-floor", needsReset = true)
     private boolean oceanFloor = false;
 
+    @ConfigComment("Sulfur vents")
+    @ConfigComment("Chance (0-100) per chunk of a sulfur vent generating just below the sea surface.")
+    @ConfigComment("Vents are made of potent sulfur over a magma block and bubble, gas, and erupt as geysers.")
+    @ConfigComment("Requires Minecraft 26.2 or later - ignored on older servers.")
+    @ConfigEntry(path = "world.sulfur-vent-chance", needsReset = true)
+    private int sulfurVentChance = 10;
+
     @ConfigComment("Structures")
     @ConfigComment("This creates an vanilla structures in the worlds.")
     @ConfigEntry(path = "world.make-structures", needsReset = true)
@@ -289,6 +296,8 @@ public class AISettings implements WorldSettings {
     private GameMode defaultGameMode = GameMode.SURVIVAL;
 
     @ConfigComment("The default biome for the overworld")
+    @ConfigComment("SULFUR_CAVES (Minecraft 26.2+) gives acid-green water with green fog.")
+    @ConfigComment("On older servers this biome does not exist and WARM_OCEAN is used instead.")
     @ConfigEntry(path = "world.default-biome")
     private Biome defaultBiome = Biome.WARM_OCEAN;
     @ConfigComment("The default biome for the nether world (this may affect what mobs can spawn)")
@@ -2143,6 +2152,20 @@ public class AISettings implements WorldSettings {
     }
     public void setOceanFloor(boolean oceanFloor) {
         this.oceanFloor = oceanFloor;
+    }
+
+    /**
+     * @return the sulfurVentChance
+     */
+    public int getSulfurVentChance() {
+        return sulfurVentChance;
+    }
+
+    /**
+     * @param sulfurVentChance chance (0-100) per chunk of a sulfur vent generating
+     */
+    public void setSulfurVentChance(int sulfurVentChance) {
+        this.sulfurVentChance = sulfurVentChance;
     }
 
     /**
