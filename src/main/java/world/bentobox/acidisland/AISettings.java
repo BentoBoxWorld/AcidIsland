@@ -11,7 +11,6 @@ import java.util.Set;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 
@@ -301,13 +300,13 @@ public class AISettings implements WorldSettings {
     @ConfigComment("SULFUR_CAVES (Minecraft 26.2+) gives acid-green water with green fog.")
     @ConfigComment("On older servers this biome does not exist and WARM_OCEAN is used instead.")
     @ConfigEntry(path = "world.default-biome")
-    private Biome defaultBiome = Biome.WARM_OCEAN;
+    private String defaultBiome = "SULFUR_CAVES";
     @ConfigComment("The default biome for the nether world (this may affect what mobs can spawn)")
     @ConfigEntry(path = "world.default-nether-biome")
-    private Biome defaultNetherBiome = Biome.NETHER_WASTES;
+    private String defaultNetherBiome = "NETHER_WASTES";
     @ConfigComment("The default biome for the end world (this may affect what mobs can spawn)")
     @ConfigEntry(path = "world.default-end-biome")
-    private Biome defaultEndBiome = Biome.THE_END;
+    private String defaultEndBiome = "THE_END";
 
     @ConfigComment("The maximum number of players a player can ban at any one time in this game mode.")
     @ConfigComment("The permission acidisland.ban.maxlimit.X where X is a number can also be used per player")
@@ -772,7 +771,7 @@ public class AISettings implements WorldSettings {
     /**
      * @return the defaultBiome
      */
-    public Biome getDefaultBiome() {
+    public String getDefaultBiome() {
         return defaultBiome;
     }
     /**
@@ -1350,7 +1349,7 @@ public class AISettings implements WorldSettings {
     /**
      * @param defaultBiome the defaultBiome to set
      */
-    public void setDefaultBiome(Biome defaultBiome) {
+    public void setDefaultBiome(String defaultBiome) {
         this.defaultBiome = defaultBiome;
     }
     /**
@@ -2052,25 +2051,25 @@ public class AISettings implements WorldSettings {
     /**
      * @return the defaultNetherBiome
      */
-    public Biome getDefaultNetherBiome() {
+    public String getDefaultNetherBiome() {
         return defaultNetherBiome;
     }
     /**
      * @param defaultNetherBiome the defaultNetherBiome to set
      */
-    public void setDefaultNetherBiome(Biome defaultNetherBiome) {
+    public void setDefaultNetherBiome(String defaultNetherBiome) {
         this.defaultNetherBiome = defaultNetherBiome;
     }
     /**
      * @return the defaultEndBiome
      */
-    public Biome getDefaultEndBiome() {
+    public String getDefaultEndBiome() {
         return defaultEndBiome;
     }
     /**
      * @param defaultEndBiome the defaultEndBiome to set
      */
-    public void setDefaultEndBiome(Biome defaultEndBiome) {
+    public void setDefaultEndBiome(String defaultEndBiome) {
         this.defaultEndBiome = defaultEndBiome;
     }
     /**

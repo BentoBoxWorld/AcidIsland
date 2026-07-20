@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
-import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.AfterEach;
@@ -95,7 +94,7 @@ public class AISettingsTest {
 
     @Test
     void testGetDefaultBiome() {
-        assertEquals(Biome.WARM_OCEAN, s.getDefaultBiome());
+        assertEquals("SULFUR_CAVES", s.getDefaultBiome());
     }
 
     @Test
@@ -496,8 +495,8 @@ public class AISettingsTest {
 
     @Test
     void testSetDefaultBiome() {
-        s.setDefaultBiome(Biome.BADLANDS);
-        assertEquals(Biome.BADLANDS, s.getDefaultBiome());
+        s.setDefaultBiome("BADLANDS");
+        assertEquals("BADLANDS", s.getDefaultBiome());
     }
 
     @Test
@@ -1169,24 +1168,24 @@ public class AISettingsTest {
 
     @Test
     void testGetDefaultNetherBiome() {
-        assertEquals(Biome.NETHER_WASTES, s.getDefaultNetherBiome());
+        assertEquals("NETHER_WASTES", s.getDefaultNetherBiome());
     }
 
     @Test
     void testSetDefaultNetherBiome() {
-        s.setDefaultNetherBiome(Biome.END_BARRENS);
-        assertEquals(Biome.END_BARRENS, s.getDefaultNetherBiome());
+        s.setDefaultNetherBiome("END_BARRENS");
+        assertEquals("END_BARRENS", s.getDefaultNetherBiome());
     }
 
     @Test
     void testGetDefaultEndBiome() {
-        assertEquals(Biome.THE_END, s.getDefaultEndBiome());
+        assertEquals("THE_END", s.getDefaultEndBiome());
     }
 
     @Test
     void testSetDefaultEndBiome() {
-        s.setDefaultEndBiome(Biome.END_BARRENS);
-        assertEquals(Biome.END_BARRENS, s.getDefaultEndBiome());
+        s.setDefaultEndBiome("END_BARRENS");
+        assertEquals("END_BARRENS", s.getDefaultEndBiome());
     }
 
 }

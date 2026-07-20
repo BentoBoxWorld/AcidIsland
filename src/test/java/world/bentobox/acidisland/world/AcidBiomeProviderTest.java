@@ -61,22 +61,36 @@ public class AcidBiomeProviderTest {
 
     @Test
     void testGetBiomeCustom() {
-        settings.setDefaultBiome(Biome.DEEP_OCEAN);
+        settings.setDefaultBiome("DEEP_OCEAN");
+        when(worldInfo.getEnvironment()).thenReturn(Environment.NORMAL);
+        assertEquals(Biome.DEEP_OCEAN, provider.getBiome(worldInfo, 0, 0, 0));
+    }
+
+    @Test
+    void testGetBiomeCustomNamespaced() {
+        settings.setDefaultBiome("minecraft:deep_ocean");
         when(worldInfo.getEnvironment()).thenReturn(Environment.NORMAL);
         assertEquals(Biome.DEEP_OCEAN, provider.getBiome(worldInfo, 0, 0, 0));
     }
 
     @Test
     void testGetBiomeCustomNether() {
-        settings.setDefaultNetherBiome(Biome.SOUL_SAND_VALLEY);
+        settings.setDefaultNetherBiome("SOUL_SAND_VALLEY");
         when(worldInfo.getEnvironment()).thenReturn(Environment.NETHER);
         assertEquals(Biome.SOUL_SAND_VALLEY, provider.getBiome(worldInfo, 0, 0, 0));
     }
 
     /**
-     * A null biome occurs when the configured biome does not exist on this server
-     * version, e.g. SULFUR_CAVES on servers older than Minecraft 26.2
+     * A biome name that does not exist on this server version, e.g. SULFUR_CAVES on
+     * servers older than Minecraft 26.2, must fall back to a vanilla biome
      */
+    @Test
+    void testGetBiomeUnknownFallsBackNormal() {
+        settings.setDefaultBiome("SULFUR_CAVES");
+        when(worldInfo.getEnvironment()).thenReturn(Environment.NORMAL);
+        assertEquals(Biome.WARM_OCEAN, provider.getBiome(worldInfo, 0, 0, 0));
+    }
+
     @Test
     void testGetBiomeNullFallsBackNormal() {
         settings.setDefaultBiome(null);
