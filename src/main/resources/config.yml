@@ -160,10 +160,18 @@ world:
   # This creates an ocean floor environment, with vanilla elements.
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
   ocean-floor: true
+  # Sulfur vents
+  # Chance (0-100) per chunk of a sulfur vent generating just below the sea surface.
+  # Vents are made of potent sulfur over a magma block and bubble, gas, and erupt as geysers.
+  # Requires Minecraft 26.2 or later - ignored on older servers.
+  # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
+  sulfur-vent-chance: 10
   # Structures
   # This creates an vanilla structures in the worlds.
+  # Trial chambers and other underground structures generate buried
+  # beneath the ocean floor, giving a reason to dig down.
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
-  make-structures: false
+  make-structures: true
   # Caves
   # This creates an vanilla caves in the worlds.
   # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
@@ -179,7 +187,9 @@ world:
   # a new island for example. Options are SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR
   default-game-mode: SURVIVAL
   # The default biome for the overworld
-  default-biome: WARM_OCEAN
+  # SULFUR_CAVES (Minecraft 26.2+) gives acid-green water with green fog.
+  # On older servers this biome does not exist and WARM_OCEAN is used instead.
+  default-biome: SULFUR_CAVES
   # The default biome for the nether world (this may affect what mobs can spawn)
   default-nether-biome: NETHER_WASTES
   # The default biome for the end world (this may affect what mobs can spawn)

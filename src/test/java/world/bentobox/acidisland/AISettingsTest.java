@@ -104,6 +104,13 @@ public class AISettingsTest {
     }
 
     @Test
+    void testGetSulfurVentChance() {
+        assertEquals(10, s.getSulfurVentChance());
+        s.setSulfurVentChance(50);
+        assertEquals(50, s.getSulfurVentChance());
+    }
+
+    @Test
     void testGetDifficulty() {
         assertEquals(Difficulty.NORMAL, s.getDifficulty());
     }

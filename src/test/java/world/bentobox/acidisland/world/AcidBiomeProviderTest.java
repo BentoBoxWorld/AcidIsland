@@ -72,4 +72,29 @@ public class AcidBiomeProviderTest {
         when(worldInfo.getEnvironment()).thenReturn(Environment.NETHER);
         assertEquals(Biome.SOUL_SAND_VALLEY, provider.getBiome(worldInfo, 0, 0, 0));
     }
+
+    /**
+     * A null biome occurs when the configured biome does not exist on this server
+     * version, e.g. SULFUR_CAVES on servers older than Minecraft 26.2
+     */
+    @Test
+    void testGetBiomeNullFallsBackNormal() {
+        settings.setDefaultBiome(null);
+        when(worldInfo.getEnvironment()).thenReturn(Environment.NORMAL);
+        assertEquals(Biome.WARM_OCEAN, provider.getBiome(worldInfo, 0, 0, 0));
+    }
+
+    @Test
+    void testGetBiomeNullFallsBackNether() {
+        settings.setDefaultNetherBiome(null);
+        when(worldInfo.getEnvironment()).thenReturn(Environment.NETHER);
+        assertEquals(Biome.NETHER_WASTES, provider.getBiome(worldInfo, 0, 0, 0));
+    }
+
+    @Test
+    void testGetBiomeNullFallsBackEnd() {
+        settings.setDefaultEndBiome(null);
+        when(worldInfo.getEnvironment()).thenReturn(Environment.THE_END);
+        assertEquals(Biome.THE_END, provider.getBiome(worldInfo, 0, 0, 0));
+    }
 }

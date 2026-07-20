@@ -10,6 +10,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
@@ -38,7 +39,23 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
             new FloorMats(Material.NETHERRACK, Material.SOUL_SAND), Environment.NORMAL,
             new FloorMats(Material.SANDSTONE, Material.SAND), Environment.THE_END,
             new FloorMats(Material.END_STONE, Material.END_STONE));
+    // Only exist on Minecraft 26.2 and later; null on older servers, which disables sulfur vents
+    private static final Material POTENT_SULFUR = Material.getMaterial("POTENT_SULFUR");
+    private static final Material SULFUR = Material.getMaterial("SULFUR");
+    private static final Material SULFUR_SPIKE = Material.getMaterial("SULFUR_SPIKE");
+    private static final Material CINNABAR = Material.getMaterial("CINNABAR");
+    // Depth of the vent cap below the sea surface. Must be 4 or less for the potent
+    // sulfur to gas the surface, and sets the geyser height (5 x water depth)
+    private static final int VENT_DEPTH = 3;
+    // Offsets to the four horizontal neighbours
+    private static final int[][] SIDES = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     private PerlinOctaveGenerator gen;
+    // Generator-placed potent sulfur keeps its default 'dry' state and never activates
+    // because worldgen blocks get no placement update, so the cap is pre-set to
+    // 'dormant' (water above, magma below), which starts the eruption cycle
+    private final BlockData ventCap;
+    // Spikes are placed waterlogged so they do not leave air pockets in the sea
+    private final BlockData ventSpike;
 
     private record WorldConfig(int seaHeight, Material waterBlock) {}
 
@@ -51,6 +68,8 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
         seaHeight.put(Environment.NORMAL, new WorldConfig(addon.getSettings().getSeaHeight(), addon.getSettings().getWaterBlock()));
         seaHeight.put(Environment.NETHER, new WorldConfig(addon.getSettings().getNetherSeaHeight(), addon.getSettings().getNetherWaterBlock()));
         seaHeight.put(Environment.THE_END, new WorldConfig(addon.getSettings().getEndSeaHeight(), addon.getSettings().getEndWaterBlock()));
+        ventCap = POTENT_SULFUR == null ? null : POTENT_SULFUR.createBlockData("[potent_sulfur_state=dormant]");
+        ventSpike = SULFUR_SPIKE == null ? null : SULFUR_SPIKE.createBlockData("[waterlogged=true]");
         rand.setSeed(System.currentTimeMillis());
         gen = new PerlinOctaveGenerator((long) (rand.nextLong() * rand.nextGaussian()), 8);
         gen.setScale(1.0/30.0);
@@ -68,24 +87,150 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
                 chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1, 16, Material.BEDROCK);
                 addNoise(worldInfo, chunkX, chunkZ, chunkData);
             }
+            addSulfurVent(worldInfo, random, chunkData, wc);
         }
         if (worldInfo.getEnvironment().equals(Environment.NETHER) && addon.getSettings().isNetherRoof()) {
             roofChunk.forEach((k,v) -> chunkData.setBlock(k.getBlockX(), worldInfo.getMaxHeight() + k.getBlockY(), k.getBlockZ(), v));
         }
     }
 
+    /**
+     * Randomly places a sulfur vent just below the sea surface in one of four natural
+     * shapes. Every vent has at least one potent sulfur cap over a magma block, which
+     * bubbles, gasses the surface with nausea, and periodically erupts as a geyser.
+     * Minecraft 26.2+ only - does nothing on older servers.
+     */
+    private void addSulfurVent(@NonNull WorldInfo worldInfo, @NonNull Random random, @NonNull ChunkData chunkData,
+            WorldConfig wc) {
+        int capY = wc.seaHeight() - VENT_DEPTH;
+        if (ventCap == null || SULFUR == null || !worldInfo.getEnvironment().equals(Environment.NORMAL)
+                || !wc.waterBlock().equals(Material.WATER) || capY - 4 <= worldInfo.getMinHeight()
+                || random.nextInt(100) >= Math.clamp(addon.getSettings().getSulfurVentChance(), 0, 100)) {
+            return;
+        }
+        // Keep one block away from the chunk edge so shoulder blocks stay in this chunk
+        int x = 1 + random.nextInt(14);
+        int z = 1 + random.nextInt(14);
+        switch (random.nextInt(4)) {
+        case 0 -> ventChimney(chunkData, random, x, capY, z);
+        case 1 -> ventMound(chunkData, random, x, capY, z);
+        case 2 -> ventTwin(chunkData, random, x, capY, z);
+        default -> ventCrag(chunkData, random, x, capY, z);
+        }
+    }
+
+    /**
+     * Places a potent sulfur cap over a magma block on a sulfur base - the working
+     * heart of every vent
+     */
+    private void placeCap(ChunkData chunkData, int x, int capY, int z) {
+        chunkData.setBlock(x, capY, z, ventCap);
+        chunkData.setBlock(x, capY - 1, z, Material.MAGMA_BLOCK);
+        chunkData.setBlock(x, capY - 2, z, SULFUR);
+    }
+
+    /**
+     * A slim chimney with a single lopsided sulfur shoulder
+     */
+    private void ventChimney(ChunkData chunkData, Random random, int x, int capY, int z) {
+        placeCap(chunkData, x, capY, z);
+        int[] side = SIDES[random.nextInt(SIDES.length)];
+        chunkData.setBlock(x + side[0], capY - 1, z + side[1], SULFUR);
+    }
+
+    /**
+     * A rounded sulfur mound with the cap poking out of the top
+     */
+    private void ventMound(ChunkData chunkData, Random random, int x, int capY, int z) {
+        placeCap(chunkData, x, capY, z);
+        for (int[] side : SIDES) {
+            if (random.nextInt(4) < 3) {
+                chunkData.setBlock(x + side[0], capY - 1, z + side[1], SULFUR);
+            }
+            chunkData.setBlock(x + side[0], capY - 2, z + side[1], SULFUR);
+        }
+        // Ragged diagonal skirt
+        for (int dx = -1; dx <= 1; dx += 2) {
+            for (int dz = -1; dz <= 1; dz += 2) {
+                if (random.nextBoolean()) {
+                    chunkData.setBlock(x + dx, capY - 2, z + dz, SULFUR);
+                }
+            }
+        }
+    }
+
+    /**
+     * Two caps at different heights on a shared sulfur outcrop; the deeper cap sits
+     * under four water blocks so its geyser erupts higher
+     */
+    private void ventTwin(ChunkData chunkData, Random random, int x, int capY, int z) {
+        placeCap(chunkData, x, capY, z);
+        int dx = random.nextBoolean() ? 1 : -1;
+        int dz = random.nextBoolean() ? 1 : -1;
+        placeCap(chunkData, x + dx, capY - 1, z + dz);
+        // Join the two stacks at their corners
+        chunkData.setBlock(x + dx, capY - 2, z, SULFUR);
+        chunkData.setBlock(x, capY - 2, z + dz, SULFUR);
+    }
+
+    /**
+     * A craggy vent with sulfur spikes growing from its shoulders
+     */
+    private void ventCrag(ChunkData chunkData, Random random, int x, int capY, int z) {
+        placeCap(chunkData, x, capY, z);
+        for (int[] side : SIDES) {
+            if (random.nextBoolean()) {
+                chunkData.setBlock(x + side[0], capY - 1, z + side[1], SULFUR);
+                if (ventSpike != null && random.nextBoolean()) {
+                    chunkData.setBlock(x + side[0], capY, z + side[1], ventSpike);
+                }
+            }
+        }
+    }
+
     private void addNoise(@NonNull WorldInfo worldInfo, int chunkX, int chunkZ, @NonNull ChunkData chunkData) {
+        FloorMats mats = floorMats.get(worldInfo.getEnvironment());
+        boolean overworld = worldInfo.getEnvironment().equals(Environment.NORMAL);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int n = (int)(25 * gen.noise((chunkX << 4) + (double)x, (chunkZ << 4) + (double)z, 0.5, 0.5, true));
-                for (int y = worldInfo.getMinHeight(); y < 25 + n; y++) {
-                    chunkData.setBlock(x, y, z, rand.nextBoolean() ? floorMats.get(worldInfo.getEnvironment()).top()
-                            : floorMats.get(worldInfo.getEnvironment()).base());
+                int top = 25 + n;
+                for (int y = worldInfo.getMinHeight(); y < top; y++) {
+                    chunkData.setBlock(x, y, z, rand.nextBoolean() ? mats.top() : mats.base());
+                }
+                if (overworld && top - 1 > worldInfo.getMinHeight()) {
+                    chunkData.setBlock(x, top - 1, z, floorSurface());
                 }
             }
         }
         // Make an solid base so sand doesn't fall into the void
         chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1 , 16, Material.BEDROCK);
+    }
+
+    /**
+     * Picks the ocean floor surface block: mostly sand, broken up with gravel and tuff
+     * patches, the odd magma block bubbling away, and on Minecraft 26.2+ scatterings
+     * of sulfur and cinnabar as found around vanilla sulfur springs
+     */
+    private Material floorSurface() {
+        int r = rand.nextInt(100);
+        Material m;
+        if (r < 55) {
+            m = Material.SAND;
+        } else if (r < 70) {
+            m = Material.GRAVEL;
+        } else if (r < 80) {
+            m = Material.SANDSTONE;
+        } else if (r < 88) {
+            m = Material.TUFF;
+        } else if (r < 93) {
+            m = Material.MAGMA_BLOCK;
+        } else if (r < 97) {
+            m = SULFUR == null ? Material.GRAVEL : SULFUR;
+        } else {
+            m = CINNABAR == null ? Material.TUFF : CINNABAR;
+        }
+        return m;
     }
 
     @Override

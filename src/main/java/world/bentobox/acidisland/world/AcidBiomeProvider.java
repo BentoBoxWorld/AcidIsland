@@ -1,6 +1,7 @@
 package world.bentobox.acidisland.world;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.bukkit.block.Biome;
 import org.bukkit.generator.BiomeProvider;
@@ -26,10 +27,12 @@ public class AcidBiomeProvider extends BiomeProvider {
 
     @Override
     public Biome getBiome(WorldInfo worldInfo, int x, int y, int z) {
+        // Biomes are null if the configured biome does not exist on this server version,
+        // e.g. SULFUR_CAVES on servers older than Minecraft 26.2, so fall back to a vanilla one
         return switch(worldInfo.getEnvironment()) {
-        case NETHER -> addon.getSettings().getDefaultNetherBiome();
-        case THE_END -> addon.getSettings().getDefaultEndBiome();
-        default -> addon.getSettings().getDefaultBiome();
+        case NETHER -> Objects.requireNonNullElse(addon.getSettings().getDefaultNetherBiome(), Biome.NETHER_WASTES);
+        case THE_END -> Objects.requireNonNullElse(addon.getSettings().getDefaultEndBiome(), Biome.THE_END);
+        default -> Objects.requireNonNullElse(addon.getSettings().getDefaultBiome(), Biome.WARM_OCEAN);
         };
     }
 
