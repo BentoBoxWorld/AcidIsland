@@ -272,8 +272,10 @@ public class AISettings implements WorldSettings {
 
     @ConfigComment("Structures")
     @ConfigComment("This creates an vanilla structures in the worlds.")
+    @ConfigComment("Trial chambers and other underground structures generate buried")
+    @ConfigComment("beneath the ocean floor, giving a reason to dig down.")
     @ConfigEntry(path = "world.make-structures", needsReset = true)
-    private boolean makeStructures = false;
+    private boolean makeStructures = true;
 
     @ConfigComment("Caves")
     @ConfigComment("This creates an vanilla caves in the worlds.")
