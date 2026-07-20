@@ -1,0 +1,19 @@
+{
+  "uniqueId": "sulfur_spring",
+  "icon": "MAGMA_BLOCK",
+  "displayName": "§eSulfur Spring Refuge",
+  "description": [
+    "§7A hardy spruce outcrop",
+    "§7weathered by acid spray.",
+    "§eBuilt for the green seas —",
+    "§7with a tuff sanctum below",
+    "§7and a sure-footed goat."
+  ],
+  "requirePermission": false,
+  "blueprints": {
+    "NORMAL": "sulfur-spring",
+    "NETHER": "nether-island",
+    "THE_END": "end-island"
+  },
+  "slot": 6
+}

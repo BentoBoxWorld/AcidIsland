@@ -43,6 +43,7 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     private static final Material POTENT_SULFUR = Material.getMaterial("POTENT_SULFUR");
     private static final Material SULFUR = Material.getMaterial("SULFUR");
     private static final Material SULFUR_SPIKE = Material.getMaterial("SULFUR_SPIKE");
+    private static final Material CINNABAR = Material.getMaterial("CINNABAR");
     // Depth of the vent cap below the sea surface. Must be 4 or less for the potent
     // sulfur to gas the surface, and sets the geyser height (5 x water depth)
     private static final int VENT_DEPTH = 3;
@@ -188,17 +189,48 @@ public class ChunkGeneratorWorld extends ChunkGenerator {
     }
 
     private void addNoise(@NonNull WorldInfo worldInfo, int chunkX, int chunkZ, @NonNull ChunkData chunkData) {
+        FloorMats mats = floorMats.get(worldInfo.getEnvironment());
+        boolean overworld = worldInfo.getEnvironment().equals(Environment.NORMAL);
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int n = (int)(25 * gen.noise((chunkX << 4) + (double)x, (chunkZ << 4) + (double)z, 0.5, 0.5, true));
-                for (int y = worldInfo.getMinHeight(); y < 25 + n; y++) {
-                    chunkData.setBlock(x, y, z, rand.nextBoolean() ? floorMats.get(worldInfo.getEnvironment()).top()
-                            : floorMats.get(worldInfo.getEnvironment()).base());
+                int top = 25 + n;
+                for (int y = worldInfo.getMinHeight(); y < top; y++) {
+                    chunkData.setBlock(x, y, z, rand.nextBoolean() ? mats.top() : mats.base());
+                }
+                if (overworld && top - 1 > worldInfo.getMinHeight()) {
+                    chunkData.setBlock(x, top - 1, z, floorSurface());
                 }
             }
         }
         // Make an solid base so sand doesn't fall into the void
         chunkData.setRegion(0, worldInfo.getMinHeight(), 0, 16, worldInfo.getMinHeight() + 1 , 16, Material.BEDROCK);
+    }
+
+    /**
+     * Picks the ocean floor surface block: mostly sand, broken up with gravel and tuff
+     * patches, the odd magma block bubbling away, and on Minecraft 26.2+ scatterings
+     * of sulfur and cinnabar as found around vanilla sulfur springs
+     */
+    private Material floorSurface() {
+        int r = rand.nextInt(100);
+        Material m;
+        if (r < 55) {
+            m = Material.SAND;
+        } else if (r < 70) {
+            m = Material.GRAVEL;
+        } else if (r < 80) {
+            m = Material.SANDSTONE;
+        } else if (r < 88) {
+            m = Material.TUFF;
+        } else if (r < 93) {
+            m = Material.MAGMA_BLOCK;
+        } else if (r < 97) {
+            m = SULFUR == null ? Material.GRAVEL : SULFUR;
+        } else {
+            m = CINNABAR == null ? Material.TUFF : CINNABAR;
+        }
+        return m;
     }
 
     @Override
