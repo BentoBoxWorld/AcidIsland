@@ -28,7 +28,7 @@ import org.mockito.quality.Strictness;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class GeyserLootEntryTest {
+class GeyserLootEntryTest {
 
     private ServerMock server;
     private MockedStatic<Bukkit> mockedBukkit;

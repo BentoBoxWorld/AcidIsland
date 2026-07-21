@@ -58,7 +58,10 @@ public class AcidIsland extends GameModeAddon {
         // Save the default config from config.yml
         saveDefaultConfig();
         // Load settings from config.yml. This will check if there are any issues with it too.
-        loadSettings();
+        if (!loadSettings()) {
+            // Settings did not load - the addon has been disabled
+            return;
+        }
         // Make the biome provider
         this.biomeProvider = new AcidBiomeProvider(this);
         // Chunk generator

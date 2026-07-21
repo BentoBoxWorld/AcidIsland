@@ -63,7 +63,7 @@ public class GeyserOfferingsTask {
      */
     private static final int POOL_SCAN_RADIUS = 3;
     /** Radius around the plume to look for a player to run command rewards for. */
-    private static final double COMMAND_RANGE_SQUARED = 24 * 24;
+    private static final double COMMAND_RANGE_SQUARED = 24.0 * 24;
 
     private static final Random RAND = new Random();
 
@@ -165,16 +165,12 @@ public class GeyserOfferingsTask {
      */
     private void consumeOfferings(World world) {
         for (Item item : world.getEntitiesByClass(Item.class)) {
-            if (item.getTicksLived() < MIN_AGE_TICKS) {
-                continue;
-            }
-            Block start = waterStart(item);
-            if (start == null) {
-                continue;
-            }
-            Block vent = findVentNear(start);
-            if (vent != null) {
-                sacrifice(world, item, vent);
+            if (item.getTicksLived() >= MIN_AGE_TICKS) {
+                Block start = waterStart(item);
+                Block vent = start == null ? null : findVentNear(start);
+                if (vent != null) {
+                    sacrifice(world, item, vent);
+                }
             }
         }
     }
@@ -235,26 +231,38 @@ public class GeyserOfferingsTask {
         Iterator<Map.Entry<Vector, VentOfferings>> it = vents.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<Vector, VentOfferings> entry = it.next();
-            Vector v = entry.getKey();
-            if (!world.isChunkLoaded(v.getBlockX() >> 4, v.getBlockZ() >> 4)) {
-                continue;
-            }
-            Block vent = world.getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
-            if (vent.getType() != POTENT_SULFUR) {
+            if (checkVent(world, entry.getKey(), entry.getValue())) {
                 it.remove();
-                continue;
-            }
-            boolean erupting = isErupting(vent);
-            VentOfferings offerings = entry.getValue();
-            if (offerings.erupting && !erupting) {
-                // The plume has settled - pay out now so the eruption cannot
-                // fling the rewards far from the vent
-                it.remove();
-                spew(world, vent, offerings);
-            } else {
-                offerings.erupting = erupting;
             }
         }
+    }
+
+    /**
+     * Check one fed vent, spewing its rewards if its eruption has settled.
+     *
+     * @param world the overworld
+     * @param v the vent cap position
+     * @param offerings the vent's pending offerings
+     * @return true if the vent's tracking entry should be dropped
+     */
+    private boolean checkVent(World world, Vector v, VentOfferings offerings) {
+        if (!world.isChunkLoaded(v.getBlockX() >> 4, v.getBlockZ() >> 4)) {
+            return false;
+        }
+        Block vent = world.getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+        if (vent.getType() != POTENT_SULFUR) {
+            // Mined out - offerings forfeited
+            return true;
+        }
+        boolean erupting = isErupting(vent);
+        if (offerings.erupting && !erupting) {
+            // The plume has settled - pay out now so the eruption cannot
+            // fling the rewards far from the vent
+            spew(world, vent, offerings);
+            return true;
+        }
+        offerings.erupting = erupting;
+        return false;
     }
 
     private boolean isErupting(Block vent) {
@@ -281,20 +289,27 @@ public class GeyserOfferingsTask {
             }
             if (entry.isCommand()) {
                 executeReward(world, spawn, entry);
-                continue;
+            } else {
+                rewards.add(launchReward(world, spawn, entry));
             }
-            Item item = world.dropItem(spawn, entry.toItemStack(RAND));
-            // Radial launch: guaranteed outward motion so the rewards scatter
-            // around the vent instead of falling straight back into the pool
-            double angle = RAND.nextDouble() * 2 * Math.PI;
-            double horizontal = 0.1 + RAND.nextDouble() * 0.3;
-            item.setVelocity(new Vector(Math.cos(angle) * horizontal, 0.6 + RAND.nextDouble() * 0.6,
-                    Math.sin(angle) * horizontal));
-            rewards.add(item);
         }
         world.playSound(spawn, Sound.ENTITY_GENERIC_SPLASH, 1F, 1F);
         world.spawnParticle(Particle.SPLASH, spawn, 40, 0.4, 0.6, 0.4, 0.2);
         Bukkit.getPluginManager().callEvent(new GeyserTransmuteEvent(vent.getLocation(), rewards, offerings.items));
+    }
+
+    /**
+     * Spawn one reward item at the plume top with a radial launch: guaranteed
+     * outward motion so the rewards scatter around the vent instead of falling
+     * straight back into the pool.
+     */
+    private Item launchReward(World world, Location spawn, GeyserLootEntry entry) {
+        Item item = world.dropItem(spawn, entry.toItemStack(RAND));
+        double angle = RAND.nextDouble() * 2 * Math.PI;
+        double horizontal = 0.1 + RAND.nextDouble() * 0.3;
+        item.setVelocity(new Vector(Math.cos(angle) * horizontal, 0.6 + RAND.nextDouble() * 0.6,
+                Math.sin(angle) * horizontal));
+        return item;
     }
 
     /**

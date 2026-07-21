@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author tastybento
  */
 @ExtendWith(MockitoExtension.class)
-public class GeyserSacrificeEventTest {
+class GeyserSacrificeEventTest {
 
     @Mock
     private Item item;

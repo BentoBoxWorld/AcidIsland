@@ -31,7 +31,7 @@ import world.bentobox.acidisland.AcidIsland;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class GeyserOfferingsTaskTest {
+class GeyserOfferingsTaskTest {
 
     @Mock
     private AcidIsland addon;
