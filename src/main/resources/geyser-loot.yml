@@ -1,0 +1,61 @@
+# Geyser offering rewards
+#
+# Items thrown into the water around a sulfur vent are consumed as offerings.
+# When the vent next erupts, one reward is rolled per item offered (capped by
+# world.geyser-offerings.max-rewards in config.yml) and spewed from the plume.
+#
+# Each entry is either an item or a console command:
+#   - {item: RAW_IRON, weight: 30, channel: mineral, amount: {min: 1, max: 3}}
+#   - {command: "give %player% cod 1", weight: 1}
+# weight   - relative chance of the entry rolling (higher = more common)
+# channel  - optional. Offerings bias the table towards their own channel:
+#            every item sacrificed in a channel adds +50% to that channel's
+#            entry weights for the payout. Channels are assigned by material:
+#            gems      - diamonds, emeralds, amethyst, lapis, ender pearls
+#            nether    - netherrack, quartz, blaze, magma, soul, crimson/warped
+#            mineral   - ores, raw metals, ingots, nuggets, stone types
+#            forestry  - logs, planks, saplings, leaves, bamboo, kelp
+#            husbandry - wool, leather, string, feathers, eggs, any food
+#            Anything else burns with no bias but still counts as an offering.
+# amount   - optional item count, fixed or a {min, max} range (default 1)
+#
+# The geyser gives back what it is fed, changed: sacrifice ores to be paid in
+# gems, sacrifice wood to be paid in living things. Materials from Minecraft
+# 26.2 (SULFUR, CINNABAR) are safe to list - this file is only loaded on
+# servers that support the mechanic.
+loot:
+  # The vent's own produce - always in the mix
+  - {item: SULFUR, weight: 25, amount: {min: 1, max: 3}}
+  - {item: CINNABAR, weight: 12, amount: {min: 1, max: 2}}
+  - {item: MAGMA_BLOCK, weight: 10}
+  - {item: PRISMARINE_SHARD, weight: 15, amount: {min: 1, max: 2}}
+  - {item: PRISMARINE_CRYSTALS, weight: 8}
+  - {item: SEA_PICKLE, weight: 6}
+  - {item: NAUTILUS_SHELL, weight: 3}
+  - {item: HEART_OF_THE_SEA, weight: 1}
+  # Mineral channel - fed by stone, ores and metals
+  - {item: IRON_NUGGET, weight: 20, channel: mineral, amount: {min: 2, max: 5}}
+  - {item: RAW_COPPER, weight: 15, channel: mineral, amount: {min: 1, max: 3}}
+  - {item: RAW_IRON, weight: 12, channel: mineral, amount: {min: 1, max: 2}}
+  - {item: RAW_GOLD, weight: 6, channel: mineral}
+  - {item: REDSTONE, weight: 8, channel: mineral, amount: {min: 1, max: 4}}
+  # Gems channel - the vent's rarest vein
+  - {item: AMETHYST_SHARD, weight: 8, channel: gems, amount: {min: 1, max: 2}}
+  - {item: LAPIS_LAZULI, weight: 8, channel: gems, amount: {min: 2, max: 4}}
+  - {item: EMERALD, weight: 3, channel: gems}
+  - {item: DIAMOND, weight: 2, channel: gems}
+  # Nether channel - heat calls to heat
+  - {item: QUARTZ, weight: 10, channel: nether, amount: {min: 1, max: 3}}
+  - {item: GLOWSTONE_DUST, weight: 8, channel: nether, amount: {min: 1, max: 2}}
+  - {item: BLAZE_POWDER, weight: 4, channel: nether}
+  - {item: ANCIENT_DEBRIS, weight: 1, channel: nether}
+  # Forestry channel - green things from a dead sea
+  - {item: KELP, weight: 12, channel: forestry, amount: {min: 1, max: 3}}
+  - {item: BAMBOO, weight: 8, channel: forestry, amount: {min: 1, max: 4}}
+  - {item: MANGROVE_PROPAGULE, weight: 5, channel: forestry}
+  - {item: OAK_SAPLING, weight: 5, channel: forestry}
+  # Husbandry channel - the boiled bounty of the deep
+  - {item: COOKED_COD, weight: 12, channel: husbandry, amount: {min: 1, max: 2}}
+  - {item: COOKED_SALMON, weight: 8, channel: husbandry}
+  - {item: LEATHER, weight: 6, channel: husbandry, amount: {min: 1, max: 2}}
+  - {item: TURTLE_EGG, weight: 2, channel: husbandry}

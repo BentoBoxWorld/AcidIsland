@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import world.bentobox.acidisland.commands.IslandAboutCommand;
+import world.bentobox.acidisland.geysers.GeyserOfferingsTask;
 import world.bentobox.acidisland.listeners.AcidEffect;
 import world.bentobox.acidisland.listeners.LavaCheck;
 import world.bentobox.acidisland.listeners.PurifiedWaterListener;
@@ -36,6 +37,7 @@ public class AcidIsland extends GameModeAddon {
 
     private @Nullable AISettings settings;
     private @Nullable AcidTask acidTask;
+    private @Nullable GeyserOfferingsTask geyserOfferingsTask;
     private @Nullable ChunkGenerator chunkGenerator;
     private final Config<AISettings> config = new Config<>(this, AISettings.class);
     private BiomeProvider biomeProvider;
@@ -56,7 +58,10 @@ public class AcidIsland extends GameModeAddon {
         // Save the default config from config.yml
         saveDefaultConfig();
         // Load settings from config.yml. This will check if there are any issues with it too.
-        loadSettings();
+        if (!loadSettings()) {
+            // Settings did not load - the addon has been disabled
+            return;
+        }
         // Make the biome provider
         this.biomeProvider = new AcidBiomeProvider(this);
         // Chunk generator
@@ -107,11 +112,14 @@ public class AcidIsland extends GameModeAddon {
         registerListener(new PurifiedWaterListener(this));
         // Burn everything
         acidTask = new AcidTask(this);
+        // Sulfur vents accept offerings and transmute them into geyser rewards
+        geyserOfferingsTask = new GeyserOfferingsTask(this);
     }
 
     @Override
     public void onDisable() {
         if (acidTask != null) acidTask.cancelTasks();
+        if (geyserOfferingsTask != null) geyserOfferingsTask.cancelTasks();
     }
 
     @NonNull
