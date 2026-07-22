@@ -163,8 +163,8 @@ world:
   # Sulfur vents
   # Chance (0-100) per chunk of a sulfur vent generating just below the sea surface.
   # Vents are made of potent sulfur over a magma block and bubble, gas, and erupt as geysers.
+  # Changing this only affects newly generated chunks.
   # Requires Minecraft 26.2 or later - ignored on older servers.
-  # /!\ BentoBox currently does not support changing this value mid-game. If you do need to change it, do a full reset of your databases and worlds.
   sulfur-vent-chance: 10
   # Geyser offerings
   # Items thrown into the water around a sulfur vent are consumed as offerings and

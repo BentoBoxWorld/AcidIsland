@@ -265,8 +265,9 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Sulfur vents")
     @ConfigComment("Chance (0-100) per chunk of a sulfur vent generating just below the sea surface.")
     @ConfigComment("Vents are made of potent sulfur over a magma block and bubble, gas, and erupt as geysers.")
+    @ConfigComment("Changing this only affects newly generated chunks.")
     @ConfigComment("Requires Minecraft 26.2 or later - ignored on older servers.")
-    @ConfigEntry(path = "world.sulfur-vent-chance", needsReset = true)
+    @ConfigEntry(path = "world.sulfur-vent-chance")
     private int sulfurVentChance = 10;
 
     @ConfigComment("Geyser offerings")
