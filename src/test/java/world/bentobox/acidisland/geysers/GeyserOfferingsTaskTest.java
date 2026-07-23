@@ -76,4 +76,11 @@ class GeyserOfferingsTaskTest {
         GeyserOfferingsTask task = new GeyserOfferingsTask(addon);
         assertDoesNotThrow(task::cancelTasks);
     }
+
+    @Test
+    void testOfferToVentWhenInert() {
+        // An inert task must refuse offers without touching the item
+        GeyserOfferingsTask task = new GeyserOfferingsTask(addon);
+        assertFalse(task.offerToVent(Mockito.mock(org.bukkit.entity.Item.class)));
+    }
 }

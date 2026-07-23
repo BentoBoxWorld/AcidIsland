@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -19,6 +21,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.eclipse.jdt.annotation.Nullable;
@@ -64,6 +67,14 @@ public class GeyserOfferingsTask {
     private static final int POOL_SCAN_RADIUS = 3;
     /** Radius around the plume to look for a player to run command rewards for. */
     private static final double COMMAND_RANGE_SQUARED = 24.0 * 24;
+
+    /**
+     * PDC tag on spewed reward items. Tagged items are never consumed as
+     * offerings, so rewards that land back in the pool cannot be recycled into
+     * new offerings in a feedback loop. Once a player picks a reward up and
+     * rethrows it, it is a fresh untagged entity and sacrifices normally.
+     */
+    static final NamespacedKey REWARD_KEY = Objects.requireNonNull(NamespacedKey.fromString("acidisland:geyser_reward"));
 
     private static final Random RAND = new Random();
 
@@ -165,7 +176,7 @@ public class GeyserOfferingsTask {
      */
     private void consumeOfferings(World world) {
         for (Item item : world.getEntitiesByClass(Item.class)) {
-            if (item.getTicksLived() >= MIN_AGE_TICKS) {
+            if (item.getTicksLived() >= MIN_AGE_TICKS && !isReward(item)) {
                 Block start = waterStart(item);
                 Block vent = start == null ? null : findVentNear(start);
                 if (vent != null) {
@@ -173,6 +184,31 @@ public class GeyserOfferingsTask {
                 }
             }
         }
+    }
+
+    /**
+     * @return true if the item is a spewed reward that has not been picked up yet
+     */
+    private static boolean isReward(Item item) {
+        return item.getPersistentDataContainer().has(REWARD_KEY, PersistentDataType.BYTE);
+    }
+
+    /**
+     * Offer an item to a nearby vent on behalf of another consumer. Called by
+     * {@link world.bentobox.acidisland.world.AcidTask} when acid is about to
+     * destroy a floating item, so acid destruction within a vent's pool counts
+     * as a sacrifice instead of a plain loss.
+     *
+     * @param item the item about to be destroyed
+     * @return true if a vent consumed the item as an offering
+     */
+    public boolean offerToVent(Item item) {
+        if (task == null || isReward(item)) {
+            return false;
+        }
+        Block start = waterStart(item);
+        Block vent = start == null ? null : findVentNear(start);
+        return vent != null && sacrifice(item.getWorld(), item, vent);
     }
 
     /**
@@ -198,13 +234,15 @@ public class GeyserOfferingsTask {
 
     /**
      * Consume one offering: sizzle, credit the vent's bias, remove the item.
+     *
+     * @return true if the item was consumed, false if the event was cancelled
      */
-    private void sacrifice(World world, Item item, Block vent) {
+    private boolean sacrifice(World world, Item item, Block vent) {
         String channel = GeyserLootTable.categorize(item.getItemStack().getType());
         GeyserSacrificeEvent event = new GeyserSacrificeEvent(item, vent.getLocation(), channel);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            return;
+            return false;
         }
         VentOfferings offerings = vents.computeIfAbsent(vent.getLocation().toVector(), k -> {
             VentOfferings v = new VentOfferings();
@@ -220,6 +258,7 @@ public class GeyserOfferingsTask {
         item.remove();
         world.playSound(item.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.8F, 1.2F);
         world.spawnParticle(Particle.LARGE_SMOKE, item.getLocation(), 8, 0.2, 0.2, 0.2, 0.02);
+        return true;
     }
 
     /**
@@ -305,6 +344,7 @@ public class GeyserOfferingsTask {
      */
     private Item launchReward(World world, Location spawn, GeyserLootEntry entry) {
         Item item = world.dropItem(spawn, entry.toItemStack(RAND));
+        item.getPersistentDataContainer().set(REWARD_KEY, PersistentDataType.BYTE, (byte) 1);
         double angle = RAND.nextDouble() * 2 * Math.PI;
         double horizontal = 0.1 + RAND.nextDouble() * 0.3;
         item.setVelocity(new Vector(Math.cos(angle) * horizontal, 0.6 + RAND.nextDouble() * 0.6,

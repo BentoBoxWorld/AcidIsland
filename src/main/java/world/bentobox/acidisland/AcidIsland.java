@@ -127,6 +127,14 @@ public class AcidIsland extends GameModeAddon {
         return Objects.requireNonNull(settings);
     }
 
+    /**
+     * @return the geyser offerings task, or null before onEnable
+     */
+    @Nullable
+    public GeyserOfferingsTask getGeyserOfferingsTask() {
+        return geyserOfferingsTask;
+    }
+
     /* (non-Javadoc)
      * @see world.bentobox.bentobox.api.addons.GameModeAddon#createWorlds()
      */

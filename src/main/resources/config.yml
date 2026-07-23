@@ -170,6 +170,8 @@ world:
   # Items thrown into the water around a sulfur vent are consumed as offerings and
   # transmuted into rewards that are spewed out when the vent next erupts as a geyser.
   # Rewards are defined in geyser-loot.yml in the addon's data folder.
+  # Works with acid item destruction: items the acid destroys within a vent's pool
+  # count as offerings instead of being lost.
   # Requires Minecraft 26.2 or later - ignored on older servers.
   geyser-offerings:
     enabled: true

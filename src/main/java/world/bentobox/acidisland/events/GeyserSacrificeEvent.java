@@ -8,8 +8,10 @@ import org.bukkit.event.HandlerList;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
- * Fired when an item thrown into the water above a sulfur vent is about to be
- * consumed as an offering. Cancelling leaves the item floating in the pool.
+ * Fired when an item in the water around a sulfur vent is about to be consumed
+ * as an offering - either by the offerings task or by acid item destruction
+ * dissolving it within the vent's pool. Cancelling leaves the item floating in
+ * the pool (acid destruction then proceeds as normal, if it applies).
  *
  * @author tastybento
  * @since 2.1.0

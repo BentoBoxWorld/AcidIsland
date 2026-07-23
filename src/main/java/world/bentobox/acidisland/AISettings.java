@@ -274,6 +274,8 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Items thrown into the water around a sulfur vent are consumed as offerings and")
     @ConfigComment("transmuted into rewards that are spewed out when the vent next erupts as a geyser.")
     @ConfigComment("Rewards are defined in geyser-loot.yml in the addon's data folder.")
+    @ConfigComment("Works with acid item destruction: items the acid destroys within a vent's pool")
+    @ConfigComment("count as offerings instead of being lost.")
     @ConfigComment("Requires Minecraft 26.2 or later - ignored on older servers.")
     @ConfigEntry(path = "world.geyser-offerings.enabled")
     private boolean geyserOfferings = true;
