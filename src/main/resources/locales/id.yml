@@ -9,3 +9,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Air asam"
     lore-purified: "<green>Air murni"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Lubang belerang mendesis dan menelan <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Lubang belerang mendesis dan menelan <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Lubang belerang bergolak dan mulai membengkak..."
+    payout: "[actionbar]<gold>Geiser meletus dan menjawab persembahanmu."
+    payout-channel: "[actionbar]<gold>Geiser meletus, membalas dengan <yellow>[channel]</yellow>."
+    channels:
+      gems: "permata"
+      nether: "api"
+      mineral: "batu dan logam"
+      forestry: "tumbuhan"
+      husbandry: "makhluk hidup"

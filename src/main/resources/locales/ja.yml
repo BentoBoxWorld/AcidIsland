@@ -8,3 +8,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>酸性の水"
     lore-purified: "<green>浄化された水"
+  geyser:
+    offering: "[actionbar]<dark_aqua>噴出孔がシューッと音を立てて<yellow>[item]</yellow>を吞み込む。"
+    offering-channel: "[actionbar]<dark_aqua>噴出孔がシューッと音を立てて<yellow>[item]</yellow>を吞み込む。<gray>([channel])"
+    churning: "[actionbar]<dark_aqua>噴出孔が渦を巻き、膨れ始める..."
+    payout: "[actionbar]<gold>間欠泉が噴出し、あなたの供え物に応える。"
+    payout-channel: "[actionbar]<gold>間欠泉が噴出し、<yellow>[channel]</yellow>に応じ返す。"
+    channels:
+      gems: "宝石"
+      nether: "火"
+      mineral: "石と金属"
+      forestry: "緑のもの"
+      husbandry: "生き物"

@@ -12,3 +12,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Acqua acida"
     lore-purified: "<green>Acqua purificata"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Il camino sibila e inghiotte <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Il camino sibila e inghiotte <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Il camino bolle e inizia a gonfiarsi..."
+    payout: "[actionbar]<gold>Il geyser erutta e risponde alle tue offerte."
+    payout-channel: "[actionbar]<gold>Il geyser erutta, rispondendo al <yellow>[channel]</yellow> allo stesso modo."
+    channels:
+      gems: "gemme"
+      nether: "fuoco"
+      mineral: "pietra e metallo"
+      forestry: "verdura"
+      husbandry: "creature"

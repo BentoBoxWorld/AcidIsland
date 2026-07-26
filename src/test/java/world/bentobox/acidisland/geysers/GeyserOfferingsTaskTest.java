@@ -1,11 +1,18 @@
 package world.bentobox.acidisland.geysers;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Item;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -81,6 +88,51 @@ class GeyserOfferingsTaskTest {
     void testOfferToVentWhenInert() {
         // An inert task must refuse offers without touching the item
         GeyserOfferingsTask task = new GeyserOfferingsTask(addon);
-        assertFalse(task.offerToVent(Mockito.mock(org.bukkit.entity.Item.class)));
+        assertFalse(task.offerToVent(thrownItem(UUID.randomUUID(), false)));
+    }
+
+    @Test
+    void testIsOfferingThrownByPlayer() {
+        assertTrue(GeyserOfferingsTask.isOffering(thrownItem(UUID.randomUUID(), false)));
+    }
+
+    @Test
+    void testIsOfferingIgnoresDeathDrops() {
+        // Death drops, block drops and mob drops have no thrower and must be left alone
+        assertFalse(GeyserOfferingsTask.isOffering(thrownItem(null, false)));
+    }
+
+    @Test
+    void testIsOfferingIgnoresRewards() {
+        assertFalse(GeyserOfferingsTask.isOffering(thrownItem(UUID.randomUUID(), true)));
+    }
+
+    @Test
+    void testDominantChannelOfNothing() {
+        assertNull(GeyserOfferingsTask.dominantChannel(new GeyserOfferingsTask.VentOfferings()));
+    }
+
+    @Test
+    void testDominantChannelIsTheMostFed() {
+        GeyserOfferingsTask.VentOfferings offerings = new GeyserOfferingsTask.VentOfferings();
+        offerings.bias.put("gems", 2);
+        offerings.bias.put("mineral", 7);
+        offerings.bias.put("forestry", 5);
+        assertEquals("mineral", GeyserOfferingsTask.dominantChannel(offerings));
+    }
+
+    /**
+     * @param thrower who threw the item, or null for a death or block drop
+     * @param reward true to tag the item as one the vent just spewed
+     * @return a mocked item entity
+     */
+    private Item thrownItem(UUID thrower, boolean reward) {
+        Item item = Mockito.mock(Item.class);
+        PersistentDataContainer pdc = Mockito.mock(PersistentDataContainer.class);
+        // Generic type erasure means the PDC key and type must be matched loosely
+        when(pdc.has(any(), any())).thenReturn(reward);
+        when(item.getPersistentDataContainer()).thenReturn(pdc);
+        when(item.getThrower()).thenReturn(thrower);
+        return item;
     }
 }

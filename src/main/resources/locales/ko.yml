@@ -8,3 +8,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>산성 물"
     lore-purified: "<green>정화된 물"
+  geyser:
+    offering: "[actionbar]<dark_aqua>분출공이 쉿하는 소리를 내며 <yellow>[item]</yellow>을 집어삼킨다."
+    offering-channel: "[actionbar]<dark_aqua>분출공이 쉿하는 소리를 내며 <yellow>[item]</yellow>을 집어삼킨다. <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>분출공이 소용돌이 치며 부풀어 오르기 시작한다..."
+    payout: "[actionbar]<gold>간헐천이 분출하며 당신의 제물에 응한다."
+    payout-channel: "[actionbar]<gold>간헐천이 분출하며 <yellow>[channel]</yellow>에 동등하게 응한다."
+    channels:
+      gems: "보석"
+      nether: "불"
+      mineral: "돌과 금속"
+      forestry: "초목"
+      husbandry: "생명"

@@ -12,3 +12,19 @@ acidisland:
   purified-water:
     lore-acid: "<red>Acid Water"
     lore-purified: "<green>Purified Water"
+  geyser:
+    # Sent to the player who threw an item into a sulfur vent's pool.
+    # Remove the [actionbar] tag to send these in chat instead.
+    offering: "[actionbar]<dark_aqua>The vent hisses and swallows <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>The vent hisses and swallows <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>The vent churns and begins to swell..."
+    payout: "[actionbar]<gold>The geyser erupts and answers your offerings."
+    payout-channel: "[actionbar]<gold>The geyser erupts, answering <yellow>[channel]</yellow> in kind."
+    # Names of the reward channels in geyser-loot.yml. A channel with no entry
+    # here is named by its raw key.
+    channels:
+      gems: "gems"
+      nether: "fire"
+      mineral: "stone and metal"
+      forestry: "green things"
+      husbandry: "living things"

@@ -8,3 +8,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Asitli Su"
     lore-purified: "<green>Arıtılmış Su"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Baca tıslayarak <yellow>[item]</yellow> yutuyor."
+    offering-channel: "[actionbar]<dark_aqua>Baca tıslayarak <yellow>[item]</yellow> yutuyor <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Baca kaynıyor ve şişmeye başlıyor..."
+    payout: "[actionbar]<gold>Gayzer püskürüyor ve adaklarına karşılık veriyor."
+    payout-channel: "[actionbar]<gold>Gayzer püskürüyor, <yellow>[channel]</yellow> ile karşılık veriyor."
+    channels:
+      gems: "mücevherler"
+      nether: "ateş"
+      mineral: "taş ve metal"
+      forestry: "bitkiler"
+      husbandry: "canlılar"

@@ -1,0 +1,250 @@
+# Sulfur vent offering worth
+#
+# What a material is worth to a sulfur vent. A vent transmutes rather than
+# destroys: offer it a diamond and it owes you a diamond's worth of rewards
+# back (times world.geyser-offerings.exchange-rate in config.yml). Offer it a
+# stack of cobble and it owes you cobble-grade tat.
+#
+# The scale is arbitrary - only the ratios matter. It is anchored on
+# iron ingot = 6, gold ingot = 12, emerald = 15, diamond = 45, so a diamond
+# comes back as three emeralds, or an emerald and two gold ingots, and so on.
+#
+# Worth is resolved in this order, first hit wins:
+#   1. the values below
+#   2. the Level addon's block values for this world, if Level is installed and
+#      use-level-addon is true. Delete an entry below to defer to Level for it.
+#   3. default, for anything nothing else knows about
+#
+# Worth is by material only: enchantments, custom names and the contents of
+# shulker boxes are not counted, so gear is worth its base material.
+#
+# Materials from Minecraft 26.2 (SULFUR, CINNABAR, POTENT_SULFUR) are safe to
+# list - any name this server does not know is skipped silently.
+
+# Worth of a material nothing else has a value for
+default: 1
+# Fall back to the Level addon's block values where this file is silent
+use-level-addon: true
+
+values:
+  # Stone, dirt and other bulk
+  COBBLESTONE: 1
+  STONE: 1
+  DEEPSLATE: 1
+  COBBLED_DEEPSLATE: 1
+  ANDESITE: 1
+  DIORITE: 1
+  GRANITE: 1
+  TUFF: 1
+  CALCITE: 2
+  DRIPSTONE_BLOCK: 2
+  DIRT: 1
+  GRAVEL: 1
+  SAND: 1
+  RED_SAND: 1
+  SANDSTONE: 2
+  CLAY_BALL: 2
+  FLINT: 2
+  SNOWBALL: 1
+  ICE: 2
+  GLASS: 2
+  NETHERRACK: 1
+  BASALT: 1
+  BLACKSTONE: 2
+  SOUL_SAND: 3
+  SOUL_SOIL: 3
+  OBSIDIAN: 8
+  CRYING_OBSIDIAN: 20
+  MAGMA_BLOCK: 4
+  GLOWSTONE: 12
+  SHROOMLIGHT: 8
+  SCULK: 4
+  # Sulfur vents (Minecraft 26.2+)
+  SULFUR: 3
+  SULFUR_SPIKE: 3
+  CINNABAR: 8
+  POTENT_SULFUR: 20
+  # Wood and green things
+  OAK_LOG: 3
+  SPRUCE_LOG: 3
+  BIRCH_LOG: 3
+  JUNGLE_LOG: 3
+  ACACIA_LOG: 3
+  DARK_OAK_LOG: 3
+  MANGROVE_LOG: 3
+  CHERRY_LOG: 3
+  PALE_OAK_LOG: 3
+  CRIMSON_STEM: 3
+  WARPED_STEM: 3
+  OAK_PLANKS: 1
+  OAK_SAPLING: 4
+  MANGROVE_PROPAGULE: 4
+  KELP: 1
+  SEAGRASS: 1
+  BAMBOO: 1
+  SUGAR_CANE: 2
+  CACTUS: 2
+  VINE: 2
+  BROWN_MUSHROOM: 2
+  RED_MUSHROOM: 2
+  NETHER_WART: 4
+  CHORUS_FRUIT: 5
+  # Food and farming
+  WHEAT: 3
+  WHEAT_SEEDS: 1
+  POTATO: 2
+  CARROT: 2
+  BEETROOT: 2
+  PUMPKIN: 3
+  MELON_SLICE: 1
+  APPLE: 3
+  BREAD: 3
+  COD: 2
+  SALMON: 2
+  COOKED_COD: 3
+  COOKED_SALMON: 3
+  TROPICAL_FISH: 4
+  PUFFERFISH: 6
+  SWEET_BERRIES: 2
+  GLOW_BERRIES: 4
+  COCOA_BEANS: 2
+  HONEYCOMB: 4
+  GOLDEN_APPLE: 40
+  ENCHANTED_GOLDEN_APPLE: 300
+  GOLDEN_CARROT: 12
+  # Ores and metals
+  COAL: 3
+  CHARCOAL: 2
+  RAW_COPPER: 2
+  COPPER_INGOT: 3
+  RAW_IRON: 5
+  IRON_INGOT: 6
+  IRON_NUGGET: 1
+  RAW_GOLD: 10
+  GOLD_INGOT: 12
+  GOLD_NUGGET: 1
+  REDSTONE: 4
+  LAPIS_LAZULI: 5
+  QUARTZ: 5
+  AMETHYST_SHARD: 6
+  EMERALD: 15
+  DIAMOND: 45
+  NETHERITE_SCRAP: 120
+  NETHERITE_INGOT: 500
+  ANCIENT_DEBRIS: 120
+  COAL_ORE: 3
+  COPPER_ORE: 8
+  IRON_ORE: 5
+  GOLD_ORE: 10
+  REDSTONE_ORE: 20
+  LAPIS_ORE: 20
+  DIAMOND_ORE: 45
+  EMERALD_ORE: 15
+  NETHER_QUARTZ_ORE: 5
+  NETHER_GOLD_ORE: 4
+  # Storage blocks - nine of the thing, worth nine of the thing
+  COAL_BLOCK: 27
+  COPPER_BLOCK: 27
+  IRON_BLOCK: 54
+  GOLD_BLOCK: 108
+  REDSTONE_BLOCK: 36
+  LAPIS_BLOCK: 45
+  AMETHYST_BLOCK: 24
+  EMERALD_BLOCK: 135
+  DIAMOND_BLOCK: 405
+  NETHERITE_BLOCK: 4500
+  # Mob drops
+  STRING: 2
+  FEATHER: 2
+  BONE: 2
+  BONE_MEAL: 1
+  ROTTEN_FLESH: 1
+  SPIDER_EYE: 3
+  GUNPOWDER: 4
+  SLIME_BALL: 4
+  MAGMA_CREAM: 8
+  INK_SAC: 2
+  GLOW_INK_SAC: 6
+  LEATHER: 3
+  RABBIT_HIDE: 2
+  RABBIT_FOOT: 12
+  PHANTOM_MEMBRANE: 10
+  ENDER_PEARL: 12
+  BLAZE_ROD: 24
+  BLAZE_POWDER: 12
+  GHAST_TEAR: 30
+  DRAGON_BREATH: 20
+  SHULKER_SHELL: 60
+  TOTEM_OF_UNDYING: 150
+  NETHER_STAR: 400
+  ELYTRA: 400
+  TRIDENT: 120
+  ECHO_SHARD: 30
+  WHITE_WOOL: 2
+  EGG: 2
+  TURTLE_EGG: 15
+  TURTLE_SCUTE: 15
+  # The sea
+  PRISMARINE_SHARD: 3
+  PRISMARINE_CRYSTALS: 5
+  SEA_PICKLE: 3
+  SPONGE: 20
+  NAUTILUS_SHELL: 20
+  HEART_OF_THE_SEA: 90
+  # Records - the usual reason to build a mob farm
+  MUSIC_DISC_13: 40
+  MUSIC_DISC_CAT: 40
+  MUSIC_DISC_BLOCKS: 40
+  MUSIC_DISC_CHIRP: 40
+  MUSIC_DISC_FAR: 40
+  MUSIC_DISC_MALL: 40
+  MUSIC_DISC_MELLOHI: 40
+  MUSIC_DISC_STAL: 40
+  MUSIC_DISC_STRAD: 40
+  MUSIC_DISC_WARD: 40
+  MUSIC_DISC_11: 40
+  MUSIC_DISC_WAIT: 40
+  MUSIC_DISC_PIGSTEP: 90
+  MUSIC_DISC_OTHERSIDE: 90
+  MUSIC_DISC_5: 90
+  MUSIC_DISC_RELIC: 90
+  DISC_FRAGMENT_5: 10
+  # Gear, at the worth of the material it is made from
+  IRON_SWORD: 12
+  IRON_PICKAXE: 18
+  IRON_AXE: 18
+  IRON_SHOVEL: 6
+  IRON_HELMET: 30
+  IRON_CHESTPLATE: 48
+  IRON_LEGGINGS: 42
+  IRON_BOOTS: 24
+  GOLDEN_SWORD: 24
+  GOLDEN_PICKAXE: 36
+  GOLDEN_HELMET: 60
+  GOLDEN_CHESTPLATE: 96
+  DIAMOND_SWORD: 90
+  DIAMOND_PICKAXE: 135
+  DIAMOND_AXE: 135
+  DIAMOND_SHOVEL: 45
+  DIAMOND_HELMET: 225
+  DIAMOND_CHESTPLATE: 360
+  DIAMOND_LEGGINGS: 315
+  DIAMOND_BOOTS: 180
+  NETHERITE_SWORD: 590
+  NETHERITE_PICKAXE: 635
+  NETHERITE_HELMET: 725
+  NETHERITE_CHESTPLATE: 860
+  NETHERITE_LEGGINGS: 815
+  NETHERITE_BOOTS: 680
+  # Odds and ends worth more than they look
+  ENCHANTED_BOOK: 30
+  EXPERIENCE_BOTTLE: 8
+  NAME_TAG: 20
+  SADDLE: 20
+  LAVA_BUCKET: 20
+  WATER_BUCKET: 12
+  BUCKET: 18
+  ENDER_EYE: 20
+  END_CRYSTAL: 60
+  BEACON: 400
+  CONDUIT: 200

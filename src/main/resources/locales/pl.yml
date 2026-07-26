@@ -8,3 +8,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Kwaśna woda"
     lore-purified: "<green>Oczyszczona woda"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Komin syczy i pochłania <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Komin syczy i pochłania <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Komin wrze i zaczyna puchnąć..."
+    payout: "[actionbar]<gold>Gejzer wybucha i odpowiada na twoje ofiary."
+    payout-channel: "[actionbar]<gold>Gejzer wybucha, odpowiadając <yellow>[channel]</yellow> w ten sam sposób."
+    channels:
+      gems: "klejnoty"
+      nether: "ogień"
+      mineral: "kamień i metal"
+      forestry: "zielone rzeczy"
+      husbandry: "żywe istoty"

@@ -9,3 +9,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Apă acidă"
     lore-purified: "<green>Apă purificată"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Gura vulcanului șuieră și înghite <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Gura vulcanului șuieră și înghite <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Gura vulcanului clocotește și începe să se umfle..."
+    payout: "[actionbar]<gold>Geizerul eruptează și răspunde ofertelor tale."
+    payout-channel: "[actionbar]<gold>Geizerul eruptează, răspunzând <yellow>[channel]</yellow> în felul cuvenit."
+    channels:
+      gems: "pietre prețioase"
+      nether: "foc"
+      mineral: "piatră și metal"
+      forestry: "lucruri verzi"
+      husbandry: "lucruri vii"

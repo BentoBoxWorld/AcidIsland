@@ -2,11 +2,14 @@ package world.bentobox.acidisland.geysers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -109,5 +112,38 @@ class GeyserLootEntryTest {
     void testToItemStackFixedAmount() {
         GeyserLootEntry entry = new GeyserLootEntry(Material.DIAMOND, null, 1, "gems", 1, 1);
         assertEquals(1, entry.toItemStack(new Random(42)).getAmount());
+    }
+
+    @Test
+    void testParseValueAndFrom() {
+        GeyserLootEntry entry = GeyserLootEntry.parse(Map.of("item", "OBSIDIAN", "weight", 10, "value", 8, "from",
+                List.of("MAGMA_BLOCK", "BASALT", "NOT_A_MATERIAL")));
+        assertNotNull(entry);
+        assertEquals(8, entry.value());
+        // Unknown materials in a from: list are skipped, not fatal
+        assertEquals(Set.of(Material.MAGMA_BLOCK, Material.BASALT), entry.from());
+    }
+
+    @Test
+    void testParseWithoutValueOrFrom() {
+        GeyserLootEntry entry = GeyserLootEntry.parse(Map.of("item", "DIAMOND", "weight", 2));
+        assertNotNull(entry);
+        assertNull(entry.value());
+        assertTrue(entry.from().isEmpty());
+    }
+
+    @Test
+    void testParseFromIgnoresNonList() {
+        GeyserLootEntry entry = GeyserLootEntry.parse(Map.of("item", "DIAMOND", "from", "MAGMA_BLOCK"));
+        assertNotNull(entry);
+        assertTrue(entry.from().isEmpty());
+    }
+
+    @Test
+    void testToItemStackWithAmount() {
+        GeyserLootEntry entry = new GeyserLootEntry(Material.EMERALD, null, 1, "gems", 1, 1);
+        assertEquals(3, entry.toItemStack(3).getAmount());
+        // An amount of zero would spawn an empty stack
+        assertEquals(1, entry.toItemStack(0).getAmount());
     }
 }
