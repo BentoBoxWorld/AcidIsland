@@ -27,6 +27,7 @@ import world.bentobox.acidisland.AcidIsland;
 import world.bentobox.acidisland.events.EntityDamageByAcidEvent;
 import world.bentobox.acidisland.events.EntityDamageByAcidEvent.Acid;
 import world.bentobox.acidisland.events.ItemDestroyByAcidEvent;
+import world.bentobox.acidisland.geysers.GeyserOfferingsTask;
 import world.bentobox.acidisland.listeners.AcidEffect;
 
 public class AcidTask {
@@ -103,9 +104,15 @@ public class AcidTask {
             if (e.getLocation().getBlock().getType().equals(Material.WATER)) {
                 itemsInWater.putIfAbsent(e, damage + addon.getSettings().getAcidDestroyItemTime() * 1000);
                 if (System.currentTimeMillis() > itemsInWater.get(e)) {
+                    itemsInWater.remove(e);
+                    // Items dissolving within a vent's pool are counted as
+                    // offerings rather than lost to the acid
+                    GeyserOfferingsTask geysers = addon.getGeyserOfferingsTask();
+                    if (geysers != null && geysers.offerToVent(item)) {
+                        return;
+                    }
                     e.getWorld().playSound(e.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 3F, 3F);
                     e.remove();
-                    itemsInWater.remove(e);
                     // Fire event
                     Bukkit.getPluginManager().callEvent(new ItemDestroyByAcidEvent(item));
                 }

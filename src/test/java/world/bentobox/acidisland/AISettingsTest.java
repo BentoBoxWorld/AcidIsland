@@ -110,6 +110,20 @@ public class AISettingsTest {
     }
 
     @Test
+    void testIsGeyserOfferings() {
+        assertTrue(s.isGeyserOfferings());
+        s.setGeyserOfferings(false);
+        assertFalse(s.isGeyserOfferings());
+    }
+
+    @Test
+    void testGetGeyserMaxRewards() {
+        assertEquals(12, s.getGeyserMaxRewards());
+        s.setGeyserMaxRewards(20);
+        assertEquals(20, s.getGeyserMaxRewards());
+    }
+
+    @Test
     void testGetDifficulty() {
         assertEquals(Difficulty.NORMAL, s.getDifficulty());
     }

@@ -265,9 +265,24 @@ public class AISettings implements WorldSettings {
     @ConfigComment("Sulfur vents")
     @ConfigComment("Chance (0-100) per chunk of a sulfur vent generating just below the sea surface.")
     @ConfigComment("Vents are made of potent sulfur over a magma block and bubble, gas, and erupt as geysers.")
+    @ConfigComment("Changing this only affects newly generated chunks.")
     @ConfigComment("Requires Minecraft 26.2 or later - ignored on older servers.")
-    @ConfigEntry(path = "world.sulfur-vent-chance", needsReset = true)
+    @ConfigEntry(path = "world.sulfur-vent-chance")
     private int sulfurVentChance = 10;
+
+    @ConfigComment("Geyser offerings")
+    @ConfigComment("Items thrown into the water around a sulfur vent are consumed as offerings and")
+    @ConfigComment("transmuted into rewards that are spewed out when the vent next erupts as a geyser.")
+    @ConfigComment("Rewards are defined in geyser-loot.yml in the addon's data folder.")
+    @ConfigComment("Works with acid item destruction: items the acid destroys within a vent's pool")
+    @ConfigComment("count as offerings instead of being lost.")
+    @ConfigComment("Requires Minecraft 26.2 or later - ignored on older servers.")
+    @ConfigEntry(path = "world.geyser-offerings.enabled")
+    private boolean geyserOfferings = true;
+
+    @ConfigComment("Maximum number of rewards a single eruption can spew, however many items were offered.")
+    @ConfigEntry(path = "world.geyser-offerings.max-rewards")
+    private int geyserMaxRewards = 12;
 
     @ConfigComment("Structures")
     @ConfigComment("This creates an vanilla structures in the worlds.")
@@ -2167,6 +2182,34 @@ public class AISettings implements WorldSettings {
      */
     public void setSulfurVentChance(int sulfurVentChance) {
         this.sulfurVentChance = sulfurVentChance;
+    }
+
+    /**
+     * @return true if sulfur vents accept item offerings and transmute them into rewards
+     */
+    public boolean isGeyserOfferings() {
+        return geyserOfferings;
+    }
+
+    /**
+     * @param geyserOfferings the geyserOfferings to set
+     */
+    public void setGeyserOfferings(boolean geyserOfferings) {
+        this.geyserOfferings = geyserOfferings;
+    }
+
+    /**
+     * @return the maximum number of rewards a single eruption can spew
+     */
+    public int getGeyserMaxRewards() {
+        return geyserMaxRewards;
+    }
+
+    /**
+     * @param geyserMaxRewards the geyserMaxRewards to set
+     */
+    public void setGeyserMaxRewards(int geyserMaxRewards) {
+        this.geyserMaxRewards = geyserMaxRewards;
     }
 
     /**
