@@ -8,3 +8,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Skābes ūdens"
     lore-purified: "<green>Attīrīts ūdens"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Atvere šņāc un norij <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Atvere šņāc un norij <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Atvere mutuļo un sāk uzbriest..."
+    payout: "[actionbar]<gold>Geizers izverd un atbild uz jūsu upuriem."
+    payout-channel: "[actionbar]<gold>Geizers izverd un atbild ar to pašu: <yellow>[channel]</yellow>."
+    channels:
+      gems: "dārgakmeņi"
+      nether: "uguns"
+      mineral: "akmens un metāls"
+      forestry: "zaļie augi"
+      husbandry: "dzīvās būtnes"

@@ -167,8 +167,11 @@ world:
   # Requires Minecraft 26.2 or later - ignored on older servers.
   sulfur-vent-chance: 10
   # Geyser offerings
-  # Items thrown into the water around a sulfur vent are consumed as offerings and
-  # transmuted into rewards that are spewed out when the vent next erupts as a geyser.
+  # Items a player throws into the water around a sulfur vent are consumed as offerings
+  # and transmuted into rewards that are spewed out when the vent erupts as a geyser.
+  # Items floating near a vent are tugged into its pool, so a throw does not have to be
+  # accurate. Only items thrown by a player count - death drops, block drops and mob
+  # drops that wash into a pool are left alone.
   # Rewards are defined in geyser-loot.yml in the addon's data folder.
   # Works with acid item destruction: items the acid destroys within a vent's pool
   # count as offerings instead of being lost.
@@ -177,6 +180,27 @@ world:
     enabled: true
     # Maximum number of rewards a single eruption can spew, however many items were offered.
     max-rewards: 12
+    # Answer an offering with rewards of roughly the same worth, instead of one random
+    # reward per item. A vent transmutes rather than destroys: feed it a diamond and it
+    # owes a diamond's worth back, feed it cobble and it owes cobble. Worth comes from
+    # geyser-values.yml, which can defer to the Level addon's block values.
+    # Turn this off for the old one-roll-per-item payout.
+    match-value: true
+    # Fraction of the offered worth a vent pays back when matching worth.
+    # 1.0 is a fair trade, below 1.0 makes the vent take a cut, above 1.0 makes offering
+    # profitable in itself - which players will farm, so raise with care.
+    exchange-rate: 1.0
+    # The most a single reward may be worth, as a multiple of the worth of the richest
+    # item offered. A stack of cobble is worth an emerald and a cobble generator is
+    # infinite, so without this a vent becomes a gem printer. Rewards named in a from:
+    # list in geyser-loot.yml ignore this - a transmutation the admin has written down
+    # is always allowed. Set to 0 for no limit.
+    reward-ceiling: 8.0
+    # Provoke a fed vent into erupting a few seconds after it is fed, instead of waiting
+    # for the vanilla eruption cycle, so the reward follows the offering while the player
+    # is still there to see it. Turn this off to leave eruption timing entirely to vanilla
+    # - offerings are then held until the vent erupts.
+    erupt-on-offering: true
   # Structures
   # This creates an vanilla structures in the worlds.
   # Trial chambers and other underground structures generate buried

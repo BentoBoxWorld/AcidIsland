@@ -1,23 +1,47 @@
 # Geyser offering rewards
 #
-# Items thrown into the water around a sulfur vent are consumed as offerings.
-# When the vent next erupts, one reward is rolled per item offered (capped by
-# world.geyser-offerings.max-rewards in config.yml) and spewed from the plume.
+# Items a player throws into the water around a sulfur vent are consumed as
+# offerings, and the vent erupts a few seconds later. What it spews back is
+# rolled from this table.
+#
+# With world.geyser-offerings.match-value on (the default) the vent owes back
+# what it was fed: it adds up the worth of the offerings from geyser-values.yml
+# and keeps rolling rewards it can still afford until that worth is spent,
+# capped by world.geyser-offerings.max-rewards. It cannot roll a reward it
+# cannot afford, and it leans away from entries worth a pittance next to what
+# it owes - so a diamond comes back in gems, and a stack of cobble comes back
+# in cobble-grade tat.
 #
 # Each entry is either an item or a console command:
 #   - {item: RAW_IRON, weight: 30, channel: mineral, amount: {min: 1, max: 3}}
-#   - {command: "give %player% cod 1", weight: 1}
+#   - {item: OBSIDIAN, weight: 10, from: [MAGMA_BLOCK, BASALT]}
+#   - {command: "give %player% cod 1", weight: 1, value: 4}
 # weight   - relative chance of the entry rolling (higher = more common)
-# channel  - optional. Offerings bias the table towards their own channel:
-#            every item sacrificed in a channel adds +50% to that channel's
-#            entry weights for the payout. Channels are assigned by material:
+# channel  - optional. Offerings pull the table towards their own channel by
+#            the share of the offering's worth that went into it: an offering
+#            that was nothing but gems makes gems entries four times as likely,
+#            an offering half gems by worth pulls half as hard. Worth pulls, not
+#            item count, so one diamond steers as firmly as the stack of cobble
+#            it is worth. Channels are assigned by material:
 #            gems      - diamonds, emeralds, amethyst, lapis, ender pearls
 #            nether    - netherrack, quartz, blaze, magma, soul, crimson/warped
 #            mineral   - ores, raw metals, ingots, nuggets, stone types
 #            forestry  - logs, planks, saplings, leaves, bamboo, kelp
 #            husbandry - wool, leather, string, feathers, eggs, any food
 #            Anything else burns with no bias but still counts as an offering.
+# from     - optional list of materials that transmute into this reward.
+#            Offer any of them and this entry becomes eight times as likely, so
+#            "magma blocks make obsidian" is something a player can learn and
+#            rely on. A from: entry also ignores world.geyser-offerings.
+#            reward-ceiling, so it is the only way for a vent to hand back
+#            something far richer than what went in - which makes it the place
+#            to move rewards that would otherwise need a mob farm or a
+#            challenge, like records from bones and gunpowder.
 # amount   - optional item count, fixed or a {min, max} range (default 1)
+# value    - optional worth of one of this reward, overriding the material's
+#            worth in geyser-values.yml. Command rewards are free unless they
+#            set this, so give paid commands a value or they will turn up in
+#            every payout.
 #
 # The geyser gives back what it is fed, changed: sacrifice ores to be paid in
 # gems, sacrifice wood to be paid in living things. Materials from Minecraft
@@ -31,31 +55,46 @@ loot:
   - {item: PRISMARINE_SHARD, weight: 15, amount: {min: 1, max: 2}}
   - {item: PRISMARINE_CRYSTALS, weight: 8}
   - {item: SEA_PICKLE, weight: 6}
-  - {item: NAUTILUS_SHELL, weight: 3}
-  - {item: HEART_OF_THE_SEA, weight: 1}
+  - {item: NAUTILUS_SHELL, weight: 3, from: [PRISMARINE_SHARD, PRISMARINE_CRYSTALS]}
+  - {item: HEART_OF_THE_SEA, weight: 1, from: [NAUTILUS_SHELL]}
   # Mineral channel - fed by stone, ores and metals
   - {item: IRON_NUGGET, weight: 20, channel: mineral, amount: {min: 2, max: 5}}
   - {item: RAW_COPPER, weight: 15, channel: mineral, amount: {min: 1, max: 3}}
   - {item: RAW_IRON, weight: 12, channel: mineral, amount: {min: 1, max: 2}}
   - {item: RAW_GOLD, weight: 6, channel: mineral}
   - {item: REDSTONE, weight: 8, channel: mineral, amount: {min: 1, max: 4}}
+  # Iron into gold: the vent's oldest trick
+  - {item: GOLD_INGOT, weight: 5, channel: mineral, from: [IRON_INGOT, RAW_IRON, IRON_BLOCK]}
   # Gems channel - the vent's rarest vein
   - {item: AMETHYST_SHARD, weight: 8, channel: gems, amount: {min: 1, max: 2}}
   - {item: LAPIS_LAZULI, weight: 8, channel: gems, amount: {min: 2, max: 4}}
-  - {item: EMERALD, weight: 3, channel: gems}
-  - {item: DIAMOND, weight: 2, channel: gems}
+  - {item: EMERALD, weight: 3, channel: gems, from: [DIAMOND, DIAMOND_BLOCK]}
+  - {item: DIAMOND, weight: 2, channel: gems, from: [EMERALD, EMERALD_BLOCK, AMETHYST_SHARD]}
   # Nether channel - heat calls to heat
   - {item: QUARTZ, weight: 10, channel: nether, amount: {min: 1, max: 3}}
   - {item: GLOWSTONE_DUST, weight: 8, channel: nether, amount: {min: 1, max: 2}}
   - {item: BLAZE_POWDER, weight: 4, channel: nether}
-  - {item: ANCIENT_DEBRIS, weight: 1, channel: nether}
+  - {item: ANCIENT_DEBRIS, weight: 1, channel: nether, from: [CRYING_OBSIDIAN, NETHERITE_SCRAP]}
+  # Water meeting fire, the way the ocean floor makes it
+  - {item: OBSIDIAN, weight: 10, channel: nether, from: [MAGMA_BLOCK, BASALT, LAVA_BUCKET]}
+  - {item: CRYING_OBSIDIAN, weight: 3, channel: nether, from: [OBSIDIAN, GHAST_TEAR]}
+  - {item: BLAZE_ROD, weight: 2, channel: nether, from: [MAGMA_CREAM, BLAZE_POWDER]}
   # Forestry channel - green things from a dead sea
   - {item: KELP, weight: 12, channel: forestry, amount: {min: 1, max: 3}}
   - {item: BAMBOO, weight: 8, channel: forestry, amount: {min: 1, max: 4}}
   - {item: MANGROVE_PROPAGULE, weight: 5, channel: forestry}
   - {item: OAK_SAPLING, weight: 5, channel: forestry}
+  - {item: SPONGE, weight: 3, channel: forestry, from: [KELP, SEAGRASS, DRIED_KELP_BLOCK]}
   # Husbandry channel - the boiled bounty of the deep
   - {item: COOKED_COD, weight: 12, channel: husbandry, amount: {min: 1, max: 2}}
   - {item: COOKED_SALMON, weight: 8, channel: husbandry}
   - {item: LEATHER, weight: 6, channel: husbandry, amount: {min: 1, max: 2}}
   - {item: TURTLE_EGG, weight: 2, channel: husbandry}
+  # A skeleton shooting a creeper is the vanilla way to get a record. Bones and
+  # gunpowder thrown into a vent are the AcidIsland way.
+  - {item: MUSIC_DISC_13, weight: 1, from: [BONE, GUNPOWDER]}
+  - {item: MUSIC_DISC_CAT, weight: 1, from: [BONE, GUNPOWDER]}
+  - {item: MUSIC_DISC_BLOCKS, weight: 1, from: [BONE, GUNPOWDER]}
+  - {item: MUSIC_DISC_CHIRP, weight: 1, from: [BONE, GUNPOWDER]}
+  - {item: MUSIC_DISC_MALL, weight: 1, from: [BONE, GUNPOWDER]}
+  - {item: MUSIC_DISC_STAL, weight: 1, from: [BONE, GUNPOWDER]}

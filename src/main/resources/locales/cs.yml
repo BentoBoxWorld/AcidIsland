@@ -15,3 +15,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Kyselá voda"
     lore-purified: "<green>Čistá voda"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Průduch syčí a pohlcuje <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Průduch syčí a pohlcuje <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Průduch vře a začíná bobtnat..."
+    payout: "[actionbar]<gold>Gejzír vybuchuje a odpovídá na vaše oběti."
+    payout-channel: "[actionbar]<gold>Gejzír vybuchuje a odpovídá <yellow>[channel]</yellow> stejným způsobem."
+    channels:
+      gems: "drahokamy"
+      nether: "oheň"
+      mineral: "kámen a kov"
+      forestry: "zeleň"
+      husbandry: "živé tvory"

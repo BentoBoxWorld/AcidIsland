@@ -8,3 +8,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Кислотная вода"
     lore-purified: "<green>Очищенная вода"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Жерло шипит и поглощает <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Жерло шипит и поглощает <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Жерло кипит и начинает расширяться..."
+    payout: "[actionbar]<gold>Гейзер извергается и отвечает на ваши дары."
+    payout-channel: "[actionbar]<gold>Гейзер извергается, отвечая <yellow>[channel]</yellow> в равной мере."
+    channels:
+      gems: "драгоценности"
+      nether: "огонь"
+      mineral: "камень и металл"
+      forestry: "зелень"
+      husbandry: "живые существа"

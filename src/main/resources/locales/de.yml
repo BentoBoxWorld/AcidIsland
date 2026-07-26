@@ -8,3 +8,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Säurewasser"
     lore-purified: "<green>Gereinigtes Wasser"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Der Schlund zischt und verschlingt <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Der Schlund zischt und verschlingt <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Der Schlund brodelt und beginnt zu schwellen..."
+    payout: "[actionbar]<gold>Der Geysir bricht aus und beantwortet deine Opfergaben."
+    payout-channel: "[actionbar]<gold>Der Geysir bricht aus und beantwortet <yellow>[channel]</yellow> gebührend."
+    channels:
+      gems: "Edelsteine"
+      nether: "Feuer"
+      mineral: "Stein und Metall"
+      forestry: "Pflanzen"
+      husbandry: "Kreaturen"

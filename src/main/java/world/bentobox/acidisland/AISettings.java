@@ -284,6 +284,35 @@ public class AISettings implements WorldSettings {
     @ConfigEntry(path = "world.geyser-offerings.max-rewards")
     private int geyserMaxRewards = 12;
 
+    @ConfigComment("Answer an offering with rewards of roughly the same worth, instead of one")
+    @ConfigComment("random reward per item. A vent transmutes rather than destroys: feed it a")
+    @ConfigComment("diamond and it owes a diamond's worth back, feed it cobble and it owes")
+    @ConfigComment("cobble. Worth comes from geyser-values.yml, which can defer to the Level")
+    @ConfigComment("addon's block values. Turn this off for the old one-roll-per-item payout.")
+    @ConfigEntry(path = "world.geyser-offerings.match-value")
+    private boolean geyserMatchValue = true;
+
+    @ConfigComment("Fraction of the offered worth a vent pays back when matching worth.")
+    @ConfigComment("1.0 is a fair trade, below 1.0 makes the vent take a cut, above 1.0 makes")
+    @ConfigComment("offering profitable in itself - which players will farm, so raise with care.")
+    @ConfigEntry(path = "world.geyser-offerings.exchange-rate")
+    private double geyserExchangeRate = 1.0;
+
+    @ConfigComment("The most a single reward may be worth, as a multiple of the worth of the")
+    @ConfigComment("richest item offered. A stack of cobble is worth an emerald and a cobble")
+    @ConfigComment("generator is infinite, so without this a vent becomes a gem printer. Rewards")
+    @ConfigComment("named in a from: list in geyser-loot.yml ignore this - a transmutation the")
+    @ConfigComment("admin has written down is always allowed. Set to 0 for no limit.")
+    @ConfigEntry(path = "world.geyser-offerings.reward-ceiling")
+    private double geyserRewardCeiling = 8.0;
+
+    @ConfigComment("Provoke a fed vent into erupting a few seconds after it is fed, instead of")
+    @ConfigComment("waiting for the vanilla eruption cycle, so the reward follows the offering")
+    @ConfigComment("while the player is still there to see it. Turn this off to leave eruption")
+    @ConfigComment("timing entirely to vanilla - offerings are then held until the vent erupts.")
+    @ConfigEntry(path = "world.geyser-offerings.erupt-on-offering")
+    private boolean geyserEruptOnOffering = true;
+
     @ConfigComment("Structures")
     @ConfigComment("This creates an vanilla structures in the worlds.")
     @ConfigComment("Trial chambers and other underground structures generate buried")
@@ -2210,6 +2239,62 @@ public class AISettings implements WorldSettings {
      */
     public void setGeyserMaxRewards(int geyserMaxRewards) {
         this.geyserMaxRewards = geyserMaxRewards;
+    }
+
+    /**
+     * @return true if rewards are matched to the worth of the offering
+     */
+    public boolean isGeyserMatchValue() {
+        return geyserMatchValue;
+    }
+
+    /**
+     * @param geyserMatchValue the geyserMatchValue to set
+     */
+    public void setGeyserMatchValue(boolean geyserMatchValue) {
+        this.geyserMatchValue = geyserMatchValue;
+    }
+
+    /**
+     * @return the fraction of the offered worth a vent pays back
+     */
+    public double getGeyserExchangeRate() {
+        return geyserExchangeRate;
+    }
+
+    /**
+     * @param geyserExchangeRate the geyserExchangeRate to set
+     */
+    public void setGeyserExchangeRate(double geyserExchangeRate) {
+        this.geyserExchangeRate = geyserExchangeRate;
+    }
+
+    /**
+     * @return the most a single reward may be worth, as a multiple of the richest item offered
+     */
+    public double getGeyserRewardCeiling() {
+        return geyserRewardCeiling;
+    }
+
+    /**
+     * @param geyserRewardCeiling the geyserRewardCeiling to set
+     */
+    public void setGeyserRewardCeiling(double geyserRewardCeiling) {
+        this.geyserRewardCeiling = geyserRewardCeiling;
+    }
+
+    /**
+     * @return true if a fed vent is provoked into erupting instead of waiting for the vanilla cycle
+     */
+    public boolean isGeyserEruptOnOffering() {
+        return geyserEruptOnOffering;
+    }
+
+    /**
+     * @param geyserEruptOnOffering the geyserEruptOnOffering to set
+     */
+    public void setGeyserEruptOnOffering(boolean geyserEruptOnOffering) {
+        this.geyserEruptOnOffering = geyserEruptOnOffering;
     }
 
     /**

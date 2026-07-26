@@ -13,3 +13,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>酸水"
     lore-purified: "<green>纯净水"
+  geyser:
+    offering: "[actionbar]<dark_aqua>喷口嘶声并吞下<yellow>[item]</yellow>。"
+    offering-channel: "[actionbar]<dark_aqua>喷口嘶声并吞下<yellow>[item]</yellow>。<gray>([channel])"
+    churning: "[actionbar]<dark_aqua>喷口翻滚，开始膨胀..."
+    payout: "[actionbar]<gold>间歇泉爆发，回应你的祭品。"
+    payout-channel: "[actionbar]<gold>间歇泉爆发，以同样方式回应<yellow>[channel]</yellow>。"
+    channels:
+      gems: "宝石"
+      nether: "火焰"
+      mineral: "石头与金属"
+      forestry: "植物"
+      husbandry: "生命"

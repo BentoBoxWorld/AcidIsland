@@ -124,6 +124,34 @@ public class AISettingsTest {
     }
 
     @Test
+    void testIsGeyserMatchValue() {
+        assertTrue(s.isGeyserMatchValue());
+        s.setGeyserMatchValue(false);
+        assertFalse(s.isGeyserMatchValue());
+    }
+
+    @Test
+    void testGetGeyserExchangeRate() {
+        assertEquals(1.0, s.getGeyserExchangeRate());
+        s.setGeyserExchangeRate(0.75);
+        assertEquals(0.75, s.getGeyserExchangeRate());
+    }
+
+    @Test
+    void testGetGeyserRewardCeiling() {
+        assertEquals(8.0, s.getGeyserRewardCeiling());
+        s.setGeyserRewardCeiling(0);
+        assertEquals(0.0, s.getGeyserRewardCeiling());
+    }
+
+    @Test
+    void testIsGeyserEruptOnOffering() {
+        assertTrue(s.isGeyserEruptOnOffering());
+        s.setGeyserEruptOnOffering(false);
+        assertFalse(s.isGeyserEruptOnOffering());
+    }
+
+    @Test
     void testGetDifficulty() {
         assertEquals(Difficulty.NORMAL, s.getDifficulty());
     }

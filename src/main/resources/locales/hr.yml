@@ -8,3 +8,15 @@ acidisland:
   purified-water:
     lore-acid: "<red>Kisela voda"
     lore-purified: "<green>Pročišćena voda"
+  geyser:
+    offering: "[actionbar]<dark_aqua>Otvor šišti i proguta <yellow>[item]</yellow>."
+    offering-channel: "[actionbar]<dark_aqua>Otvor šišti i proguta <yellow>[item]</yellow> <gray>([channel])"
+    churning: "[actionbar]<dark_aqua>Otvor se vrti i počinje bubriti..."
+    payout: "[actionbar]<gold>Gejzir se aktivira i odgovara vašim darivanjima."
+    payout-channel: "[actionbar]<gold>Gejzir se aktivira, odgovarajući <yellow>[channel]</yellow> na isti način."
+    channels:
+      gems: "drago kamenje"
+      nether: "vatra"
+      mineral: "kamen i metal"
+      forestry: "zelene stvari"
+      husbandry: "živa bića"
