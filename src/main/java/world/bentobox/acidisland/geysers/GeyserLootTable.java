@@ -156,7 +156,7 @@ public class GeyserLootTable {
     private int amountFor(GeyserLootEntry entry, @Nullable GeyserValues values, int budget, boolean budgeted,
             boolean last, Random random) {
         int rolled = entry.rollAmount(random);
-        if (!budgeted || entry.isCommand()) {
+        if (!budgeted || values == null || entry.isCommand()) {
             return rolled;
         }
         int unit = values.unitValue(entry);
