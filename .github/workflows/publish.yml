@@ -18,7 +18,7 @@ on:
 
 jobs:
   publish:
-    uses: bentoboxworld/.github/.github/workflows/publish-platforms.yml@83854779c88155085dca4b06bff7f133da6b8923 # fix/curl-form-inline-parsing
+    uses: bentoboxworld/.github/.github/workflows/publish-platforms.yml@1f91a0edf72e8c86d671b3b8fdd3121ac6fb88e1 # fix/curl-form-inline-parsing
     with:
       use_release_asset: "true"          # publish the jar attached to the release; do not rebuild
       hangar_slug: "AcidIsland"           # blank = skip Hangar
