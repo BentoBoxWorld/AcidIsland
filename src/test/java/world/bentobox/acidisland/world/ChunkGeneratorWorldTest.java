@@ -66,6 +66,7 @@ public class ChunkGeneratorWorldTest {
 
     /**
      * Test method for {@link world.bentobox.acidisland.world.ChunkGeneratorWorld#getDefaultPopulators(org.bukkit.World)}.
+     * POTENT_SULFUR does not exist on this test classpath, so there is no sulfur vent populator.
      */
     @Test
     void testGetDefaultPopulatorsWorld() {
