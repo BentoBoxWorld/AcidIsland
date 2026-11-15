@@ -121,13 +121,13 @@ permissions:
     default: TRUE
   acidisland.island.deletehome:
     description: Allow use of '/ai deletehome' command - delete a home location
-    default: OP
+    default: TRUE
   acidisland.island.renamehome:
     description: Allow use of '/ai renamehome' command - rename a home location
-    default: OP
+    default: TRUE
   acidisland.island.homes:
     description: Allow use of '/ai homes' command - list your homes
-    default: OP
+    default: TRUE
   acidisland.admin:
     description: Allow use of '/acid' command - admin command
     default: OP
