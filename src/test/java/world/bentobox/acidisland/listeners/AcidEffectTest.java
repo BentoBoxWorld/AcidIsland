@@ -568,7 +568,6 @@ public class AcidEffectTest {
      * Test method for {@link world.bentobox.acidisland.listeners.AcidEffect#onPlayerMove(org.bukkit.event.player.PlayerMoveEvent)}.
      */
     @Test
-    @Disabled("Cannot be tested because of the PotionEffectType issue")
     void testOnPlayerMoveActivePotionsBadOmen() {
         Collection<PotionEffect> potions = new ArrayList<>();
         potions.add(new PotionEffect(PotionEffectType.BAD_OMEN, 0, 0, false, false, false));

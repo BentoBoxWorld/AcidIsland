@@ -444,7 +444,28 @@ world:
   falling-banned-commands:
   - warp
   - spawn
+  # Per-world override for vanilla structure generation and structure searches
+  # (/locate, Eyes of Ender, explorer/treasure maps, dolphins, cartographer trades).
+  # Only has an effect when world.make-structures is true (the default).
+  # Key is the vanilla structure id (e.g. trial_chambers, ancient-city), value is:
+  #   false - disable the structure in AcidIsland worlds
+  #   true  - force it on even if BentoBox's global world.disabled-structures disables it
+  # Structures not listed inherit BentoBox's global world.disabled-structures setting.
+  # Example:
+  #   structure-settings:
+  #     monument: false
+  #     trial_chambers: false
+  # Requires BentoBox 3.19.1 or later.
+  # Added since 2.2.0.
+  structure-settings: {}
 island:
+  # Disable the team system in AcidIsland worlds.
+  # When true, players cannot invite, accept team invites, kick, leave, promote, demote
+  # or change island owner. Trust and coop still work and are the alternative to teams.
+  # After turning this on, run /acid team disbandall once to remove existing team members.
+  # Requires BentoBox 3.16.0 or later.
+  # Added since 2.2.0.
+  teams-disabled: false
   # Default max team size
   # Use this permission to set for specific user groups: acidisland.team.maxsize.<number>
   # Permission size cannot be less than the default below.

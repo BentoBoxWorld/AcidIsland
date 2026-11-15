@@ -1,13 +1,18 @@
 package world.bentobox.acidisland.world;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.generator.LimitedRegion;
 import org.bukkit.generator.WorldInfo;
@@ -38,10 +43,13 @@ class SulfurVentPopulatorTest {
     @Mock
     private LimitedRegion region;
 
+    private SulfurServerMock server;
+    private AISettings settings;
+
     @BeforeEach
     void setUp() {
-        MockBukkit.mock();
-        AISettings settings = new AISettings();
+        server = MockBukkit.mock(new SulfurServerMock());
+        settings = new AISettings();
         settings.setSulfurVentChance(100);
         when(addon.getSettings()).thenReturn(settings);
         when(worldInfo.getEnvironment()).thenReturn(Environment.NORMAL);
@@ -54,26 +62,39 @@ class SulfurVentPopulatorTest {
     }
 
     /**
-     * Sulfur vents require Minecraft 26.2 or later, and POTENT_SULFUR does not exist
-     * on this test classpath
+     * Sulfur vents need Minecraft 26.2 or later; the 26.3 API on this classpath has the blocks.
      */
     @Test
-    void testIsSupportedOnOldServer() {
-        assertFalse(SulfurVentPopulator.isSupported());
+    void testIsSupported() {
+        assertTrue(SulfurVentPopulator.isSupported());
     }
 
     /**
-     * On an old server the populator must not touch the region, even at 100% vent chance
+     * At 100% vent chance an overworld chunk gets a dormant potent sulfur cap over magma,
+     * VENT_DEPTH (3) blocks below the sea surface.
      */
     @Test
-    void testPopulateNoVentOnOldServer() {
+    void testPopulatePlacesVentCap() {
+        SulfurVentPopulator pop = new SulfurVentPopulator(addon);
+        pop.populate(worldInfo, new Random(42), 0, 0, region);
+        int capY = settings.getSeaHeight() - 3;
+        verify(region, atLeastOnce()).setBlockData(anyInt(), eq(capY), anyInt(), eq(server.getPotentSulfur()));
+        verify(region, atLeastOnce()).setType(anyInt(), eq(capY - 1), anyInt(), eq(Material.MAGMA_BLOCK));
+    }
+
+    /**
+     * A vent chance of 0 never touches the region.
+     */
+    @Test
+    void testPopulateNoVentAtZeroChance() {
+        settings.setSulfurVentChance(0);
         SulfurVentPopulator pop = new SulfurVentPopulator(addon);
         assertDoesNotThrow(() -> pop.populate(worldInfo, new Random(42), 0, 0, region));
         verifyNoInteractions(region);
     }
 
     /**
-     * Non-overworld environments never get vents
+     * Non-overworld environments never get vents.
      */
     @Test
     void testPopulateNoVentInNether() {

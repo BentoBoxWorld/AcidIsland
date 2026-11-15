@@ -193,15 +193,11 @@ public class AcidIslandTest {
         Path path = Paths.get("config.yml");
         Files.write(path, lines, Charset.forName("UTF-8"));
         try (JarOutputStream tempJarOutputStream = new JarOutputStream(new FileOutputStream(jFile))) {
-            try (FileInputStream fis = new FileInputStream(path.toFile())) {
-                byte[] buffer = new byte[1024];
-                int bytesRead = 0;
-                JarEntry entry = new JarEntry(path.toString());
-                tempJarOutputStream.putNextEntry(entry);
-                while ((bytesRead = fis.read(buffer)) != -1) {
-                    tempJarOutputStream.write(buffer, 0, bytesRead);
-                }
-            }
+            addToJar(tempJarOutputStream, path.toFile(), path.toString());
+            // Geyser offerings run on 26.2+ (POTENT_SULFUR exists on this classpath), so
+            // onEnable() saves and loads these embedded resources from the addon jar
+            addToJar(tempJarOutputStream, new File("src/main/resources/geyser-loot.yml"), "geyser-loot.yml");
+            addToJar(tempJarOutputStream, new File("src/main/resources/geyser-values.yml"), "geyser-values.yml");
         }
         File dataFolder = new File("addons/AcidIsland");
         addon.setDataFolder(dataFolder);
@@ -343,4 +339,11 @@ public class AcidIslandTest {
         assertFalse(addon.getPlayerCommand().isPresent());
     }
 
+    private static void addToJar(JarOutputStream jar, File source, String entryName) throws IOException {
+        try (FileInputStream fis = new FileInputStream(source)) {
+            jar.putNextEntry(new JarEntry(entryName));
+            fis.transferTo(jar);
+            jar.closeEntry();
+        }
+    }
 }
