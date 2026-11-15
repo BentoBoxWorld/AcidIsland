@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AcidIsland is a BentoBox GameModeAddon for Minecraft (Paper). It implements a Skyblock-like game mode where the ocean is acid that damages players, mobs, and items. Requires BentoBox 3.12.0+ as the parent plugin framework.
+AcidIsland is a BentoBox GameModeAddon for Minecraft (Paper). It implements a Skyblock-like game mode where the ocean is acid that damages players, mobs, and items. Requires BentoBox 3.23.0+ as the parent plugin framework.
 
 ## Build Commands
 
@@ -16,7 +16,7 @@ mvn test -Dtest=AcidEffectTest#testMethod  # Run a single test method
 mvn -DskipTests clean package              # Build without tests
 ```
 
-Java 21 is required. The project uses Maven with the Shade plugin to produce the final JAR.
+Java 25 is required (BentoBox 3.23+ and Paper 26.x are Java 25 artifacts). The project uses Maven with the Shade plugin to produce the final JAR.
 
 ## Architecture
 
@@ -48,7 +48,7 @@ public class MyTest {
     void setUp() {
         server = MockBukkit.mock();  // always first
         mockedBukkit = Mockito.mockStatic(Bukkit.class, Mockito.RETURNS_DEEP_STUBS);
-        mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("1.21.11");
+        mockedBukkit.when(Bukkit::getMinecraftVersion).thenReturn("26.3");
         mockedBukkit.when(Bukkit::getServer).thenReturn(server);
         // ...
     }
@@ -82,7 +82,7 @@ All 24 locale files use **MiniMessage format** (e.g., `<red>`, `<dark_blue>`). L
 ### Configuration
 
 - `src/main/resources/config.yml` — Default config with acid damage values, rain settings, potion effects, world generation params
-- `src/main/resources/addon.yml` — BentoBox addon metadata and permissions (requires `api-version: 3.12.0`)
+- `src/main/resources/addon.yml` — BentoBox addon metadata and permissions (requires `api-version: 3.23.0`)
 - `src/main/resources/locales/` — 24 language translation files (MiniMessage format)
 - `src/main/resources/blueprints/` — Island templates (overworld, nether, end)
 
@@ -109,7 +109,7 @@ Change `impactSeverities` to `HIGH`, `MEDIUM`, or `LOW` as needed.
 
 ## CI
 
-GitHub Actions workflow on `develop` branch and PRs: builds with Java 21, runs JaCoCo coverage, reports to SonarCloud.
+GitHub Actions workflow on `develop` branch and PRs: builds with Java 25, runs JaCoCo coverage, reports to SonarCloud.
 
 ## Dependency Source Lookup
 

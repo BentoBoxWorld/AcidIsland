@@ -474,7 +474,6 @@ public class AISettingsTest {
     }
 
     @Test
-    @Disabled("PotionEffectType cannot be mocked without full server initialisation")
     void testSetAcidEffects() {
         List<PotionEffectType> list = Collections.singletonList(PotionEffectType.ABSORPTION);
         s.setAcidEffects(list);
@@ -1048,7 +1047,6 @@ public class AISettingsTest {
     }
 
     @Test
-    @Disabled("Bukkit made this so we can't test")
     void testSetAcidRainEffects() {
         s.setAcidRainEffects(Collections.singletonList(PotionEffectType.BAD_OMEN));
         assertEquals(PotionEffectType.BAD_OMEN, s.getAcidRainEffects().get(0));
@@ -1230,4 +1228,18 @@ public class AISettingsTest {
         assertEquals("END_BARRENS", s.getDefaultEndBiome());
     }
 
+    @Test
+    void testTeamsDisabled() {
+        assertFalse(s.isTeamsDisabled());
+        s.setTeamsDisabled(true);
+        assertTrue(s.isTeamsDisabled());
+    }
+
+    @Test
+    void testStructureSettings() {
+        assertTrue(s.getStructureSettings().isEmpty());
+        s.setStructureSettings(java.util.Map.of("monument", false, "trial_chambers", true));
+        assertFalse(s.getStructureSettings().get("monument"));
+        assertTrue(s.getStructureSettings().get("trial_chambers"));
+    }
 }
