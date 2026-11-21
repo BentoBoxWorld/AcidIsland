@@ -317,6 +317,61 @@ world:
     ITEM_FRAME_DAMAGE: false
     TREES_GROWING_OUTSIDE_RANGE: false
     BOAT: true
+    ELYTRA: true
+    ENDER_PEARL: true
+    FROST_WALKER: true
+    RIDING: true
+    MINECART: true
+    LEASH: true
+    HURT_ANIMALS: true
+    HURT_MONSTERS: true
+    HURT_TAMED_ANIMALS: true
+    HURT_VILLAGERS: true
+    MILKING: true
+    SHEARING: true
+    ITEM_DROP: true
+    ITEM_PICKUP: true
+    EXPERIENCE_PICKUP: true
+    EXPERIENCE_BOTTLE_THROWING: true
+    EGGS: true
+    FISHING: true
+    FISH_SCOOPING: true
+    DYE: true
+    CHEST: true
+    TRAPPED_CHEST: true
+    BARREL: true
+    SHULKER_BOX: true
+    CONTAINER: true
+    DISPENSER: true
+    DROPPER: true
+    HOPPER: true
+    FURNACE: true
+    BREWING: true
+    ITEM_FRAME: true
+    LECTERN: true
+    JUKEBOX: true
+    COMPOSTER: true
+    HIVE: true
+    FLOWER_POT: true
+    ANVIL: true
+    CRAFTING: true
+    ENCHANTING: true
+    GRINDSTONE: true
+    LOOM: true
+    DOOR: true
+    GATE: true
+    TRAPDOOR: true
+    LEVER: true
+    BUTTON: true
+    PRESSURE_PLATE: true
+    NOTE_BLOCK: true
+    BELL_RINGING: true
+    ALLAY: true
+    TRADING: true
+    END_PORTAL: true
+    FIRE_EXTINGUISH: true
+    FLINT_AND_STEEL: true
+    TNT_PRIMING: true
   # These are the default protection settings for new islands.
   # The value is the minimum island rank required allowed to do the action
   # Ranks are: Visitor = 0, Member = 900, Owner = 1000
@@ -402,7 +457,7 @@ world:
     SCULK_SHRIEKER: 500
     GATE: 0
     SMITHING: 500
-    EXPERIENCE_PICKUP: 500
+    EXPERIENCE_PICKUP: 0
     HOPPER: 500
     CANDLES: 500
     LEASH: 500
@@ -415,6 +470,9 @@ world:
     BARREL: 500
     COLLECT_POWDERED_SNOW: 500
     CARTOGRAPHY: 500
+    FISHING: 0
+    RAID_TRIGGER: 500
+    CRAFTER: 500
   # These are the default settings for new islands
   default-island-settings:
     PVP_END: false
@@ -434,7 +492,15 @@ world:
     BLOCK_EXPLODE_DAMAGE: true
   # These settings/flags are hidden from users
   # Ops can toggle hiding in-game using SHIFT-LEFT-CLICK on flags in settings
-  hidden-flags: []
+  hidden-flags:
+  - TNT_DAMAGE
+  - BLOCK_EXPLODE_DAMAGE
+  - FIRE_BURNING
+  - FIRE_IGNITE
+  - FIRE_SPREAD
+  - LEAF_DECAY
+  - ENDERMAN_TELEPORT
+  - SHULKER_TELEPORT
   # Visitor banned commands - Visitors to islands cannot use these commands in this world
   visitor-banned-commands:
   - spawner
