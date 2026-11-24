@@ -1,5 +1,9 @@
 AcidIsland
 ==========
+
+<!-- BentoBox stats badges: https://download.bentobox.world/admin (Badges tab) -->
+[![Servers](https://download.bentobox.world/badge/AcidIsland/servers.svg)](https://download.bentobox.world/) [![Popularity](https://download.bentobox.world/badge/AcidIsland/rank.svg)](https://download.bentobox.world/) [![Downloads](https://download.bentobox.world/badge/AcidIsland/downloads.svg)](https://download.bentobox.world/) [![Minecraft](https://download.bentobox.world/badge/AcidIsland/mc.svg)](https://download.bentobox.world/)
+
 [![Build Status](https://ci.codemc.org/buildStatus/icon?job=BentoBoxWorld/AcidIsland)](https://ci.codemc.org/job/BentoBoxWorld/job/AcidIsland/)
 [![Lines Of Code](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=ncloc)](https://sonarcloud.io/component_measures?id=BentoBoxWorld_AcidIsland&metric=ncloc)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=BentoBoxWorld_AcidIsland&metric=sqale_rating)](https://sonarcloud.io/component_measures?id=BentoBoxWorld_AcidIslandd&metric=Maintainability)
